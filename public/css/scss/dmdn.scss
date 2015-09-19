@@ -1,0 +1,142 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,800);
+
+$font-futura-round: 'Open Sans', sans-serif;
+$font-futura-round-medium: 'Open Sans', $font-futura-round;
+
+
+
+$color-dmdn-grey : #F9F9F9;
+$color-dmdn-background :#5C3170;
+$color-dmdn-white :#fff;
+$color-dmdn-red :#ff0000;
+
+/* :: GLOBAL :: */
+html, body {
+	height: 100%;
+}
+
+body {
+	font-family: $font-futura-round;
+	font-size: 16px;
+	color: $color-dmdn-background;
+	
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+*,
+*:before, *:after {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+*:focus {
+	outline: 0;
+}
+
+a {
+	text-decoration: none;
+	color: $color-dmdn-red;
+	
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+h1, h3 {
+	margin: 0;
+}
+
+i {
+	margin-right: 5px;
+}
+
+/* :: ELEMENTS :: */
+header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 100;
+}
+.frontpage{
+        background-image: url("http://www.dasmerkendienie.com/upload/8b6103b2e0ef37d2d5f829eeeee22757a82f865f7be07523c105a5dfcfeeb67c604c16fe2e32c63ee65b4ec11b06083aa7c213c97b57350ff6ceb69ec04026ba.jpg");
+        
+        background-size: 100%;    
+}
+.hide{
+    display:none;
+}
+
+label{
+    background-color: #000;
+    color: $color-dmdn-white;
+    padding: 5 10 5 10;
+}
+.jumbotron{
+    
+    opacity: 0.9;
+}
+
+.red{
+    color:$color-dmdn-red;
+}
+
+.preview{
+    display:none;
+}
+.stream-item,.stream-input{
+    
+    margin-bottom: 20px;
+
+    .content p{
+       font-size: 20px;
+    }
+    border: 1px solid #eee;
+    color:#000;
+    .www{
+        img{
+            width:200px;
+            margin-right:20px;
+            float:left;
+        }
+    }
+}
+.author{
+    background-color: #F9F9F9;
+    border-bottom: 1px solid #eee;
+    height:80px;
+    padding:20px;
+    color:#000; 
+    img{
+        margin-right:20px;
+        width:46px;
+        height:46px;
+        float:left;
+    }
+}
+.comment{
+    
+    color: #000;
+    border-bottom: 1px solid #eee;
+    img{
+        float:left;
+        width:45px;
+        height:45px;
+        margin-right:20px;
+    }
+
+}
+.commentBox{
+    color: #000;
+    background-color: $color-dmdn-white;
+    
+}
+.comment:after,.www:after{
+    content:'';
+    display:block;
+    clear: both;
+}
+
