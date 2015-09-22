@@ -22,6 +22,9 @@ class UserController extends BaseController
 
                 $_SESSION['login'] = $res[0]->id;
                 $_SESSION['user_settings']=$res[0]->settings;
+                $res[0]->auth_cookie=md5($_POST['mail'] . $_POST['pass'] . Config::get("salat"));
+                $res[0]->save();
+                setcookie("auth", $res[0]->auth_cookie, strtotime( '+1 year' ), "/");
                 $this->redirect("/public/stream/");
             }
         }
@@ -139,6 +142,7 @@ class UserController extends BaseController
     function logout()
     {
         session_destroy();
+        setcookie("auth", "", time()-3600);
         $this->redirect("/");
     }
 

@@ -75,15 +75,49 @@
     });
     
     var StreamList = React.createClass({
-
+       
+       
+    
 
     render: function () {
     var streamNodes = this.props.data.map(function (data) {
-        var markdown = marked(data.stream.text, {sanitize: true});
+        
+        var editContent = function(){
+            $(".stream-item[data-id="+data.stream.id+"]")
+                    .find(".text")
+                    .attr("contenteditable", "true")
+                    .focus();
+            $(".stream-item[data-id="+data.stream.id+"]").find(".action .save").removeClass("hide");
+            $(".stream-item[data-id="+data.stream.id+"]").find(".action .save").click(function(){
+                $.ajax({
+                url: '/api/content/'+data.stream.id,
+                data: { "content": $(".stream-item[data-id="+data.stream.id+"]").find(".text").text() },
+                type: 'PUT',
+                success: function(result) {
+                    if(result.status=="done"){
+                        $(".stream-item[data-id="+data.stream.id+"]").find(".action .save").addClass("hide");
+                        $(".stream-item[data-id="+data.stream.id+"]").find(".text").attr("contenteditable", "false")
+                    }
+                }
+                });
+            });
+        }
+        var deleteContent = function(){
+            $.ajax({
+                url: '/api/content/'+data.stream.id,
+                type: 'DELETE',
+                success: function(result) {
+                    if(result.status=="deleted"){
+                        $(".stream-item[data-id="+data.stream.id+"]").remove();
+                    }
+                }
+            });
+        }
         return (
                 <div data-id={data.stream.id} className="stream-item">
-                    <Author id={data.author.id} author={data.author}></Author>
-                    <div className="text"><span dangerouslySetInnerHTML = {{__html: markdown}} /></div>
+                     
+                    <Author editContent={editContent} deleteContent={deleteContent} id={data.author.id} author={data.author}></Author>
+                    <AuthorText id={data.stream.id} data={data.stream}></AuthorText>   
                     <Content id={data.stream.id} data={data.stream}></Content>
                     <Likebox id={data.stream.id}></Likebox>
                     <CommentBox id={data.stream.id} data=""></CommentBox>
@@ -101,7 +135,7 @@
     });
 
 
-
+    
     var Content = React.createClass({
 
     render: function () {
@@ -203,22 +237,49 @@
         });
 
     var Author = React.createClass({
-
+   
     render: function () {
-
+        
         var imgpath = "/public/upload/" + this.props.author.profile_picture;
+        
+        var editBtn;
+        if(this.props.id==user_id)
+            editBtn=<ul className="AuthorMenu">
+                        <li onClick={this.props.editContent}>Edit</li>
+                        <li onClick={this.props.deleteContent}>Delete</li>
+                    </ul>;
+        
         return (
-            <div className="author">
+            <div className="author" x>
                 <img className="img-circle" src={imgpath} />
-
                 <strong>
                         {this.props.author.name}
                 </strong>
+                
+                {editBtn}
             </div>
             );
     }
     });
 
+    var AuthorText = React.createClass({
+
+    render: function () {
+        
+        var markdown = marked(this.props.data.text, {sanitize: true});
+        
+        return (
+                <div>
+                    <div className="text">
+                        <span dangerouslySetInnerHTML = {{__html: markdown}} />
+                    </div>
+                    <div className="action">
+                        <a className="btn save hide btn-success">Save</a>
+                    </div>
+                </div>
+            );
+    }
+    });
 
 
 
@@ -245,7 +306,6 @@
         },
         handleCommentSubmit: function (comment) {
 
-
             $.ajax({
                 url: '/api/comments/' + this.props.id,
                 dataType: 'json',
@@ -266,11 +326,15 @@
         },
         render: function () {
 
+            var commentForm="";
+            if(user_id > 0)
+            {
+                commentForm= <CommentForm onCommentSubmit = {this.handleCommentSubmit} />;
+            }
             return (
                     <div className = "commentBox">
-                   
-                    <CommentForm onCommentSubmit = {this.handleCommentSubmit} />
-                    <CommentList data = {this.state.data} />
+                        {commentForm}
+                        <CommentList data = {this.state.data} />
                     </div>
                     );
         }
@@ -318,25 +382,25 @@
                 }
             });
 
-            var Comment = React.createClass({
+    var Comment = React.createClass({
 
-            render: function () {
+        render: function () {
 
-                var imgpath = "/public/upload/" + this.props.author.profile_picture;
-                var rawMarkup = marked(this.props.children.toString(), {sanitize: true});
-                return (
-                    <div className = "comment">
-                        <img className="img-circle" src = {imgpath} />
-                        <h3 className = "commentAuthor">
-                        {this.props.author.name}
-                        </h3>
-                        <span dangerouslySetInnerHTML = {{__html: rawMarkup}} />
+            var imgpath = "/public/upload/" + this.props.author.profile_picture;
+            var rawMarkup = marked(this.props.children.toString(), {sanitize: true});
+            return (
+                <div className = "comment">
+                    <img className="img-circle" src = {imgpath} />
+                    <h3 className = "commentAuthor">
+                    {this.props.author.name}
+                    </h3>
+                    <span dangerouslySetInnerHTML = {{__html: rawMarkup}} />
 
-                    </div>
+                </div>
 
-                    );
-            }
-            });
+                );
+        }
+        });
     var Likebox = React.createClass({
             getInitialState: function () {
             return {data: []};
@@ -360,42 +424,37 @@
         },
 
 
-            handleSubmit: function (e) {
-                e.preventDefault();
-                
-                var type="add";
-                if($(e.target).hasClass("active"))
-                {
-                    type="sub";
-                }
-                
-                $(e.target).toggleClass("active");    
-                $.ajax({
-                url: '/api/score/'+type+'/' + this.props.id,
-                method:"POST",
-                dataType: 'json',
-                cache: false,
-                success: function (data) {
-                    this.setState({like: data.like, dislike: data.dislike});
-                }.bind(this),
-                error: function (xhr, status, err) {
-                    console.error(this.props.url, status, err.toString());
-                }.bind(this)
-            });
-                
-            },
-            render: function(){
-                console.log(this.state.dislike);
-                return(
-                <div>
-                <form className="Likebox" onSubmit={this.handleSubmit}> 
-                    <span onClick={this.handleSubmit} className="glyphicon glyphicon-chevron-up btn"> {this.state.like}</span>
-                    <span onClick={this.handleSubmit}  className="glyphicon glyphicon-chevron-down btn"> {this.state.dislike}</span>
-                </form>
-                </div>
-                )
-            }
+        handleSubmit: function (target, e) {
+
+            e.preventDefault();
+
+            
+            $.ajax({
+            url: '/api/score/'+target+'/' + this.props.id,
+            method:"POST",
+            dataType: 'json',
+            cache: false,
+            success: function (data) {
+                this.setState({like: data.like, dislike: data.dislike});
+            }.bind(this),
+            error: function (xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
         });
+
+        },
+        render: function(){
+            
+            return(
+            <div>
+            <form className="Likebox" onSubmit={this.handleSubmit}> 
+                <span onClick={this.handleSubmit.bind(this, "add")} dest="up" className="glyphicon glyphicon-chevron-up btn"> {this.state.like}</span>
+                <span onClick={this.handleSubmit.bind(this, "sub")} dest="down" className="glyphicon glyphicon-chevron-down btn"> {this.state.dislike}</span>
+            </form>
+            </div>
+            )
+        }
+    });
 
 
         var data={}

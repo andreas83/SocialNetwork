@@ -10,9 +10,9 @@
                         <?php } else { ?>
                             <div class="glyph-icon flaticon-user91"></div>
                         <?php } ?>
-</a>
+            </a>
             <a class="list-group-item" href="/my/settings/"><?php echo _('Settings') ?></a>
-            <a class="list-group-item" href="/user/logout/"><?php echo _('Logout') ?></a>
+            <a class="list-group-item" href="/documentation/api/"><?php echo _('API') ?></a>
         <?php endif; ?>
     </div>
 

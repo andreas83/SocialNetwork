@@ -69,7 +69,7 @@ abstract class BaseApp
 
         $stmt = $this->dbh->prepare($sql);
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-
+        
         $obj = $stmt->execute();
         return $obj[0];
 

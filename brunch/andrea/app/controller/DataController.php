@@ -6,13 +6,30 @@
 class DataController extends BaseController {
 
     function frontend() {
-
+        
         if (Helper::isUser()) {
             $this->stream();
             return;
         }
+        elseif(isset($_COOKIE['auth']))
+        {
+            
+            //try reauth 
+            $user = new User;
+            $res=$user->find(array("auth_cookie"  => $_COOKIE['auth']));
+            
+            if(count($res)>0)
+            {
+                $_SESSION['login']=$res[0]->id;
+                $_SESSION['user_settings']=$res[0]->settings;
+                $this->stream();
+                return;    
+            }
+            
+        }
+        
+        
         $this->assign("scope", "frontpage login");
-        $this->assign("nodeChatUrl", Config::get('node_chat_url'));
         $this->render("main.php");
     }
 
@@ -86,7 +103,6 @@ class DataController extends BaseController {
         $this->assign("scope", "login");
         $this->assign("title", "New cats from da block");
         $this->assign("data", $res);
-        $this->assign("nodeChatUrl", Config::get('node_chat_url'));
         $this->render("stream.php");
     }
 
@@ -124,15 +140,17 @@ class DataController extends BaseController {
 
         $score = new Score();
         if (isset($request['type']) && Helper::isUser()) {
+            
             $find=$score->find(array(
                 "content_id"=>$request['id'], 
                 "user_id" => $_SESSION['login'],
                 "type" => $request['type']));
             
-            //we delete the score
             if(count($find)>0)
             {
-                $find[0]->delete();
+                $find[0]->delete($find[0]->id);
+                goto getScore;
+                    
             }
             
             $score->user_id = $_SESSION['login'];
@@ -142,17 +160,47 @@ class DataController extends BaseController {
         } elseif ($_POST && !Helper::isUser()) {
             header('HTTP/1.0 403 Forbidden');
         }
-
-        $data = $score->getScore($request['id']);
+        getScore:
+        $like=$score->find(array(
+            "content_id"=>$request['id'], 
+            "type" => "add"));
         
-       
+        $dislike=$score->find(array(
+            "content_id"=>$request['id'], 
+            "type" => "sub"));
+        
         header('Content-Type: application/json');
    
-        if (count($data)>0)
-            echo json_encode(array("like"=>$data[0]->cnt, "dislike"=>$data[1]->cnt));
+        if (count($like)>0 || count($dislike)>0)
+            echo json_encode(array("like"=>count($like), "dislike"=>count($dislike)));
         else {
-            echo json_encode(array());
+            echo json_encode(array("like" =>0, "dislike" => 0));
         }
+    }
+    
+    function delete($request){
+        $content = new Content();
+        $res=$content->find(array("user_id" => $_SESSION['login'], "id" =>$request['id'] ));
+        header('Content-Type: application/json');
+        if(count($res)>0)
+        {
+            $content->delete($request['id']);
+            echo json_encode(array("status" => "deleted"));
+        }
+        
+    }
+        function update($request){
+        $content = new Content();
+        $res=$content->find(array("user_id" => $_SESSION['login'], "id" =>$request['id'] ));
+        header('Content-Type: application/json');
+        if(count($res)>0)
+        {
+            parse_str(file_get_contents("php://input"),$put_vars);
+            $res[0]->data=$put_vars['content'];
+            $res[0]->save();
+            echo json_encode(array("status" => "done"));
+        }
+        
     }
 
     function download($url) {

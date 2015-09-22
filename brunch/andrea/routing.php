@@ -20,6 +20,9 @@ $router->map('POST', '/api/create/', 'DataController#create');
 $router->map('POST', '/api/getmetainformation/', 'DataController#getmeta');
 $router->map('GET', '/api/content/', 'DataController#content');
 $router->map('GET', '/api/metadata/', 'DataController#metadata');
+$router->map('DELETE', '/api/content/[i:id]', 'DataController#delete');
+$router->map('PUT', '/api/content/[i:id]', 'DataController#update');
+
 
 //Comment API
 $router->map('GET|POST', '/api/comments/[i:id]', 'DataController#comment');
