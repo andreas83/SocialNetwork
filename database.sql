@@ -40,3 +40,5 @@ CREATE TABLE  Score (
   PRIMARY KEY (`id`), UNIQUE(`user_id`, `content_id`, `type`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8
 
+Alter table User add column 
+auth_cookie varchar(32);

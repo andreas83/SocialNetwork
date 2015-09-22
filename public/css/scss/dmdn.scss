@@ -6,7 +6,7 @@ $font-futura-round-medium: 'Open Sans', $font-futura-round;
 
 
 $color-dmdn-grey : #F9F9F9;
-$color-dmdn-background :#5C3170;
+$color-dmdn-black :#000;
 $color-dmdn-white :#fff;
 $color-dmdn-red :#ff0000;
 
@@ -18,8 +18,8 @@ html, body {
 body {
 	font-family: $font-futura-round;
 	font-size: 16px;
-	color: $color-dmdn-background;
-	
+	color: $color-dmdn-black;
+	background-color: $color-dmdn-black;
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -62,7 +62,7 @@ header {
 	z-index: 100;
 }
 .frontpage{
-        background-image: url("http://www.dasmerkendienie.com/upload/8b6103b2e0ef37d2d5f829eeeee22757a82f865f7be07523c105a5dfcfeeb67c604c16fe2e32c63ee65b4ec11b06083aa7c213c97b57350ff6ceb69ec04026ba.jpg");
+        background-image: url("http://dasmerkendienie.com/upload/998a76924607c5396b978bb7341784e52ab4f49a17f84897c1b5b96e7c1e15b3e3f3797b8630f0c7861b80e224f795eb385a502cf4021f4e772b52938941b6bf.jpg");
         
         background-size: 100%;    
 }
@@ -86,6 +86,9 @@ label{
 
 .preview{
     display:none;
+}
+.stream-item{
+    background-color:$color-dmdn-white;
 }
 .stream-item,.stream-input{
     
@@ -116,6 +119,20 @@ label{
         height:46px;
         float:left;
     }
+    .AuthorMenu {  
+        
+        
+        height: 50px;
+        width: 50px; 
+        margin-left:auto;
+        margin-right:30px;
+        
+        li{
+            float:left; 
+            cursor: pointer;
+        }
+    }
+
 }
 .comment{
     
@@ -140,3 +157,6 @@ label{
     clear: both;
 }
 
+.btn{
+    border-radius: 0px;
+}
