@@ -37,7 +37,8 @@ $router->map('GET|POST', '/api/comments/[i:id]', 'DataController#comment');
 $router->map('POST|GET', '/api/score/[a:type]/[i:id]', 'DataController#score');
 $router->map('GET|POST', '/api/score/[i:id]', 'DataController#score');
 
-
+//Old urls
+$router->map('GET', '/page/[i:id]', 'DataController#stream');
 
 $router->map('GET|POST', '/', 'DataController#frontend');
 
