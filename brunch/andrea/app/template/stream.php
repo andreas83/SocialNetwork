@@ -81,7 +81,7 @@ include("menu.php");
                 </div>
             <?php } ?>
 
-        <div class="row ">
+        <div class="row stream-row" data-permalink="<?php echo $permalink; ?>">
             <div class="stream col-md-12"></div>
         </div>
      

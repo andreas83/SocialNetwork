@@ -19,18 +19,26 @@ var StreamBox = React.createClass({
     loadStreamFromServer: function loadStreamFromServer() {
         var id = 0;
         var hash = "";
+        var show = 5;
         if (typeof id == "undefined") {
             id = 0;
         } else {
             id = $(".stream-item").last().attr("data-id");
         }
+        if ($(".stream-row").attr("data-permalink") > 0) {
+            id = $(".stream-row").attr("data-permalink");
+            id = parseInt(id) + 1;
+            show = 1;
+            this.setEndofData();
+        }
+
         if (typeof this.props.hashtag == "undefined") {
             hash = "";
         } else {
             hash = this.props.hashtag.replace("#", "");
         }
         $.ajax({
-            url: '/api/content/?id=' + id + '&hash=' + hash + '&show=5',
+            url: '/api/content/?id=' + id + '&hash=' + hash + '&show=' + show,
             dataType: 'json',
             cache: false,
             success: (function (data) {
@@ -67,6 +75,9 @@ var StreamBox = React.createClass({
         $("video").prop('muted', true);
     },
 
+    setEndofData: function setEndofData() {
+        this.endofdata = true;
+    },
     setLoading: function setLoading(status) {
         this.loading = status;
     },
@@ -75,10 +86,11 @@ var StreamBox = React.createClass({
     },
 
     handleScroll: function handleScroll(event) {
-        console.log($(document).height());
-        if ($(window).scrollTop() + 50 >= $(document).height() - $(window).height()) {
-            if (endofdata) return false;
 
+        if ($(window).scrollTop() + 50 >= $(document).height() - $(window).height()) {
+            if (this.endofdata) {
+                return false;
+            }
             if (this.loading) {
 
                 return false; // don't make another request, let the current one complete, or
@@ -130,7 +142,7 @@ var StreamList = React.createClass({
             return React.createElement(
                 'div',
                 { 'data-id': data.stream.id, className: 'stream-item' },
-                React.createElement(Author, { editContent: editContent, deleteContent: deleteContent, id: data.author.id, author: data.author }),
+                React.createElement(Author, { editContent: editContent, deleteContent: deleteContent, id: data.author.id, author: data.author, contentID: data.stream.id, time: data.stream.date }),
                 React.createElement(AuthorText, { id: data.stream.id, data: data.stream }),
                 React.createElement(Content, { id: data.stream.id, data: data.stream }),
                 React.createElement(Likebox, { id: data.stream.id }),
@@ -260,31 +272,50 @@ var Author = React.createClass({
         var imgpath = "/public/upload/" + this.props.author.profile_picture;
 
         var editBtn;
-        if (this.props.id == user_id) editBtn = React.createElement(
-            'ul',
-            { className: 'AuthorMenu' },
-            React.createElement(
-                'li',
-                { onClick: this.props.editContent },
-                'Edit'
-            ),
-            React.createElement(
-                'li',
-                { onClick: this.props.deleteContent },
-                'Delete'
-            )
-        );
+        if (this.props.id == user_id) {
+            editBtn = React.createElement(
+                'ul',
+                { className: 'AuthorMenu' },
+                React.createElement(
+                    'li',
+                    { onClick: this.props.editContent },
+                    'Edit'
+                ),
+                React.createElement(
+                    'li',
+                    { onClick: this.props.deleteContent },
+                    'Delete'
+                )
+            );
+        }
+        var permalink = "/page/" + this.props.contentID;
 
         return React.createElement(
             'div',
-            { className: 'author', x: true },
-            React.createElement('img', { className: 'img-circle', src: imgpath }),
+            { className: 'author' },
             React.createElement(
-                'strong',
-                null,
-                this.props.author.name
+                'div',
+                { className: 'left' },
+                React.createElement('img', { className: 'img-circle', src: imgpath }),
+                React.createElement(
+                    'strong',
+                    null,
+                    this.props.author.name
+                ),
+                React.createElement('br', null),
+                React.createElement(
+                    'a',
+                    { href: permalink },
+                    '#',
+                    this.props.contentID,
+                    ' Permalink'
+                )
             ),
-            editBtn
+            React.createElement(
+                'div',
+                { className: 'right' },
+                editBtn
+            )
         );
     }
 });
@@ -509,4 +540,3 @@ var isLoading = false;
 var endofdata = false;
 
 React.render(React.createElement(StreamBox, { data: data }), document.getElementsByClassName('stream')[0]);
-

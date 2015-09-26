@@ -50,7 +50,7 @@ class DataController extends BaseController {
             $std[$i]->stream->type = "generic";
             $std[$i]->stream = (isset($res->media) && $res->media != "null" ? json_decode($res->media) : $std[$i]->stream);
 
-
+            $std[$i]->stream->date = $res->date;
             $std[$i]->stream->text = $res->data;
             $std[$i]->stream->id = $res->id;
 
@@ -68,12 +68,9 @@ class DataController extends BaseController {
         }
     }
 
-    function stream() {
+    function stream($request=false) {
+        
         $data = new Content;
-
-        $id = (isset($_REQUEST['id']) ? "" : 1000000000);
-        $show = (isset($_REQUEST['show']) && $_REQUEST['show'] < 100 ? $_REQUEST['show'] : 10);
-        $res = $data->getNext($id, $show);
 
         if (isset($_POST) && !empty($_POST) && Helper::isUser()) {
             $content = new Content();
@@ -96,15 +93,21 @@ class DataController extends BaseController {
             }
             $content->media = json_encode($metadata);
             $content->user_id = $_SESSION['login'];
+            $content->date=date("U");
+            
             $content->save();
             $this->redirect("/public/stream/");
         }
 
-
+        if(isset($request['id']))
+        {
+            $this->assign("permalink", $request['id']);
+        }
+        
         $this->addHeader(Helper::jsScript("stream.js"));
         $this->assign("scope", "login");
         $this->assign("title", "New cats from da block");
-        $this->assign("data", $res);
+       
         $this->render("stream.php");
     }
 
