@@ -160,16 +160,21 @@ label{
         height:46px;
         float:left;
     }
+    .left{
+        width:30%;
+        float:left;
+    }
     .AuthorMenu {  
         
         
-        height: 50px;
-        width: 50px; 
+        height: 45px;
+        width: 90px; 
         margin-left:auto;
-        margin-right:30px;
+        margin-right:0px;
         
         li{
             float:left; 
+            margin-top:4px;
             cursor: pointer;
         }
     }

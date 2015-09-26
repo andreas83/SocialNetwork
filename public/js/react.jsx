@@ -20,6 +20,7 @@
         loadStreamFromServer: function () {
             var id=0;
             var hash="";
+            var show =5;
             if (typeof id == "undefined")
             {
                 id = 0;
@@ -27,6 +28,14 @@
             {
                 id=$(".stream-item").last().attr("data-id");
             }
+            if($(".stream-row").attr("data-permalink")>0)
+            {
+                id = $(".stream-row").attr("data-permalink");
+                id=parseInt(id)+1;
+                show = 1;
+                this.setEndofData();
+            }
+
             if (typeof this.props.hashtag == "undefined")
             {
                 hash = "";
@@ -35,7 +44,7 @@
                 hash = this.props.hashtag.replace("#", "");
             }
             $.ajax({
-                url: '/api/content/?id=' + id +'&hash='+hash+'&show=5',
+                url: '/api/content/?id=' + id +'&hash='+hash+'&show='+show,
                 dataType: 'json',
                 cache: false,
                 success: function (data) {
@@ -59,7 +68,8 @@
             
             return (
                     <div className="content">
-                        <StreamList  data={this.state.data}/>        
+                        <StreamList data={this.state.data}/>
+                        
                     </div>
                     );
         },
@@ -74,7 +84,10 @@
             $("video").prop('muted', true);
         },
 
-
+        setEndofData: function()
+        {
+            this.endofdata=true;
+        },
         setLoading: function(status)
         {
             this.loading=status;
@@ -86,12 +99,13 @@
         },
         
         handleScroll(event) {
-            console.log($(document).height());
+            
             if ($(window).scrollTop() + 50 >= ($(document).height() - $(window).height()))
             {
-                if (endofdata)
-                return false;
-
+                if (this.endofdata)
+                {
+                    return false;
+                }
                 if (this.loading) {
 
                     return false; // don't make another request, let the current one complete, or
@@ -149,7 +163,7 @@
         return (
                 <div data-id={data.stream.id} className="stream-item">
                      
-                    <Author editContent={editContent} deleteContent={deleteContent} id={data.author.id} author={data.author}></Author>
+                    <Author editContent={editContent} deleteContent={deleteContent} id={data.author.id} author={data.author} contentID={data.stream.id} time={data.stream.date}></Author>
                     <AuthorText id={data.stream.id} data={data.stream}></AuthorText>   
                     <Content id={data.stream.id} data={data.stream}></Content>
                     <Likebox id={data.stream.id}></Likebox>
@@ -163,6 +177,7 @@
         <div className = "stream">
             {streamNodes}
         </div>
+        
         );
     }
     });
@@ -270,26 +285,35 @@
         });
 
     var Author = React.createClass({
-   
+        
     render: function () {
         
         var imgpath = "/public/upload/" + this.props.author.profile_picture;
         
         var editBtn;
         if(this.props.id==user_id)
+        {
             editBtn=<ul className="AuthorMenu">
                         <li onClick={this.props.editContent}>Edit</li>
                         <li onClick={this.props.deleteContent}>Delete</li>
                     </ul>;
+        }
+        var permalink="/page/"+this.props.contentID;
         
         return (
-            <div className="author" x>
-                <img className="img-circle" src={imgpath} />
-                <strong>
-                        {this.props.author.name}
-                </strong>
+            <div className="author">
+                <div className="left">
+                    <img className="img-circle" src={imgpath} />
+                    <strong>
+                            {this.props.author.name}
+                    </strong>
+                    <br/>
+                    <a href={permalink}>#{this.props.contentID} Permalink</a>
+                </div>
+                <div className="right">
+                    {editBtn}
+                </div>
                 
-                {editBtn}
             </div>
             );
     }
