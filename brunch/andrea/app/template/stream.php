@@ -5,9 +5,9 @@ include("menu.php");
 ?>
 
 
-    <div class="container">
-
-    <div class="col-md-9" id="stream">
+    
+<div class="row mainrow">
+    <div class="col-md-8 col-sm-8 col-xs-12" id="stream">
         <?php if (Helper::isUser()) { ?>
             <div class="row ">
                 <div class="col-md-8 stream-input">
@@ -82,7 +82,7 @@ include("menu.php");
             <?php } ?>
 
         <div class="row ">
-            <div class="stream col-md-8"></div>
+            <div class="stream col-md-12"></div>
         </div>
      
         </div>

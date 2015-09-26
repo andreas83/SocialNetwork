@@ -16,7 +16,7 @@ class Hashtags extends BaseApp
     
     public function findHashtags($term) {
         
-        $sql = "select * from hashtags where hashtag like :term order by pop";
+        $sql = "select * from hashtags where hashtag like :term order by pop desc";
         
         $stmt = $this->dbh->prepare($sql);
 
