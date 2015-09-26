@@ -42,3 +42,10 @@ CREATE TABLE  Score (
 
 Alter table User add column 
 auth_cookie varchar(32);
+
+CREATE TABLE  hashtags (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `hashtag` VARCHAR(255) NOT NULL,
+  `pop` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`), UNIQUE(`id`, `hashtag`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8

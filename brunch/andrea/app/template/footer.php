@@ -28,18 +28,21 @@
             else
                 id=$(".stream-item").last().attr("data-id");
 
-            if (typeof hash == "undefined")
+            if (typeof this.props.hashtag == "undefined")
                 hash = "";
+            else
+                hash = this.props.hashtag.replace("#", "");
             
             $.ajax({
-                url: '/api/content/?id=' + id+"&show=5",
+                url: '/api/content/?id=' + id +'&hash='+hash+'&show=5',
                 dataType: 'json',
                 cache: false,
                 success: function (data) {
                     
                     data=this.state.data.concat(data);
                     this.setState({data:data});
-                    isLoading=false;
+                    
+                    this.setLoading(false);
                 }.bind(this),
                 error: function (xhr, status, err) {
                     console.error(this.props.url, status, err.toString());
@@ -55,19 +58,33 @@
                     </div>
                     );
         },
-        handleScroll(event) {
+        
+        setLoading: function(status)
+        {
+            this.loading=status;
             
+        },
+        getLoading: function()
+        {
+            console.log(this.loading);
+        },
+        
+        handleScroll(event) {
+            console.log($(document).height());
             if ($(window).scrollTop() + 50 >= ($(document).height() - $(window).height()))
             {
                 if (endofdata)
                 return false;
 
-                if (isLoading) {
+                if (this.loading) {
 
                     return false; // don't make another request, let the current one complete, or
                     // ajax.abort(); // stop the current request, let it run again
                 }
-                isLoading=true;
+               
+               
+                this.setLoading(true);
+               
                 this.loadStreamFromServer();
             }
             
@@ -83,20 +100,20 @@
     var streamNodes = this.props.data.map(function (data) {
         
         var editContent = function(){
-            $(".stream-item[data-id="+data.stream.id+"]")
-                    .find(".text")
-                    .attr("contenteditable", "true")
-                    .focus();
-            $(".stream-item[data-id="+data.stream.id+"]").find(".action .save").removeClass("hide");
-            $(".stream-item[data-id="+data.stream.id+"]").find(".action .save").click(function(){
+            var streamItem=$(".stream-item[data-id="+data.stream.id+"]");
+            streamItem.find(".text").attr("contenteditable", "true").focus();
+            streamItem.find(".action .save").removeClass("hide");
+            streamItem.find(".action .save").click(function(){
                 $.ajax({
                 url: '/api/content/'+data.stream.id,
-                data: { "content": $(".stream-item[data-id="+data.stream.id+"]").find(".text").text() },
+                data: { "content": streamItem.find(".text").text() },
                 type: 'PUT',
                 success: function(result) {
                     if(result.status=="done"){
-                        $(".stream-item[data-id="+data.stream.id+"]").find(".action .save").addClass("hide");
-                        $(".stream-item[data-id="+data.stream.id+"]").find(".text").attr("contenteditable", "false")
+                        streamItem.find(".action .save").addClass("hide");
+                        streamItem.find(".text").attr("contenteditable", "false");
+                        
+                        
                     }
                 }
                 });
@@ -196,7 +213,7 @@
 
         return (
             <div className = "www">
-                <a href={this.props.meta.og_img}>
+                <a href={this.props.meta.url}>
                 <img className="img-responsive" src={this.props.meta.og_img} />
                 
                 <h2>{this.props.meta.og_title}</h2>

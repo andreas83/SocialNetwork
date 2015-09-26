@@ -46,9 +46,11 @@
                     Share some            <span class="glyphicon glyphicon-heart red"></span>
                 </a>
 
-                <form class="navbar-form navbar-left ng-pristine ng-valid" method="post" role="search">
+                <form id="search" class="navbar-form navbar-left" method="post" role="search">
                     <div class="form-group">
-                        <input ng-model="searchTerm" type="text" class="form-control ng-pristine ng-untouched ng-valid" placeholder="#hash">
+                        <input  type="text" class="form-control" placeholder="#hash">
+                        <ul class="searchresult">
+                        </ul>
                     </div>
                     <button type="submit" class="btn btn-default">Search</button>
                 </form>

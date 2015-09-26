@@ -18,7 +18,7 @@ class Content extends BaseApp
     {
 
         if ($term) {
-            $esql = " data LIKE :term AND";
+            $esql = " (data LIKE :term or media LIKE :term) AND";
         } else {
             $esql = "";
         }

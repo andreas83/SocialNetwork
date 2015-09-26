@@ -38,7 +38,9 @@ class DataController extends BaseController {
 
         $id = (isset($_REQUEST['id']) && $_REQUEST['id'] != 0 ? (int) $_REQUEST['id'] : 1000000000);
         $show = (isset($_REQUEST['show']) && $_REQUEST['show'] < 100 ? $_REQUEST['show'] : 10);
-        $data = $data->getNext($id, $show);
+        $hash= (isset($_REQUEST['hash']) && $_REQUEST['hash'] != "" ? $_REQUEST['hash'] : false);
+
+        $data = $data->getNext($id, $show, $hash);
         header('Content-Type: application/json');
         $i = 0;
 

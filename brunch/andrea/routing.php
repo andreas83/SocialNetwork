@@ -14,6 +14,9 @@ $router->map('GET|POST', '/my/settings/', 'UserController#settings');
 
 $router->map('GET|POST', '/public/stream/', 'DataController#stream');
 
+$router->map('GET|POST', '/stream/public', 'DataController#stream');
+$router->map('GET|POST', '/stream/private', 'DataController#stream');
+$router->map('GET|POST', '/stream/friends', 'DataController#stream');
 
 //Content API
 $router->map('POST', '/api/create/', 'DataController#create');
@@ -22,6 +25,9 @@ $router->map('GET', '/api/content/', 'DataController#content');
 $router->map('GET', '/api/metadata/', 'DataController#metadata');
 $router->map('DELETE', '/api/content/[i:id]', 'DataController#delete');
 $router->map('PUT', '/api/content/[i:id]', 'DataController#update');
+
+//for autocomplete
+$router->map('GET', '/api/hashtags/[a:auto]', 'HashController#get');
 
 
 //Comment API
