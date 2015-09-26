@@ -43,9 +43,9 @@
                     data=this.state.data.concat(data);
                     this.setState({data:data});
                     if (user_settings.autoplay == "no")
-                        setAutoplayOff();
+                        this.setAutoplayOff();
                     if (user_settings.mute_video == "yes")
-                        setMuted();
+                        this.setMuted();
                     
                     this.setLoading(false);
                 }.bind(this),
@@ -63,7 +63,18 @@
                     </div>
                     );
         },
-        
+        setAutoplayOff: function() {
+
+            $('video').each(function (index) {
+                $("video").get(index).pause();
+            });
+        },
+        setMuted: function() {
+
+            $("video").prop('muted', true);
+        },
+
+
         setLoading: function(status)
         {
             this.loading=status;

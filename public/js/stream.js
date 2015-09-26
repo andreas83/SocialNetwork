@@ -47,16 +47,6 @@ $(document).ready(function () {
         $(".stream").html("");
     }
     
-    function setAutoplayOff() {
-        
-        $('video').each(function (index) {
-            $("video").get(index).pause();
-        });
-    }
-    function setMuted() {
-
-        $("video").prop('muted', true);
-    }
 
 
 
@@ -144,8 +134,4 @@ $(document).ready(function () {
         $("#video_target").html(data.html);
     }
 
-    if (user_settings.autoplay == "no")
-        setAutoplayOff();
-    if (user_settings.mute_video == "yes")
-        setMuted();
 });
