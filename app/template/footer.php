@@ -1,3 +1,4 @@
+
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
 
@@ -41,6 +42,10 @@
                     
                     data=this.state.data.concat(data);
                     this.setState({data:data});
+                    if (user_settings.autoplay == "no")
+                        setAutoplayOff();
+                    if (user_settings.mute_video == "yes")
+                        setMuted();
                     
                     this.setLoading(false);
                 }.bind(this),

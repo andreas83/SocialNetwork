@@ -69,8 +69,9 @@ header {
 }
 .frontpage{
         background-image: url("http://dasmerkendienie.com/upload/998a76924607c5396b978bb7341784e52ab4f49a17f84897c1b5b96e7c1e15b3e3f3797b8630f0c7861b80e224f795eb385a502cf4021f4e772b52938941b6bf.jpg");
+        background-repeat:no-repeat;
+        background-size:cover;
         
-        background-size: 100%;    
 }
 .navbar-default, .navbar-brand{
     background-color: $font;
@@ -84,7 +85,7 @@ header {
     li{
         color:$color1;
         background-color: $font;
-        min-width:120px;
+        width:auto;
         padding: 5px 10px;
         list-style-type: none;
         cursor: pointer;
@@ -95,6 +96,12 @@ header {
     }
     
 }
+
+.navbar-form
+{
+    border:0px;
+}
+
 .hide{
     display:none;
 }
@@ -118,6 +125,7 @@ label{
 }
 .stream-item{
     background-color:$color-dmdn-white;
+    
 }
 .stream-item,.stream-input{
     
@@ -130,7 +138,7 @@ label{
         margin-left:10px;
         margin-top:10px;
     }
-    border: 1px solid #eee;
+    
     color:#000;
     .www{
         img{
@@ -167,6 +175,15 @@ label{
     }
 
 }
+
+.mainrow, #stream{
+    padding-right: 0px;
+    padding-left: 0px;
+    margin-right:0px;
+    margin-left:0px;
+    
+}
+
 .comment{
     
     color: #000;
@@ -192,4 +209,23 @@ label{
 
 .btn{
     border-radius: 0px;
+}
+
+video {
+  width: 100%    !important;
+  height: auto   !important;
+}
+
+.video {
+	position: relative;
+	padding-bottom: 56.25%; /* 16:9 */
+	padding-top: 25px;
+	height: 0;
+}
+.video iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 }
