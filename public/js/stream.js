@@ -2,6 +2,51 @@ $(document).ready(function () {
     var isLoading = false;
     var endofdata = false;
 
+    $("#search").find("input[type=text]").on("keyup", function()
+    {
+        clearSearchResult();
+        $.get('/api/hashtags/'+$(this).val().replace("#", ""), function (data) {
+            $(data).each(function(res, d){
+                $("#search").find(".searchresult").append("<li>#"+d.hashtag+"</li>")
+               
+            });
+            $("#search").find(".searchresult li").click(function(){
+               clearSearchResult();
+               clearStream();
+               
+               //set input from search res
+               $("#search").find("input[type=text]").val($(this).text());
+               
+               //cnt click 
+               var container = document.getElementsByClassName('stream')[0];
+               
+               var component = React.createElement(StreamBox, {hashtag:$(this).text()});
+               React.render(component, container);
+               
+               
+            });
+        });
+    });
+    
+    $("#search").on("submit", function(e){
+        e.preventDefault();
+        clearSearchResult();
+        clearStream();
+        var container = document.getElementsByClassName('stream')[0];
+        var component = React.createElement(StreamBox, {hashtag:$("#search").find("input[type=text]").val()});
+        
+        React.render(component, container);
+    });
+    
+    function clearSearchResult(){
+        $("#search").find(".searchresult").html("");
+    }
+    
+    function clearStream(){
+        React.unmountComponentAtNode(document.getElementsByClassName('stream')[0]);
+        $(".stream").html("");
+    }
+    
     function setAutoplayOff() {
         
         $('video').each(function (index) {
@@ -37,7 +82,7 @@ $(document).ready(function () {
                 data.url = url[0];
 
                 $("#metadata").val(JSON.stringify(data));
-            })
+            });
         }
     });
     $(".close").click(function (e) {
