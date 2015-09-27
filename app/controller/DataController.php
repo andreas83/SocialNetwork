@@ -104,11 +104,16 @@ class DataController extends BaseController {
             $res=$data->get($request['id']);
             $this->assign("title", "Public Stream  ".$res->data);
             $media=json_decode($res->media);
-            $this->addHeader('<link rel="canonical" href="'.Config::get("address").'/permalink/'.$request['id'].'">');
+            $this->addHeader('<link rel="canonical" href="'.Config::get("address").'permalink/'.$request['id'].'">');
+            $this->addHeader('<meta property="og:url" content="'.Config::get("address").'permalink/'.$request['id'].'"/>');
             $this->addHeader('<meta property="og:title" content="'.$res->data.'"/>');
             $this->addHeader('<meta property="og:type" content="website" />');
             if(isset($media->img[0]))
-                $this->addHeader('<meta property="og:image" content="/public/upload/'.$media->img[0].'"/>');
+                $this->addHeader('<meta property="og:image" content="'.Config::get("address").'/public/upload/'.$media->img[0].'"/>');
+            if(isset($media->type) && $media->type=="img")
+                $this->addHeader('<meta property="og:image" content="'.Config::get("address").'/public/upload/'.$media->url.'"/>');
+            
+            
             $this->assign("permalink", $request['id']);
         }
         if(isset($request['hash']))
