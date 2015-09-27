@@ -26,10 +26,10 @@ body { padding-top: 70px; }
         background-size:cover;
         
 }
-.navbar-default, .navbar-brand{
-    background-color: $font;
+.navbar-default, .navbar-brand, {
+    background-color: #00003D;
     border-color: #000;
-    color:$font;
+    color: #fff!important;
 }
 .searchresult{
     position:absolute;
