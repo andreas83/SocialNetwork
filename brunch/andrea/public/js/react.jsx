@@ -166,7 +166,7 @@
             });
         }
         return (
-                <div data-id={data.stream.id} className="stream-item">
+                <div data-id={data.stream.id} className="row stream-item">
                      
                     <Author editContent={editContent} deleteContent={deleteContent} id={data.author.id} author={data.author} contentID={data.stream.id} time={data.stream.date}></Author>
                     <AuthorText id={data.stream.id} data={data.stream}></AuthorText>   
@@ -438,7 +438,7 @@
             return (
                 <form className = "commentForm" onSubmit={this.handleSubmit} >
                     <textarea className="form-control" ref="text" ></textarea>
-                    <input type="submit" value="Post" />
+                    <input className="btn btn-success col-xs-12 col-md-2" type="submit" value="Comment" />
                 </form>
                 );
                 }
