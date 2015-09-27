@@ -314,8 +314,7 @@ var Author = React.createClass({
                     'a',
                     { href: permalink },
                     '#',
-                    this.props.contentID,
-                    ' Permalink'
+                    this.props.contentID
                 )
             ),
             React.createElement(
