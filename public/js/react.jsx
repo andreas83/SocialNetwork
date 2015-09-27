@@ -41,17 +41,14 @@
             }
             
 
-            if (typeof this.props.hashtag == "undefined")
-            {
-                hash = "";
-            }else
-            {
-                hash = this.props.hashtag.replace("#", "");
-            }
             if($(".stream-row").attr("data-hash")!="")
             {
                 hash=$(".stream-row").attr("data-hash");
             } 
+            if(this.props.hashtag!="")
+            {
+                hash = this.props.hashtag.replace("#", "");
+            }
             $.ajax({
                 url: '/api/content/?id=' + id +'&hash='+hash+'&show='+show,
                 dataType: 'json',
