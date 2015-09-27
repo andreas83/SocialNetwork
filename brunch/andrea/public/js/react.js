@@ -1,5 +1,10 @@
 'use strict';
 
+function Replacehashtags(string) {
+
+    return string.replace(/#(\S*)/g, '<a class="hash" href="/hash/$1">#$1</a>');
+}
+
 var StreamBox = React.createClass({
     displayName: 'StreamBox',
 
@@ -36,6 +41,9 @@ var StreamBox = React.createClass({
             hash = "";
         } else {
             hash = this.props.hashtag.replace("#", "");
+        }
+        if ($(".stream-row").attr("data-hash") != "") {
+            hash = $(".stream-row").attr("data-hash");
         }
         $.ajax({
             url: '/api/content/?id=' + id + '&hash=' + hash + '&show=' + show,
@@ -123,6 +131,7 @@ var StreamList = React.createClass({
                             if (result.status == "done") {
                                 streamItem.find(".action .save").addClass("hide");
                                 streamItem.find(".text").attr("contenteditable", "false");
+                                streamItem.find(".text").html(Replacehashtags(streamItem.find(".text").html()));
                             }
                         }
                     });
@@ -325,15 +334,13 @@ var AuthorText = React.createClass({
 
     render: function render() {
 
-        var markdown = marked(this.props.data.text, { sanitize: true });
-
         return React.createElement(
             'div',
             null,
             React.createElement(
                 'div',
                 { className: 'text' },
-                React.createElement('span', { dangerouslySetInnerHTML: { __html: markdown } })
+                React.createElement('span', { dangerouslySetInnerHTML: { __html: Replacehashtags(this.props.data.text) } })
             ),
             React.createElement(
                 'div',

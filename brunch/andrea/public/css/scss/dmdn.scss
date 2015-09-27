@@ -126,7 +126,6 @@ label{
 }
 .stream-item{
     background-color:$color-dmdn-white;
-    
 }
 .stream-item,.stream-input{
     
@@ -149,6 +148,9 @@ label{
         }
     }
 }
+a.hash{
+    font-size: 20px;
+}
 .author{
     background-color: #F9F9F9;
     border-bottom: 1px solid #eee;
@@ -162,7 +164,7 @@ label{
         float:left;
     }
     .left{
-        width:30%;
+        width:50%;
         float:left;
     }
     .AuthorMenu {  

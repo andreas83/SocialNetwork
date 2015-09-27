@@ -1,6 +1,5 @@
 $(document).ready(function () {
-    var isLoading = false;
-    var endofdata = false;
+
 
     $("#search").find("input[type=text]").on("keyup", function()
     {

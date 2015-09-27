@@ -103,6 +103,10 @@ class DataController extends BaseController {
         {
             $this->assign("permalink", $request['id']);
         }
+        if(isset($request['hash']))
+        {
+            $this->assign("hash", $request['hash']);
+        }
         
         $this->addHeader(Helper::jsScript("stream.js"));
         $this->assign("scope", "login");
