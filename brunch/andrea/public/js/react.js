@@ -285,12 +285,12 @@ var Author = React.createClass({
                 { className: 'AuthorMenu' },
                 React.createElement(
                     'li',
-                    { onClick: this.props.editContent },
+                    { className: 'btn btn-info', onClick: this.props.editContent },
                     'Edit'
                 ),
                 React.createElement(
                     'li',
-                    { onClick: this.props.deleteContent },
+                    { className: 'btn btn-warning', onClick: this.props.deleteContent },
                     'Delete'
                 )
             );

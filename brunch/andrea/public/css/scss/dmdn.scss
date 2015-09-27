@@ -163,21 +163,17 @@ a.hash{
         height:46px;
         float:left;
     }
-    .left{
+    .left, .right{
         width:50%;
         float:left;
     }
     .AuthorMenu {  
         
-        
-        height: 45px;
-        width: 90px; 
         margin-left:auto;
         margin-right:0px;
         
         li{
             float:left; 
-            margin-top:4px;
             cursor: pointer;
         }
     }
