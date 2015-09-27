@@ -52,7 +52,7 @@
                         <ul class="searchresult">
                         </ul>
                     </div>
-                    <button type="submit" class="btn btn-default">Search</button>
+                    <button type="submit" class="btn btn-default hidden-xs">Search</button>
                 </form>
 
             </div>

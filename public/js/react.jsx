@@ -1,5 +1,9 @@
 
-
+    function Replacehashtags(string){
+    
+        return string.replace(/#(\S*)/g,'<a class="hash" href="/hash/$1">#$1</a>');
+    }
+    
     var StreamBox  = React.createClass({
         getInitialState: function () {
            
@@ -35,6 +39,7 @@
                 show = 1;
                 this.setEndofData();
             }
+            
 
             if (typeof this.props.hashtag == "undefined")
             {
@@ -43,6 +48,10 @@
             {
                 hash = this.props.hashtag.replace("#", "");
             }
+            if($(".stream-row").attr("data-hash")!="")
+            {
+                hash=$(".stream-row").attr("data-hash");
+            } 
             $.ajax({
                 url: '/api/content/?id=' + id +'&hash='+hash+'&show='+show,
                 dataType: 'json',
@@ -142,7 +151,7 @@
                     if(result.status=="done"){
                         streamItem.find(".action .save").addClass("hide");
                         streamItem.find(".text").attr("contenteditable", "false");
-                        
+                        streamItem.find(".text").html(Replacehashtags(streamItem.find(".text").html()));
                         
                     }
                 }
@@ -323,12 +332,12 @@
 
     render: function () {
         
-        var markdown = marked(this.props.data.text, {sanitize: true});
+        
         
         return (
                 <div>
                     <div className="text">
-                        <span dangerouslySetInnerHTML = {{__html: markdown}} />
+                        <span dangerouslySetInnerHTML = {{__html: Replacehashtags(this.props.data.text)}} />
                     </div>
                     <div className="action">
                         <a className="btn save hide btn-success">Save</a>
