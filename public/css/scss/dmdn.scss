@@ -82,16 +82,17 @@ label{
 }
 .stream-item{
     background-color:$color-dmdn-white;
+    border: 1px solid #E6EBFA;
 }
 .stream-item,.stream-input{
     
     margin-bottom: 20px;
-
+    border: 1px solid #E6EBFA;
     .content p{
        font-size: 20px;
     }
-    .text p{
-        margin-left:10px;
+    .text {
+        margin-left:20px;
         margin-top:10px;
     }
     
@@ -106,6 +107,9 @@ label{
     .img-responsive{
         margin-left: auto;
         margin-right: auto;
+    }
+    .Likebox{
+        margin-left: 9px;
     }
 }
 a.hash{
