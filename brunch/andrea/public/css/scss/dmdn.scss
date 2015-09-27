@@ -34,10 +34,13 @@ body { padding-top: 70px; }
 .searchresult{
     position:absolute;
     padding:0px;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
     
     li{
         color:$color1;
-        background-color: $font;
+        background-color: #fff;
         width:auto;
         padding: 5px 10px;
         list-style-type: none;
@@ -45,7 +48,7 @@ body { padding-top: 70px; }
     }
     li:hover{
         
-        color:$color2;  
+        background-color:#f9f9f9;  
     }
     
 }
