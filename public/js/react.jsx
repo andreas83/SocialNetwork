@@ -299,8 +299,8 @@
         if(this.props.id==user_id)
         {
             editBtn=<ul className="AuthorMenu">
-                        <li onClick={this.props.editContent}>Edit</li>
-                        <li onClick={this.props.deleteContent}>Delete</li>
+                        <li className="btn btn-info" onClick={this.props.editContent}>Edit</li>
+                        <li className="btn btn-warning" onClick={this.props.deleteContent}>Delete</li>
                     </ul>;
         }
         var permalink="/permalink/"+this.props.contentID;
