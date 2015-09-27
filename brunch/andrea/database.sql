@@ -49,3 +49,6 @@ CREATE TABLE  hashtags (
   `pop` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`), UNIQUE(`id`, `hashtag`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8
+
+Alter table User add column 
+api_key varchar(32);

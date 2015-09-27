@@ -167,7 +167,6 @@
         }
         return (
                 <div data-id={data.stream.id} className="row stream-item">
-                     
                     <Author editContent={editContent} deleteContent={deleteContent} id={data.author.id} author={data.author} contentID={data.stream.id} time={data.stream.date}></Author>
                     <AuthorText id={data.stream.id} data={data.stream}></AuthorText>   
                     <Content id={data.stream.id} data={data.stream}></Content>
