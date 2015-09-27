@@ -16,13 +16,9 @@ $color1:#797270;
 $color2:#A7A7A9;
 $color3:#8FB8DE;
 
-/* :: ELEMENTS :: */
-header {
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	z-index: 100;
+body { padding-top: 70px; }
+.space{
+    padding-top: 45px;
 }
 .frontpage{
         background-image: url("http://dasmerkendienie.com/upload/998a76924607c5396b978bb7341784e52ab4f49a17f84897c1b5b96e7c1e15b3e3f3797b8630f0c7861b80e224f795eb385a502cf4021f4e772b52938941b6bf.jpg");
