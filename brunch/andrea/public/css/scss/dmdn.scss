@@ -123,9 +123,10 @@ label{
 
 .preview{
     display:none;
-    .www{
-        background-color: #fff;
-    }
+    
+}
+.preview.www{
+    background-color: #fff;
 }
 .stream-item{
     background-color:$color-dmdn-white;
