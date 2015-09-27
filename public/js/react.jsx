@@ -313,7 +313,7 @@
                             {this.props.author.name}
                     </strong>
                     <br/>
-                    <a href={permalink}>#{this.props.contentID} Permalink</a>
+                    <a href={permalink}>#{this.props.contentID}</a>
                 </div>
                 <div className="right">
                     {editBtn}
