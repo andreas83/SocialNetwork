@@ -303,7 +303,7 @@
                         <li onClick={this.props.deleteContent}>Delete</li>
                     </ul>;
         }
-        var permalink="/page/"+this.props.contentID;
+        var permalink="/permalink/"+this.props.contentID;
         
         return (
             <div className="author">
