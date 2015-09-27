@@ -28,8 +28,8 @@ class DataController extends BaseController {
             
         }
         
-        
-        $this->assign("scope", "frontpage login");
+        $this->assign("title", "Das merken die nie");
+        $this->assign("scope", "frontpage register");
         $this->render("main.php");
     }
 
@@ -213,7 +213,7 @@ class DataController extends BaseController {
         }
         
     }
-        function update($request){
+    function update($request){
         $content = new Content();
         $res=$content->find(array("user_id" => $_SESSION['login'], "id" =>$request['id'] ));
         header('Content-Type: application/json');

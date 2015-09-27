@@ -16,7 +16,7 @@
     </div>
 
     <button class="btn-success btn btn-lg"><?php echo _("Come to the darkside"); ?></button>
-    <button class="btn-warning btn btn-lg toggleform"><?php echo _("Register here"); ?></button>
+    
 </form>
 
 <form id="registerform" class="<?php echo(isset($scope) && strpos($scope, "register") === false ? "hide" : ""); ?>"
@@ -44,9 +44,7 @@
         <label for=""><?php echo _('your password please') ?></label>
         <input type="password" name="pass" class="form-control" id="" placeholder="<?php echo _("1234"); ?>" />
     </div>
-    <div class="form-group">
-        <label for=""><?php echo _('your password again'); ?></label>
-        <input type="password" name="pass2" class="form-control" id="" placeholder="<?php echo _("1234"); ?>" />
-    </div>
     <input type="submit" class="btn-warning  btn btn-lg" value="<?php echo _("Signup Now"); ?>" />
+    <button class="btn-info btn btn-lg toggleform"><?php echo _("Already have an account?"); ?></button>
+    
 </form>

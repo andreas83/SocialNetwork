@@ -28,6 +28,7 @@ class UserController extends BaseController
                 $this->redirect("/public/stream/");
             }
         }
+        
         $this->assign("scope", "login frontpage");
         $this->assign("title", "Login");
         $this->assign("error", $error);
@@ -50,10 +51,7 @@ class UserController extends BaseController
                 $error['mail'] = "Please validate you mail";
             }
 
-            if ($_POST['pass'] != $_POST['pass2']) {
-                $error['pass2'] = "Passwords do not match";
-            }
-
+            
             if (strlen($_POST['pass']) < 6) {
                 $error['pass'] = "A bit stronger";
             }
@@ -95,6 +93,9 @@ class UserController extends BaseController
             }
 
         }
+        
+        $this->addHeader(Helper::jsScript("stream.js"));
+        $this->assign("title", "Register an account");
         $this->assign("error", $error);
         $this->assign("scope", "frontpage register");
         $this->render("main.php");

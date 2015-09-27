@@ -9,6 +9,7 @@ class User extends BaseApp
     public $mail = "";
     public $password = "";
     public $settings = "";
+    public $api_key = "";
     public $auth_cookie = "";
     public $created = "";
 
