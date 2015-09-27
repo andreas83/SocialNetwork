@@ -98,19 +98,29 @@ class DataController extends BaseController {
             $content->save();
             $this->redirect("/public/stream/");
         }
-
+        $this->assign("title", "Public Stream");
         if(isset($request['id']))
         {
+            $res=$data->get($request['id']);
+            $this->assign("title", "Public Stream  ".$res->data);
+            $media=json_decode($res->media);
+            $this->addHeader('<link rel="canonical" href="'.Config::get("address").'/permalink/'.$request['id'].'">');
+            $this->addHeader('<meta property="og:title" content="'.$res->data.'"/>');
+            $this->addHeader('<meta property="og:type" content="website" />');
+            if(isset($media->img[0]))
+                $this->addHeader('<meta property="og:image" content="/public/upload/'.$media->img[0].'"/>');
             $this->assign("permalink", $request['id']);
         }
         if(isset($request['hash']))
         {
             $this->assign("hash", $request['hash']);
+            $this->assign("title", "Pictures of ".$request['hash'] );
+            
         }
         
         $this->addHeader(Helper::jsScript("stream.js"));
         $this->assign("scope", "login");
-        $this->assign("title", "New cats from da block");
+        
        
         $this->render("stream.php");
     }

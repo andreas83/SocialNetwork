@@ -295,7 +295,7 @@ var Author = React.createClass({
                 )
             );
         }
-        var permalink = "/page/" + this.props.contentID;
+        var permalink = "/permalink/" + this.props.contentID;
 
         return React.createElement(
             'div',
