@@ -16,50 +16,6 @@ $color1:#797270;
 $color2:#A7A7A9;
 $color3:#8FB8DE;
 
-/* :: GLOBAL :: */
-html, body {
-	height: 100%;
-}
-
-body {
-	font-family: $font-futura-round;
-	font-size: 16px;
-	color: $font;
-	background-color: $bgcolor;
-	margin: 0;
-	padding: 0;
-	border: 0;
-        padding-top: 70px;
-}
-
-*,
-*:before, *:after {
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	box-sizing: border-box;
-}
-
-*:focus {
-	outline: 0;
-}
-
-a {
-	text-decoration: none;
-	color: $color1;
-	
-	&:hover {
-		text-decoration: underline;
-	}
-}
-
-h1, h3 {
-	margin: 0;
-}
-
-i {
-	margin-right: 5px;
-}
-
 /* :: ELEMENTS :: */
 header {
 	position: fixed;
@@ -192,8 +148,8 @@ a.hash{
 .mainrow, #stream{
     padding-right: 0px;
     padding-left: 0px;
-    margin-right:0px;
-    margin-left:0px;
+    margin-right:22px;
+    margin-left:8px;
     
 }
 
