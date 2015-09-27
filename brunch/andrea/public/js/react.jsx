@@ -40,12 +40,11 @@
                 this.setEndofData();
             }
             
-
             if($(".stream-row").attr("data-hash")!="")
             {
                 hash=$(".stream-row").attr("data-hash");
             } 
-            if(this.props.hashtag!="")
+            if(typeof this.props.hashtag !="undefined")
             {
                 hash = this.props.hashtag.replace("#", "");
             }
