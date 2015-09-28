@@ -72,7 +72,7 @@ class DataController extends BaseController {
         
         $data = new Content;
 
-        if (isset($_POST) && !empty($_POST) && Helper::isUser()) {
+        if (isset($_POST) && !empty($_POST) && Helper::isUser() && !isset($_POST['wayback'])) {
             $content = new Content();
             $content->data = $_POST['content'];
 
@@ -121,6 +121,12 @@ class DataController extends BaseController {
             $this->assign("hash", $request['hash']);
             $this->assign("title", "Pictures of ".$request['hash'] );
             
+        }
+        
+        if(isset($_POST['wayback']) && is_numeric($_POST['wayback']))
+        {
+        
+            $this->assign("wayback", $_POST['wayback']);
         }
         
         $this->addHeader(Helper::jsScript("stream.js"));

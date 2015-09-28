@@ -22,20 +22,26 @@ var StreamBox = React.createClass({
     },
 
     loadStreamFromServer: function loadStreamFromServer() {
-        var id = 0;
+
         var hash = "";
         var show = 5;
-        if (typeof id == "undefined") {
-            id = 0;
-        } else {
-            id = $(".stream-item").last().attr("data-id");
+
+        if (this.id > 0 || typeof id == "undefined") {
+
+            this.setID(parseInt($(".stream-item").last().attr("data-id")));
         }
         if ($(".stream-row").attr("data-permalink") > 0) {
-            id = $(".stream-row").attr("data-permalink");
-            id = parseInt(id) + 1;
+
+            this.setID(parseInt($(".stream-row").attr("data-permalink")) + 1);
             show = 1;
             this.setEndofData();
         }
+        if ($(".stream-row").attr("data-wayback") != "") {
+
+            this.setID(parseInt($(".stream-row").attr("data-wayback")) + 1);
+            $(".stream-row").attr("data-wayback", "");
+        }
+        console.log(this.id);
 
         if ($(".stream-row").attr("data-hash") != "") {
             hash = $(".stream-row").attr("data-hash");
@@ -43,8 +49,9 @@ var StreamBox = React.createClass({
         if (typeof this.props.hashtag != "undefined") {
             hash = this.props.hashtag.replace("#", "");
         }
+
         $.ajax({
-            url: '/api/content/?id=' + id + '&hash=' + hash + '&show=' + show,
+            url: '/api/content/?id=' + this.id + '&hash=' + hash + '&show=' + show,
             dataType: 'json',
             cache: false,
             success: (function (data) {
@@ -80,7 +87,9 @@ var StreamBox = React.createClass({
 
         $("video").prop('muted', true);
     },
-
+    setID: function setID(id) {
+        this.id = id;
+    },
     setEndofData: function setEndofData() {
         this.endofdata = true;
     },
