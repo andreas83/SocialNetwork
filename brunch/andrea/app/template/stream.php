@@ -81,7 +81,11 @@ include("menu.php");
                 </div>
             <?php } ?>
 
-        <div class="row stream-row" data-permalink="<?php echo (isset($permalink) ? $permalink : ""); ?>" data-hash="<?php echo (isset($hash) && !empty($hash) ? $hash : ""); ?>">
+        <div class="row stream-row" 
+             data-permalink="<?php echo (isset($permalink) ? $permalink : ""); ?>" 
+             data-hash="<?php echo (isset($hash) && !empty($hash) ? $hash : ""); ?>"
+             data-wayback="<?php echo (isset($wayback) && !empty($wayback) ? $wayback : ""); ?>"
+             >
             <div class="stream col-md-12"></div>
         </div>
      

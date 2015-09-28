@@ -48,7 +48,7 @@ class UserController extends BaseController
         $error = false;
         if ($_POST) {
             if (!filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL)) {
-                $error['mail'] = "Please validate you mail";
+                $error['mail'] = "Please validate your email";
             }
 
             
@@ -62,14 +62,14 @@ class UserController extends BaseController
             }
 
             if (!isset($_POST['nick']) || empty($_POST['nick'])) {
-                $error['nick'] = "Required Field";
+                $error['nick'] = "Required field";
             }
 
             $user = new User();
 
             $res = $user->find(array("name" => $_POST['nick']));
             if (count($res) > 0) {
-                $error['mail'] = "A User with this Nickname already exist.";
+                $error['mail'] = "A User with this nick already exist.";
             }
 
             if ($error === false) {
