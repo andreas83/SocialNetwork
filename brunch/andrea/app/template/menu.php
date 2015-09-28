@@ -21,7 +21,7 @@
     
     
         <div class="list-group hidden-xs ">
-            <form class="list-group-item" method="post">
+            <form class="list-group-item" action="/public/stream" method="post">
                 <div class="form-group">
                     <input name="wayback"  type="text" class="form-control" placeholder="i.e. 9873">
                 </div>
