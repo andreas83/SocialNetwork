@@ -157,7 +157,10 @@ a.hash{
     margin-left:8px;
     
 }
-
+.commentForm{
+    
+ min-height:75px    
+}
 .comment{
     
     color: #000;
@@ -167,6 +170,7 @@ a.hash{
         width:45px;
         height:45px;
         margin-right:20px;
+        margin-left:20px;
     }
 
 }
