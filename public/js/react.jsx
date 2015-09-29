@@ -71,7 +71,9 @@
                     if (user_settings.mute_video == "yes")
                         this.setMuted();
                     
-                    this.setLoading(false);
+                     this.setState({
+                        loadingFlag:false,
+                    });
                 }.bind(this),
                 error: function (xhr, status, err) {
                     console.error(this.props.url, status, err.toString());
@@ -116,23 +118,21 @@
         
         handleScroll(event) {
             
-            if ($(window).scrollTop() + 50 >= ($(document).height() - $(window).height()))
-            {
-                if (this.endofdata)
-                {
-                    return false;
-                }
-                if (this.loading) {
 
-                    return false; // don't make another request, let the current one complete, or
-                    // ajax.abort(); // stop the current request, let it run again
+            //this function will be triggered if user scrolls
+            var windowHeight = $(window).height();
+            var inHeight = window.innerHeight;
+            var scrollT = $(window).scrollTop();
+            var totalScrolled = scrollT+inHeight;
+            if(totalScrolled+100>windowHeight){ //user reached at bottom
+                if(!this.state.loadingFlag){ //to avoid multiple request
+                    this.setState({
+                        loadingFlag:true,
+                    });
+                    this.loadStreamFromServer();
                 }
-               
-               
-                this.setLoading(true);
-               
-                this.loadStreamFromServer();
             }
+
             
         }
     });
