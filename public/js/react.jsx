@@ -25,7 +25,7 @@
             
             var hash="";
             var show =5;
-            
+            var lastid="";
             if (this.id>0 || typeof(id)=="undefined")
             {
                 
@@ -36,7 +36,9 @@
                 
                 this.setID(parseInt($(".stream-row").attr("data-permalink"))+1);
                 show = 1;
-                this.setEndofData();
+                this.setState({
+                        endofData:true,
+                    });
             }
             if($(".stream-row").attr("data-wayback")!="")
             {
@@ -44,7 +46,7 @@
                 this.setID(parseInt($(".stream-row").attr("data-wayback"))+1);
                 $(".stream-row").attr("data-wayback", "");
             } 
-            console.log(this.id);
+            
             
             
             if($(".stream-row").attr("data-hash")!="")
@@ -56,7 +58,14 @@
                 hash = this.props.hashtag.replace("#", "");
             }
 
-            
+            if(this.state.lastID==this.id)
+            {
+                this.setState({
+                    endofData:true,
+                });
+            }
+            this.state.lastID=this.id;
+
 
             $.ajax({
                 url: '/api/content/?id=' + this.id +'&hash='+hash+'&show='+show,
@@ -65,6 +74,8 @@
                 success: function (data) {
                     
                     data=this.state.data.concat(data);
+                    
+                    
                     this.setState({data:data});
                     if (user_settings.autoplay == "no")
                         this.setAutoplayOff();
@@ -102,23 +113,14 @@
         setID: function(id){
             this.id=id;
         },
-        setEndofData: function()
-        {
-            this.endofdata=true;
-        },
-        setLoading: function(status)
-        {
-            this.loading=status;
-            
-        },
-        getLoading: function()
-        {
-            console.log(this.loading);
-        },
+        
         
         handleScroll(event) {
             
-
+            if(this.state.endofData)
+            {
+                return true;
+            }
             //this function will be triggered if user scrolls
             var windowHeight = $(window).height();
             var inHeight = window.innerHeight;
