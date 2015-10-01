@@ -94,7 +94,6 @@ class UserController extends BaseController
 
         }
         
-        $this->addHeader(Helper::jsScript("stream.js"));
         $this->assign("title", "Register an account");
         $this->assign("error", $error);
         $this->assign("scope", "frontpage register");
