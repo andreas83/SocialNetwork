@@ -129,7 +129,7 @@ class DataController extends BaseController {
             $this->assign("wayback", $_POST['wayback']);
         }
         
-        $this->addHeader(Helper::jsScript("stream.js"));
+        
         $this->assign("scope", "login");
         
        
