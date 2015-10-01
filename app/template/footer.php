@@ -4,7 +4,7 @@ if (Helper::isUser()) {
     . "var user_id=" . $_SESSION['login']  . ";"
     . "var user_settings=" . $_SESSION['user_settings']
     . "</script>";
-    $user_settings = json_decode($_SESSION['user_settings']);
+    
 
     if (isset($user_settings->custom_css)) {
         echo "<style>" . $user_settings->custom_css . "</style>";
