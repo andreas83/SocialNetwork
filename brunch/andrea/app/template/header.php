@@ -8,7 +8,7 @@
         <meta name="description" content="Images and Videos to kill some time - mostly funny cat pictures from the internet" />
         <meta name="keywords" content="gifs,webm,fun,lol,omg">
 
-
+    
     </head>
     <body class="<?php echo $scope; ?>">
     <top-menu><nav class="navbar navbar-default navbar-fixed-top">
