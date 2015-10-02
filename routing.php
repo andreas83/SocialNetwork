@@ -41,6 +41,8 @@ $router->map('GET|POST', '/api/score/[i:id]', 'DataController#score');
 $router->map('GET', '/[page|permalink]/[i:id]', 'DataController#stream');
 $router->map('GET', '/hash/[a:hash]', 'DataController#stream');
 
+
+$router->map('GET', '/[*:user]', 'DataController#stream');
 $router->map('GET|POST', '/', 'DataController#frontend');
 
 

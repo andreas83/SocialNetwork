@@ -1,7 +1,7 @@
 
-<div class="col-md-2 col-sm-2 col-xs-12">
+<div class="col-md-2 col-sm-2 col-xs-12 animated bounceInLeft">
     
-        <div class="list-group user-box">
+        <div class="list-group user-box ">
 
             <?php if (!Helper::isUser()): ?>
                 <a class="btn btn-success col-xs-12 col-sm-12 col-md-12" href="/"><?php echo _('Join us'); ?></a>

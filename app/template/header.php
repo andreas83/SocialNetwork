@@ -15,8 +15,9 @@
             <div class="container">
 
                 <a class="navbar-brand" href="/public/stream/">
-                    Share some            <span class="glyphicon glyphicon-heart red"></span>
+                    Share some <span class="glyphicon glyphicon-heart red"></span>
                 </a>
+                
 
                 <form id="search" class="navbar-form navbar-left" method="post" role="search">
                     <div class="form-group">
