@@ -39,8 +39,10 @@ class DataController extends BaseController {
         $id = (isset($_REQUEST['id']) && $_REQUEST['id'] != 0 ? (int) $_REQUEST['id'] : 1000000000);
         $show = (isset($_REQUEST['show']) && $_REQUEST['show'] < 100 ? $_REQUEST['show'] : 10);
         $hash= (isset($_REQUEST['hash']) && $_REQUEST['hash'] != "" ? $_REQUEST['hash'] : false);
+        $user= (isset($_REQUEST['user']) && $_REQUEST['user'] != "" ? $_REQUEST['user'] : false);
 
-        $data = $data->getNext($id, $show, $hash);
+        
+        $data = $data->getNext($id, $show, $hash, $user);
         header('Content-Type: application/json');
         $i = 0;
 
@@ -120,6 +122,12 @@ class DataController extends BaseController {
         {
             $this->assign("hash", $request['hash']);
             $this->assign("title", "Pictures of ".$request['hash'] );
+            
+        }
+        if(isset($request['user']))
+        {
+            $this->assign("user", $request['user']);
+            $this->assign("title", "Stream of ".str_replace(".", " ", $request['user'] ));
             
         }
         

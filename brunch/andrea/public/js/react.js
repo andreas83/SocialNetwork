@@ -24,10 +24,11 @@ var StreamBox = React.createClass({
     loadStreamFromServer: function loadStreamFromServer() {
 
         var hash = "";
+        var user = "";
+
         var show = 5;
         var lastid = "";
         if (this.id > 0 || typeof id == "undefined") {
-
             this.setID(parseInt($(".stream-item").last().attr("data-id")));
         }
         if ($(".stream-row").attr("data-permalink") > 0) {
@@ -39,7 +40,6 @@ var StreamBox = React.createClass({
             });
         }
         if ($(".stream-row").attr("data-wayback") != "") {
-
             this.setID(parseInt($(".stream-row").attr("data-wayback")) + 1);
             $(".stream-row").attr("data-wayback", "");
         }
@@ -51,6 +51,10 @@ var StreamBox = React.createClass({
             hash = this.props.hashtag.replace("#", "");
         }
 
+        if ($(".stream-row").attr("data-user") != "") {
+            user = $(".stream-row").attr("data-user");
+        }
+
         if (this.state.lastID == this.id) {
             this.setState({
                 endofData: true
@@ -59,7 +63,7 @@ var StreamBox = React.createClass({
         this.state.lastID = this.id;
 
         $.ajax({
-            url: '/api/content/?id=' + this.id + '&hash=' + hash + '&show=' + show,
+            url: '/api/content/?id=' + this.id + '&hash=' + hash + '&user=' + user + '&show=' + show,
             dataType: 'json',
             cache: false,
             success: (function (data) {
@@ -119,6 +123,7 @@ var StreamBox = React.createClass({
                 this.setState({
                     loadingFlag: true
                 });
+
                 this.loadStreamFromServer();
             }
         }
@@ -311,7 +316,7 @@ var Author = React.createClass({
             );
         }
         var permalink = "/permalink/" + this.props.contentID;
-
+        var authorlink = "/" + this.props.author.name.replace(" ", ".");
         return React.createElement(
             'div',
             { className: 'author' },
@@ -322,7 +327,11 @@ var Author = React.createClass({
                 React.createElement(
                     'strong',
                     null,
-                    this.props.author.name
+                    React.createElement(
+                        'a',
+                        { href: authorlink },
+                        this.props.author.name
+                    )
                 ),
                 React.createElement('br', null),
                 React.createElement(
@@ -476,14 +485,19 @@ var Comment = React.createClass({
 
         var imgpath = "/public/upload/" + this.props.author.profile_picture;
         var rawMarkup = marked(this.props.children.toString(), { sanitize: true });
+        var authorLink = "/" + this.props.author.name.replace(" ", ".");
         return React.createElement(
             'div',
             { className: 'comment' },
             React.createElement('img', { className: 'img-circle', src: imgpath }),
             React.createElement(
-                'h3',
+                'h4',
                 { className: 'commentAuthor' },
-                this.props.author.name
+                React.createElement(
+                    'a',
+                    { href: authorLink },
+                    this.props.author.name
+                )
             ),
             React.createElement('span', { dangerouslySetInnerHTML: { __html: rawMarkup } })
         );

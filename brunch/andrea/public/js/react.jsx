@@ -24,11 +24,12 @@
         loadStreamFromServer: function () {
             
             var hash="";
+            var user="";
+
             var show =5;
             var lastid="";
             if (this.id>0 || typeof(id)=="undefined")
             {
-                
                 this.setID(parseInt($(".stream-item").last().attr("data-id")));
             }
             if($(".stream-row").attr("data-permalink")>0)
@@ -42,11 +43,9 @@
             }
             if($(".stream-row").attr("data-wayback")!="")
             {
-                
                 this.setID(parseInt($(".stream-row").attr("data-wayback"))+1);
                 $(".stream-row").attr("data-wayback", "");
             } 
-            
             
             
             if($(".stream-row").attr("data-hash")!="")
@@ -58,6 +57,11 @@
                 hash = this.props.hashtag.replace("#", "");
             }
 
+            if($(".stream-row").attr("data-user")!="")
+            {
+                user=$(".stream-row").attr("data-user");
+            } 
+
             if(this.state.lastID==this.id)
             {
                 this.setState({
@@ -66,9 +70,9 @@
             }
             this.state.lastID=this.id;
 
-
+        
             $.ajax({
-                url: '/api/content/?id=' + this.id +'&hash='+hash+'&show='+show,
+                url: '/api/content/?id=' + this.id +'&hash='+hash+'&user='+user+'&show='+show,
                 dataType: 'json',
                 cache: false,
                 success: function (data) {
@@ -131,6 +135,7 @@
                     this.setState({
                         loadingFlag:true,
                     });
+
                     this.loadStreamFromServer();
                 }
             }
@@ -316,13 +321,13 @@
                     </ul>;
         }
         var permalink="/permalink/"+this.props.contentID;
-        
+        var authorlink="/"+this.props.author.name.replace(" ", ".");
         return (
             <div className="author">
                 <div className="left">
                     <img className="img-circle" src={imgpath} />
                     <strong>
-                            {this.props.author.name}
+                            <a href={authorlink}>{this.props.author.name}</a>
                     </strong>
                     <br/>
                     <a href={permalink}>#{this.props.contentID}</a>
@@ -462,12 +467,13 @@
 
             var imgpath = "/public/upload/" + this.props.author.profile_picture;
             var rawMarkup = marked(this.props.children.toString(), {sanitize: true});
+            var authorLink="/"+this.props.author.name.replace(" ", ".");
             return (
                 <div className = "comment">
                     <img className="img-circle" src = {imgpath} />
-                    <h3 className = "commentAuthor">
-                    {this.props.author.name}
-                    </h3>
+                    <h4 className = "commentAuthor">
+                    <a href={authorLink}>{this.props.author.name}</a>
+                    </h4>
                     <span dangerouslySetInnerHTML = {{__html: rawMarkup}} />
 
                 </div>

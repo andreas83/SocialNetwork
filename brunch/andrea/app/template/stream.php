@@ -6,7 +6,7 @@ include("menu.php");
 
 
     
-<div class="row mainrow">
+<div class="row mainrow ">
     <div class="col-md-8 col-sm-8 col-xs-12" id="stream">
         <?php if (Helper::isUser()) { ?>
             <div class="row ">
@@ -81,10 +81,11 @@ include("menu.php");
                 </div>
             <?php } ?>
 
-        <div class="row stream-row" 
+        <div class="row stream-row animated bounceInDown" 
              data-permalink="<?php echo (isset($permalink) ? $permalink : ""); ?>" 
              data-hash="<?php echo (isset($hash) && !empty($hash) ? $hash : ""); ?>"
              data-wayback="<?php echo (isset($wayback) && !empty($wayback) ? $wayback : ""); ?>"
+             data-user="<?php echo (isset($user) && !empty($user) ? $user : ""); ?>"
              >
             <div class="stream col-md-12"></div>
         </div>
