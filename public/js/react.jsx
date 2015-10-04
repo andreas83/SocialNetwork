@@ -320,7 +320,10 @@
     render: function () {
         
         var imgpath = "/public/upload/" + this.props.author.profile_picture;
-        
+        if(typeof(this.props.author.profile_picture)=="undefined")
+        {
+            imgpath="/public/img/default-profile.png";
+        }
         var editBtn;
         if(this.props.id==user_id)
         {
@@ -356,21 +359,39 @@
         var domNode = this.getDOMNode();
         var nodes = domNode.querySelectorAll('code');
         if (nodes.length > 0) {
-        for (var i = 0; i < nodes.length; i=i+1) {
-            $( nodes[i] ).wrap( "<pre></pre>" );
-            hljs.highlightBlock(nodes[i]);
+            for (var i = 0; i < nodes.length; i=i+1) {
+                $( nodes[i] ).wrap( '<pre className="SourceCode"></pre>' );
+                hljs.highlightBlock(nodes[i]);
+
+            }
         }
+        
+        nodes = domNode.querySelectorAll('.text>span');
+        if (nodes.length > 0) {
+            for (var i = 0; i < nodes.length; i=i+1) {
+                if(nodes[i].childNodes.length>0)
+                {
+                    if(typeof(nodes[i].childNodes[0].nodeValue)=="string")
+                    {
+                        
+                        $(nodes[i]).html(nodes[i].childNodes[0].nodeValue.replace(/#(\S*)/g,'<a class="hash" href="/hash/$1">#$1</a>'));
+                        
+                        
+                    }
+                    console.log(nodes[i].childNodes[0].nodeType);
+                }
+                //$(nodes[i].childNodes[0].nodeValue).text().replace(/#(\S*)/g,'<a class="hash" href="/hash/$1">#$1</a>');
+            }
         }
+
+         
     },
     
     render: function () {
         
         var content=this.props.data.text;
-        //content =Replacehashtags(content);
         
         
- 
-
         return (
                 <div>
                     <div className="text" >
@@ -490,6 +511,11 @@
         render: function () {
 
             var imgpath = "/public/upload/" + this.props.author.profile_picture;
+            if(typeof(this.props.author.profile_picture)=="undefined")
+            {
+                imgpath="/public/img/default-profile.png";
+            }
+            
             
             var authorLink="/"+this.props.author.name.replace(" ", ".");
             return (

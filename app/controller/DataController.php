@@ -55,11 +55,13 @@ class DataController extends BaseController {
             $std[$i]->stream->date = $res->date;
             $std[$i]->stream->text = $res->data;
             $std[$i]->stream->id = $res->id;
-
-            $std[$i]->author = json_decode($res->settings);
-            $std[$i]->author->name = $res->name;
-            $std[$i]->author->id = $res->user_id;
-
+            
+            if(isset($res->settings))
+            {
+                $std[$i]->author = json_decode($res->settings);
+                $std[$i]->author->name = $res->name;
+                $std[$i]->author->id = $res->user_id;
+            }
             $i++;
         }
 
