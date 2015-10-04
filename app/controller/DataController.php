@@ -104,6 +104,16 @@ class DataController extends BaseController {
         if(isset($request['id']))
         {
             $res=$data->get($request['id']);
+            if(strpos($res->data, "<code")!==false)
+            {
+                $res->data="";  
+            }
+            else
+            {
+                
+                $res->data=  strip_tags($res->data);
+            }
+                
             $this->assign("title", "Public Stream  ".$res->data);
             $media=json_decode($res->media);
             $this->addHeader('<link rel="canonical" href="'.Config::get("address").'permalink/'.$request['id'].'">');
