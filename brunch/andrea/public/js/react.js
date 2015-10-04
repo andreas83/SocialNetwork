@@ -302,7 +302,9 @@ var Author = React.createClass({
     render: function render() {
 
         var imgpath = "/public/upload/" + this.props.author.profile_picture;
-
+        if (typeof this.props.author.profile_picture == "undefined") {
+            imgpath = "/public/img/default-profile.png";
+        }
         var editBtn;
         if (this.props.id == user_id) {
             editBtn = React.createElement(
@@ -363,8 +365,22 @@ var AuthorText = React.createClass({
         var nodes = domNode.querySelectorAll('code');
         if (nodes.length > 0) {
             for (var i = 0; i < nodes.length; i = i + 1) {
-                $(nodes[i]).wrap("<pre></pre>");
+                $(nodes[i]).wrap('<pre className="SourceCode"></pre>');
                 hljs.highlightBlock(nodes[i]);
+            }
+        }
+
+        nodes = domNode.querySelectorAll('.text>span');
+        if (nodes.length > 0) {
+            for (var i = 0; i < nodes.length; i = i + 1) {
+                if (nodes[i].childNodes.length > 0) {
+                    if (typeof nodes[i].childNodes[0].nodeValue == "string") {
+
+                        $(nodes[i]).html(nodes[i].childNodes[0].nodeValue.replace(/#(\S*)/g, '<a class="hash" href="/hash/$1">#$1</a>'));
+                    }
+                    console.log(nodes[i].childNodes[0].nodeType);
+                }
+                //$(nodes[i].childNodes[0].nodeValue).text().replace(/#(\S*)/g,'<a class="hash" href="/hash/$1">#$1</a>');
             }
         }
     },
@@ -372,7 +388,6 @@ var AuthorText = React.createClass({
     render: function render() {
 
         var content = this.props.data.text;
-        //content =Replacehashtags(content);
 
         return React.createElement(
             'div',
@@ -503,6 +518,9 @@ var Comment = React.createClass({
     render: function render() {
 
         var imgpath = "/public/upload/" + this.props.author.profile_picture;
+        if (typeof this.props.author.profile_picture == "undefined") {
+            imgpath = "/public/img/default-profile.png";
+        }
 
         var authorLink = "/" + this.props.author.name.replace(" ", ".");
         return React.createElement(
