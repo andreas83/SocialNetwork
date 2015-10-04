@@ -47,14 +47,18 @@ var StreamBox = React.createClass({
         if ($(".stream-row").attr("data-hash") != "") {
             hash = $(".stream-row").attr("data-hash");
         }
-        if (typeof this.props.hashtag != "undefined") {
-            hash = this.props.hashtag.replace("#", "");
-        }
 
         if ($(".stream-row").attr("data-user") != "") {
             user = $(".stream-row").attr("data-user");
         }
 
+        if (typeof this.props.hashtag != "undefined") {
+            //we do a full page load
+            //when the search is called via /user or /permalink
+            //reson: url reflect content
+
+            if (show == 1 || user != "") window.location.href = "/hash/" + this.props.hashtag.replace("#", "");else hash = this.props.hashtag.replace("#", "");
+        }
         if (this.state.lastID == this.id) {
             this.setState({
                 endofData: true
@@ -139,6 +143,7 @@ var StreamList = React.createClass({
             var editContent = function editContent() {
                 var streamItem = $(".stream-item[data-id=" + data.stream.id + "]");
                 streamItem.find(".text").attr("contenteditable", "true").focus();
+                streamItem.find(".text").html(streamItem.find(".text").text());
                 streamItem.find(".action .save").removeClass("hide");
                 streamItem.find(".action .save").click(function () {
                     $.ajax({
@@ -353,7 +358,21 @@ var Author = React.createClass({
 var AuthorText = React.createClass({
     displayName: 'AuthorText',
 
+    componentDidMount: function componentDidMount() {
+        var domNode = this.getDOMNode();
+        var nodes = domNode.querySelectorAll('code');
+        if (nodes.length > 0) {
+            for (var i = 0; i < nodes.length; i = i + 1) {
+                $(nodes[i]).wrap("<pre></pre>");
+                hljs.highlightBlock(nodes[i]);
+            }
+        }
+    },
+
     render: function render() {
+
+        var content = this.props.data.text;
+        //content =Replacehashtags(content);
 
         return React.createElement(
             'div',
@@ -361,7 +380,7 @@ var AuthorText = React.createClass({
             React.createElement(
                 'div',
                 { className: 'text' },
-                React.createElement('span', { dangerouslySetInnerHTML: { __html: Replacehashtags(this.props.data.text) } })
+                React.createElement('span', { dangerouslySetInnerHTML: { __html: content } })
             ),
             React.createElement(
                 'div',
@@ -484,7 +503,7 @@ var Comment = React.createClass({
     render: function render() {
 
         var imgpath = "/public/upload/" + this.props.author.profile_picture;
-        var rawMarkup = marked(this.props.children.toString(), { sanitize: true });
+
         var authorLink = "/" + this.props.author.name.replace(" ", ".");
         return React.createElement(
             'div',
@@ -499,7 +518,7 @@ var Comment = React.createClass({
                     this.props.author.name
                 )
             ),
-            React.createElement('span', { dangerouslySetInnerHTML: { __html: rawMarkup } })
+            React.createElement('span', { dangerouslySetInnerHTML: { __html: this.props.children.toString() } })
         );
     }
 });

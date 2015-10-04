@@ -16,7 +16,11 @@ $color1:#797270;
 $color2:#A7A7A9;
 $color3:#8FB8DE;
 
-body { padding-top: 70px; }
+body { 
+    padding-top: 70px; 
+    background-color:#f2f2f2;
+}
+
 .space{
     padding-top: 45px;
 }
@@ -161,30 +165,38 @@ a.hash{
     
  min-height:75px    
 }
-.comment{
+.commentList{
     
-    color: #000;
-    border-bottom: 1px solid #eee;
-    img{
-        float:left;
-        width:45px;
-        height:45px;
-        margin-right:20px;
-        margin-left:20px;
+    .comment:first-child{
+        margin-top:35px;
     }
+    .comment{
+        padding-bottom:10px;
+    }
+    .comment{
 
-}
-.commentBox{
-    color: #000;
-    background-color: $color-dmdn-white;
-    
-}
-.comment:after,.www:after{
-    content:'';
-    display:block;
-    clear: both;
-}
+        color: #000;
+        border-bottom: 1px solid #eee;
+        img{
+            float:left;
+            width:45px;
+            height:45px;
+            margin-right:20px;
+            margin-left:20px;
+        }
 
+    }
+    .commentBox{
+        color: #000;
+        background-color: $color-dmdn-white;
+
+    }
+    .comment:after,.www:after{
+        content:'';
+        display:block;
+        clear: both;
+    }
+}
 .btn{
     border-radius: 0px;
 }

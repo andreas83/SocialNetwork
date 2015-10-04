@@ -1,7 +1,7 @@
 $(document).ready(function () {
     
     var isMetaLoading = false;
-    $("#share_area").on("keyup", function () {
+    $("#share_area").on("onpaste", function () {
         var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
 
         if ($(this).val().match(urlRegex)) {
