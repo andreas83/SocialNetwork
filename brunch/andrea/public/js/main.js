@@ -1,9 +1,8 @@
 $(document).ready(function () {
     
     var isMetaLoading = false;
-    $("#share_area").on("onpaste", function () {
+    $("#share_area").on("input propertychange", function () {
         var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-
         if ($(this).val().match(urlRegex)) {
             url = $(this).val().match(urlRegex);
             if (isMetaLoading)
