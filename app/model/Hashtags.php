@@ -16,7 +16,7 @@ class Hashtags extends BaseApp
     
     public function findHashtags($term) {
         
-        $sql = "select * from hashtags where hashtag like :term order by pop desc";
+        $sql = "select * from Hashtags where hashtag like :term order by pop desc";
         
         $stmt = $this->dbh->prepare($sql);
 
@@ -24,7 +24,7 @@ class Hashtags extends BaseApp
 
         $stmt->execute();
 
-        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, 'stdClass');
+        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, 'Hashtags');
 
         return $obj;
         

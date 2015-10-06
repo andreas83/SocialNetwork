@@ -79,7 +79,17 @@ class DataController extends BaseController {
         if (isset($_POST) && !empty($_POST) && Helper::isUser() && !isset($_POST['wayback'])) {
             $content = new Content();
             $content->data = $_POST['content'];
-
+            $pattern="/(^|\s)#(\w*[a-zA-Z0-9öäü_-]+\w*)/";
+            preg_match_all($pattern, $content->data, $hashtags);
+            if(count($hashtags[0])>0)
+            {
+                $hashdb= new Hashtags;
+                foreach($hashtags[0] as $hashtag)
+                {
+                    $hashdb->hashtag=trim(str_replace("#", "", $hashtag));
+                    $hashdb->save();
+                }
+            }
             $metadata = json_decode($_POST['metadata']);
             if ($metadata->type == "img") {
                 $metadata->url = $this->download($metadata->url);
@@ -132,6 +142,11 @@ class DataController extends BaseController {
         }
         if(isset($request['hash']))
         {
+            $hashdb= new Hashtags;
+            $res=$hashdb->find(array("hashtag"=>str_replace("#", "", $request['hash'])));
+            $res[0]->pop+=1;
+            $res[0]->save();
+            
             $this->assign("hash", $request['hash']);
             $this->assign("title", "Pictures of ".$request['hash'] );
             
@@ -248,6 +263,20 @@ class DataController extends BaseController {
             parse_str(file_get_contents("php://input"),$put_vars);
             $res[0]->data=$put_vars['content'];
             $res[0]->save();
+            
+            $pattern="/(^|\s)#(\w*[a-zA-Z0-9öäü_-]+\w*)/";
+            preg_match_all($pattern, $put_vars['content'], $hashtags);
+            if(count($hashtags[0])>0)
+            {
+                $hashdb= new Hashtags;
+                foreach($hashtags[0] as $hashtag)
+                {
+                    $hashdb->hashtag=trim(str_replace("#", "", $hashtag));
+                    $hashdb->save();
+                }
+            }
+            
+            
             echo json_encode(array("status" => "done"));
         }
         

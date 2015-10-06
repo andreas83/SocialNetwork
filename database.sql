@@ -52,3 +52,8 @@ CREATE TABLE  hashtags (
 
 Alter table User add column 
 api_key varchar(32);
+
+RENAME TABLE hashtags to Hashtags;
+Alter table Hashtags drop index id;
+Alter table Hashtags add unique index hashtag (hashtag);
+

@@ -93,6 +93,11 @@ $(document).ready(function () {
 
             });
             $("#search").find(".searchresult li").click(function () {
+                
+                $.post('/api/hashtag/score/' + $(this).text().replace("#", ""), function( data ) {
+                    console.log(data);
+                });
+                
                 if ($(".frontpage").length > 0)
                 {
                     window.location.href = "/hash/" + $(this).text().replace("#", "");

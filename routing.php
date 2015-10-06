@@ -28,7 +28,7 @@ $router->map('PUT', '/api/content/[i:id]', 'DataController#update');
 
 //for autocomplete
 $router->map('GET', '/api/hashtags/[a:auto]', 'HashController#get');
-
+$router->map('POST', '/api/hashtag/score/[a:hash]', 'HashController#addScore');
 
 //Comment API
 $router->map('GET|POST', '/api/comments/[i:id]', 'DataController#comment');
