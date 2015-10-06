@@ -1,0 +1,34 @@
+
+27.9.2015  ---   Complete Rewrite ---
+
+18.07.2015 added youtu.be  and redtube url shema
+23.05.2015 added relation graph to hashtag page
+20.02.2015 changed look and feel of frontpage
+11.10.2014 removed image thumbnailer (performance issues with gifs)
+25.07.2014 webm now no longer hot linked
+10.06.2014 server errors now redirect to /random, fixed voting troubles on mobile devices
+07.06.2014 fixed youtube height
+30.05.2014 added stats, improved hashtags counting, fixed youtube responsive behavior
+28.05.2014 improved file extension check on server side
+23.05.2014 bugfix, videos now also available on votes
+22.05.2014 added newest comment
+19.05.2014 reduced badwords to nsfw
+17.05.2014 added /random/, top navigation and some minor css improvements
+14.05.2014 fixed android qml app and chrome ext due api change from 12.05.2014
+12.05.2014 getting next pictures based on id not pages, fixed issue with double posts while scrolling
+11.05.2014 added comments and new one collumn design
+21.04.2014 webm videos now supported
+04.04.2014 redesign
+30.03.2014 hashtags are now sorted by weight
+26.03.2014 css improvements
+27.02.2014 nsfw content removed from the front page
+26.02.2014 added hot or not, hashtags, sidebar
+08.02.2014 added modal preview dialog
+27.01.2014 added swipe gesture detection
+17.12.2013 added opengraph
+15.12.2013 added small admin tool
+14.12.2013 added #hashtag feature
+27.11.2013 chrome extention now available
+05.11.2013 some css improvements, removed rand()m weekend, buggy monday and so on
+08.10.2013 first dmdn bot (php) and new logic for Tuesday
+07.10.2013 some strange monday sort algorithm was added

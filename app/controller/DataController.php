@@ -332,8 +332,24 @@ class DataController extends BaseController {
             if ($tag->getAttribute('property') === 'og:description') {
                 $data['og_description'] = $tag->getAttribute('content');
             }
+            if($tag->getAttribute('name') == 'description')
+            {
+              $data['alt_description']= $tag->getAttribute('content');  
+            } 
+            
         }
-
+        //fallback (while no opengraph tags exist, we use title tag, and meta description)
+        if(!isset($data['og_title'])){
+             $data['og_title'] =  $dom->getElementsByTagName('title')->item(0)->textContent;
+        }
+        if(!isset($data['og_description'])){
+             $data['og_description'] =  $data['alt_description'];
+        }
+        if(!isset($data['og_img']))
+        {
+            $base =  $dom->getElementsByTagName('base')->item(0)->attributes->getNamedItem("href")->value;
+            $data['og_img'] = $base.$dom->getElementsByTagName('img')->item(0)->attributes->getNamedItem("src")->value;
+        }
         echo json_encode($data);
     }
 

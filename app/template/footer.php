@@ -12,11 +12,7 @@ if (Helper::isUser()) {
     echo "<script>var user_settings=false;</script>";
 }
 ?>
-<?php
-foreach ($header as $script) {
-    echo $script;
-}
-?>
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
 <link rel="stylesheet" href="/public/css/scss.php/dmdn.scss" />
 
