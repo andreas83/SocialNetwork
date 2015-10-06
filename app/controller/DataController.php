@@ -96,13 +96,25 @@ class DataController extends BaseController {
             }
 
             if (isset($_FILES) && !empty($_FILES['img']['name'][0]) && is_array($_FILES)) {
-
+                $i=0;
                 foreach ($_FILES['img']['tmp_name'] as $i => $file) {
                     $uniq = uniqid("", true) . "_" . $_FILES['img']['name'][$i];
                     $upload_path = Config::get("dir") . Config::get("upload_path");
                     move_uploaded_file($file, $upload_path . $uniq);
-                    $metadata->img[] = $uniq;
+                    
                     $metadata->type = "upload";
+                    
+                    $mime = mime_content_type($upload_path . $uniq);
+
+                    $metadata->files[$i]->src = $uniq;
+                    $metadata->files[$i]->name = $_FILES['img']['name'][$i];
+                    $metadata->files[$i]->type = $mime;
+
+                    
+                    $i++;
+                    
+                    
+                    
                 }
             }
             $content->media = json_encode($metadata);

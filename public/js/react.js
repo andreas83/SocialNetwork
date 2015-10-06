@@ -224,16 +224,37 @@ var Upload = React.createClass({
     displayName: 'Upload',
 
     render: function render() {
-        var imgpath = "";
-        var Images = this.props.upload.img.map(function (data) {
-            imgpath = "/public/upload/" + data;
-            return React.createElement('img', { className: 'img-responsive', src: imgpath });
-        });
+        var ImgPath,
+            FilePath = "";
+        var Img = "";
+        var Files = "";
+        //
+        if (typeof this.props.upload.files != "undefined") {
+
+            var Files = this.props.upload.files.map(function (data) {
+                FilePath = "/public/upload/" + data.src;
+
+                if (data.type.match("image")) {
+                    return React.createElement('img', { className: 'img-responsive', src: FilePath });
+                }
+                return React.createElement(
+                    'p',
+                    null,
+                    React.createElement(
+                        'a',
+                        { href: FilePath, target: '_blank' },
+                        React.createElement('span', { className: 'glyphicon glyphicon-circle-arrow-down' }),
+                        '  ',
+                        data.name
+                    )
+                );
+            });
+        }
 
         return React.createElement(
             'div',
             { className: 'upload' },
-            Images
+            Files
         );
     }
 });
