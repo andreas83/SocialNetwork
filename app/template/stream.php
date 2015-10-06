@@ -11,7 +11,7 @@ include("menu.php");
         <?php if (Helper::isUser()) { ?>
             <div class="row ">
                 <div class="col-md-8 stream-input">
-                    <form method="post" enctype="multipart/form-data">
+                    <form method="post" action="/" enctype="multipart/form-data">
 
                             <textarea id="share_area" name="content" class="form-control"></textarea>
 
