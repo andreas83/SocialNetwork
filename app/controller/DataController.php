@@ -61,6 +61,9 @@ class DataController extends BaseController {
                         case 'img':
                             $std[$i]->stream->url = Config::get('upload_address') . $std[$i]->stream->url;
                             break;
+                        case 'upload':
+                            $std[$i]->stream->src = Config::get('upload_address') . $std[$i]->stream->src;
+                            break;
                         default:
                             break;
                     }
