@@ -200,7 +200,7 @@ var Content = React.createClass({
             return React.createElement('div', { className: 'generic' });
         }
         if (this.props.data.type == "img") {
-            imgpath = "/public/upload/" + this.props.data.url;
+            imgpath = this.props.data.url;
 
             return React.createElement(
                 'div',
@@ -232,7 +232,7 @@ var Upload = React.createClass({
         if (typeof this.props.upload.files != "undefined") {
 
             var Files = this.props.upload.files.map(function (data) {
-                FilePath = "/public/upload/" + data.src;
+                FilePath = data.src;
 
                 if (data.type.match("image")) {
                     return React.createElement('img', { className: 'img-responsive', src: FilePath });
@@ -322,9 +322,9 @@ var Author = React.createClass({
 
     render: function render() {
 
-        var imgpath = "/public/upload/" + this.props.author.profile_picture;
+        var imgpath = this.props.author.profile_picture;
         if (typeof this.props.author.profile_picture == "undefined") {
-            imgpath = "/public/img/default-profile.png";
+            imgpath = "default-profile.png";
         }
         var editBtn;
         if (this.props.id == user_id) {
@@ -539,9 +539,9 @@ var Comment = React.createClass({
 
     render: function render() {
 
-        var imgpath = "/public/upload/" + this.props.author.profile_picture;
+        var imgpath = this.props.author.profile_picture;
         if (typeof this.props.author.profile_picture == "undefined") {
-            imgpath = "/public/img/default-profile.png";
+            imgpath = "default-profile.png";
         }
 
         var authorLink = "/" + this.props.author.name.replace(" ", ".");

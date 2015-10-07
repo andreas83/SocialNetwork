@@ -41,7 +41,7 @@ class DataController extends BaseController {
         $hash= (isset($_REQUEST['hash']) && $_REQUEST['hash'] != "" ? $_REQUEST['hash'] : false);
         $user= (isset($_REQUEST['user']) && $_REQUEST['user'] != "" ? $_REQUEST['user'] : false);
 
-        
+
         $data = $data->getNext($id, $show, $hash, $user);
         header('Content-Type: application/json');
         $i = 0;
@@ -50,17 +50,34 @@ class DataController extends BaseController {
             $std[$i] = new stdClass();
             $std[$i]->stream = new stdClass();
             $std[$i]->stream->type = "generic";
-            $std[$i]->stream = (isset($res->media) && $res->media != "null" ? json_decode($res->media) : $std[$i]->stream);
-
-            $std[$i]->stream->date = $res->date;
+            $std[$i]->stream->date = (int)$res->date;
             $std[$i]->stream->text = $res->data;
-            $std[$i]->stream->id = $res->id;
-            
-            if(isset($res->settings))
+            $std[$i]->stream->id = (int)$res->id;
+
+            if (isset($res->media) && $res->media != 'null') {
+                $std[$i]->stream = json_decode($res->media);
+                if (isset($std[$i]->stream->type)) {
+                    switch ($std[$i]->stream->type) {
+                        case 'img':
+                            $std[$i]->stream->url = Config::get('upload_address') . $std[$i]->stream->url;
+                            break;
+                        case 'upload':
+                            $std[$i]->stream->src = Config::get('upload_address') . $std[$i]->stream->src;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+
+            if (isset($res->settings))
             {
                 $std[$i]->author = json_decode($res->settings);
                 $std[$i]->author->name = $res->name;
-                $std[$i]->author->id = $res->user_id;
+                $std[$i]->author->id = (int)$res->user_id;
+                if (isset($std[$i]->author->profile_picture) && $std[$i]->author->profile_picture != 'null') {
+                    $std[$i]->author->profile_picture = Config::get('upload_address') . $std[$i]->author->profile_picture;
+                }
             }
             $i++;
         }
@@ -92,7 +109,7 @@ class DataController extends BaseController {
             }
             $metadata = json_decode($_POST['metadata']);
             if ($metadata->type == "img") {
-                $metadata->url = $this->download($metadata->url);
+                $metadata->url = Config::get("upload_address").$this->download($metadata->url);
             }
 
             if (isset($_FILES) && !empty($_FILES['img']['name'][0]) && is_array($_FILES)) {
@@ -145,9 +162,9 @@ class DataController extends BaseController {
             $this->addHeader('<meta property="og:title" content="'.$res->data.'"/>');
             $this->addHeader('<meta property="og:type" content="website" />');
             if(isset($media->img[0]))
-                $this->addHeader('<meta property="og:image" content="'.Config::get("address").'/public/upload/'.$media->img[0].'"/>');
+                $this->addHeader('<meta property="og:image" content="'.Config::get("upload_address").$media->img[0].'"/>');
             if(isset($media->type) && $media->type=="img")
-                $this->addHeader('<meta property="og:image" content="'.Config::get("address").'/public/upload/'.$media->url.'"/>');
+                $this->addHeader('<meta property="og:image" content="'.Config::get("upload_address").$media->url.'"/>');
             
             
             $this->assign("permalink", $request['id']);
@@ -424,7 +441,7 @@ class DataController extends BaseController {
 
         $extensions = array("svg", "png", "jpg", "gif", "jpeg");
         if (in_array(strtolower($path_parts['extension']), $extensions)) {
-            $data = "<img src=\"/upload/" . $path_parts['basename'] . "\">";
+            $data = "<img src=\"".Config::get("upload_address").$path_parts['basename'] . "\">";
         }
 
         return $data;

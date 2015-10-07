@@ -227,7 +227,7 @@
         }
         if(this.props.data.type=="img")
         {
-            imgpath="/public/upload/" + this.props.data.url;
+            imgpath = this.props.data.url;
             
             return (<div className = "img"><img className="img-responsive" src={imgpath} /></div>);
         }
@@ -258,7 +258,7 @@
         {
             
             var Files = this.props.upload.files.map(function (data) {
-                FilePath="/public/upload/" + data.src;
+                FilePath = data.src;
 
                     if(data.type.match("image"))
                     {
@@ -335,10 +335,10 @@
         
     render: function () {
         
-        var imgpath = "/public/upload/" + this.props.author.profile_picture;
+        var imgpath = this.props.author.profile_picture;
         if(typeof(this.props.author.profile_picture)=="undefined")
         {
-            imgpath="/public/img/default-profile.png";
+            imgpath="default-profile.png";
         }
         var editBtn;
         if(this.props.id==user_id)
@@ -525,10 +525,10 @@
 
         render: function () {
 
-            var imgpath = "/public/upload/" + this.props.author.profile_picture;
+            var imgpath = this.props.author.profile_picture;
             if(typeof(this.props.author.profile_picture)=="undefined")
             {
-                imgpath="/public/img/default-profile.png";
+                imgpath = "default-profile.png";
             }
             
             

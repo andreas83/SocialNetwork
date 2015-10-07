@@ -12,7 +12,7 @@
 
                 ?>
                 <a class="" href="/"><?php if (isset($user_settings->profile_picture) && $user_settings->profile_picture) { ?>
-                        <img class="hidden-xs img-responsive" src="<?php echo ($user_settings->profile_picture) ? Config::get("upload_path") . "$user_settings->profile_picture" : "no-profile.jpg"; ?>">
+                        <img class="hidden-xs img-responsive" src="<?php echo Config::get('upload_address') . (($user_settings->profile_picture) ? $user_settings->profile_picture : "no-profile.jpg"); ?>">
                     <?php } else { ?>
                         <div class="glyph-icon flaticon-user91"></div>
                     <?php } ?>
