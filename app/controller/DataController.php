@@ -62,7 +62,9 @@ class DataController extends BaseController {
                             $std[$i]->stream->url = Config::get('upload_address') . $std[$i]->stream->url;
                             break;
                         case 'upload':
-                            $std[$i]->stream->src = Config::get('upload_address') . $std[$i]->stream->src;
+                            foreach ($std[$i]->stream->files as $fileKey => $file) {
+                                $std[$i]->stream->files[$fileKey]->src = Config::get('upload_address').$std[$i]->stream->files[$fileKey]->src;
+                            }
                             break;
                         default:
                             break;
