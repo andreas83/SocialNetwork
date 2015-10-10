@@ -224,6 +224,9 @@ class DataController extends BaseController {
             $std[$i]->text = $res->comment;
             $std[$i]->author = json_decode($res->settings);
             $std[$i]->author->name = $res->name;
+            if (isset($std[$i]->author->profile_picture) && $std[$i]->author->profile_picture != 'null') {
+                $std[$i]->author->profile_picture = Config::get('upload_address') . $std[$i]->author->profile_picture;
+            }
             $i++;
         }
         if (isset($std))
