@@ -50,9 +50,6 @@ class DataController extends BaseController {
             $std[$i] = new stdClass();
             $std[$i]->stream = new stdClass();
             $std[$i]->stream->type = "generic";
-            $std[$i]->stream->date = (int)$res->date;
-            $std[$i]->stream->text = $res->data;
-            $std[$i]->stream->id = (int)$res->id;
 
             if (isset($res->media) && $res->media != 'null') {
                 $std[$i]->stream = json_decode($res->media);
@@ -71,6 +68,10 @@ class DataController extends BaseController {
                     }
                 }
             }
+
+            $std[$i]->stream->date = (int)$res->date;
+            $std[$i]->stream->text = $res->data;
+            $std[$i]->stream->id = (int)$res->id;
 
             if (isset($res->settings))
             {
