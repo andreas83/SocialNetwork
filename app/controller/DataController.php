@@ -112,7 +112,7 @@ class DataController extends BaseController {
             }
             $metadata = json_decode($_POST['metadata']);
             if ($metadata->type == "img") {
-                $metadata->url = Config::get("upload_address").$this->download($metadata->url);
+                $metadata->url = $this->download($metadata->url);
             }
 
             if (isset($_FILES) && !empty($_FILES['img']['name'][0]) && is_array($_FILES)) {
