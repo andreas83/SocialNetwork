@@ -87,6 +87,9 @@ $(document).ready(function () {
     $("#search").find("input[type=text]").on("keyup", function ()
     {
         clearSearchResult();
+        if($(this).val().length==0)
+            return false;
+        
         $.get('/api/hashtags/' + $(this).val().replace("#", ""), function (data) {
             $(data).each(function (res, d) {
                 $("#search").find(".searchresult").append("<li>#" + d.hashtag + "</li>")
@@ -112,7 +115,7 @@ $(document).ready(function () {
                 //cnt click 
                 var container = document.getElementsByClassName('stream')[0];
 
-                var component = React.createElement(StreamBox, {hashtag: $(this).text()});
+                var component = React.createElement(InitStream, {hashtag: $(this).text()});
                 React.render(component, container);
 
 
@@ -130,7 +133,7 @@ $(document).ready(function () {
         clearSearchResult();
         clearStream();
         var container = document.getElementsByClassName('stream')[0];
-        var component = React.createElement(StreamBox, {hashtag: $("#search").find("input[type=text]").val()});
+        var component = React.createElement(InitStream, {hashtag: $("#search").find("input[type=text]").val()});
 
         React.render(component, container);
     });
