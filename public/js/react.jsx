@@ -338,7 +338,7 @@
         var imgpath = this.props.author.profile_picture;
         if(typeof(this.props.author.profile_picture)=="undefined")
         {
-            imgpath="default-profile.png";
+            imgpath="/public/img/default-profile.png";
         }
         var editBtn;
         if(this.props.id==user_id)
@@ -528,7 +528,7 @@
             var imgpath = this.props.author.profile_picture;
             if(typeof(this.props.author.profile_picture)=="undefined")
             {
-                imgpath = "default-profile.png";
+                imgpath = "/public/img/default-profile.png";
             }
             
             

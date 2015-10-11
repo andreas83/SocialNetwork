@@ -50,9 +50,6 @@ class DataController extends BaseController {
             $std[$i] = new stdClass();
             $std[$i]->stream = new stdClass();
             $std[$i]->stream->type = "generic";
-            $std[$i]->stream->date = (int)$res->date;
-            $std[$i]->stream->text = $res->data;
-            $std[$i]->stream->id = (int)$res->id;
 
             if (isset($res->media) && $res->media != 'null') {
                 $std[$i]->stream = json_decode($res->media);
@@ -71,6 +68,10 @@ class DataController extends BaseController {
                     }
                 }
             }
+
+            $std[$i]->stream->date = (int)$res->date;
+            $std[$i]->stream->text = $res->data;
+            $std[$i]->stream->id = (int)$res->id;
 
             if (isset($res->settings))
             {
@@ -111,7 +112,7 @@ class DataController extends BaseController {
             }
             $metadata = json_decode($_POST['metadata']);
             if ($metadata->type == "img") {
-                $metadata->url = Config::get("upload_address").$this->download($metadata->url);
+                $metadata->url = $this->download($metadata->url);
             }
 
             if (isset($_FILES) && !empty($_FILES['img']['name'][0]) && is_array($_FILES)) {
@@ -223,6 +224,9 @@ class DataController extends BaseController {
             $std[$i]->text = $res->comment;
             $std[$i]->author = json_decode($res->settings);
             $std[$i]->author->name = $res->name;
+            if (isset($std[$i]->author->profile_picture) && $std[$i]->author->profile_picture != 'null') {
+                $std[$i]->author->profile_picture = Config::get('upload_address') . $std[$i]->author->profile_picture;
+            }
             $i++;
         }
         if (isset($std))
