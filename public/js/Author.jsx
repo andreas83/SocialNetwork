@@ -71,10 +71,9 @@
             }
             
         }
-
-
         
-        
+        tmp_content=tmp_content.replace("\r\n", "<br>");
+
         return (
                 <div>
                     <div className="text" >
