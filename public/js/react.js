@@ -94,7 +94,7 @@ var AuthorText = React.createClass({
             }
         }
 
-        tmp_content = tmp_content.replace("\r\n", "<br>");
+        tmp_content = tmp_content.replace(/\r\n/g, "<br/>");
 
         return React.createElement(
             "div",

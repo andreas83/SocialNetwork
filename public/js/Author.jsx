@@ -71,8 +71,8 @@
             }
             
         }
-        
-        tmp_content=tmp_content.replace("\r\n", "<br>");
+
+        tmp_content=tmp_content.replace(/\r\n/g, "<br/>");
 
         return (
                 <div>
