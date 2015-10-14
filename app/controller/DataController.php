@@ -165,9 +165,9 @@ class DataController extends BaseController {
             $this->addHeader('<meta property="og:title" content="'.$res->data.'"/>');
             $this->addHeader('<meta property="og:type" content="website" />');
             if(isset($media->img[0]))
-                $this->addHeader('<meta property="og:image" content="'.Config::get("upload_address").$media->img[0].'"/>');
+                $this->addHeader('<meta property="og:image" content="'.Config::get("address").Config::get("upload_address").$media->img[0].'"/>');
             if(isset($media->type) && $media->type=="img")
-                $this->addHeader('<meta property="og:image" content="'.Config::get("upload_address").$media->url.'"/>');
+                $this->addHeader('<meta property="og:image" content="'.Config::get("address").Config::get("upload_address").$media->url.'"/>');
             
             
             $this->assign("permalink", $request['id']);
