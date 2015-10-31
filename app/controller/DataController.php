@@ -406,12 +406,18 @@ class DataController extends BaseController {
         if(!isset($data['og_title'])){
              $data['og_title'] =  $dom->getElementsByTagName('title')->item(0)->textContent;
         }
-        if(!isset($data['og_description'])){
+        if(!isset($data['og_description']) && isset($data['alt_description']) && !empty($data['alt_description'])){
              $data['og_description'] =  $data['alt_description'];
         }
+        
         if(!isset($data['og_img']))
         {
-            $base =  $dom->getElementsByTagName('base')->item(0)->attributes->getNamedItem("href")->value;
+            $base=$dom->getElementsByTagName('base');
+            if($base->length>0)
+                $base =  $dom->getElementsByTagName('base')->item(0)->attributes->getNamedItem("href")->value;
+            else
+                $base=$url;
+            
             $data['og_img'] = $base.$dom->getElementsByTagName('img')->item(0)->attributes->getNamedItem("src")->value;
         }
         echo json_encode($data);
