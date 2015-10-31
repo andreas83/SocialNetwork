@@ -47,6 +47,16 @@ class Helper
     {
         return (isset($_SESSION['login']) ? true : false);
     }
+    
+    public static function isValidAPIKey($secret)
+    {
+        $user = new User;
+        $res=$user->find(array("api_key" => $secret));
+
+        return (count($res)>0 ? true : false);
+    }
+    
+    
 
     public static function seoUrl($url)
     {

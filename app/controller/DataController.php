@@ -96,7 +96,12 @@ class DataController extends BaseController {
         
         $data = new Content;
 
-        if (isset($_POST) && !empty($_POST) && Helper::isUser() && !isset($_POST['wayback'])) {
+        if (isset($_POST) && !empty($_POST) && 
+                (
+                    Helper::isUser() || 
+                    isset($_POST['api_key']) && isValidAPIKey($_POST['api_key'])
+                ) &&
+                !isset($_POST['wayback'])) {
             $content = new Content();
             $content->data = $_POST['content'];
             $pattern="/(^|\s)#(\w*[a-zA-Z0-9öäü_-]+\w*)/";
