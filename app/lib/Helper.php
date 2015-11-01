@@ -45,17 +45,18 @@ class Helper
 
     public static function isUser()
     {
+        if(isset($_POST['api_key']))
+        {
+            $user=new User;
+            $res=$user->getUserbyAPIKey($_POST['api_key']);
+            if(count($res)>0)
+                return true;
+            else 
+                return false;
+        }
         return (isset($_SESSION['login']) ? true : false);
     }
-    
-    public static function isValidAPIKey($secret)
-    {
-        $user = new User;
-        $res=$user->find(array("api_key" => $secret));
-
-        return (count($res)>0 ? true : false);
-    }
-    
+      
     
 
     public static function seoUrl($url)

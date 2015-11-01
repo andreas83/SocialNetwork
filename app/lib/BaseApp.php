@@ -87,7 +87,7 @@ abstract class BaseApp
                 $sql .= " AND $key=:$key";
             }
         }
-
+        
         $stmt = $this->dbh->prepare($sql);
 
         foreach ($arg as $key => $val) {

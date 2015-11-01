@@ -17,5 +17,20 @@ class User extends BaseApp
     {
         return "id";
     }
+    
+    public function getUserbyAPIKey($secret){
+        $sql = "select * from User where api_key=:api";
+        
+        $stmt = $this->dbh->prepare($sql);
+
+        $stmt->bindValue(':api', $secret, PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, 'User');
+
+        return $obj;
+        
+    }
 
 }

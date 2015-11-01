@@ -96,12 +96,10 @@ class DataController extends BaseController {
         
         $data = new Content;
 
-        if (isset($_POST) && !empty($_POST) && 
-                (
-                    Helper::isUser() || 
-                    isset($_POST['api_key']) && isValidAPIKey($_POST['api_key'])
-                ) &&
-                !isset($_POST['wayback'])) {
+        if (
+            isset($_POST) && !empty($_POST) &&  
+            Helper::isUser()  && !isset($_POST['wayback']) )
+        {            
             $content = new Content();
             $content->data = $_POST['content'];
             $pattern="/(^|\s)#(\w*[a-zA-Z0-9öäü_-]+\w*)/";
@@ -144,6 +142,13 @@ class DataController extends BaseController {
             }
             $content->media = json_encode($metadata);
             $content->user_id = $_SESSION['login'];
+            if(isset($_POST['api_key']))
+            {
+                $user=new User;
+                $user=$user->getUserbyAPIKey($_POST['api_key']);
+                
+                $content->user_id= $user[0]->id;
+            }
             $content->date=date("U");
             
             $content->save();
