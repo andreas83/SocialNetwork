@@ -428,7 +428,12 @@ class DataController extends BaseController {
             else
                 $base=$url;
             
-            $data['og_img'] = $base.$dom->getElementsByTagName('img')->item(0)->attributes->getNamedItem("src")->value;
+            $imgSrc=$dom->getElementsByTagName('img')->item(0)->attributes->getNamedItem("src")->value;
+            
+            if(substr($imgSrc, 0, 4)=="http")
+                $data['og_img'] = $imgSrc;
+            else
+                $data['og_img'] = $base.$imgSrc;
         }
         echo json_encode($data);
     }
