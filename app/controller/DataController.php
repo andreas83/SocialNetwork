@@ -225,7 +225,8 @@ class DataController extends BaseController {
             $content=$content->get($request['id']);
             
             $notification = new Notification;
-            $notification->user_id=$content->user_id;
+            $notification->to_user_id=$content->user_id;
+            $notification->from_user_id=$_SESSION['login'];
             $notification->date=date("U");
             $notification->message='wrote something about your'
                     . ' <a href="/permalink/'.$request['id'].'">post</a>';
@@ -285,7 +286,8 @@ class DataController extends BaseController {
             $content=$content->get($request['id']);
             
             $notification = new Notification;
-            $notification->user_id=$content->user_id;
+            $notification->to_user_id=$content->user_id;
+            $notification->from_user_id=$_SESSION['login'];
             $notification->date=date("U");
             $notification->message='scored your'
                     . ' <a href="/permalink/'.$request['id'].'">post</a>';
