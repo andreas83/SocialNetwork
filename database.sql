@@ -57,3 +57,11 @@ RENAME TABLE hashtags to Hashtags;
 Alter table Hashtags drop index id;
 Alter table Hashtags add unique index hashtag (hashtag);
 
+CREATE TABLE  Notification (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `message` text COLLATE utf8_unicode_ci NOT NULL,
+  `level` int(1) unsigned NOT NULL,
+  `date` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 

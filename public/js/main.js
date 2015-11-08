@@ -112,7 +112,7 @@ $(document).ready(function () {
                 //set input from search res
                 $("#search").find("input[type=text]").val($(this).text());
 
-                //cnt click 
+                
                 var container = document.getElementsByClassName('stream')[0];
 
                 var component = React.createElement(InitStream, {hashtag: $(this).text()});
@@ -152,4 +152,54 @@ $(document).ready(function () {
         $("#registerform").toggleClass("hide");
         $("#loginform").toggleClass("hide");
     });
+    
+    
+    function getCookie(cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0; i<ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1);
+            if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+        }
+        return "";
+    }
+
+    //start notification block
+    var socket;
+
+    
+    var host = "ws://127.0.0.1:9000/notification"; // SET THIS TO YOUR SERVER
+    
+    try {
+            socket = new WebSocket(host);
+            
+            socket.onopen    = function(msg) { 
+                socket.send(JSON.stringify({action: "getNotifications", auth_cookie:getCookie("auth")}));
+            };
+            socket.onmessage = function(msg) { 
+                data=JSON.parse(msg.data);
+                
+                $(data).each(function(key){
+                    console.log(data[key]);
+                    safe_username=data[key].name.replace(" ", ".")
+                    user_link='<a href="/'+safe_username+'">'+data[key].name+'</a>';
+                    
+                    $("#notifications").append("<li class=list-group-item>"+user_link+" "+data[key].message+"</li>");
+                });
+            };
+            socket.onclose   = function(msg) { 
+                $("#notifications").html("Disconected from notification server");
+                 
+            };
+    }
+    catch(ex){ 
+            $("#notifications").text(ex);
+            //console.log(ex); 
+    }
+
+
+    
+    
+    
 });

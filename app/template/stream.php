@@ -6,11 +6,11 @@ include("menu.php");
 
 
     
-<div class="row mainrow ">
-    <div class="col-md-8 col-sm-8 col-xs-12" id="stream">
+<div class="col-md-7 col-sm-8 col-xs-12 ">
+    
         <?php if (Helper::isUser()) { ?>
-            <div class="row ">
-                <div class="col-md-8 stream-input">
+            
+                <div class="col-md-11 stream-input">
                     <form method="post" action="/" enctype="multipart/form-data">
 
                             <textarea id="share_area" name="content" class="form-control"></textarea>
@@ -78,20 +78,28 @@ include("menu.php");
                             <button class="btn btn-lg btn-info"><?php echo _('Share now!'); ?></button>
                         </form>
                     </div>
-                </div>
+                
             <?php } ?>
 
-        <div class="row stream-row animated bounceInDown" 
+        <div class=" stream-row animated bounceInDown" 
              data-permalink="<?php echo (isset($permalink) ? $permalink : ""); ?>" 
              data-hash="<?php echo (isset($hash) && !empty($hash) ? $hash : ""); ?>"
              data-wayback="<?php echo (isset($wayback) && !empty($wayback) ? $wayback : ""); ?>"
              data-user="<?php echo (isset($user) && !empty($user) ? $user : ""); ?>"
              >
-            <div class="stream col-md-12"></div>
+            <div class="stream col-md-11"></div>
         </div>
      
-        </div>
+        
     </div>
+
+<div class="col-md-3 hidden-sm hidden-xs">
+    <ul class="list-group" id="notifications">
+        
+    </ul>
+    
+
+</div>
 <?php
 
 include("footer.php");

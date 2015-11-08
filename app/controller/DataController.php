@@ -220,6 +220,19 @@ class DataController extends BaseController {
             $comment->comment = $_POST['text'];
             $comment->user_id = $_SESSION['login'];
             $comment->save();
+            
+            $content= new Content;
+            $content=$content->get($request['id']);
+            
+            $notification = new Notification;
+            $notification->user_id=$content->user_id;
+            $notification->date=date("U");
+            $notification->message='wrote something about your'
+                    . ' <a href="/permalink/'.$request['id'].'">post</a>';
+            if($notification->user_id!=$_SESSION['login'])
+                $notification->save();
+                    
+            
         } elseif ($_POST && !Helper::isUser()) {
             header('HTTP/1.0 403 Forbidden');
         }
@@ -267,6 +280,19 @@ class DataController extends BaseController {
             $score->content_id = $request['id'];
             $score->type = $request['type'];
             $score->save();
+            
+            $content= new Content;
+            $content=$content->get($request['id']);
+            
+            $notification = new Notification;
+            $notification->user_id=$content->user_id;
+            $notification->date=date("U");
+            $notification->message='scored your '
+                    . ' <a href="/permalink/'.$request['id'].'">post</a>';
+            if($content->user_id!=$_SESSION['login'])
+                $notification->save();
+            
+            
         } elseif ($_POST && !Helper::isUser()) {
             header('HTTP/1.0 403 Forbidden');
         }
