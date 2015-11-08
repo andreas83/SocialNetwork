@@ -4,7 +4,8 @@ class Notification extends BaseApp
 {
 
     public $id = "";
-    public $user_id = "";
+    public $to_user_id = "";
+    public $from_user_id = "";
 
     public $message ="";
     public $level ="";
@@ -18,7 +19,7 @@ class Notification extends BaseApp
     
     public function cleanup(){
         $enddate=  strtotime("-1 week");
-        $sql = "delete from Notification where date<:enddata";
+        $sql = "delete from Notification where date<:enddate";
         
         $stmt = $this->dbh->prepare($sql);
 
@@ -27,12 +28,15 @@ class Notification extends BaseApp
         $stmt->execute();
     }
     
-    public function getNotifications($auth_cookie, $level=false) {
+    public function getNotifications($auth_cookie) {
         
-        $sql = "select * from Notification "
-                . "inner join User on Notification.user_id=User.id and "
+        $sql = "select Notification.*, "
+                . "fromUser.* from Notification"
+                . " inner join User on "
+                . "Notification.to_user_id=User.id and "
                 . "User.auth_cookie=:auth_cookie "
-                . "order by Notification.date desc";
+                . " left join User fromUser on "
+                . "Notification.from_user_id = fromUser.id";
         
         $stmt = $this->dbh->prepare($sql);
 

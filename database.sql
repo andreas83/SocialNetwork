@@ -65,3 +65,6 @@ CREATE TABLE  Notification (
   `date` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 
+
+alter table Notification change user_id to_user_id int(10) unsigned;
+alter table Notification add column from_user_id int(10) unsigned after to_user_id;

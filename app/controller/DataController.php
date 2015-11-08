@@ -287,7 +287,7 @@ class DataController extends BaseController {
             $notification = new Notification;
             $notification->user_id=$content->user_id;
             $notification->date=date("U");
-            $notification->message='scored your '
+            $notification->message='scored your'
                     . ' <a href="/permalink/'.$request['id'].'">post</a>';
             if($content->user_id!=$_SESSION['login'])
                 $notification->save();
