@@ -43,7 +43,7 @@ $router->map('GET', '/hash/[a:hash]', 'DataController#stream');
 
 
 $router->map('GET', '/[*:user]', 'DataController#stream');
-$router->map('GET|POST', '/', 'DataController#frontend');
+$router->map('GET|POST', '/', 'DataController#stream');
 
 
 $match = $router->match();

@@ -18,7 +18,8 @@ if (Helper::isUser()) {
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/highlight.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script src="https://fb.me/react-0.13.3.js"></script>
+<script src="https://fb.me/react-0.14.2.min.js"></script>
+<script src="https://fb.me/react-dom-0.14.2.min.js"></script>
 <script src="/public/js/main.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script src="/public/js/react.js"></script>

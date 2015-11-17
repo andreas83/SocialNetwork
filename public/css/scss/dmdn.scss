@@ -21,16 +21,13 @@ body {
     background-color:#f2f2f2;
 }
 
-.space{
-    padding-top: 45px;
-}
 .frontpage{
         background-image: url("http://dasmerkendienie.com/upload/998a76924607c5396b978bb7341784e52ab4f49a17f84897c1b5b96e7c1e15b3e3f3797b8630f0c7861b80e224f795eb385a502cf4021f4e772b52938941b6bf.jpg");
         background-repeat:no-repeat;
         background-size:cover;
         
 }
-.navbar-default, .navbar-brand, {
+.navbar-default, .navbar-brand {
     background-color: #00003D;
     border-color: #000;
     color: #fff!important;
@@ -60,6 +57,7 @@ body {
 .navbar-form
 {
     border:0px;
+    padding: 0px 5px;
 }
 
 .hide{
@@ -203,7 +201,7 @@ a.hash{
 
 video {
   width: 100%    !important;
-  height: auto   !important;
+  
   max-height: 560px;
 }
 
@@ -221,6 +219,13 @@ video {
 	height: 100%;
 }
 
+#notifications img{
+    max-height: 50px;
+    max-width: 50px;
+    float:left;
+    margin-right: 5px;
+    
+}
 .animated { 
     -webkit-animation-duration: 1s; 
     animation-duration: 1s; 

@@ -1,8 +1,5 @@
 <?php
 
-require_once('./websocketServer.php');
-
-chdir('../../');
 require_once 'app/lib/AutoLoader.php';
 
 
@@ -16,7 +13,6 @@ class notificationServer extends WebSocketServer {
       {
           $notifications = new Notification;
           $res=$notifications->getNotifications($data->auth_cookie);
-          var_dump($data);
           $this->send($user, json_encode($res));
       }
       
