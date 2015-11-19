@@ -92,13 +92,19 @@ class DataController extends BaseController {
         }
     }
 
+    
+    /**
+     * we should splitt this function into (save data, get data)
+     *
+     * @todo refactoring 
+     * @param type $request
+     */
     function stream($request=false) {
         
         $data = new Content;
 
         if (
-            isset($_POST) && !empty($_POST) &&  
-            Helper::isUser()  && !isset($_POST['wayback']) )
+            isset($_POST) && !empty($_POST)  && !isset($_POST['wayback']) )
         {            
             $content = new Content();
             $content->data = $_POST['content'];
@@ -141,7 +147,11 @@ class DataController extends BaseController {
                 }
             }
             $content->media = json_encode($metadata);
-            $content->user_id = $_SESSION['login'];
+            if(Helper::isUser())
+                $content->user_id = $_SESSION['login'];
+            else
+                $content->user_id = 1;
+            
             if(isset($_POST['api_key']))
             {
                 $user=new User;
