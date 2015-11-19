@@ -9,7 +9,9 @@ include("menu.php");
 <div class="col-md-7 col-sm-8 col-xs-12 ">
     
         
-            
+                <?php
+                if(!isset($permalink))
+                { ?>
                 <div class="col-md-11 stream-input">
                     <?php if (!Helper::isUser()) { ?>
                         You post anonymously, if you like to comment, delete post, please 
@@ -79,9 +81,11 @@ include("menu.php");
                                 <option><?php echo  _('Friends'); ?></option>
                             </select>
                             <input type="hidden" name="metadata" id="metadata" />
+                            <input type="text" name="mail" class="hide" value="" />
                             <button class="btn btn-lg btn-info"><?php echo _('Share now!'); ?></button>
                         </form>
                     </div>
+                <?php } ?>
                 
             
 

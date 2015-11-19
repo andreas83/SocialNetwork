@@ -105,7 +105,10 @@ class DataController extends BaseController {
 
         if (
             isset($_POST) && !empty($_POST)  && !isset($_POST['wayback']) )
-        {            
+        {      
+            //spam bot prevention
+            if(isset($_POST['mail']) && !empty($_POST['mail']))
+                return false;
             $content = new Content();
             $content->data = $_POST['content'];
             $pattern="/(^|\s)#(\w*[a-zA-Z0-9öäü_-]+\w*)/";
