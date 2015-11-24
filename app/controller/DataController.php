@@ -126,6 +126,18 @@ class DataController extends BaseController {
             if ($metadata->type == "img") {
                 $metadata->url = $this->download($metadata->url);
             }
+            
+            if($metadata->type == "video")
+            {
+                if($metadata->dl==true)
+                {
+                    $filename = $this->download($metadata->url);
+                    $metadata->url= Config::get("upload_address").$filename;
+                    $metadata->html=$this->replaceVideo($metadata->url);
+                    
+                }
+                
+            }
 
             if (isset($_FILES) && !empty($_FILES['img']['name'][0]) && is_array($_FILES)) {
                 $i=0;
@@ -188,9 +200,9 @@ class DataController extends BaseController {
             $this->addHeader('<meta property="og:title" content="'.$res->data.'"/>');
             $this->addHeader('<meta property="og:type" content="website" />');
             if(isset($media->img[0]))
-                $this->addHeader('<meta property="og:image" content="'.Config::get("address").Config::get("upload_address").$media->img[0].'"/>');
+                $this->addHeader('<meta property="og:image" content="'.Config::get("upload_address").$media->img[0].'"/>');
             if(isset($media->type) && $media->type=="img")
-                $this->addHeader('<meta property="og:image" content="'.Config::get("address").Config::get("upload_address").$media->url.'"/>');
+                $this->addHeader('<meta property="og:image" content="'.Config::get("upload_address").$media->url.'"/>');
             
             
             $this->assign("permalink", $request['id']);
@@ -382,7 +394,12 @@ class DataController extends BaseController {
         $rawdata = curl_exec($ch);
         curl_close($ch);
 
+        $path_parts = pathinfo($url);
         $filename = hash("sha512", $url);
+        if(isset($path_parts['extension']))
+            $filename.=".".$path_parts['extension'];
+        
+        
         $fullpath = Config::get("dir") . Config::get("upload_path") . $filename;
         $fp = fopen($fullpath, 'x');
         fwrite($fp, $rawdata);
