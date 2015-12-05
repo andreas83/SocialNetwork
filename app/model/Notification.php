@@ -18,7 +18,7 @@ class Notification extends BaseApp
     }
     
     public function cleanup(){
-        $enddate=  strtotime("-1 week");
+        $enddate=  strtotime("-2 days");
         $sql = "delete from Notification where date<:enddate";
         
         $stmt = $this->dbh->prepare($sql);
@@ -36,7 +36,7 @@ class Notification extends BaseApp
                 . "Notification.to_user_id=User.id and "
                 . "User.auth_cookie=:auth_cookie "
                 . " left join User fromUser on "
-                . "Notification.from_user_id = fromUser.id";
+                . "Notification.from_user_id = fromUser.id order by date desc";
         
         $stmt = $this->dbh->prepare($sql);
 

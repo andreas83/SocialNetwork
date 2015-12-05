@@ -87,7 +87,11 @@
                     
                     data=this.state.data.concat(data);
                     
-                    
+                    if($(".stream-row").attr("data-user")!="")
+                    {
+                        $("#custom_css").html(data[0].author.custom_css); 
+                    }
+                   
                     this.setState({data:data});
                     if (user_settings.autoplay == "no")
                         this.setAutoplayOff();

@@ -11,6 +11,7 @@ if (Helper::isUser()) {
     echo "<script>var user_id=0;</script>";
     echo "<script>var user_settings=false;</script>";
 }
+echo "<script>var upload_address=\"".Config::get("upload_address")."\";  </script>";
 ?>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
@@ -27,9 +28,14 @@ if (Helper::isUser()) {
 <link rel="stylesheet" href="/public/css/code/railscasts.css">
 
 <?php
-if (isset($user_settings->custom_css)) {
+if (Helper::isUser() && isset($user_settings->custom_css)) {
         echo "<style>" . $user_settings->custom_css . "</style>";
+}elseif(!Helper::isUser() && isset($user) && !empty($user))
+{
+    ?><style id="custom_css"></style><?php
+    
 }
+
 ?>
 </body>
 </html>

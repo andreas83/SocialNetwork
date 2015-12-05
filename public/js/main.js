@@ -203,7 +203,7 @@ $(document).ready(function () {
                 $(data).each(function(key){
                     
                     if(typeof JSON.parse(data[key].settings).profile_picture !=="undefined")
-                        profile_pic='<img  src=/public/upload/'+JSON.parse(data[key].settings).profile_picture+'>';
+                        profile_pic='<img  src='+public_upload+JSON.parse(data[key].settings).profile_picture+'>';
                     else
                         profile_pic='<img  src=/public/img/no-profile.jpg>';
                     

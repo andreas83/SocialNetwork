@@ -118,7 +118,8 @@ class UserController extends BaseController
             $setting->show_nsfw = $_POST['nsfw'];
             $setting->autoplay = $_POST['autoplay'];
             $setting->mute_video = $_POST['mute_video'];
-            $setting->custom_css=(isset($_POST['custom_css'])?$_POST['custom_css']: $setting->customcss);
+            
+            $setting->custom_css=(isset($_POST['custom_css']) ? $_POST['custom_css']: $setting->customcss);
             $user->settings = json_encode($setting);
             $_SESSION['user_settings']=$user->settings;
             $res = $user->find(array("name" => $_POST['nick']));

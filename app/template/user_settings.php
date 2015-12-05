@@ -90,9 +90,7 @@ include("menu.php");
         <div class="row">
             <div class="col-xs-8 col-md-8">
                 <label for="custom-css"><?php echo _("Own CSS (Experimental)"); ?></label>
-                <textarea id="custom-css" name="custom_css" class="form-control" rows="10">
-                    <?php echo (isset($settings->custom_css) ? $settings->custom_css: ""); ?>
-                </textarea>
+                <textarea id="custom-css" name="custom_css" class="form-control" rows="10"><?php echo (isset($settings->custom_css) ? $settings->custom_css: ""); ?></textarea>
             </div>
         </div>
         <?php
