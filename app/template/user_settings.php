@@ -43,17 +43,7 @@ include("menu.php");
                 </select>
             </div>
 
-            <div class="col-xs-6 col-md-3">
-                <label for="use-experimental"><?php echo _("Test experimental features") ?></label>
-                <select id="use-experimental" name="use_experimental" class="form-control">
-                    <option <?php echo($settings->use_experimental == "yes" ? "selected" : "") ?> value="yes">
-                        <?php echo  _("Yepp I'm in"); ?>
-                    </option>
-                    <option <?php echo($settings->use_experimental == "no" ? "selected" : "") ?> value="no">
-                        <?php echo _("Nope"); ?>
-                    </option>
-                </select>
-            </div>
+            
             
             <div class="col-xs-6 col-md-3">
                 <label for="autoplay"><?php echo _("Autoplay Videos"); ?></label>
@@ -78,24 +68,17 @@ include("menu.php");
                 </select>
             </div>
             
-            <div class="col-xs-8 col-md-8">
+            <div class="col-xs-6 col-md-6">
                 <label for="api-key"><?php echo _("API Key") ?></label>
                 <input id="api-key" class="form-control" type="text" disabled="" value="<?php echo $user->api_key; ?>">
             </div>
-        </div>
-        <?php
-        if ($settings->use_experimental=="yes")
-        {
-        ?>
-        <div class="row">
+        
             <div class="col-xs-8 col-md-8">
-                <label for="custom-css"><?php echo _("Own CSS (Experimental)"); ?></label>
-                <textarea id="custom-css" name="custom_css" class="form-control" rows="10"><?php echo (isset($settings->custom_css) ? $settings->custom_css: ""); ?></textarea>
+                <label for="custom-css"><?php echo _("CSS for Profile page"); ?></label>
+                <textarea id="custom_css_input" name="custom_css" class="form-control" rows="10"><?php echo (isset($settings->custom_css) ? $settings->custom_css: ""); ?></textarea>
             </div>
         </div>
-        <?php
-        }
-        ?>
+        
         <input type="submit" class="btn btn-lg btn-warning " value="Save" />
     </form>
 </div>

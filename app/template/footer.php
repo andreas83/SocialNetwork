@@ -28,9 +28,7 @@ echo "<script>var upload_address=\"".Config::get("upload_address")."\";  </scrip
 <link rel="stylesheet" href="/public/css/code/railscasts.css">
 
 <?php
-if (Helper::isUser() && isset($user_settings->custom_css)) {
-        echo "<style>" . $user_settings->custom_css . "</style>";
-}elseif(!Helper::isUser() && isset($user) && !empty($user))
+if( isset($user) && !empty($user))
 {
     ?><style id="custom_css"></style><?php
     

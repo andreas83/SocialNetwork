@@ -227,8 +227,10 @@ $(document).ready(function () {
             $("#notifications").text(ex);
             //console.log(ex); 
     }
-
-
+    $("#custom_css").html($("#custom_css_input").val());
+    $("#custom_css_input").on("keyup", function(){
+        $("#custom_css").html($(this).val());
+    })
     
     
     
