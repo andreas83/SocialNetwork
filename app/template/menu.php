@@ -26,4 +26,13 @@
                 <button type="submit" class="btn btn-default hidden-xs hidden-sm">Take me back</button>
             </form>
         </div>
+        <div class="list-group hidden-xs ">
+        <?php
+                    foreach ($stream as $data){
+                        $img=json_decode($data->media);
+                        $img->url=Config::get("upload_address").$img->url;
+                        echo "<a href=\"/permalink/".$data->id."\"><img  class=\"img-thumbnail \" src=\"$img->url\"></a>";
+                    }
+                    ?>
+        </div>
 </div>

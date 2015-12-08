@@ -32,5 +32,5 @@ class User extends BaseApp
         return $obj;
         
     }
-
+    
 }

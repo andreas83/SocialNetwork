@@ -28,6 +28,8 @@ class UserController extends BaseController
                 $this->redirect("/public/stream/");
             }
         }
+        $data= new Content;
+        $this->assign("stream", $data->getNext(false, 5 , false, false, "img", "order by rand()"));
         
         $this->assign("scope", "login frontpage");
         $this->assign("title", "Login");
@@ -93,6 +95,9 @@ class UserController extends BaseController
             }
 
         }
+        
+        $data= new Content;
+        $this->assign("stream", $data->getNext(false, 5 , false, false, "img", "order by rand()"));
         
         $this->assign("title", "Register an account");
         $this->assign("error", $error);

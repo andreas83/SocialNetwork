@@ -14,8 +14,8 @@ include("menu.php");
                 { ?>
                 <div class="col-md-11 stream-input">
                     <?php if (!Helper::isUser()) { ?>
-                        You post anonymously, if you like to comment, delete post, please 
-                        <a href="/user/register/">signin</a>
+                    <h4>You post anonymously, if you like to comment, delete post, please 
+                        <a href="/user/register/">signin</a></h4>
                     <?php } ?>
                     <form method="post" action="/" enctype="multipart/form-data">
 

@@ -28,6 +28,9 @@ class DataController extends BaseController {
             
         }
         
+  
+        
+        
         $this->assign("title", "Das merken die nie");
         $this->assign("scope", "frontpage register");
         $this->render("main.php");
@@ -103,6 +106,8 @@ class DataController extends BaseController {
         
         $data = new Content;
 
+        $this->assign("stream", $data->getNext(false, 5 , false, false, "img", "order by rand()"));
+        
         if (
             isset($_POST) && !empty($_POST)  && !isset($_POST['wayback']) )
         {      
@@ -453,7 +458,7 @@ class DataController extends BaseController {
         $result = curl_exec($ch);
 
         $dom = new DOMDocument;
-        @$dom->loadHTML(mb_convert_encoding($result, 'HTML-ENTITIES', 'UTF-8'));
+        @$dom->loadHTML($result);
         foreach ($dom->getElementsByTagName('meta') as $tag) {
             if ($tag->getAttribute('property') === 'og:image') {
                 $data['og_img'] = $tag->getAttribute('content');
@@ -493,6 +498,7 @@ class DataController extends BaseController {
             else
                 $data['og_img'] = $base.$imgSrc;
         }
+        
         echo json_encode($data);
     }
 

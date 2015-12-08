@@ -14,9 +14,9 @@
         <label for="password"><?php echo _('your password please') ?></label>
         <input name="pass" type="password" class="form-control" id="password" placeholder="<?php echo _("1234"); ?>" />
     </div>
-
-    <button class="btn-success btn btn-lg"><?php echo _("SignIn!"); ?></button>
     <button class="btn-info btn btn-lg toggleform"><?php echo _("Need an account?"); ?></button>
+    <button class="btn-success btn btn-lg"><?php echo _("SignIn!"); ?></button>
+    
 </form>
 
 <form id="registerform" class="<?php echo(isset($scope) && strpos($scope, "register") === false ? "hide" : ""); ?>"

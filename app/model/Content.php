@@ -14,11 +14,22 @@ class Content extends BaseApp
         return "id";
     }
 
-    public function getNext($id = false, $show = 10, $hash = false, $user =false)
+    /**
+     * get new Data
+     * @param int $id
+     * @param int $show
+     * @param string $hash
+     * @param int $user
+     * @param string $type img, video, www
+     * @param string $order 
+     * @return type
+     */
+    public function getNext($id = false, $show = 10, $hash = false, $user =false, $type=false, $order=false)
     {
+        $id=(isset($id) && $id ? $id : 1000000);
         
         $esql="";
-
+        
         if ($hash) {
             $esql.= " (data LIKE :term or media LIKE :term) AND";
         } 
@@ -26,11 +37,21 @@ class Content extends BaseApp
         if($user){
             $esql.= " User.id=(select id from User where name = :username) AND";
         }
+        if($type){
+            $esql.= " (media LIKE :type) AND";
+        }
+        
+        $orderby="ORDER BY Content.id desc";        
+        if($order)
+        {
+            $orderby=$order;
+        }
+        
         $sql = "SELECT *, Content.id AS id, User.id as user_id FROM Content, User "
                 . "WHERE  $esql "
                 . "Content.user_id=User.id AND "
                 . "Content.id < $id "
-                . "ORDER BY Content.id desc limit $show";
+                . "$orderby limit $show";
         
         
         $stmt = $this->dbh->prepare($sql);
@@ -39,7 +60,10 @@ class Content extends BaseApp
             $stmt->bindValue(':term', "%" . $hash . "%", PDO::PARAM_STR);
         if($user)
             $stmt->bindValue(':username', str_replace(".", " ", $user), PDO::PARAM_STR);
-
+        if($type){
+            $stmt->bindValue(':type', '%type":"'.$type.'"%', PDO::PARAM_STR);
+        }
+        
         $stmt->execute();
 
         $obj = $stmt->fetchALL(PDO::FETCH_CLASS, 'Content');
