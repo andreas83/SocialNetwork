@@ -28,7 +28,7 @@
         </div>
         <div class="list-group hidden-xs ">
         <?php
-                    foreach ($stream as $data){
+                    foreach ($streamleft as $data){
                         $img=json_decode($data->media);
                         $img->url=Config::get("upload_address").$img->url;
                         echo "<a href=\"/permalink/".$data->id."\"><img  class=\"img-thumbnail \" src=\"$img->url\"></a>";

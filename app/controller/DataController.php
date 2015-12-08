@@ -106,7 +106,8 @@ class DataController extends BaseController {
         
         $data = new Content;
 
-        $this->assign("stream", $data->getNext(false, 5 , false, false, "img", "order by rand()"));
+        $this->assign("streamleft", $data->getNext(false, 15 , false, false, "img", "order by rand()"));
+        $this->assign("streamright", $data->getNext(false, 15 , false, false, "img", "order by rand()"));
         
         if (
             isset($_POST) && !empty($_POST)  && !isset($_POST['wayback']) )
