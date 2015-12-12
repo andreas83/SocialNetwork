@@ -29,7 +29,7 @@ class UserController extends BaseController
             }
         }
         $data= new Content;
-        $this->assign("stream", $data->getNext(false, 5 , false, false, "img", "order by rand()"));
+        $this->assign("stream", $data->getNext(false, 5 , "cat", false, "img", "order by rand()"));
         
         $this->assign("scope", "login frontpage");
         $this->assign("title", "Login");
@@ -53,7 +53,6 @@ class UserController extends BaseController
                 $error['mail'] = "Please validate your email";
             }
 
-            
             if (strlen($_POST['pass']) < 6) {
                 $error['pass'] = "A bit stronger";
             }
@@ -97,7 +96,7 @@ class UserController extends BaseController
         }
         
         $data= new Content;
-        $this->assign("stream", $data->getNext(false, 5 , false, false, "img", "order by rand()"));
+        $this->assign("stream", $data->getNext(false, 5 , "cat", false, "img", "order by rand()"));
         
         $this->assign("title", "Register an account");
         $this->assign("error", $error);

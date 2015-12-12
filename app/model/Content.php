@@ -24,7 +24,7 @@ class Content extends BaseApp
      * @param string $order 
      * @return type
      */
-    public function getNext($id = false, $show = 10, $hash = false, $user =false, $type=false, $order=false)
+    public function getNext($id = false, $show = 10, $hash = false, $user =false, $type=false, $order=false, $show_nsfw="false")
     {
         $id=(isset($id) && $id ? $id : 1000000);
         
@@ -41,6 +41,11 @@ class Content extends BaseApp
             $esql.= " (media LIKE :type) AND";
         }
         
+        if($show_nsfw=="false")
+        {
+            $esql.="  data not like '%nsfw%' AND";
+        }
+        
         $orderby="ORDER BY Content.id desc";        
         if($order)
         {
@@ -52,8 +57,7 @@ class Content extends BaseApp
                 . "Content.user_id=User.id AND "
                 . "Content.id < $id "
                 . "$orderby limit $show";
-        
-        
+       
         $stmt = $this->dbh->prepare($sql);
 
         if($hash)

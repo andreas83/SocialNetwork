@@ -34,10 +34,10 @@ include("menu.php");
             <div class="col-xs-6 col-md-3">
                 <label for="nsfw"><?php echo _('Show NSFW Content') ?></label>
                 <select id="nsfw" name="nsfw" class="form-control">
-                    <option <?php echo($settings->show_nsfw == "yes" ? "selected" : "") ?> value="yes">
+                    <option <?php echo($settings->show_nsfw == "true" ? "selected" : "") ?> value="true">
                         <?php echo _("Yepp I'm in"); ?>
                     </option>
-                    <option <?php echo($settings->show_nsfw == "no" ? "selected" : "") ?> value="no">
+                    <option <?php echo($settings->show_nsfw == "false" ? "selected" : "") ?> value="false">
                         <?php echo _("Nope"); ?>
                     </option>
                 </select>

@@ -12,7 +12,7 @@ include("header.php");
                         $img->url=Config::get("upload_address").$img->url;
                         echo "<a href=\"/permalink/".$data->id."\"><img width=\"100\" height=\"100\" class=\"img-thumbnail\"  src=\"$img->url\"></a>";
                     }
-                    ?>
+                    ?> 
                     <p><?php echo _("From Hackers with "); ?> <span class="glyphicon glyphicon-heart red"></span></p>
                     
                     <p>

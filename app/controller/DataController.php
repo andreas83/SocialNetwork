@@ -43,9 +43,18 @@ class DataController extends BaseController {
         $show = (isset($_REQUEST['show']) && $_REQUEST['show'] < 100 ? $_REQUEST['show'] : 10);
         $hash= (isset($_REQUEST['hash']) && $_REQUEST['hash'] != "" ? $_REQUEST['hash'] : false);
         $user= (isset($_REQUEST['user']) && $_REQUEST['user'] != "" ? $_REQUEST['user'] : false);
+        //check nsfw content
+       
+        
+        $settings=  Helper::getUserSettings();
+        //while user is not logged in
+        if($settings==false)
+        {
+            $settings=new stdClass();
+            $settings->show_nsfw="false";
+        }
 
-
-        $data = $data->getNext($id, $show, $hash, $user);
+        $data = $data->getNext($id, $show, $hash, $user, false, false, $settings->show_nsfw);
         header('Content-Type: application/json');
         $i = 0;
 
@@ -106,8 +115,22 @@ class DataController extends BaseController {
         
         $data = new Content;
 
-        $this->assign("streamleft", $data->getNext(false, 15 , false, false, "img", "order by rand()"));
-        $this->assign("streamright", $data->getNext(false, 15 , false, false, "img", "order by rand()"));
+        //check nsfw content
+        if(Helper::isUser())
+        {
+            $user= new User;
+            $user=$user->get($_SESSION['login']);
+            $settings=  json_decode($user->settings);
+            //$settings->show_nsfw
+        }
+        else
+        {
+            $settings=new stdClass();
+            $settings->show_nsfw="false";
+        }
+        
+        $this->assign("streamleft", $data->getNext(false, 1 , false, false, "img", "order by rand()", $settings->show_nsfw));
+        $this->assign("streamright", $data->getNext(false, 9 , false, false, "img", "order by rand()", $settings->show_nsfw));
         
         if (
             isset($_POST) && !empty($_POST)  && !isset($_POST['wayback']) )

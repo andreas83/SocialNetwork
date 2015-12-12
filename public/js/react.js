@@ -607,6 +607,26 @@ var InitStream = React.createClass({
 
     render: function render() {
 
+        if (user_settings.show_nsfw == "false" && $(".stream-row").attr("data-hash") == "nsfw") {
+
+            return React.createElement(
+                'div',
+                { className: 'content' },
+                'You disabled not safe for work content'
+            );
+        }
+        if (user_settings == false && $(".stream-row").attr("data-hash") == "nsfw") {
+            return React.createElement(
+                'div',
+                { className: 'content' },
+                'You need to be over +18 to watch nsfw content, please ',
+                React.createElement(
+                    'a',
+                    { href: '/user/register/' },
+                    'register here.'
+                )
+            );
+        }
         return React.createElement(
             'div',
             { className: 'content' },

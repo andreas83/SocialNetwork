@@ -109,7 +109,25 @@
         }
         ,
         render: function () {
-            
+
+            if(user_settings.show_nsfw=="false"  && $(".stream-row").attr("data-hash")=="nsfw")
+            {
+
+                return (
+                    <div className="content">
+                        You disabled not safe for work content
+                    </div>
+                    );
+            }
+            if(user_settings==false && $(".stream-row").attr("data-hash")=="nsfw")
+            {
+                return (
+                    <div className="content">
+                        You need to be over +18 to watch nsfw content, 
+                        please <a href="/user/register/">register here.</a>
+                    </div>
+                    );
+            }
             return (
                     <div className="content">
                         <StreamList data={this.state.data}/>

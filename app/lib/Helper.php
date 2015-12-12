@@ -57,7 +57,17 @@ class Helper
         return (isset($_SESSION['login']) ? true : false);
     }
       
-    
+    public static function getUserSettings()
+    {
+        if(!Helper::isUser())
+            return false;
+        
+        $user= new User;
+        $user=$user->get($_SESSION['login']);
+        $settings=  json_decode($user->settings);
+        
+        return $settings;
+    }
 
     public static function seoUrl($url)
     {

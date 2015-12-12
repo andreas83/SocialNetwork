@@ -75,14 +75,11 @@ include("menu.php");
 
                             </div>
                             <input type="file" id="img" multiple name="img[]" class="form-control" />
-                            <select class="form-control">
-                                <option><?php echo _('Public'); ?></option>
-                                <option><?php echo  _('Private'); ?></option>
-                                <option><?php echo  _('Friends'); ?></option>
-                            </select>
+                            
                             <input type="hidden" name="metadata" id="metadata" />
                             <input type="text" name="mail" class="hide" value="" />
                             <button class="btn btn-lg btn-info"><?php echo _('Share now!'); ?></button>
+                            
                         </form>
                     </div>
                 <?php } ?>
