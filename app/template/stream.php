@@ -10,7 +10,7 @@ include("menu.php");
     
         
                 <?php
-                if(!isset($permalink))
+                if(isset($show_share) && $show_share===true)
                 { ?>
                 <div class="col-md-11 stream-input">
                     <?php if (!Helper::isUser()) { ?>
@@ -85,16 +85,19 @@ include("menu.php");
                 <?php } ?>
                 
             
-
+        
+        
         <div class=" stream-row animated bounceInDown" 
              data-permalink="<?php echo (isset($permalink) ? $permalink : ""); ?>" 
              data-hash="<?php echo (isset($hash) && !empty($hash) ? $hash : ""); ?>"
-             data-wayback="<?php echo (isset($wayback) && !empty($wayback) ? $wayback : ""); ?>"
              data-user="<?php echo (isset($user) && !empty($user) ? $user : ""); ?>"
+             data-random="<?php echo (isset($random) && !empty($random) ? $random : ""); ?>"
              >
             <div class="stream col-md-11"></div>
         </div>
-     
+        
+    
+
         
     </div>
 
@@ -102,8 +105,10 @@ include("menu.php");
     <ul class="list-group" id="notifications">
         
     </ul>
-       <div class="list-group hidden-xs ">
+       
+        <div class="list-group hidden-xs ">
         <?php
+                if(isset($streamright) && !empty($streamright))
                     foreach ($streamright as $data){
                         $img=json_decode($data->media);
                         $img->url=Config::get("upload_address").$img->url;

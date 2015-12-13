@@ -9,6 +9,8 @@ class Content extends BaseApp
     public $media = "";
     public $date = "";
 
+    const maxid= 1000000000;
+    
     public function getPrimary()
     {
         return "id";
@@ -26,7 +28,7 @@ class Content extends BaseApp
      */
     public function getNext($id = false, $show = 10, $hash = false, $user =false, $type=false, $order=false, $show_nsfw="false")
     {
-        $id=(isset($id) && $id ? $id : 1000000);
+        $id=(isset($id) && $id ? $id : Content::maxid);
         
         $esql="";
         

@@ -552,9 +552,17 @@ var InitStream = React.createClass({
                 endofData: true
             });
         }
-        if ($(".stream-row").attr("data-wayback") != "") {
-            this.setID(parseInt($(".stream-row").attr("data-wayback")) + 1);
-            $(".stream-row").attr("data-wayback", "");
+        if ($(".stream-row").attr("data-random") > 0) {
+            var getRandomInt = function getRandomInt(min, max) {
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            };
+
+            this.setID(getRandomInt(1, parseInt($(".stream-row").attr("data-random")) + 1));
+
+            show = 1;
+            this.setState({
+                endofData: true
+            });
         }
 
         if ($(".stream-row").attr("data-hash") != "") {

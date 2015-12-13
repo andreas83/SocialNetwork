@@ -17,22 +17,11 @@
                 <a class="btn btn-success col-xs-12 col-sm-12 col-md-12" href="/my/settings/"><?php echo _('Settings') ?></a>
             <?php endif; ?>
         </div>
-      
-        <div class="list-group hidden-xs ">
-            <form class="list-group-item" action="/public/stream/" method="post">
-                <div class="form-group">
-                    <input name="wayback"  type="text" class="form-control" placeholder="i.e. 9873">
-                </div>
-                <button type="submit" class="btn btn-default hidden-xs hidden-sm">Take me back</button>
-            </form>
+        <div class="list-group hidden-xs">
+           
+           <button class="col-xs-12 col-sm-12 col-md-12 btn btn-info" id="next">New Random Post</button>
+          
         </div>
-        <div class="list-group hidden-xs ">
-        <?php
-                    foreach ($streamleft as $data){
-                        $img=json_decode($data->media);
-                        $img->url=Config::get("upload_address").$img->url;
-                        echo "<a href=\"/permalink/".$data->id."\"><img  class=\"img-thumbnail \" src=\"$img->url\"></a>";
-                    }
-                    ?>
-        </div>
+        
+        
 </div>

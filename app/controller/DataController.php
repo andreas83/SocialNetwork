@@ -5,6 +5,8 @@
  */
 class DataController extends BaseController {
 
+    
+
     function frontend() {
         
         if (Helper::isUser()) {
@@ -36,10 +38,23 @@ class DataController extends BaseController {
         $this->render("main.php");
     }
 
+    function random(){
+        
+        $content= new Content();
+        //get max id for rand min/max
+        $res=$content->getNext(Content::maxid, 1, false, false, false, false, false);
+        $this->assign("random", $res[0]->id);
+        
+        $this->assign("title", "Das merken die nie");
+        $this->assign("scope", "random");
+        $this->render("stream.php");
+    }
+    
+    
     function content() {
         $data = new Content;
 
-        $id = (isset($_REQUEST['id']) && $_REQUEST['id'] != 0 ? (int) $_REQUEST['id'] : 1000000000);
+        $id = (isset($_REQUEST['id']) && $_REQUEST['id'] != 0 ? (int) $_REQUEST['id'] : Content::maxid);
         $show = (isset($_REQUEST['show']) && $_REQUEST['show'] < 100 ? $_REQUEST['show'] : 10);
         $hash= (isset($_REQUEST['hash']) && $_REQUEST['hash'] != "" ? $_REQUEST['hash'] : false);
         $user= (isset($_REQUEST['user']) && $_REQUEST['user'] != "" ? $_REQUEST['user'] : false);
@@ -129,11 +144,11 @@ class DataController extends BaseController {
             $settings->show_nsfw="false";
         }
         
-        $this->assign("streamleft", $data->getNext(false, 1 , false, false, "img", "order by rand()", $settings->show_nsfw));
-        $this->assign("streamright", $data->getNext(false, 9 , false, false, "img", "order by rand()", $settings->show_nsfw));
         
-        if (
-            isset($_POST) && !empty($_POST)  && !isset($_POST['wayback']) )
+        $this->assign("streamright", $data->getNext(false, 9 , false, false, "img", "order by rand()", $settings->show_nsfw));
+        $this->assign("show_share", true);
+        
+        if (isset($_POST) && !empty($_POST)) 
         {      
             //spam bot prevention
             if(isset($_POST['mail']) && !empty($_POST['mail']))
@@ -233,7 +248,7 @@ class DataController extends BaseController {
             if(isset($media->type) && $media->type=="img")
                 $this->addHeader('<meta property="og:image" content="'.Config::get("upload_address").$media->url.'"/>');
             
-            
+            $this->assign("show_share", false);
             $this->assign("permalink", $request['id']);
         }
         if(isset($request['hash']))
@@ -242,7 +257,7 @@ class DataController extends BaseController {
             $res=$hashdb->find(array("hashtag"=>str_replace("#", "", $request['hash'])));
             $res[0]->pop+=1;
             $res[0]->save();
-            
+            $this->assign("show_share", false);
             $this->assign("hash", $request['hash']);
             $this->assign("title", "Pictures of ".$request['hash'] );
             
@@ -254,11 +269,6 @@ class DataController extends BaseController {
             
         }
         
-        if(isset($_POST['wayback']) && is_numeric($_POST['wayback']))
-        {
-        
-            $this->assign("wayback", $_POST['wayback']);
-        }
         
         
         $this->assign("scope", "login");

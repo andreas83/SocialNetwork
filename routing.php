@@ -11,6 +11,7 @@ $router->map('GET|POST', '/my/settings/', 'UserController#settings');
 
 
 //Fronten STREAM
+$router->map('GET|POST', '/random/', 'DataController#random');
 
 $router->map('GET|POST', '/public/stream/', 'DataController#stream');
 

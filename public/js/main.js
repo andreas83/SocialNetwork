@@ -122,6 +122,23 @@ $(document).ready(function () {
             });
         });
     });
+    
+    $("#next").on("click", function(){
+        //redirect to /random
+        var url = window.location.pathname.split( '/' );
+        
+        if(url[1]!="random")
+        {
+            window.location.href="/random/";
+            return true;
+        }
+        clearStream();
+        var container = document.getElementsByClassName('stream')[0];
+        var component = React.createElement(InitStream, {random: parseInt($(".stream-row").attr("data-random"))});
+
+        React.render(component, container);
+        
+    });
 
     $("#search").on("submit", function (e) {
         e.preventDefault();
