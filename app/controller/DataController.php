@@ -38,6 +38,11 @@ class DataController extends BaseController {
         $this->render("main.php");
     }
 
+    /**
+     * this function loads the inital data for /random
+     * it gets the max id from db, so the client can do 
+     * some min/max calulation.
+     */
     function random(){
         
         $content= new Content();
@@ -50,7 +55,11 @@ class DataController extends BaseController {
         $this->render("stream.php");
     }
     
-    
+    /**
+     * this method handles all requests arround stream data
+     * and returns data as json formted string
+     * 
+     */
     function content() {
         $data = new Content;
 
@@ -58,9 +67,8 @@ class DataController extends BaseController {
         $show = (isset($_REQUEST['show']) && $_REQUEST['show'] < 100 ? $_REQUEST['show'] : 10);
         $hash= (isset($_REQUEST['hash']) && $_REQUEST['hash'] != "" ? $_REQUEST['hash'] : false);
         $user= (isset($_REQUEST['user']) && $_REQUEST['user'] != "" ? $_REQUEST['user'] : false);
-        //check nsfw content
-       
         
+        //check nsfw content
         $settings=  Helper::getUserSettings();
         //while user is not logged in
         if($settings==false)
@@ -121,7 +129,11 @@ class DataController extends BaseController {
 
     
     /**
-     * we should splitt this function into (save data, get data)
+     * this function handles the save data 
+     * also it loads the inital data for 
+     * /permalink/<id> /public/stream /hash/
+     * which should be splitted to
+     * @todo we should split this function into (save data, get data)
      *
      * @todo refactoring 
      * @param type $request
@@ -145,7 +157,7 @@ class DataController extends BaseController {
         }
         
         
-        $this->assign("streamright", $data->getNext(false, 9 , false, false, "img", "order by rand()", $settings->show_nsfw));
+        
         $this->assign("show_share", true);
         
         if (isset($_POST) && !empty($_POST)) 
@@ -277,6 +289,14 @@ class DataController extends BaseController {
         $this->render("stream.php");
     }
 
+    /**
+     * this function handles get and set of comments
+     * 
+     * @todo put function into own controller
+     * @todo split get and save into two methods
+     * 
+     * @param type $request
+     */
     function comment($request) {
         $comment = new Comment();
         if ($_POST && Helper::isUser()) {
@@ -324,6 +344,13 @@ class DataController extends BaseController {
         }
     }
 
+    /**
+     * score function handles 
+     * like and dislike request
+     * 
+     * @todo remove the goto, move to own score controller 
+     * @param array $request
+     */
     function score($request) {
 
         $score = new Score();
@@ -419,6 +446,12 @@ class DataController extends BaseController {
         
     }
 
+    /**
+     * download content from given $url
+     * 
+     * @param string $url
+     * @return string $filename
+     */
     function download($url) {
 
         $ch = curl_init($url);
@@ -445,6 +478,14 @@ class DataController extends BaseController {
         return $filename;
     }
 
+    
+    /**
+     * returns infomations about given url
+     * 
+     * @todo splitt image, www, video handling into smaller functions
+     * @todo better fallback for og tag parsing
+     * @return void
+     */
     function metadata() {
         $url = $_GET['url'];
 
@@ -536,6 +577,12 @@ class DataController extends BaseController {
         echo json_encode($data);
     }
 
+    /**
+     * function was needed to replace hashs and links
+     * @todo can be removed
+     * @param string $data
+     * @return string
+     */
     static function replaceData($data) {
 
         $data = DataController::replaceLinks($data);
@@ -551,6 +598,14 @@ class DataController extends BaseController {
         return preg_replace('/(^|\s)#(\w*[a-zA-Z0-9öäü_-]+\w*)/', '\1<a href="http://www.dasmerkendienie.com/hash/\2">#\2</a>', $txt);
     }
 
+    /**
+     * this function replaced video and image filers
+     * now this taks is done on client side
+     * @todo can be removed 
+     * @param string $media
+     * @param array $size
+     * @return string
+     */
     static function replaceMedia($media, $size = false) {
 
         if (!$size) {

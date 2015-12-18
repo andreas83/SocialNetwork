@@ -143,7 +143,10 @@ class UserController extends BaseController
         $this->render("user_settings.php");
     }
 
-
+    /**
+     * @todo does not work right now.
+     * 
+     */
     function logout()
     {
         session_destroy();
@@ -152,6 +155,9 @@ class UserController extends BaseController
     }
 
     /**
+     * @todo can be removed
+     * @maybe i will move them to some sort of autmated backend
+     * 
      * @param $request
      */
     function backend_list($request)
@@ -169,6 +175,9 @@ class UserController extends BaseController
     }
 
     /**
+     * @todo can be removed
+     * @maybe i will move them to some sort of autmated backend
+     * 
      * @param $request
      */
     function backend_edit($request)
@@ -197,6 +206,9 @@ class UserController extends BaseController
     }
 
     /**
+     * @todo can be removed
+     * @maybe i will move them to some sort of autmated backend
+     * 
      * @param $request
      */
     function backend_delete($request)

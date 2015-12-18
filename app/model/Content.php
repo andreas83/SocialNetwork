@@ -18,6 +18,9 @@ class Content extends BaseApp
 
     /**
      * get new Data
+     * 
+     * @todo profiling, there is some room for optimisation (i.e. nsfw filter)
+     * 
      * @param int $id
      * @param int $show
      * @param string $hash

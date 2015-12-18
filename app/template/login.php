@@ -7,16 +7,16 @@
             echo(isset($error['login']) ? $error['login'] : _("Your login please"));
             ?>
         </label>
-        <input name="mail" type="mail" class="form-control" id="nickname"
+        <input tabindex="1" name="mail" type="mail" class="form-control" id="nickname"
                placeholder="<?php echo _("email is okay"); ?>" />
     </div>
     <div class="form-group">
         <label for="password"><?php echo _('your password please') ?></label>
-        <input name="pass" type="password" class="form-control" id="password" placeholder="<?php echo _("1234"); ?>" />
+        <input tabindex="2" name="pass" type="password" class="form-control" id="password" placeholder="<?php echo _("1234"); ?>" />
     </div>
-    <button class="btn-info btn btn-lg toggleform"><?php echo _("Need an account?"); ?></button>
-    <button class="btn-success btn btn-lg"><?php echo _("SignIn!"); ?></button>
     
+    <button tabindex="3" class="btn-success btn btn-lg"><?php echo _("SignIn!"); ?></button>
+    <button class="btn-info btn btn-lg toggleform"><?php echo _("Need an account?"); ?></button>
 </form>
 
 <form id="registerform" class="<?php echo(isset($scope) && strpos($scope, "register") === false ? "hide" : ""); ?>"

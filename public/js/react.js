@@ -382,7 +382,7 @@ var Upload = React.createClass({
             var Files = this.props.upload.files.map(function (data) {
                 FilePath = data.src;
 
-                if (data.type.match("image")) {
+                if (data.type != false && data.type.match("image")) {
                     return React.createElement("img", { className: "img-responsive", src: FilePath });
                 }
                 return React.createElement(

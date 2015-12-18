@@ -11,7 +11,7 @@ include("menu.php");
                 <a href="#" class="thumbnail">
                     <?php
                     if ($settings->profile_picture != "") {
-                        $profile_url = Config::get("upload_path") . $settings->profile_picture;
+                        $profile_url = Config::get("upload_address") . $settings->profile_picture;
                     } else {
                         $profile_url = "https://placeholdit.imgix.net/~text?txtsize=33&txt=180×180&w=180&h=180";
                     }

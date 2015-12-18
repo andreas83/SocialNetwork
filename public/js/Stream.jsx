@@ -104,7 +104,7 @@
             var Files = this.props.upload.files.map(function (data) {
                 FilePath = data.src;
 
-                    if(data.type.match("image"))
+                    if(data.type!=false && data.type.match("image"))
                     {
                         return (
                         <img className="img-responsive" src={FilePath} />
