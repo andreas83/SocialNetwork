@@ -267,8 +267,11 @@ class DataController extends BaseController {
         {
             $hashdb= new Hashtags;
             $res=$hashdb->find(array("hashtag"=>str_replace("#", "", $request['hash'])));
-            $res[0]->pop+=1;
-            $res[0]->save();
+            if(count($res)>0)
+            {
+                $res[0]->pop+=1;
+                $res[0]->save();
+            }
             $this->assign("show_share", false);
             $this->assign("hash", $request['hash']);
             $this->assign("title", "Pictures of ".$request['hash'] );
