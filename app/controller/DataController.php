@@ -271,6 +271,10 @@ class DataController extends BaseController {
             {
                 $res[0]->pop+=1;
                 $res[0]->save();
+            }else{
+                $hashdb->hashtag=str_replace("#", "", $request['hash']);
+                $hashdb->pop=1;
+                $hashdb->save();
             }
             $this->assign("show_share", false);
             $this->assign("hash", $request['hash']);
