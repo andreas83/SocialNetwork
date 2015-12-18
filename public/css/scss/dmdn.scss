@@ -126,6 +126,7 @@ a.hash{
     height:80px;
     padding:20px;
     color:#000; 
+    
     img{
         margin-right:20px;
         width:46px;
@@ -201,8 +202,8 @@ a.hash{
 
 video {
   width: 100%    !important;
-  
-  max-height: 560px;
+  height: initial;
+ 
 }
 
 .video {
