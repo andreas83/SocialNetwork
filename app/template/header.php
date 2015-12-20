@@ -13,7 +13,7 @@
         }
         ?>
     </head>
-    <body class="<?php echo $scope; ?>">
+    <body class="<?php echo (isset($scope) ? $scope : ""); ?>">
     <top-menu>
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container">

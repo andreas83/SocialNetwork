@@ -30,9 +30,6 @@ class DataController extends BaseController {
             
         }
         
-  
-        
-        
         $this->assign("title", "Das merken die nie");
         $this->assign("scope", "frontpage register");
         $this->render("main.php");
@@ -129,42 +126,109 @@ class DataController extends BaseController {
 
     
     /**
-     * this function handles the save data 
-     * also it loads the inital data for 
-     * /permalink/<id> /public/stream /hash/
-     * which should be splitted to
-     * @todo we should split this function into (save data, get data)
-     *
-     * @todo refactoring 
+     * load inital data for public stream 
+     * 
      * @param type $request
      */
     function stream($request=false) {
         
         $data = new Content;
+        $this->assign("show_share", true);
+        $this->assign("title", "Public Stream");
+        $this->render("stream.php");
+    }
 
-        //check nsfw content
-        if(Helper::isUser())
+    /**
+     * loads inital data for /<username>
+     * @param type $request
+     */
+    function get_user($request){
+        $this->assign("user", $request['user']);
+        $this->assign("title", "Stream from ".str_replace(".", " ", $request['user'] ));
+        $this->addHeader('<meta property="og:url" content="'.Config::get("address").''.$request['user'].'"/>');
+        $this->addHeader('<meta property="og:title" content="Stream from '.str_replace(".", " ", $request['user'] ).'"/>');
+        $this->addHeader('<meta property="og:type" content="website" />');
+        $this->render("stream.php");
+    }
+    
+    
+    /**
+     * load inital data for /hash/
+     * and saves hashtag popularity
+     * 
+     * @param type $request
+     */
+    function get_hash($request){
+        $hashdb= new Hashtags;
+        $res=$hashdb->find(array("hashtag"=>$request['hash']));
+        if(count($res)>0)
         {
-            $user= new User;
-            $user=$user->get($_SESSION['login']);
-            $settings=  json_decode($user->settings);
-            //$settings->show_nsfw
+            $res[0]->pop+=1;
+            $res[0]->save();
+        }else{
+            $hashdb->hashtag= $request['hash'];
+            $hashdb->pop=1;
+            $hashdb->save();
+        }
+        
+        $this->addHeader('<meta property="og:url" content="'.Config::get("address").'hash/'.$request['hash'].'"/>');
+        $this->addHeader('<meta property="og:title" content="All about #'.$request['hash'].'"/>');
+        $this->addHeader('<meta property="og:type" content="website" />');
+        
+        $this->assign("show_share", false);
+        $this->assign("hash", $request['hash']);
+        $this->assign("title", "All about ".$request['hash'] );
+        $this->render("stream.php");
+    }
+    
+    /**
+     * loads inital data for permalink
+     * like meta information
+     * 
+     * @param type $request
+     */
+    function get_permalink($request){
+        $data = new Content;
+        $res=$data->get($request['id']);
+        
+        if(strpos($res->data, "<code")!==false)
+        {
+            $res->data="";  
         }
         else
         {
-            $settings=new stdClass();
-            $settings->show_nsfw="false";
+            $res->data=  strip_tags($res->data);
         }
-        
-        
-        
-        $this->assign("show_share", true);
+
+        $this->assign("title", $res->data);
+        $media=json_decode($res->media);
+        $this->addHeader('<link rel="canonical" href="'.Config::get("address").'permalink/'.$request['id'].'">');
+        $this->addHeader('<meta property="og:url" content="'.Config::get("address").'permalink/'.$request['id'].'"/>');
+        $this->addHeader('<meta property="og:title" content="'.$res->data.'"/>');
+        $this->addHeader('<meta property="og:type" content="website" />');
+        if(isset($media->img[0]))
+            $this->addHeader('<meta property="og:image" content="'.Config::get("upload_address").$media->img[0].'"/>');
+        if(isset($media->type) && $media->type=="img")
+            $this->addHeader('<meta property="og:image" content="'.Config::get("upload_address").$media->url.'"/>');
+
+        $this->assign("show_share", false);
+        $this->assign("permalink", $request['id']);
+        $this->render("stream.php");
+    }
+    
+    /**
+     * function handles new content
+     * 
+     * @return boolean
+     */
+    function post_content(){
         
         if (isset($_POST) && !empty($_POST)) 
         {      
             //spam bot prevention
             if(isset($_POST['mail']) && !empty($_POST['mail']))
                 return false;
+            
             $content = new Content();
             $content->data = $_POST['content'];
             $pattern="/(^|\s)#(\w*[a-zA-Z0-9öäü_-]+\w*)/";
@@ -209,12 +273,8 @@ class DataController extends BaseController {
                     $metadata->files[$i]->src = $uniq;
                     $metadata->files[$i]->name = $_FILES['img']['name'][$i];
                     $metadata->files[$i]->type = $mime;
-
-                    
+               
                     $i++;
-                    
-                    
-                    
                 }
             }
             $content->media = json_encode($metadata);
@@ -235,184 +295,8 @@ class DataController extends BaseController {
             $content->save();
             $this->redirect("/public/stream/");
         }
-        $this->assign("title", "Public Stream");
-        if(isset($request['id']))
-        {
-            $res=$data->get($request['id']);
-            if(strpos($res->data, "<code")!==false)
-            {
-                $res->data="";  
-            }
-            else
-            {
-                
-                $res->data=  strip_tags($res->data);
-            }
-                
-            $this->assign("title", "Public Stream  ".$res->data);
-            $media=json_decode($res->media);
-            $this->addHeader('<link rel="canonical" href="'.Config::get("address").'permalink/'.$request['id'].'">');
-            $this->addHeader('<meta property="og:url" content="'.Config::get("address").'permalink/'.$request['id'].'"/>');
-            $this->addHeader('<meta property="og:title" content="'.$res->data.'"/>');
-            $this->addHeader('<meta property="og:type" content="website" />');
-            if(isset($media->img[0]))
-                $this->addHeader('<meta property="og:image" content="'.Config::get("upload_address").$media->img[0].'"/>');
-            if(isset($media->type) && $media->type=="img")
-                $this->addHeader('<meta property="og:image" content="'.Config::get("upload_address").$media->url.'"/>');
-            
-            $this->assign("show_share", false);
-            $this->assign("permalink", $request['id']);
-        }
-        if(isset($request['hash']))
-        {
-            $hashdb= new Hashtags;
-            $res=$hashdb->find(array("hashtag"=>str_replace("#", "", $request['hash'])));
-            if(count($res)>0)
-            {
-                $res[0]->pop+=1;
-                $res[0]->save();
-            }else{
-                $hashdb->hashtag=str_replace("#", "", $request['hash']);
-                $hashdb->pop=1;
-                $hashdb->save();
-            }
-            $this->assign("show_share", false);
-            $this->assign("hash", $request['hash']);
-            $this->assign("title", "Pictures of ".$request['hash'] );
-            
-        }
-        if(isset($request['user']))
-        {
-            $this->assign("user", $request['user']);
-            $this->assign("title", "Stream of ".str_replace(".", " ", $request['user'] ));
-            
-        }
-        
-        
-        
-        $this->assign("scope", "login");
-        
-       
-        $this->render("stream.php");
     }
 
-    /**
-     * this function handles get and set of comments
-     * 
-     * @todo put function into own controller
-     * @todo split get and save into two methods
-     * 
-     * @param type $request
-     */
-    function comment($request) {
-        $comment = new Comment();
-        if ($_POST && Helper::isUser()) {
-            $comment->content_id = $request['id'];
-            $comment->comment = $_POST['text'];
-            $comment->user_id = $_SESSION['login'];
-            $comment->save();
-            
-            $content= new Content;
-            $content=$content->get($request['id']);
-            
-            $notification = new Notification;
-            $notification->to_user_id=$content->user_id;
-            $notification->from_user_id=$_SESSION['login'];
-            $notification->date=date("U");
-            $notification->message='wrote something about your'
-                    . ' <a href="/permalink/'.$request['id'].'">post</a>';
-            if($notification->user_id!=$_SESSION['login'])
-                $notification->save();
-                    
-            
-        } elseif ($_POST && !Helper::isUser()) {
-            header('HTTP/1.0 403 Forbidden');
-        }
-
-        $data = $comment->getComment($request['id']);
-
-        header('Content-Type: application/json');
-        $i = 0;
-        foreach ($data as $res) {
-            $std[$i] = new stdClass();
-
-            $std[$i]->text = $res->comment;
-            $std[$i]->author = json_decode($res->settings);
-            $std[$i]->author->name = $res->name;
-            if (isset($std[$i]->author->profile_picture) && $std[$i]->author->profile_picture != 'null') {
-                $std[$i]->author->profile_picture = Config::get('upload_address') . $std[$i]->author->profile_picture;
-            }
-            $i++;
-        }
-        if (isset($std))
-            echo json_encode($std);
-        else {
-            echo json_encode(array());
-        }
-    }
-
-    /**
-     * score function handles 
-     * like and dislike request
-     * 
-     * @todo remove the goto, move to own score controller 
-     * @param array $request
-     */
-    function score($request) {
-
-        $score = new Score();
-        if (isset($request['type']) && Helper::isUser()) {
-            
-            $find=$score->find(array(
-                "content_id"=>$request['id'], 
-                "user_id" => $_SESSION['login'],
-                "type" => $request['type']));
-            
-            if(count($find)>0)
-            {
-                $find[0]->delete($find[0]->id);
-                goto getScore;
-                    
-            }
-            
-            $score->user_id = $_SESSION['login'];
-            $score->content_id = $request['id'];
-            $score->type = $request['type'];
-            $score->save();
-            
-            $content= new Content;
-            $content=$content->get($request['id']);
-            
-            $notification = new Notification;
-            $notification->to_user_id=$content->user_id;
-            $notification->from_user_id=$_SESSION['login'];
-            $notification->date=date("U");
-            $notification->message='scored your'
-                    . ' <a href="/permalink/'.$request['id'].'">post</a>';
-            if($content->user_id!=$_SESSION['login'])
-                $notification->save();
-            
-            
-        } elseif ($_POST && !Helper::isUser()) {
-            header('HTTP/1.0 403 Forbidden');
-        }
-        getScore:
-        $like=$score->find(array(
-            "content_id"=>$request['id'], 
-            "type" => "add"));
-        
-        $dislike=$score->find(array(
-            "content_id"=>$request['id'], 
-            "type" => "sub"));
-        
-        header('Content-Type: application/json');
-   
-        if (count($like)>0 || count($dislike)>0)
-            echo json_encode(array("like"=>count($like), "dislike"=>count($dislike)));
-        else {
-            echo json_encode(array("like" =>0, "dislike" => 0));
-        }
-    }
     
     function delete($request){
         $content = new Content();

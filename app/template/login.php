@@ -25,23 +25,25 @@
     <div class="form-group">
         <label for="">
             <?php
-                echo(isset($error['nick']) ? $error['nick'] : _("Your nickname please"));
+                echo(isset($error['nick']) ? $error['nick'] : _("nickname"));
             ?>
         </label>
-        <input type="text" name="nick" class="form-control" id="" placeholder="<?php echo _("chuck norris"); ?>" />
+        <input type="text" value="<?php
+                echo(isset($error['nick']) ? "": $_POST['nick']);
+            ?>" name="nick" class="form-control" id="" placeholder="<?php echo _("chuck norris"); ?>" />
 
     </div>
     <div class="form-group">
         <label for="">
             <?php
-                echo(isset($error['mail']) ? $error['mail'] : _("Your mail please"));
+                echo(isset($error['mail']) ? $error['mail'] : _("mail"));
             ?>
         </label>
-        <input type="email" name="mail" class="form-control" id="" placeholder="<?php echo _("chuck@norris.com"); ?>" />
+        <input type="email" value="<?php echo(isset($error['mail']) ? "" : $_POST['mail']); ?>" name="mail" class="form-control" id="" placeholder="<?php echo _("chuck@norris.com"); ?>" />
         
     </div>
     <div class="form-group">
-        <label for=""><?php echo _('your password please') ?></label>
+        <label for=""><?php  echo(isset($error['pass']) ? $error['pass'] : _("password"));   ?></label>
         <input type="password" name="pass" class="form-control" id="" placeholder="<?php echo _("1234"); ?>" />
     </div>
     <input type="submit" class="btn-warning  btn btn-lg" value="<?php echo _("SignUp !"); ?>" />

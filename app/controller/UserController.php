@@ -50,16 +50,16 @@ class UserController extends BaseController
         $error = false;
         if ($_POST) {
             if (!filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL)) {
-                $error['mail'] = "Please validate your email";
+                $error['mail'] = _("Please validate your email");
             }
 
-            if (strlen($_POST['pass']) < 6) {
-                $error['pass'] = "A bit stronger";
+            if (strlen($_POST['pass']) < 4) {
+                $error['pass'] = "Your password is to short";
             }
 
 
             if (strlen($_POST['nick']) < 2) {
-                $error['nick'] = "Nickname must be greater than 2.";
+                $error['nick'] = _("Nickname is to short 2.");
             }
 
             if (!isset($_POST['nick']) || empty($_POST['nick'])) {
@@ -70,7 +70,7 @@ class UserController extends BaseController
 
             $res = $user->find(array("name" => $_POST['nick']));
             if (count($res) > 0) {
-                $error['mail'] = "A User with this nick already exist.";
+                $error['nick'] = _("A User with this nick already exist.");
             }
 
             if ($error === false) {
@@ -79,10 +79,10 @@ class UserController extends BaseController
                 $user->mail = $_POST['mail'];
                 $user->password = md5($_POST['pass'] . Config::get("salat"));
                 $default=new stdClass;
-                $default->use_experimental = "nein";
-                $default->show_nsfw = "nein";
-                $default->autoplay = "ja";
-                $default->mute_video = "ja";
+                
+                $default->show_nsfw = "true";
+                $default->autoplay = "yes";
+                $default->mute_video = "yes";
                 $user->settings = json_encode($default);
                 $user->api_key = md5($_POST['nick']+date("Y-m-d H:i:s"));
                 $user->created = date("Y-m-d H:i:s");
@@ -118,7 +118,7 @@ class UserController extends BaseController
                 move_uploaded_file($_FILES['picture']['tmp_name'], Config::get("dir").Config::get("upload_path") . "$uniq");
                 $setting->profile_picture = $uniq;
             }
-            $setting->use_experimental = $_POST['use_experimental'];
+            
             $setting->show_nsfw = $_POST['nsfw'];
             $setting->autoplay = $_POST['autoplay'];
             $setting->mute_video = $_POST['mute_video'];

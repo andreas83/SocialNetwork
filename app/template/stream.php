@@ -1,11 +1,7 @@
 <?php
 include("header.php");
-
 include("menu.php");
-?>
-
-
-    
+?>    
 <div class="col-md-7 col-sm-8 col-xs-12 ">
     
         
@@ -17,7 +13,7 @@ include("menu.php");
                     <h4>You post anonymously, if you like to comment, delete post, please 
                         <a href="/user/register/">signin</a></h4>
                     <?php } ?>
-                    <form method="post" action="/" enctype="multipart/form-data">
+                    <form method="post" action="/api/content/" enctype="multipart/form-data">
 
                             <textarea id="share_area" name="content" class="form-control"></textarea>
 
@@ -83,9 +79,6 @@ include("menu.php");
                         </form>
                     </div>
                 <?php } ?>
-                
-            
-        
         
         <div class=" stream-row animated bounceInDown" 
              data-permalink="<?php echo (isset($permalink) ? $permalink : ""); ?>" 
@@ -95,9 +88,6 @@ include("menu.php");
              >
             <div class="stream col-md-11"></div>
         </div>
-        
-    
-
         
     </div>
 

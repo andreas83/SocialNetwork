@@ -20,7 +20,7 @@ $router->map('GET|POST', '/stream/private', 'DataController#stream');
 $router->map('GET|POST', '/stream/friends', 'DataController#stream');
 
 //Content API
-$router->map('POST', '/api/create/', 'DataController#create');
+$router->map('POST', '/api/content/', 'DataController#post_content');
 $router->map('POST', '/api/getmetainformation/', 'DataController#getmeta');
 $router->map('GET', '/api/content/', 'DataController#content');
 $router->map('GET', '/api/metadata/', 'DataController#metadata');
@@ -32,18 +32,19 @@ $router->map('GET', '/api/hashtags/[a:auto]', 'HashController#get');
 $router->map('POST', '/api/hashtag/score/[a:hash]', 'HashController#addScore');
 
 //Comment API
-$router->map('GET|POST', '/api/comments/[i:id]', 'DataController#comment');
+$router->map('GET', '/api/comments/[i:id]', 'CommentController#get_comment');
+$router->map('POST', '/api/comments/[i:id]', 'CommentController#post_comment');
 
 //Score API
-$router->map('POST|GET', '/api/score/[a:type]/[i:id]', 'DataController#score');
-$router->map('GET|POST', '/api/score/[i:id]', 'DataController#score');
+$router->map('POST', '/api/score/[a:type]/[i:id]', 'ScoreController#post_score');
+$router->map('GET', '/api/score/[i:id]', 'ScoreController#get_score');
 
-//Old urls
-$router->map('GET', '/[page|permalink]/[i:id]', 'DataController#stream');
-$router->map('GET', '/hash/[a:hash]', 'DataController#stream');
+//Permalink and hash url
+$router->map('GET', '/[page|permalink]/[i:id]', 'DataController#get_permalink');
+$router->map('GET', '/hash/[a:hash]', 'DataController#get_hash');
 
 
-$router->map('GET', '/[*:user]', 'DataController#stream');
+$router->map('GET', '/[*:user]', 'DataController#get_user');
 $router->map('GET|POST', '/', 'DataController#stream');
 
 

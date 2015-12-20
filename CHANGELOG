@@ -1,3 +1,11 @@
+20.12.2015 
+
+moved score and comments into own controller. 
+splitted comment method into get_comment and post_comment
+splitted score method into get_score and post_score
+splitted stream into get_permalink, get_hash, get_user method
+ 
+
 18.12.2015 added more @todos, another fix for the responsive video issue
 16.12.2015 added @todo for refactoring
 05.12.2015 added custom css for profile page, fixed responsive video 
