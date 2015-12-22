@@ -44,7 +44,7 @@ class CommentController extends BaseController{
         if ($_POST && Helper::isUser()) {
             $comment->content_id = $request['id'];
             $comment->comment = $_POST['text'];
-            $comment->user_id = $_SESSION['login'];
+            $comment->user_id = Helper::getUserID();
             $comment->save();
             
             
@@ -54,11 +54,11 @@ class CommentController extends BaseController{
             
             $notification = new Notification;
             $notification->to_user_id=$content->user_id;
-            $notification->from_user_id=$_SESSION['login'];
+            $notification->from_user_id=Helper::getUserID();
             $notification->date=date("U");
             $notification->message='wrote something about your'
                     . ' <a href="/permalink/'.$request['id'].'">post</a>';
-            if($notification->to_user_id!=$_SESSION['login'])
+            if($notification->to_user_id!=Helper::getUserID())
                 $notification->save();
                     
             

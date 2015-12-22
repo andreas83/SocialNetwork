@@ -45,16 +45,32 @@ class Helper
 
     public static function isUser()
     {
-        if(isset($_POST['api_key']))
+        if(isset($_REQUEST['api_key']))
         {
+            
             $user=new User;
-            $res=$user->getUserbyAPIKey($_POST['api_key']);
+            $res=$user->getUserbyAPIKey($_REQUEST['api_key']);
             if(count($res)>0)
                 return true;
             else 
                 return false;
         }
         return (isset($_SESSION['login']) ? true : false);
+    }
+    
+    /**
+     * useally userID is stored in $_SESSION
+     * but when request comes from api, there is only the api_key
+     */
+    public static function getUserID(){
+        if(isset($_REQUEST['api_key']) && !empty($_REQUEST['api_key']))
+        {
+            $user=new User;
+            $res=$user->getUserbyAPIKey($_REQUEST['api_key']);
+            return $res['0']->id;
+        }
+        
+        return $_SESSION['login'];
     }
       
     public static function getUserSettings()

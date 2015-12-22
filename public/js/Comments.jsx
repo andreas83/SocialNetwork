@@ -26,7 +26,7 @@
         },
         loadCommentsFromServer: function () {
             $.ajax({
-                url: '/api/comments/' + this.props.id,
+                url: '/api/comment/' + this.props.id,
                 dataType: 'json',
                 cache: false,
                 success: function (data) {
@@ -40,7 +40,7 @@
         handleCommentSubmit: function (comment) {
 
             $.ajax({
-                url: '/api/comments/' + this.props.id,
+                url: '/api/comment/' + this.props.id,
                 dataType: 'json',
                 type: 'POST',
                 data: comment,

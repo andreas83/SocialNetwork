@@ -17,11 +17,14 @@
                 <a class="btn btn-success col-xs-12 col-sm-12 col-md-12" href="/my/settings/"><?php echo _('Settings') ?></a>
             <?php endif; ?>
         </div>
-        <div class="list-group hidden-xs">
-           
-           <button class="col-xs-12 col-sm-12 col-md-12 btn btn-info" id="next">New Random Post</button>
-          
+        <div class="left-nav hidden-xs">
+            <button class="col-xs-12 col-sm-12 col-md-12 btn btn-info" id="next">New Random Post</button>
+            
+            
         </div>
-        
+        <div class="left-nav hidden-xs">
+            <a href="/help/" class="col-xs-12 col-sm-12 col-md-12 btn btn-warning" >API Documentation</a>
+        </div>
+
         
 </div>

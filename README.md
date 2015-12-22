@@ -7,6 +7,9 @@ but you can host it on your very own infrastructure or intranet.
 http://www.dasmerkendienie.com/
 
 
+##API Documentation
+http://www.dasmerkendienie.com/help/
+
 ##Features:
 * Signup / Signin
 * Share (Websites, Images, Videos, SourceCode)

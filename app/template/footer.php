@@ -28,12 +28,16 @@ echo "<script>var upload_address=\"".Config::get("upload_address")."\";  </scrip
 <link rel="stylesheet" href="/public/css/code/railscasts.css">
 
 <?php
+
 if( isset($user) && !empty($user))
 {
     ?><style id="custom_css"></style><?php
     
 }
 
+foreach ($footer as $script) {
+    echo $script;
+}
 ?>
 </body>
 </html>

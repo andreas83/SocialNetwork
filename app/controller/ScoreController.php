@@ -42,7 +42,7 @@ class ScoreController{
             
             $find=$score->find(array(
                 "content_id"=>$request['id'], 
-                "user_id" => $_SESSION['login'],
+                "user_id" => Helper::getUserID(),
                 "type" => $request['type']));
             
             if(count($find)>0)
@@ -52,7 +52,7 @@ class ScoreController{
                     
             }
             
-            $score->user_id = $_SESSION['login'];
+            $score->user_id = Helper::getUserID();
             $score->content_id = $request['id'];
             $score->type = $request['type'];
             $score->save();
@@ -62,11 +62,11 @@ class ScoreController{
             
             $notification = new Notification;
             $notification->to_user_id=$content->user_id;
-            $notification->from_user_id=$_SESSION['login'];
+            $notification->from_user_id=Helper::getUserID();
             $notification->date=date("U");
             $notification->message='scored your'
                     . ' <a href="/permalink/'.$request['id'].'">post</a>';
-            if($content->user_id!=$_SESSION['login'])
+            if($content->user_id!=Helper::getUserID())
                 $notification->save();
             
             

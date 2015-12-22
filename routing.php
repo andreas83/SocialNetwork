@@ -32,8 +32,8 @@ $router->map('GET', '/api/hashtags/[a:auto]', 'HashController#get');
 $router->map('POST', '/api/hashtag/score/[a:hash]', 'HashController#addScore');
 
 //Comment API
-$router->map('GET', '/api/comments/[i:id]', 'CommentController#get_comment');
-$router->map('POST', '/api/comments/[i:id]', 'CommentController#post_comment');
+$router->map('GET', '/api/comment/[i:id]', 'CommentController#get_comment');
+$router->map('POST', '/api/comment/[i:id]', 'CommentController#post_comment');
 
 //Score API
 $router->map('POST', '/api/score/[a:type]/[i:id]', 'ScoreController#post_score');
@@ -42,6 +42,9 @@ $router->map('GET', '/api/score/[i:id]', 'ScoreController#get_score');
 //Permalink and hash url
 $router->map('GET', '/[page|permalink]/[i:id]', 'DataController#get_permalink');
 $router->map('GET', '/hash/[a:hash]', 'DataController#get_hash');
+
+
+$router->map('GET|POST', '/help/', 'DataController#help');
 
 
 $router->map('GET', '/[*:user]', 'DataController#get_user');

@@ -242,12 +242,17 @@ class DataController extends BaseController {
                     $hashdb->save();
                 }
             }
-            $metadata = json_decode($_POST['metadata']);
-            if ($metadata->type == "img") {
+            $metadata= NULL;
+                    
+            if(isset($_POST['metadata']) && !empty($_POST['metadata']))
+            {
+                $metadata = json_decode($_POST['metadata']);
+            }
+            if (isset($metadata->type) && $metadata->type == "img") {
                 $metadata->url = $this->download($metadata->url);
             }
             
-            if($metadata->type == "video")
+            if(isset($metadata->type) && $metadata->type == "video")
             {
                 if($metadata->dl==true)
                 {
@@ -279,28 +284,30 @@ class DataController extends BaseController {
             }
             $content->media = json_encode($metadata);
             if(Helper::isUser())
-                $content->user_id = $_SESSION['login'];
+                $content->user_id = Helper::getUserID();
             else
                 $content->user_id = 1;
             
-            if(isset($_POST['api_key']))
-            {
-                $user=new User;
-                $user=$user->getUserbyAPIKey($_POST['api_key']);
-                
-                $content->user_id= $user[0]->id;
-            }
-            $content->date=date("U");
+           
+            $new_id=$content->date=date("U");
             
             $content->save();
-            $this->redirect("/public/stream/");
+            if(isset($_REQUEST['api_key']) && !empty($_REQUEST['api_key']))
+            {
+                header('Content-Type: application/json'); 
+                echo json_encode(array("status" => "done", "id" =>$new_id));
+                
+            }else
+            {
+               $this->redirect("/public/stream/");
+            }
         }
     }
 
     
     function delete($request){
         $content = new Content();
-        $res=$content->find(array("user_id" => $_SESSION['login'], "id" =>$request['id'] ));
+        $res=$content->find(array("user_id" => Helper::getUserID(), "id" =>$request['id'] ));
         header('Content-Type: application/json');
         if(count($res)>0)
         {
@@ -310,8 +317,23 @@ class DataController extends BaseController {
         
     }
     function update($request){
+        
+        parse_str(file_get_contents("php://input"),$put_vars);
+        
+        //PUT vars not 
+        $_REQUEST['api_key']=$put_vars['api_key'];
+        
+        if(!Helper::isUser()){
+            header('HTTP/1.0 403 Forbidden');
+            echo "Please validate your API Key: ".$_REQUEST['api_key'];
+            
+            return;
+        }
+        
         $content = new Content();
-        $res=$content->find(array("user_id" => $_SESSION['login'], "id" =>$request['id'] ));
+        
+        
+        $res=$content->find(array("user_id" => Helper::getUserID(), "id" =>$request['id'] ));
         header('Content-Type: application/json');
         if(count($res)>0)
         {
@@ -336,6 +358,20 @@ class DataController extends BaseController {
         }
         
     }
+    
+    
+    function help(){
+        $user= new User;
+        if(Helper::isUser())
+        {
+            $user=$user->get(Helper::getUserID());
+            $this->assign("api_key", $user->api_key);
+        }
+        $this->assign("title", "API Documentation");
+        $this->addFooter(Helper::jsScript("help.js"));
+        $this->render("help.php");
+    }
+    
 
     /**
      * download content from given $url
@@ -418,7 +454,8 @@ class DataController extends BaseController {
         $ch = curl_init();
         $optArray = array(
             CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_USERAGENT=>'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13',
         );
         curl_setopt_array($ch, $optArray);
         $result = curl_exec($ch);
@@ -441,6 +478,7 @@ class DataController extends BaseController {
             } 
             
         }
+  
         //fallback (while no opengraph tags exist, we use title tag, and meta description)
         if(!isset($data['og_title'])){
              $data['og_title'] =  $dom->getElementsByTagName('title')->item(0)->textContent;

@@ -162,7 +162,7 @@ var CommentBox = React.createClass({
     },
     loadCommentsFromServer: function loadCommentsFromServer() {
         $.ajax({
-            url: '/api/comments/' + this.props.id,
+            url: '/api/comment/' + this.props.id,
             dataType: 'json',
             cache: false,
             success: (function (data) {
@@ -176,7 +176,7 @@ var CommentBox = React.createClass({
     handleCommentSubmit: function handleCommentSubmit(comment) {
 
         $.ajax({
-            url: '/api/comments/' + this.props.id,
+            url: '/api/comment/' + this.props.id,
             dataType: 'json',
             type: 'POST',
             data: comment,
