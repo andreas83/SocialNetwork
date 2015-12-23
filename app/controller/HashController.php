@@ -18,7 +18,7 @@ class HashController extends BaseController {
     function addScore($request){
         $hash= new Hashtags;
         
-        $res=$hash->findHashtags($request['hash']);
+        $res=$hash->find(array("hashtag" => $request['hash']));
         
         $res[0]->pop=$res[0]->pop+1;
         $res[0]->save();

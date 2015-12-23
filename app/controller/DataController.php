@@ -263,6 +263,13 @@ class DataController extends BaseController {
                 }
                 
             }
+            
+            if (isset($metadata->type) && $metadata->type == "www") {
+                
+                $tmp_url=$metadata->url;
+                $metadata=(object)($this->og_parser($metadata->url));
+                $metadata->url = $tmp_url;
+            }
 
             if (isset($_FILES) && !empty($_FILES['img']['name'][0]) && is_array($_FILES)) {
                 $i=0;
@@ -415,7 +422,7 @@ class DataController extends BaseController {
      */
     function metadata() {
         $url = $_GET['url'];
-
+        
         header('Content-Type: application/json; charset=utf-8');
         //check for image
         $path_parts = pathinfo($url);
@@ -449,6 +456,19 @@ class DataController extends BaseController {
             return;
         }
 
+        $data=$this->og_parser($url);
+        echo json_encode($data);
+    }
+    
+    /**
+     * og_parser downloads a website
+     * and extract information like title, description and og tags
+     * 
+     * @param type $url
+     * @return array
+     */
+    function og_parser($url){
+        
         //check for og tag
         $data = array("type" => "www");
         $ch = curl_init();
@@ -502,8 +522,7 @@ class DataController extends BaseController {
             else
                 $data['og_img'] = $base.$imgSrc;
         }
-        
-        echo json_encode($data);
+        return $data;
     }
 
     /**

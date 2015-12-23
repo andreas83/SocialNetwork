@@ -8,7 +8,7 @@ include("menu.php");
     <div class="row">
 
         <div class="col-md-12">
-            <h1>Help - API Documentation</h1>
+            <h1>API Documentation</h1>
 
             <?php
             if (!isset($api_key)) {
@@ -101,7 +101,26 @@ Simple example, just text
         
                         </code>
                         </pre>
-<pre class="SourceCode">
+                        <pre class="SourceCode">
+Website and Text 
+                        <code class="hljs javascript">
+    
+    var text="content with website";
+    var url="https://fsfe.org/";
+    var metadata = {"type":"www", "url":url}
+    var api_key="";
+    $.ajax({
+            url: '/api/content/',
+            data: { "content": text, "metadata": JSON.stringify(metadata), "api_key" : api_key},
+            type: 'POST',
+            success: function(result) { 
+                        console.log(result);
+                    }
+            });
+        
+                        </code>
+                        </pre>
+                        <pre class="SourceCode">
 Text and Image 
                         <code class="hljs javascript">
     
@@ -120,6 +139,7 @@ Text and Image
         
                         </code>
                         </pre>
+
                     </div>
                     <div role="tabpanel" class="tab-pane" id="update">
 
