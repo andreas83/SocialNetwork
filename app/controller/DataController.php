@@ -8,7 +8,7 @@ class DataController extends BaseController {
     
 
     function frontend() {
-        
+
         if (Helper::isUser()) {
             $this->stream();
             return;
@@ -327,7 +327,7 @@ class DataController extends BaseController {
         
         parse_str(file_get_contents("php://input"),$put_vars);
         
-        //PUT vars not 
+        
         if(isset($put_vars['api_key']))
             $_REQUEST['api_key']=$put_vars['api_key'];
         
@@ -345,7 +345,7 @@ class DataController extends BaseController {
         header('Content-Type: application/json');
         if(count($res)>0)
         {
-            parse_str(file_get_contents("php://input"),$put_vars);
+            
             $res[0]->data=$put_vars['content'];
             $res[0]->save();
             
