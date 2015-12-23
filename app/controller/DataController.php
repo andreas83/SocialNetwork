@@ -328,7 +328,8 @@ class DataController extends BaseController {
         parse_str(file_get_contents("php://input"),$put_vars);
         
         //PUT vars not 
-        $_REQUEST['api_key']=$put_vars['api_key'];
+        if(isset($put_vars['api_key']))
+            $_REQUEST['api_key']=$put_vars['api_key'];
         
         if(!Helper::isUser()){
             header('HTTP/1.0 403 Forbidden');
