@@ -1,3 +1,4 @@
 RewriteEngine on
+RewriteRule ^(app/config) - [F,L,NC]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule . index.php [L]
