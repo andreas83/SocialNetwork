@@ -23,7 +23,7 @@
                             Share some <span class="glyphicon glyphicon-heart red"></span>
                         </a>
                     </div>
-                    <div class="col-md-6 col-xs-6">
+                    <div class="col-md-4 col-xs-6">
                         <form id="search" class="navbar-form navbar-left " method="post" role="search">
                             <div class="form-group">
                                 <input  type="text" class="form-control" placeholder="#hash">
@@ -32,6 +32,11 @@
                             </div>
                             <button type="submit" class="btn btn-default hidden-xs">Search</button>
                         </form>
+                    </div>
+                    <div class="col-md-2 hidden-xs">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="https://github.com/andreas83/SocialNetwork" class="navbar-default"><span class="glyphicon glyphicon-grain "></span> Fork me on Github</a></li>
+                        </ul>
                     </div>
                 </div> 
             </div>
