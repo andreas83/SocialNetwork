@@ -441,7 +441,7 @@ var Video = React.createClass({
         return React.createElement(
             "div",
             { className: "video" },
-            React.createElement("div", { dangerouslySetInnerHTML: { __html: this.props.meta.html } })
+            React.createElement("div", { className: "embed-responsive embed-responsive-16by9", dangerouslySetInnerHTML: { __html: this.props.meta.html } })
         );
     }
 });

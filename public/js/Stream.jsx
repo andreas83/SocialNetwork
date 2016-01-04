@@ -152,7 +152,7 @@
     render: function () {
         return (
             <div className = "video">
-                <div dangerouslySetInnerHTML={{__html: this.props.meta.html}} />
+                <div className = "embed-responsive embed-responsive-16by9" dangerouslySetInnerHTML={{__html: this.props.meta.html}} />
             </div>
             );
     }
