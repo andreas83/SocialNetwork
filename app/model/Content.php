@@ -1,6 +1,6 @@
 <?php
 
-class Content extends BaseApp
+class Content extends BaseModel
 {
 
     public $id = "";
@@ -14,6 +14,15 @@ class Content extends BaseApp
     public function getPrimary()
     {
         return "id";
+    }
+    
+    public function getBackendConfiguration(){
+     $backend = new ConfigureBackend;
+     $backend->setEditable(array("id", "user_id", "data", "media", "date"));
+     $backend->setVisible(array("id", "data",  "date"));
+     $backend->setSearchable(array("id", "data", "media"));
+     return $backend;
+        
     }
 
     /**

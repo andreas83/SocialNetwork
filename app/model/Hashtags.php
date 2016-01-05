@@ -1,6 +1,6 @@
 <?php
 
-class Hashtags extends BaseApp
+class Hashtags extends BaseModel
 {
 
     public $id = "";
@@ -12,6 +12,15 @@ class Hashtags extends BaseApp
     public function getPrimary()
     {
         return "id";
+    }
+    
+    public function getBackendConfiguration(){
+     $backend = new ConfigureBackend;
+     $backend->setEditable(array("id", "hashtag", "pop"));
+     $backend->setVisible(array("id", "hashtag", "pop"));
+     $backend->setSearchable(array("id", "hashtag", "pop"));
+     return $backend;
+        
     }
     
     public function findHashtags($term) {

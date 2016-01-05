@@ -68,3 +68,6 @@ CREATE TABLE  Notification (
 
 alter table Notification change user_id to_user_id int(10) unsigned;
 alter table Notification add column from_user_id int(10) unsigned after to_user_id;
+
+Alter table User add column 
+isAdmin BIT(1) DEFAULT 0

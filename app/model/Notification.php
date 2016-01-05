@@ -1,6 +1,6 @@
 <?php
 
-class Notification extends BaseApp
+class Notification extends BaseModel
 {
 
     public $id = "";
@@ -15,6 +15,15 @@ class Notification extends BaseApp
     public function getPrimary()
     {
         return "id";
+    }
+    
+    public function getBackendConfiguration(){
+        $backend = new ConfigureBackend;
+        $backend->setEditable(array("id", "to_user_id", "from_user_id", "message"));
+        $backend->setVisible(array("id", "to_user_id",  "from_user_id", "date"));
+        $backend->setSearchable(array("id", "to_user_id",  "from_user_id", "date"));
+        return $backend;
+        
     }
     
     public function cleanup(){

@@ -47,8 +47,18 @@ $router->map('GET', '/hash/[a:hash]', 'DataController#get_hash');
 $router->map('GET|POST', '/help/', 'DataController#help');
 
 
+
+$router->map("POST|GET", "/backend/", "BackendController#init");
+$router->map("POST|GET", "/backend/[a:model]/delete/[i:id]/", "BackendController#delete");
+$router->map("POST|GET", "/backend/[a:model]/create/", "BackendController#edit");
+$router->map("POST|GET", "/backend/[a:model]/edit/[i:id]/", "BackendController#edit");
+$router->map("POST|GET", "/backend/[a:model]/list/", "BackendController#table");
+$router->map("POST|GET", "/backend/[a:model]/list/page/[i:page]/", "BackendController#table");
+$router->map("POST|GET", "/backend/login/", "BackendController#login");
+
+
 $router->map('GET', '/[*:user]', 'DataController#get_user');
-$router->map('GET|POST', '/', 'DataController#stream');
+$router->map('GET', '/', 'DataController#stream');
 
 
 $match = $router->match();
@@ -56,7 +66,7 @@ if ($match) {
 
     //backend -> redirect to login
     if (!isset($_SESSION['isAdmin']) && strpos($_SERVER['REQUEST_URI'], "/backend/") === 0) {
-        #var_dump(strpos($_SERVER['REQUEST_URI'], "/backend/login/"));
+        
 
         if (strpos($_SERVER['REQUEST_URI'], "/backend/login/") === false) {
             header("Location: /backend/login/");

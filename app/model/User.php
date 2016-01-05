@@ -1,9 +1,15 @@
 <?php
 
-
-class User extends BaseApp
+/**
+ * User Model
+ * 
+ * @inject backend
+ */
+class User extends BaseModel
 {
 
+    
+ 
     public $id = "";
     public $name = "";
     public $mail = "";
@@ -11,11 +17,20 @@ class User extends BaseApp
     public $settings = "";
     public $api_key = "";
     public $auth_cookie = "";
+    public $isAdmin = "";
     public $created = "";
 
     public function getPrimary()
     {
         return "id";
+    }
+    
+    public function getBackendConfiguration(){
+     $backend = new ConfigureBackend;
+     $backend->setEditable(array("id", "name", "mail", "api_key", "isAdmin"));
+     $backend->setVisible(array("name", "mail"));
+     return $backend;
+        
     }
     
     public function getUserbyAPIKey($secret){

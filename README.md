@@ -11,10 +11,10 @@ http://www.dasmerkendienie.com/
 http://www.dasmerkendienie.com/help/
 
 ##Features:
-* Signup / Signin
+
 * Share (Websites, Images, Videos, SourceCode)
-* Like / Dislike
-* #hash tag search
-* Comments
-* Personal Wall
+* Like / Dislike / Comments
+* #hash tag search (orderd by popularity)
+* REST API
+* Backend
 

@@ -1,6 +1,6 @@
 <?php
 
-class Comment extends BaseApp
+class Comment extends BaseModel
 {
 
     public $id = "";
@@ -13,6 +13,15 @@ class Comment extends BaseApp
     public function getPrimary()
     {
         return "id";
+    }
+    
+    public function getBackendConfiguration(){
+        $backend = new ConfigureBackend;
+        $backend->setEditable(array("id", "content_id", "user_id", "comment"));
+        $backend->setVisible(array("id", "content_id", "user_id", "comment"));
+        $backend->setSearchable(array("user_id", "content_id", "comment"));
+        return $backend;
+        
     }
     
     

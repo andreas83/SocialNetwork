@@ -1,6 +1,6 @@
 <?php
 
-class Score extends BaseApp
+class Score extends BaseModel
 {
 
     public $id = "";
