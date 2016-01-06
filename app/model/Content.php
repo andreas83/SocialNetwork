@@ -19,8 +19,16 @@ class Content extends BaseModel
     public function getBackendConfiguration(){
      $backend = new ConfigureBackend;
      $backend->setEditable(array("id", "user_id", "data", "media", "date"));
-     $backend->setVisible(array("id", "data",  "date"));
+     $backend->setVisible(array("id", "user_id", "data",  "date"));
+     
+     $backend->setRelation("user_id", "User", "id")->showFields("name");
+     $backend->addLabel("user_id", "Username");
+     
      $backend->setSearchable(array("id", "data", "media"));
+     $backend->addTextarea("data");
+     
+     
+     
      return $backend;
         
     }

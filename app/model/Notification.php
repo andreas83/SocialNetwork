@@ -22,6 +22,13 @@ class Notification extends BaseModel
         $backend->setEditable(array("id", "to_user_id", "from_user_id", "message"));
         $backend->setVisible(array("id", "to_user_id",  "from_user_id", "date"));
         $backend->setSearchable(array("id", "to_user_id",  "from_user_id", "date"));
+        
+        $backend->addLabel("from_user_id", "From User");
+        $backend->addLabel("to_user_id", "To User");
+        
+        $backend->setRelation("to_user_id", "User", "id")->showFields("name");
+        $backend->setRelation("from_user_id", "User", "id")->showFields("name");
+        
         return $backend;
         
     }

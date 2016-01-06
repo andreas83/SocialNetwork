@@ -5,15 +5,46 @@ include("header.php");
     <form class="form-horizontal" enctype="multipart/form-data"  method="post">
         
         <?php
-        
         foreach ($configuration->editable as $propertie){
-            
-            
         ?>
         <div class="form-group">
-            <label for="<?php echo $propertie; ?>" class="col-sm-2 control-label"><?php echo $propertie; ?></label>
+            <?php
+            $label=$propertie;
+            if(isset($configuration->properties[$propertie]['label']))
+            {
+                $label=$configuration->properties[$propertie]['label'];
+            }
+            ?>
+            <label for="<?php echo $propertie; ?>" class="col-sm-2 control-label"><?php echo $label; ?></label>
             <div class="col-sm-10">
+                <?php
+                if(isset($configuration->properties[$propertie]['type']))
+                {
+                    
+                    if($configuration->properties[$propertie]['type']=="textarea")
+                    {
+                        ?>
+                        <textarea name="<?php echo $propertie; ?>" class="form-control" ><?php echo (isset($model->$propertie) ? htmlentities($model->$propertie) : ""); ?></textarea>
+                        <?php
+                    }
+                    if($configuration->properties[$propertie]['type']=="checkbox")
+                    {
+                        ?>
+                        <select  name="<?php echo $propertie; ?>" class="form-control" >
+                            <?php
+                                foreach ($configuration->properties[$propertie]['values'] as $key => $val)
+                                {
+                                    $selected=($model->$propertie==$key ? "selected" : "");
+                                    echo "<option ".$selected." value=\"$key\">".$val."</option>";
+                                }
+                            ?>
+                        </select>
+                        <?php
+                    }
+                }else{
+                ?>
                 <input type="text" name="<?php echo $propertie; ?>" class="form-control"  placeholder="<?php echo $propertie; ?>" value="<?php echo (isset($model->$propertie) ? htmlentities($model->$propertie) : ""); ?>">
+                <?php } ?>
             </div>
         </div>
         <?php } ?>

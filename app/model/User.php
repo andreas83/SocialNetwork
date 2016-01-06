@@ -17,7 +17,7 @@ class User extends BaseModel
     public $settings = "";
     public $api_key = "";
     public $auth_cookie = "";
-    public $isAdmin = "";
+    public $isAdmin = "0";
     public $created = "";
 
     public function getPrimary()
@@ -26,10 +26,14 @@ class User extends BaseModel
     }
     
     public function getBackendConfiguration(){
-     $backend = new ConfigureBackend;
-     $backend->setEditable(array("id", "name", "mail", "api_key", "isAdmin"));
-     $backend->setVisible(array("name", "mail"));
-     return $backend;
+        $backend = new ConfigureBackend;
+        $backend->setSearchable(array("id", "name", "mail", "api_key", "isAdmin"));
+        $backend->setEditable(array("id", "name", "mail", "api_key", "isAdmin"));
+        $backend->setVisible(array("name", "mail", "isAdmin"));
+        $backend->addCheckbox("isAdmin", array("1"=>"Yes", "0" =>"No"));
+        
+        
+        return $backend;
         
     }
     

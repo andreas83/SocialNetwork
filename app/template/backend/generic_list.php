@@ -30,9 +30,14 @@ include("header.php");
         <tr>
             <?php
             
-            foreach ($configuration->visible as $properties )
+            foreach ($configuration->visible as $propertie )
             {
-                echo "<th>".$properties."</th>";
+                $label=$propertie;
+                if(isset($configuration->properties[$propertie]['label']))
+                {
+                    $label=$configuration->properties[$propertie]['label'];
+                }
+                echo "<th>".$label."</th>";
             }
             ?>
             <th  class="text-right"><?php echo _("Action"); ?></th>
@@ -43,9 +48,21 @@ include("header.php");
             <tr>
                 
             <?php
-            foreach ($configuration->visible as $properties)
+            foreach ($configuration->visible as $propertie)
             {
-                echo "<td>".$model->$properties."</td>";
+                if(isset($configuration->properties[$propertie]['relation']))
+                {
+                    $relation = new $configuration->properties[$propertie]['relation'];
+                    $result=$relation->find(array($configuration->properties[$propertie]['field']=>$model->$propertie));
+                    if(count($result)==0)
+                        echo "<td>".$model->$propertie."</td>";
+                    else
+                        echo "<td>".$result[0]->{$configuration->properties[$propertie]['show']}."</td>";
+                }
+                else
+                {
+                    echo "<td>".$model->$propertie."</td>";
+                }
             }
             ?>
                 <td  class="text-right">

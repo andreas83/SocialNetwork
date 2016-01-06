@@ -20,6 +20,11 @@ class Comment extends BaseModel
         $backend->setEditable(array("id", "content_id", "user_id", "comment"));
         $backend->setVisible(array("id", "content_id", "user_id", "comment"));
         $backend->setSearchable(array("user_id", "content_id", "comment"));
+        $backend->addTextarea("comment");
+        $backend->addLabel("user_id", "Username");
+        $backend->setRelation("user_id", "User", "id")->showFields("name");
+        
+        
         return $backend;
         
     }

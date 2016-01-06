@@ -15,11 +15,11 @@ class Hashtags extends BaseModel
     }
     
     public function getBackendConfiguration(){
-     $backend = new ConfigureBackend;
-     $backend->setEditable(array("id", "hashtag", "pop"));
-     $backend->setVisible(array("id", "hashtag", "pop"));
-     $backend->setSearchable(array("id", "hashtag", "pop"));
-     return $backend;
+        $backend = new ConfigureBackend;
+        $backend->setEditable(array("id", "hashtag", "pop"));
+        $backend->setVisible(array("id", "hashtag", "pop"));
+        $backend->setSearchable(array("id", "hashtag", "pop"));
+        return $backend;
         
     }
     
