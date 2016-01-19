@@ -53,6 +53,23 @@ For security reasons please don`t forget to change the salat to some other rando
 salat="KJMnmnNUU&/§N(JH/h80h87fnunu43h8u7"
 ```
 
+##Permissions
+
+Please make sure that following directories are writeable by webserver
+```
+public/css/scss/
+public/upload
+```
+
+via 
+```
+sudo chown www-data:www-data public/css/scss
+sudo chown www-data:www-data public/upload
+```
+
+
+## Webserver 
+
 If you run Apache, you need also activate mod_rewirte 
 
 ```
