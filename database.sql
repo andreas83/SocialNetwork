@@ -5,6 +5,9 @@ CREATE TABLE User (
   password VARCHAR(255) NOT NULL,
   about text not null,
   settings text not null,
+  auth_cookie varchar(32) default NULL,
+  api_key varchar(32) default NULL,
+  isAdmin tinyint DEFAULT 0,
   created DATETIME,
   modified DATETIME
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
@@ -16,20 +19,17 @@ CREATE TABLE  Content (
   `media` text COLLATE utf8_unicode_ci NOT NULL,
   `date` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
-RENAME TABLE content to Content;
-
-
-CREATE TABLE  Comment (
+CREATE TABLE `Comment` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
   `content_id` int(10) unsigned NOT NULL,
-  `comment` text COLLATE utf8_unicode_ci NOT NULL,
+  `comment` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `date` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 
+) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8;
 
 CREATE TABLE  Score (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -38,35 +38,25 @@ CREATE TABLE  Score (
   `type` enum('add', 'sub') NOT NULL,
   `date` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`), UNIQUE(`user_id`, `content_id`, `type`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-Alter table User add column 
-auth_cookie varchar(32);
 
-CREATE TABLE  hashtags (
+CREATE TABLE  Hashtags (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `hashtag` VARCHAR(255) NOT NULL,
   `pop` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`), UNIQUE(`id`, `hashtag`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8
+   PRIMARY KEY (`id`), UNIQUE(`hashtag`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-Alter table User add column 
-api_key varchar(32);
-
-RENAME TABLE hashtags to Hashtags;
-Alter table Hashtags drop index id;
-Alter table Hashtags add unique index hashtag (hashtag);
 
 CREATE TABLE  Notification (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) unsigned NOT NULL,
+  `to_user_id` int(10) unsigned NOT NULL,
+  `from_user_id` int(10) unsigned NOT NULL,
   `message` text COLLATE utf8_unicode_ci NOT NULL,
   `level` int(1) unsigned NOT NULL,
   `date` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ;
 
-alter table Notification change user_id to_user_id int(10) unsigned;
-alter table Notification add column from_user_id int(10) unsigned after to_user_id;
 
-Alter table User add column isAdmin tinyint DEFAULT 0
