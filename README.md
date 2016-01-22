@@ -127,3 +127,20 @@ server {
   }
 }
 ```
+
+
+## Notification Server (experimental)
+
+You can start the websocket server by following command:
+
+```
+php app/server/runnotificationServer.php
+```
+
+Also you need to change following configuration parameter in main.cfg:
+
+```
+notification_server="ws://127.0.0.1:9000/notification";
+```
+
+ 
