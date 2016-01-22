@@ -1,0 +1,193 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Socialnetwork by andreas83</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Socialnetwork</h1>
+        <p class="header">share videos, websites, images and sourcecode</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/andreas83/SocialNetwork/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/andreas83/SocialNetwork/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/andreas83/SocialNetwork">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/andreas83">andreas83</a></p>
+
+
+      </header>
+      <section>
+        <h1>
+<a id="socialnetwork" class="anchor" href="#socialnetwork" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>SocialNetwork</h1>
+
+<p>works pretty similar to a well known social network, 
+but you can host it on your very own infrastructure or intranet. </p>
+
+<h2>
+<a id="demo" class="anchor" href="#demo" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Demo</h2>
+
+<p><a href="http://www.dasmerkendienie.com/">http://www.dasmerkendienie.com/</a></p>
+
+<h2>
+<a id="api-documentation" class="anchor" href="#api-documentation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API Documentation</h2>
+
+<p><a href="http://www.dasmerkendienie.com/help/">http://www.dasmerkendienie.com/help/</a></p>
+
+<h2>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Features:</h2>
+
+<ul>
+<li>Share (Websites, Images, Videos, SourceCode)</li>
+<li>Like / Dislike / Comments</li>
+<li>#hash tag search (orderd by popularity)</li>
+<li>REST API</li>
+<li>Backend</li>
+</ul>
+
+<h1>
+<a id="instalation" class="anchor" href="#instalation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Instalation</h1>
+
+<h2>
+<a id="download-the-sourcecode" class="anchor" href="#download-the-sourcecode" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Download the Sourcecode</h2>
+
+<p>Via GIT: </p>
+
+<pre><code>git clone https://github.com/andreas83/SocialNetwork.git
+</code></pre>
+
+<p>Via Download:</p>
+
+<p><a href="https://github.com/andreas83/SocialNetwork/archive/andrea.zip">https://github.com/andreas83/SocialNetwork/archive/andrea.zip</a></p>
+
+<h2>
+<a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuration</h2>
+
+<p>you can adjust the db credentials in app/config/main.cfg </p>
+
+<pre><code>db_name="dmdn"
+db_user=""
+db_pass=""
+</code></pre>
+
+<p>You will find the <a href="https://raw.githubusercontent.com/andreas83/SocialNetwork/andrea/database.sql">database.sql</a> file in repro</p>
+
+<p>Also you should adopt following configuration parameter</p>
+
+<pre><code>address="http://www.yourdomain.com"
+dir="/home/lissi/tmp/dmdn/trunk";
+</code></pre>
+
+<p>For security reasons please don`t forget to change the salat to some other random string</p>
+
+<pre><code>salat="KJMnmnNUU&amp;/§N(JH/h80h87fnunu43h8u7"
+</code></pre>
+
+<h2>
+<a id="permissions" class="anchor" href="#permissions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Permissions</h2>
+
+<p>Please make sure that following directories are writeable by webserver</p>
+
+<pre><code>public/css/scss/
+public/upload
+</code></pre>
+
+<p>via </p>
+
+<pre><code>sudo chown www-data:www-data public/css/scss
+sudo chown www-data:www-data public/upload
+</code></pre>
+
+<h2>
+<a id="webserver" class="anchor" href="#webserver" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Webserver</h2>
+
+<p>If you run Apache, you need also activate mod_rewirte </p>
+
+<pre><code>a2enmod rewrite
+</code></pre>
+
+<h2>
+<a id="sample-nginx-configuration" class="anchor" href="#sample-nginx-configuration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Sample nginx configuration</h2>
+
+<pre><code>server {
+  listen 217.11.57.227:80;
+  listen [2a00:1828:2000:148::3]:80;
+
+  server_name .dasmerkendienie.com;
+
+  access_log /var/log/nginx/www.dasmerkendienie.com.access.log;
+  error_log /var/log/nginx/www.dasmerkendienie.com.error.log info;
+
+  root /home/dasmerkendienie/www/dasmerkendienie.com;
+  index index.php;
+
+  location ^~ /(css|img|js|upload|bootstrap) {
+    # enable CORS (http://enable-cors.org/server_nginx.html)
+    if ($http_origin ~ (https?://.*\.dasmerkendienie\.com(:[0-9]+)?)) {
+      add_header "Access-Control-Allow-Origin" $http_origin;
+    }
+    root /home/dasmerkendienie/www/dasmerkendienie.com;
+    expires 1d;
+  }
+  location /public/upload {
+    deny all;
+  }
+  location /app/config {
+    deny all;
+  }
+  location / {
+    rewrite ^/public/css/scss.php/(.*)$ /public/css/scss.php?p=$1 last;
+    try_files $uri /index.php?$args;
+
+    location ~ .php$ {
+      try_files $uri $uri/ =404;
+      fastcgi_index index.php;
+      fastcgi_read_timeout 1800s;
+      fastcgi_send_timeout 1800s;
+      fastcgi_pass phpcgi;
+      include fastcgi_params;
+      fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+      fastcgi_param SCRIPT_NAME $fastcgi_script_name;
+    }
+
+    # deny access to apache .htaccess files
+    location ~ /\. {
+      deny all;
+    }
+  }
+}
+</code></pre>
+
+<h2>
+<a id="notification-server-experimental" class="anchor" href="#notification-server-experimental" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Notification Server (experimental)</h2>
+
+<p>You can start the websocket server by following command:</p>
+
+<pre><code>php app/server/runnotificationServer.php
+</code></pre>
+
+<p>Also you need to change following configuration parameter in main.cfg:</p>
+
+<pre><code>notification_server="ws://127.0.0.1:9000/notification";
+</code></pre>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
