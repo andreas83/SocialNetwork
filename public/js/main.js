@@ -97,6 +97,18 @@ $(document).ready(function () {
             });
             $("#search").find(".searchresult li").click(function () {
                 
+                if(user_settings==false && $(this).text().replace("#", "")=="nsfw")
+                {
+                    var info='\
+                        <div className="content">\
+                            You need to be over +18 to watch nsfw content, \
+                            please <a href="/user/register/">register here.</a>\
+                        </div>';
+                    
+                    $(".stream").html(info);
+                    return false;
+                }
+                
                 $.post('/api/hashtag/score/' + $(this).text().replace("#", ""), function( data ) {
                     console.log(data);
                 });
