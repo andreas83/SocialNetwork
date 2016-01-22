@@ -206,10 +206,10 @@ $(document).ready(function () {
     var socket;
 
     
-    var host = "ws://127.0.0.1:9000/notification"; // SET THIS TO YOUR SERVER
+    
     
     try {
-            socket = new WebSocket(host);
+            socket = new WebSocket(notification_server);
             
             socket.onopen    = function(msg) { 
                 socket.send(JSON.stringify({action: "getNotifications", auth_cookie:getCookie("auth")}));
@@ -220,7 +220,7 @@ $(document).ready(function () {
                 $(data).each(function(key){
                     
                     if(typeof JSON.parse(data[key].settings).profile_picture !=="undefined")
-                        profile_pic='<img  src='+public_upload+JSON.parse(data[key].settings).profile_picture+'>';
+                        profile_pic='<img  src='+upload_address+JSON.parse(data[key].settings).profile_picture+'>';
                     else
                         profile_pic='<img  src=/public/img/no-profile.jpg>';
                     
