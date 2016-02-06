@@ -6,6 +6,8 @@ but you can host it on your very own infrastructure or intranet.
 ## Demo
 http://www.dasmerkendienie.com/
 
+## Donate 
+Bitcoins: 1GqMSGseij18JnAoB9f3LHJRozNr1QeHkh
 
 ##API Documentation
 http://www.dasmerkendienie.com/help/
