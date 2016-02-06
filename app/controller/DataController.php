@@ -376,7 +376,7 @@ class DataController extends BaseController {
             $this->assign("api_key", $user->api_key);
         }
         $this->assign("title", "API Documentation");
-        $this->addFooter(Helper::jsScript("help.js"));
+        $this->addFooter("<script> hljs.initHighlightingOnLoad(); </script>");
         $this->render("help.php");
     }
     

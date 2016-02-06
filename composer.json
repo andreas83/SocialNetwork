@@ -1,0 +1,21 @@
+{
+    "name": "movingbytes/social-network",
+    "description": "works pretty similar to a well known social network, but you can host it on your very own infrastructure or intranet.",
+    "type": "project",
+    "require": {
+        "altorouter/altorouter": "^1.1",
+	"leafo/scssphp": "^0.6.3",
+        "components/jquery" : "^2.2.0",
+        "components/highlightjs": "^9.1",
+        "components/bootstrap": "^3.3"
+        
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Andreas Beder",
+            "email": "andreas@moving-bytes.at"
+        }
+    ],
+    "minimum-stability": "stable"
+}
