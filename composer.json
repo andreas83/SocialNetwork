@@ -17,5 +17,5 @@
             "email": "andreas@moving-bytes.at"
         }
     ],
-    "minimum-stability": "stable"
+    "minimum-stability": "beta"
 }
