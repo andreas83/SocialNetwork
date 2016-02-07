@@ -587,6 +587,7 @@ var InitStream = React.createClass({
         }
         this.state.lastID = this.id;
 
+        $(".spinner").show();
         $.ajax({
             url: '/api/content/?id=' + this.id + '&hash=' + hash + '&user=' + user + '&show=' + show,
             dataType: 'json',
@@ -600,12 +601,14 @@ var InitStream = React.createClass({
                 }
 
                 this.setState({ data: data });
-                if (user_settings.autoplay == "no") this.setAutoplayOff();
-                if (user_settings.mute_video == "yes") this.setMuted();
+                if (user_settings == false || user_settings.autoplay == "no") this.setAutoplayOff();
+
+                if (user_settings == false || user_settings.mute_video == "yes") this.setMuted();
 
                 this.setState({
                     loadingFlag: false
                 });
+                $(".spinner").hide();
             }).bind(this),
             error: (function (xhr, status, err) {
                 console.error(this.props.url, status, err.toString());

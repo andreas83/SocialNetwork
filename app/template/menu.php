@@ -17,14 +17,26 @@
                 <a class="btn btn-success col-xs-12 col-sm-12 col-md-12" href="/my/settings/"><?php echo _('Settings') ?></a>
             <?php endif; ?>
         </div>
+        <?php if (!Helper::isUser() && Config::get("facebook_auth")==true): ?>
         <div class="left-nav hidden-xs">
-            <button class="col-xs-12 col-sm-12 col-md-12 btn btn-info" id="next">New Random Post</button>
             
+            <a href='<?php echo UserController::getFBLoginURL(); ?>' class="col-xs-12 col-sm-12 col-md-12 btn" id="fblogin">Facebook</a>
             
+        </div>
+        
+        <?php endif; ?>
+        <div class="left-nav hidden-xs">
+            <button class="col-md-12 btn btn-info" id="next">New Random Post</button>
         </div>
         <div class="left-nav hidden-xs">
             <a href="/help/" class="col-xs-12 col-sm-12 col-md-12 btn btn-warning" >API Documentation</a>
         </div>
-
+        <?php if (Helper::isUser() ): ?>
+        <div class="left-nav hidden-xs">
+            
+            <a href='/user/logout/' class="col-xs-12 col-sm-12 col-md-12 btn btn-danger">Abmelden</a>
+            
+        </div>
+        <?php endif; ?>
         
 </div>

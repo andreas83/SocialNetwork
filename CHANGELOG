@@ -1,3 +1,10 @@
+07.02.2016 
+added mute video and autoplay off for unregistered users
+added loading animation
+added fb login
+
+06.02.2016 added composer.json 
+
 06.01.2016 addCheckbox, addTextarea, addLabel and addRelation methods added 
 04.01.2016 added generic backend
 

@@ -78,12 +78,9 @@ class UserController extends BaseController
                 $user->name = $_POST['nick'];
                 $user->mail = $_POST['mail'];
                 $user->password = md5($_POST['pass'] . Config::get("salat"));
-                $default=new stdClass;
+                              
                 
-                $default->show_nsfw = "true";
-                $default->autoplay = "yes";
-                $default->mute_video = "yes";
-                $user->settings = json_encode($default);
+                $user->settings = json_encode(UserController::defaultSettings());
                 $user->api_key = md5($_POST['nick']+date("Y-m-d H:i:s"));
                 $user->created = date("Y-m-d H:i:s");
                 $user->id = $user->save();
@@ -104,7 +101,14 @@ class UserController extends BaseController
         $this->render("main.php");
     }
 
-
+    static function defaultSettings(){
+        $default=new stdClass;
+        $default->show_nsfw = "true";
+        $default->autoplay = "yes";
+        $default->mute_video = "yes";
+        return $default;
+    }
+    
     function settings()
     {
         $user = new User();
@@ -143,6 +147,137 @@ class UserController extends BaseController
         $this->render("user_settings.php");
     }
 
+    
+
+    static function getFBLoginURL(){
+       
+        $fb = new Facebook\Facebook([
+        'app_id' => Config::get("facebook_app_id"),
+        'app_secret' => Config::get("facebook_app_secret"),
+        'default_graph_version' => 'v2.2'
+        ]);
+        
+      $helper = $fb->getRedirectLoginHelper();
+      
+      $permissions = ['email']; // Optional permissions
+      $loginUrl = $helper->getLoginUrl(Config::get("address")."/user/fblogin/", $permissions);
+      
+      
+      return htmlspecialchars($loginUrl);
+
+    }
+    
+    
+    function fbcallback(){
+        
+        $fb = new Facebook\Facebook([
+        'app_id' => Config::get("facebook_app_id"), // Replace {app-id} with your app id
+        'app_secret' => Config::get("facebook_app_secret"),
+        'default_graph_version' => 'v2.2',
+        ]);
+
+        $helper = $fb->getRedirectLoginHelper();
+
+        try {
+          $accessToken = $helper->getAccessToken();
+        } catch(Facebook\Exceptions\FacebookResponseException $e) {
+          // When Graph returns an error
+          echo 'Graph returned an error: ' . $e->getMessage();
+          exit;
+        } catch(Facebook\Exceptions\FacebookSDKException $e) {
+          // When validation fails or other local issues
+          echo 'Facebook SDK returned an error: ' . $e->getMessage();
+          exit;
+        }
+
+        if (! isset($accessToken)) {
+          if ($helper->getError()) {
+            header('HTTP/1.0 401 Unauthorized');
+            echo "Error: " . $helper->getError() . "\n";
+            echo "Error Code: " . $helper->getErrorCode() . "\n";
+            echo "Error Reason: " . $helper->getErrorReason() . "\n";
+            echo "Error Description: " . $helper->getErrorDescription() . "\n";
+          } else {
+            header('HTTP/1.0 400 Bad Request');
+            echo 'Bad request';
+          }
+          exit;
+        }
+
+        // The OAuth 2.0 client handler helps us manage access tokens
+        $oAuth2Client = $fb->getOAuth2Client();
+
+      
+      
+        try {
+          // Returns a `Facebook\FacebookResponse` object
+          $response = $fb->get('/me?fields=id,name,email', $accessToken->getValue());
+        } catch(Facebook\Exceptions\FacebookResponseException $e) {
+          echo 'Graph returned an error: ' . $e->getMessage();
+          exit;
+        } catch(Facebook\Exceptions\FacebookSDKException $e) {
+          echo 'Facebook SDK returned an error: ' . $e->getMessage();
+          exit;
+        }
+
+        $fbuser = $response->getGraphUser();
+        // Get the access token metadata from /debug_token
+        $tokenMetadata = $oAuth2Client->debugToken($accessToken);
+        
+        // Validation (these will throw FacebookSDKException's when they fail)
+        $tokenMetadata->validateAppId(Config::get("facebook_app_id")); // Replace {app-id} with your app id
+        // If you know the user ID this access token belongs to, you can validate it here
+        $tokenMetadata->validateUserId($fbuser['id']);
+        $tokenMetadata->validateExpiration();
+        
+        
+
+        $user = new User();
+        $error=false;
+        $res = $user->find(array("name" => $fbuser['name']));
+        if (count($res) > 0) {
+            $error=true;
+        }
+        $res = $user->find(array("mail" => $fbuser['email']));
+        if (count($res) > 0) {
+            $_SESSION['login'] = $res[0]->id;
+            $_SESSION['user_settings']=$res[0]->settings;
+            $res[0]->auth_cookie=md5($fbuser['name'] . $fbuser['email']. uniqid() . Config::get("salat"));
+            $res[0]->save();
+            setcookie("auth", $res[0]->auth_cookie, strtotime( '+1 year' ), "/");
+            $this->redirect("/public/stream/");
+            return true;
+        }
+        if(!$error)
+        {
+            $user->name = $fbuser['name'];
+            $user->mail = $fbuser['email'];
+            $user->password = md5(uniqid(). Config::get("salat"));
+
+
+            $user->settings = json_encode(UserController::defaultSettings());
+            $user->api_key = md5(uniqid()+date("Y-m-d H:i:s"));
+            $user->created = date("Y-m-d H:i:s");
+            $user->id = $user->save();
+            $_SESSION['login'] = $user->id;
+            $_SESSION['user_settings'] = $user->settings;
+            $this->redirect("/public/stream/");
+            return true;
+        }
+        
+      
+      
+      
+
+
+      
+
+      $_SESSION['fb_access_token'] = (string) $accessToken;
+      
+      $this->assing("error", array("nick" =>_("A User with this nick already exist.") ));
+      $this->register();
+    }
+    
     /**
      * @todo does not work right now.
      * 
@@ -150,7 +285,7 @@ class UserController extends BaseController
     function logout()
     {
         session_destroy();
-        setcookie("auth", "", time()-3600);
+        setcookie("auth", "", time()-3600, "/");
         $this->redirect("/");
     }
 

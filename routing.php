@@ -7,6 +7,7 @@ $router = new AltoRouter();
 $router->map('GET|POST', '/user/login/', 'UserController#login');
 $router->map('GET|POST', '/user/register/', 'UserController#register');
 $router->map('GET|POST', '/user/logout/', 'UserController#logout');
+$router->map('GET|POST', '/user/fblogin/', 'UserController#fbcallback');
 $router->map('GET|POST', '/my/settings/', 'UserController#settings');
 
 
@@ -67,7 +68,7 @@ if ($match) {
     //backend -> redirect to login
     if (!isset($_SESSION['isAdmin']) && strpos($_SERVER['REQUEST_URI'], "/backend/") === 0) {
         
-
+                
         if (strpos($_SERVER['REQUEST_URI'], "/backend/login/") === false) {
             header("Location: /backend/login/");
         }
@@ -82,6 +83,7 @@ if ($match) {
 
     if (strpos($match['target'], "#")) {
         list($object, $method) = explode("#", $match['target']);
+       
         $view = new $object;
         $view->$method($match['params']);
     }
