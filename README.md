@@ -19,7 +19,7 @@ http://www.dasmerkendienie.com/help/
 * #hash tag search (orderd by popularity)
 * REST API
 * Backend
-
+* Facebook login
 
 
 # Instalation
@@ -57,9 +57,25 @@ address="http://www.yourdomain.com"
 dir="/home/lissi/tmp/dmdn/trunk";
 ```
 
+the upload_address is useful for large installation, if you plan to host your images on
+a server optimitzed for static content delivery,
+```
+# Upload path & address
+upload_path="/public/upload/"
+upload_address="http://static.youdomain.com/"
+```
+
 For security reasons please don`t forget to change the salat to some other random string
 ```
 salat="KJMnmnNUU&/§N(JH/h80h87fnunu43h8u7"
+```
+
+If you like to use the Facebook login, following settings are required:
+```
+# Facebook Auth
+facebook_auth=true; //set to false if you dont like fb login
+facebook_app_id="";
+facebook_app_secret="";
 ```
 
 ##Permissions
