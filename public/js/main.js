@@ -136,6 +136,18 @@ $(document).ready(function () {
     });
 
     $("#next").on("click", function () {
+        
+        randomPost();
+    });
+    $( document.body ).on('keydown',  function(event) {
+        if (!$(event.target).is('input[type="text"], textarea')){
+            if(event.keyCode==82)
+            {
+                randomPost();
+            }
+        }
+    });
+    function randomPost(){
         //redirect to /random
         var url = window.location.pathname.split('/');
 
@@ -149,8 +161,7 @@ $(document).ready(function () {
         var component = React.createElement(InitStream, {random: parseInt($(".stream-row").attr("data-random"))});
 
         React.render(component, container);
-
-    });
+    }
 
     $("#search").on("submit", function (e) {
         e.preventDefault();

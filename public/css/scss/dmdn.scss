@@ -1,5 +1,6 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,800);
 
+
 $font-futura-round: 'Open Sans', sans-serif;
 $font-futura-round-medium: 'Open Sans', $font-futura-round;
 
@@ -17,6 +18,7 @@ $color2:#A7A7A9;
 $color3:#8FB8DE;
 
 body { 
+    font-family: $font-futura-round;
     padding-top: 70px; 
     background-color:#f2f2f2;
 }
@@ -53,6 +55,7 @@ body {
     }
     
 }
+
 
 .navbar-form
 {
@@ -98,7 +101,24 @@ label{
     }
     .text {
         margin-left:20px;
+        margin-right:20px;
         margin-top:10px;
+        margin-bottom:10px;
+        font-size:16px;
+        a{
+            font-weight:300;
+            
+            background-color:#5bc0de;
+            border: 1px solid #46b8da;
+            color:#fff;
+            padding: 3px;
+            margin:5px;
+            
+        }
+        a:hover{
+            background-color:#31b0d5;
+            text-decoration:none;
+        }
     }
     
     color:#000;
