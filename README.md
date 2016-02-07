@@ -34,6 +34,13 @@ Via Download:
 
 https://github.com/andreas83/SocialNetwork/archive/andrea.zip
 
+## Install dependencies
+
+```
+cd SocialNetwork
+composer install
+```
+
 ## Configuration 
 
 you can adjust the db credentials in app/config/main.cfg 
