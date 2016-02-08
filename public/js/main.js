@@ -192,6 +192,13 @@ $(document).ready(function () {
         $("#registerform").toggleClass("hide");
         $("#loginform").toggleClass("hide");
     });
+    
+    $("#passsword_reset").click(function(){
+        $("#registerform").addClass("hide");
+        $("#loginform").addClass("hide");
+        $(this).hide();
+        $("#password_reset_form").removeClass("hide");
+    });
 
 
     function getCookie(cname) {
