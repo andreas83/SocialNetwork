@@ -8,7 +8,8 @@
         "facebook/php-sdk-v4" : "~5.0",
         "components/jquery" : "^2.2.0",
         "components/highlightjs": "^9.1",
-        "components/bootstrap": "^3.3"
+        "components/bootstrap": "^3.3",
+        "phpmailer/phpmailer": "^5.2"
         
     },
     "license": "MIT",

@@ -7,6 +7,7 @@ $router = new AltoRouter();
 $router->map('GET|POST', '/user/login/', 'UserController#login');
 $router->map('GET|POST', '/user/register/', 'UserController#register');
 $router->map('GET|POST', '/user/logout/', 'UserController#logout');
+$router->map('GET|POST', '/user/password/reset/', 'UserController#passwordReset');
 $router->map('GET|POST', '/user/fblogin/', 'UserController#fbcallback');
 $router->map('GET|POST', '/my/settings/', 'UserController#settings');
 

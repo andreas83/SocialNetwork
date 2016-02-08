@@ -1,5 +1,5 @@
 
-<div class="col-md-2 col-sm-2 col-xs-12 animated bounceInLeft">
+<div class="col-md-2 col-sm-3 col-xs-12 animated bounceInLeft">
     
         <div class="list-group user-box ">
 
@@ -11,10 +11,15 @@
                     $user_settings = json_decode($_SESSION['user_settings']);
 
                 ?>
+                <?php
+                if(isset($user_settings->profile_picture)){
+                ?>
+                
                 <a class="" href="/">
-                    <img class="hidden-xs img-responsive" src="<?php echo  (isset($user_settings->profile_picture) ? Config::get('upload_address') .$user_settings->profile_picture : "/public/img/no-profile.jpg"); ?>">
+                    <img class="hidden-xs img-responsive" src="<?php echo  (isset($user_settings->profile_picture) ? Config::get('upload_address') .$user_settings->profile_picture : ""); ?>">
                 </a>
-                <a class="btn btn-success col-xs-12 col-sm-12 col-md-12" href="/my/settings/"><?php echo _('Settings') ?></a>
+                <?php } ?>
+                <a class="btn btn-success hidden-xs col-sm-12 col-md-12" href="/my/settings/"><?php echo _('Settings') ?></a>
             <?php endif; ?>
         </div>
         <?php if (!Helper::isUser() && Config::get("facebook_auth")==true): ?>
@@ -26,7 +31,7 @@
         
         <?php endif; ?>
         <div class="left-nav hidden-xs">
-            <button class="col-md-12 btn btn-info" id="next">(R)andom Post</button>
+            <button class="col-xs-12 col-sm-12 col-md-12 btn btn-info" id="next">(R)andom Post</button>
         </div>
         <div class="left-nav hidden-xs">
             <a href="/help/" class="col-xs-12 col-sm-12 col-md-12 btn btn-warning" >API Documentation</a>
@@ -34,7 +39,7 @@
         <?php if (Helper::isUser() ): ?>
         <div class="left-nav hidden-xs">
             
-            <a href='/user/logout/' class="col-xs-12 col-sm-12 col-md-12 btn btn-danger">Abmelden</a>
+            <a href='/user/logout/' class="col-xs-12 col-sm-12 col-md-12 btn btn-danger"><?php echo _("Logout"); ?></a>
             
         </div>
         <?php endif; ?>

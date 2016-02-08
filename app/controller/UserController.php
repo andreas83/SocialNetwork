@@ -37,12 +37,7 @@ class UserController extends BaseController
         $this->render("main.php");
     }
 
-    function abmelden()
-    {
-        unset($_SESSION['login']);
-        unset($_SESSION['isAdmin']);
-        $this->redirect("/");
-    }
+
 
     function register()
     {
@@ -101,6 +96,61 @@ class UserController extends BaseController
         $this->render("main.php");
     }
 
+    
+    function passwordReset(){
+        $user = new User();
+
+        $res = $user->find(array("mail" => $_POST['mail']));
+        if (count($res) == 0) {
+            $error['pw_error'] = _("Account not found.");
+        }else{
+            $newpw=uniqid();
+            $this->assign("newpw", $newpw);
+            $res[0]->password = md5( $newpw. Config::get("salat"));
+            $res[0]->save();
+            
+            $mail = new PHPMailer;
+            
+            if(Config::get("smtp")=="true")
+            {
+                $mail->isSMTP();
+                $mail->SMTPAuth = true;
+                $mail->Username = Config::get("smtp_user");
+                $mail->Password = Config::get("smtp_pass");
+                $mail->Port = Config::get("smtp_port");
+                $mail->Host = Config::get("smtp_host");
+                
+            }
+            
+            
+            $mail->From =  Config::get("mail_from");
+            $mail->FromName =  Config::get("mail_from_name");
+            $mail->addAddress($res[0]->mail, $res[0]->name);
+            
+
+            $mail->Subject = _("Password Reset")." - ".Config::get("address");
+            $mail->Body    = $this->render("email/pw_forgot.php", true);
+
+            $mail->isHTML(true);
+            $mail->CharSet = 'UTF-8';
+            
+            if (!$mail->send()) {
+                die( "Mailer Error: " . $mail->ErrorInfo );
+            } 
+            $this->assign("pwreset", true);
+            
+
+        }
+        
+            
+        $data= new Content;
+        $this->assign("stream", $data->getNext(false, 5 , "cat", false, "img", "order by rand()"));
+        $this->assign("title", "Password Reset");
+        $this->assign("error", $error);
+        $this->assign("scope", "frontpage password_reset_form");
+        $this->render("main.php");
+    }
+    
     static function defaultSettings(){
         $default=new stdClass;
         $default->show_nsfw = "true";
@@ -135,6 +185,11 @@ class UserController extends BaseController
                 $error['user'] = "A User with this Nickname already exist.";
             } else {
                 $user->name = $_POST['nick'];
+            }
+            
+            if($user->password==md5($_POST['pass1']. Config::get("salat")))
+            {
+                $user->password=md5($_POST['pass2']. Config::get("salat"));
             }
 
 
@@ -279,7 +334,7 @@ class UserController extends BaseController
     }
     
     /**
-     * @todo does not work right now.
+     * 
      * 
      */
     function logout()

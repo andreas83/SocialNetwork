@@ -33,7 +33,7 @@
                             <button type="submit" class="btn btn-default hidden-xs">Search</button>
                         </form>
                     </div>
-                    <div class="col-md-2 hidden-xs">
+                    <div class="col-md-2 hidden-xs hidden-sm">
                         <ul class="nav navbar-nav navbar-right">
                             <li><a href="https://github.com/andreas83/SocialNetwork" class="navbar-default"><span class="glyphicon glyphicon-grain "></span> Fork me on Github</a></li>
                         </ul>

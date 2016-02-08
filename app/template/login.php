@@ -15,8 +15,11 @@
         <input tabindex="2" name="pass" type="password" class="form-control" id="password" placeholder="<?php echo _("1234"); ?>" />
     </div>
     
-    <button tabindex="3" class="btn-success btn btn-lg"><?php echo _("SignIn!"); ?></button>
-    <button class="btn-info btn btn-lg toggleform"><?php echo _("Need an account?"); ?></button>
+    <button tabindex="3" class="col-md-6 btn-success btn btn-lg"><?php echo _("SignIn!"); ?></button>
+    <button class="col-md-6  btn-info btn btn-lg toggleform"><?php echo _("Need an account?"); ?></button>
+    <?php if (!Helper::isUser() && Config::get("facebook_auth")==true): ?>
+    <a href='<?php echo UserController::getFBLoginURL(); ?>' class="col-xs-12 col-sm-12 col-md-12 btn btn-lg" id="fblogin">Facebook</a>
+    <?php endif; ?>
 </form>
 
 <form id="registerform" class="<?php echo(isset($scope) && strpos($scope, "register") === false ? "hide" : ""); ?>"
@@ -46,7 +49,40 @@
         <label for=""><?php  echo(isset($error['pass']) ? $error['pass'] : _("password"));   ?></label>
         <input type="password" name="pass" class="form-control" id="" placeholder="<?php echo _("1234"); ?>" />
     </div>
-    <input type="submit" class="btn-warning  btn btn-lg" value="<?php echo _("SignUp !"); ?>" />
-    <button class="btn-info btn btn-lg toggleform"><?php echo _("Already have an account?"); ?></button>
+    <input type="submit" class="col-md-4  btn-warning  btn btn-lg" value="<?php echo _("SignUp !"); ?>" />
+    <button class="btn-info btn btn-lg col-md-8 toggleform"><?php echo _("Already have an account?"); ?></button>
+    <?php if (!Helper::isUser() && Config::get("facebook_auth")==true): ?>
+    <a href='<?php echo UserController::getFBLoginURL(); ?>' class="col-xs-12 col-sm-12 col-md-12 btn btn-lg" id="fblogin">Facebook</a>
+    <?php endif; ?>
+    
+    
     
 </form>
+
+<form id="password_reset_form" class="<?php echo(isset($scope) && strpos($scope, "password_reset_form") === false ? "hide" : ""); ?>"
+      action="/user/password/reset/" method="post">
+      <?php
+      if(isset($pwreset))
+      {
+          echo "<h2><label>"._("Pls check your mail")."</label></h2>"; 
+      }else{
+      
+      ?>
+        
+        <div class="form-group">
+        <label for="">
+            <?php
+                echo(isset($error['pw_error']) ? $error['pw_error'] : _("mail"));
+            ?>
+        </label>
+        <input type="email" value="<?php echo(isset($error['mail']) ? "" : $_POST['mail']); ?>" name="mail" class="form-control" id="" placeholder="<?php echo _("chuck@norris.com"); ?>" />
+        
+    </div>
+    <input type="submit" class="btn-info btn btn-lg col-md-12 "value="<?php echo _("Reset Password"); ?>">
+    <?php } ?>
+</form>
+<?php
+if(!isset($pwreset))
+{?>
+<a href="#" id="passsword_reset"><?php echo _("Password Reset"); ?></a>
+<?php } ?>

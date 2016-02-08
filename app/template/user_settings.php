@@ -72,6 +72,15 @@ include("menu.php");
                 <label for="api-key"><?php echo _("API Key") ?></label>
                 <input id="api-key" class="form-control" type="text" disabled="" value="<?php echo $user->api_key; ?>">
             </div>
+            
+            <div class="col-xs-6 col-md-6">
+                <label for="pass1"><?php echo _("Old Password") ?></label>
+                <input id="pass1" class="form-control" type="password" name="pass1" value="">
+            </div>
+            <div class="col-xs-6 col-md-6">
+                <label for="pass2"><?php echo _("New Password") ?></label>
+                <input id="pass12" class="form-control" type="password"  name="pass2" value="">
+            </div>
         
             <div class="col-xs-8 col-md-8">
                 <label for="custom-css"><?php echo _("CSS for Profile page"); ?></label>
