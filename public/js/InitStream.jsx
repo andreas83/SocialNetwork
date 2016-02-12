@@ -15,7 +15,12 @@
             
             document.addEventListener('scroll', this.handleScroll);
             
-            
+            //@todo better soloution would be to save the complete data as state
+            window.onpopstate = (event) => {
+                window.location.href=event.state.url;
+            };
+
+
             
         },
         componentWillUnmount() {
@@ -29,6 +34,8 @@
 
             var show =5;
             var lastid="";
+
+
             if (this.id>0 || typeof(id)=="undefined")
             {
                 this.setID(parseInt($(".stream-item").last().attr("data-id")));
@@ -48,11 +55,13 @@
                     return Math.floor(Math.random() * (max - min + 1)) + min;
                 }
                 this.setID(getRandomInt(1, parseInt($(".stream-row").attr("data-random"))+1));
-
+                
+        
                 
                 show = 1;
                 this.setState({
                         endofData:true,
+                        random:true
                     });
             }
 
@@ -104,11 +113,21 @@
                    
                     this.setState({data:data});
                     if (user_settings==false ||user_settings.autoplay == "no")
+                    {
                         this.setAutoplayOff();
-
-                    
+                    }
                     if (user_settings==false || user_settings.mute_video == "yes")
+                    {
                         this.setMuted();
+                    }
+                    if(this.state.random)
+                    {
+                        url = "/permalink/"+data[0].stream.id;
+                        var stateObj = { id: data[0].stream.id, url: url };
+                        history.pushState(stateObj, "irgendwas", url);
+                        
+
+                    }
                     
                      this.setState({
                         loadingFlag:false,

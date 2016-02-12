@@ -140,7 +140,7 @@ $(document).ready(function () {
         randomPost();
     });
     $( document.body ).on('keydown',  function(event) {
-        if (!$(event.target).is('input[type="text"], textarea')){
+        if (!$(event.target).is('input, textarea')){
             if(event.keyCode==82)
             {
                 randomPost();

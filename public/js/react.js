@@ -1,9 +1,9 @@
-"use strict";
 
 var Author = React.createClass({
     displayName: "Author",
 
-    render: function render() {
+
+    render: function () {
 
         var imgpath = this.props.author.profile_picture;
         if (typeof this.props.author.profile_picture == "undefined") {
@@ -62,7 +62,7 @@ var Author = React.createClass({
             )
         );
     },
-    prettyDate: function prettyDate(time) {
+    prettyDate: function (time) {
         var date = new Date(time * 1000),
             diff = (new Date().getTime() - date.getTime()) / 1000,
             day_diff = Math.floor(diff / 86400);
@@ -77,7 +77,8 @@ var Author = React.createClass({
 var AuthorText = React.createClass({
     displayName: "AuthorText",
 
-    componentDidMount: function componentDidMount() {
+
+    componentDidMount: function () {
         var domNode = this.getDOMNode();
         var nodes = domNode.querySelectorAll('code');
         if (nodes.length > 0) {
@@ -88,7 +89,7 @@ var AuthorText = React.createClass({
         }
     },
 
-    render: function render() {
+    render: function () {
 
         var content = this.props.data.text;
         var re = /(\<code[\]\>[\s\S]*?(?:.*?)<\/code\>*?[\s\S])|(#\S*)/gi;
@@ -129,12 +130,11 @@ var AuthorText = React.createClass({
         );
     }
 });
-'use strict';
 
 var CommentList = React.createClass({
     displayName: 'CommentList',
 
-    render: function render() {
+    render: function () {
         var commentNodes = this.props.data.map(function (comment) {
             return React.createElement(
                 Comment,
@@ -153,45 +153,45 @@ var CommentList = React.createClass({
 var CommentBox = React.createClass({
     displayName: 'CommentBox',
 
-    getInitialState: function getInitialState() {
+    getInitialState: function () {
         return { data: [] };
     },
-    componentDidMount: function componentDidMount() {
+    componentDidMount: function () {
         this.loadCommentsFromServer();
         //setInterval(this.loadCommentsFromServer, 10000);
     },
-    loadCommentsFromServer: function loadCommentsFromServer() {
+    loadCommentsFromServer: function () {
         $.ajax({
             url: '/api/comment/' + this.props.id,
             dataType: 'json',
             cache: false,
-            success: (function (data) {
+            success: function (data) {
                 this.setState({ data: data });
-            }).bind(this),
-            error: (function (xhr, status, err) {
+            }.bind(this),
+            error: function (xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
-            }).bind(this)
+            }.bind(this)
         });
     },
-    handleCommentSubmit: function handleCommentSubmit(comment) {
+    handleCommentSubmit: function (comment) {
 
         $.ajax({
             url: '/api/comment/' + this.props.id,
             dataType: 'json',
             type: 'POST',
             data: comment,
-            success: (function (data) {
+            success: function (data) {
                 this.setState({ data: data });
-            }).bind(this),
-            error: (function (xhr, status, err) {
+            }.bind(this),
+            error: function (xhr, status, err) {
                 if (err.toString() == "Forbidden") {
                     alert("Please login");
                 }
                 console.error(this.props.url, status, err.toString());
-            }).bind(this)
+            }.bind(this)
         });
     },
-    render: function render() {
+    render: function () {
 
         var commentForm = "";
         if (user_id > 0) {
@@ -209,7 +209,7 @@ var CommentBox = React.createClass({
 var CommentList = React.createClass({
     displayName: 'CommentList',
 
-    render: function render() {
+    render: function () {
 
         var commentNodes = this.props.data.map(function (comment) {
 
@@ -230,7 +230,7 @@ var CommentList = React.createClass({
 var CommentForm = React.createClass({
     displayName: 'CommentForm',
 
-    handleSubmit: function handleSubmit(e) {
+    handleSubmit: function (e) {
         e.preventDefault();
 
         var text = React.findDOMNode(this.refs.text).value.trim();
@@ -242,7 +242,7 @@ var CommentForm = React.createClass({
         React.findDOMNode(this.refs.text).value = '';
         return;
     },
-    render: function render() {
+    render: function () {
         return React.createElement(
             'form',
             { className: 'commentForm', onSubmit: this.handleSubmit },
@@ -255,7 +255,8 @@ var CommentForm = React.createClass({
 var Comment = React.createClass({
     displayName: 'Comment',
 
-    render: function render() {
+
+    render: function () {
 
         var imgpath = this.props.author.profile_picture;
         if (typeof this.props.author.profile_picture == "undefined") {
@@ -280,15 +281,15 @@ var Comment = React.createClass({
         );
     }
 });
-"use strict";
 
 var StreamList = React.createClass({
     displayName: "StreamList",
 
-    render: function render() {
+
+    render: function () {
         var streamNodes = this.props.data.map(function (data) {
 
-            var editContent = function editContent() {
+            var editContent = function () {
                 var streamItem = $(".stream-item[data-id=" + data.stream.id + "]");
                 streamItem.find(".text").attr("contenteditable", "true").focus();
                 streamItem.find(".text").html(streamItem.find(".text").text());
@@ -298,7 +299,7 @@ var StreamList = React.createClass({
                         url: '/api/content/' + data.stream.id,
                         data: { "content": streamItem.find(".text").text() },
                         type: 'PUT',
-                        success: function success(result) {
+                        success: function (result) {
                             if (result.status == "done") {
                                 streamItem.find(".action .save").addClass("hide");
                                 streamItem.find(".text").attr("contenteditable", "false");
@@ -308,11 +309,11 @@ var StreamList = React.createClass({
                     });
                 });
             };
-            var deleteContent = function deleteContent() {
+            var deleteContent = function () {
                 $.ajax({
                     url: '/api/content/' + data.stream.id,
                     type: 'DELETE',
-                    success: function success(result) {
+                    success: function (result) {
                         if (result.status == "deleted") {
                             $(".stream-item[data-id=" + data.stream.id + "]").remove();
                         }
@@ -341,7 +342,8 @@ var StreamList = React.createClass({
 var Content = React.createClass({
     displayName: "Content",
 
-    render: function render() {
+
+    render: function () {
 
         var imgpath = "";
         if (this.props.data.type == "generic") {
@@ -371,7 +373,8 @@ var Content = React.createClass({
 var Upload = React.createClass({
     displayName: "Upload",
 
-    render: function render() {
+
+    render: function () {
         var ImgPath,
             FilePath = "";
         var Img = "";
@@ -410,7 +413,8 @@ var Upload = React.createClass({
 var WWW = React.createClass({
     displayName: "WWW",
 
-    render: function render() {
+
+    render: function () {
 
         return React.createElement(
             "div",
@@ -437,7 +441,8 @@ var WWW = React.createClass({
 var Video = React.createClass({
     displayName: "Video",
 
-    render: function render() {
+
+    render: function () {
         return React.createElement(
             "div",
             { className: "video" },
@@ -445,32 +450,31 @@ var Video = React.createClass({
         );
     }
 });
-'use strict';
 
 var Likebox = React.createClass({
     displayName: 'Likebox',
 
-    getInitialState: function getInitialState() {
+    getInitialState: function () {
         return { data: [] };
     },
-    componentDidMount: function componentDidMount() {
+    componentDidMount: function () {
         this.loadLikesFromServer();
     },
-    loadLikesFromServer: function loadLikesFromServer() {
+    loadLikesFromServer: function () {
         $.ajax({
             url: '/api/score/' + this.props.id,
             dataType: 'json',
             cache: false,
-            success: (function (data) {
+            success: function (data) {
                 this.setState({ like: data.like, dislike: data.dislike });
-            }).bind(this),
-            error: (function (xhr, status, err) {
+            }.bind(this),
+            error: function (xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
-            }).bind(this)
+            }.bind(this)
         });
     },
 
-    handleSubmit: function handleSubmit(target, e) {
+    handleSubmit: function (target, e) {
 
         e.preventDefault();
 
@@ -479,15 +483,15 @@ var Likebox = React.createClass({
             method: "POST",
             dataType: 'json',
             cache: false,
-            success: (function (data) {
+            success: function (data) {
                 this.setState({ like: data.like, dislike: data.dislike });
-            }).bind(this),
-            error: (function (xhr, status, err) {
+            }.bind(this),
+            error: function (xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
-            }).bind(this)
+            }.bind(this)
         });
     },
-    render: function render() {
+    render: function () {
 
         return React.createElement(
             'div',
@@ -511,7 +515,6 @@ var Likebox = React.createClass({
         );
     }
 });
-'use strict';
 
 function Replacehashtags(string) {
 
@@ -521,26 +524,32 @@ function Replacehashtags(string) {
 var InitStream = React.createClass({
     displayName: 'InitStream',
 
-    getInitialState: function getInitialState() {
+    getInitialState: function () {
 
         return { data: [] };
     },
-    componentDidMount: function componentDidMount() {
+    componentDidMount: function () {
         this.loadStreamFromServer();
 
         document.addEventListener('scroll', this.handleScroll);
+
+        //@todo better soloution would be to save the complete data as state
+        window.onpopstate = event => {
+            window.location.href = event.state.url;
+        };
     },
-    componentWillUnmount: function componentWillUnmount() {
+    componentWillUnmount() {
         document.removeEventListener('scroll', this.handleScroll);
     },
 
-    loadStreamFromServer: function loadStreamFromServer() {
+    loadStreamFromServer: function () {
 
         var hash = "";
         var user = "";
 
         var show = 5;
         var lastid = "";
+
         if (this.id > 0 || typeof id == "undefined") {
             this.setID(parseInt($(".stream-item").last().attr("data-id")));
         }
@@ -553,15 +562,15 @@ var InitStream = React.createClass({
             });
         }
         if ($(".stream-row").attr("data-random") > 0) {
-            var getRandomInt = function getRandomInt(min, max) {
+            function getRandomInt(min, max) {
                 return Math.floor(Math.random() * (max - min + 1)) + min;
-            };
-
+            }
             this.setID(getRandomInt(1, parseInt($(".stream-row").attr("data-random")) + 1));
 
             show = 1;
             this.setState({
-                endofData: true
+                endofData: true,
+                random: true
             });
         }
 
@@ -592,7 +601,7 @@ var InitStream = React.createClass({
             url: '/api/content/?id=' + this.id + '&hash=' + hash + '&user=' + user + '&show=' + show,
             dataType: 'json',
             cache: false,
-            success: (function (data) {
+            success: function (data) {
 
                 data = this.state.data.concat(data);
 
@@ -601,22 +610,30 @@ var InitStream = React.createClass({
                 }
 
                 this.setState({ data: data });
-                if (user_settings == false || user_settings.autoplay == "no") this.setAutoplayOff();
-
-                if (user_settings == false || user_settings.mute_video == "yes") this.setMuted();
+                if (user_settings == false || user_settings.autoplay == "no") {
+                    this.setAutoplayOff();
+                }
+                if (user_settings == false || user_settings.mute_video == "yes") {
+                    this.setMuted();
+                }
+                if (this.state.random) {
+                    url = "/permalink/" + data[0].stream.id;
+                    var stateObj = { id: data[0].stream.id, url: url };
+                    history.pushState(stateObj, "irgendwas", url);
+                }
 
                 this.setState({
                     loadingFlag: false
                 });
                 $(".spinner").hide();
-            }).bind(this),
-            error: (function (xhr, status, err) {
+            }.bind(this),
+            error: function (xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
-            }).bind(this)
+            }.bind(this)
         });
     },
 
-    render: function render() {
+    render: function () {
 
         if (user_settings.show_nsfw == "false" && $(".stream-row").attr("data-hash") == "nsfw") {
 
@@ -644,21 +661,21 @@ var InitStream = React.createClass({
             React.createElement(StreamList, { data: this.state.data })
         );
     },
-    setAutoplayOff: function setAutoplayOff() {
+    setAutoplayOff: function () {
 
         $('video').each(function (index) {
             $("video").get(index).pause();
         });
     },
-    setMuted: function setMuted() {
+    setMuted: function () {
 
         $("video").prop('muted', true);
     },
-    setID: function setID(id) {
+    setID: function (id) {
         this.id = id;
     },
 
-    handleScroll: function handleScroll(event) {
+    handleScroll(event) {
 
         if (this.state.endofData) {
             return true;
