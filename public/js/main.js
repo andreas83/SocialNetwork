@@ -147,11 +147,13 @@ $(document).ready(function () {
             }
         }
     });
+    
+    function isNumeric(n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
+    }
     function randomPost(){
-        //redirect to /random
-        var url = window.location.pathname.split('/');
 
-        if (url[1] != "random")
+        if (!isNumeric($(".stream-row").attr("data-random")))
         {
             window.location.href = "/random/";
             return true;
@@ -160,7 +162,7 @@ $(document).ready(function () {
         var container = document.getElementsByClassName('stream')[0];
         var component = React.createElement(InitStream, {random: parseInt($(".stream-row").attr("data-random"))});
 
-        React.render(component, container);
+        ReactDOM.render(component, container);
     }
 
     $("#search").on("submit", function (e) {
