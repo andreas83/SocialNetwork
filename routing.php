@@ -8,6 +8,7 @@ $router->map('GET|POST', '/user/login/', 'UserController#login');
 $router->map('GET|POST', '/user/register/', 'UserController#register');
 $router->map('GET|POST', '/user/logout/', 'UserController#logout');
 $router->map('GET|POST', '/user/password/reset/', 'UserController#passwordReset');
+$router->map('GET|POST', '/user/password/reset/[a:hash]/', 'UserController#passwordResetConfirmed');
 $router->map('GET|POST', '/user/fblogin/', 'UserController#fbcallback');
 $router->map('GET|POST', '/my/settings/', 'UserController#settings');
 
@@ -58,6 +59,8 @@ $router->map("POST|GET", "/backend/[a:model]/list/", "BackendController#table");
 $router->map("POST|GET", "/backend/[a:model]/list/page/[i:page]/", "BackendController#table");
 $router->map("POST|GET", "/backend/login/", "BackendController#login");
 
+
+$router->map("GET", "/sitemap.xml", "WebController#sitemap");
 
 $router->map('GET', '/[*:user]', 'DataController#get_user');
 $router->map('GET', '/', 'DataController#stream');
