@@ -8,14 +8,24 @@ include("menu.php");
                 <?php
                 if(isset($show_share) && $show_share===true)
                 { ?>
+                        <div class="col-md-1" >
+                            
+                            <h5><span class="btn btn-sm btn-warning btn-file">
+                                <i class="glyphicon glyphicon-cloud-upload"></i> 
+                            <input type="file" id="img" multiple name="img[]" class="form-control" />
+                            </span>
+                                </h5>
+                        </div>
+                        <div class="col-md-10" >
+                        <?php if (!Helper::isUser()) { ?>
+                            <h5 class="pull-right">You post anonymously:  <a href="/user/register/" class="btn btn-primary btn-sm">signin now!</a></h5>
+                        <?php } ?>
+                        </div>
                 <div class="col-md-11 stream-input">
-                    <?php if (!Helper::isUser()) { ?>
-                    <h4>You post anonymously, if you like to comment, delete post, please 
-                        <a href="/user/register/">signin</a></h4>
-                    <?php } ?>
+                    
                     <form method="post" action="/api/content/" enctype="multipart/form-data">
-
-                            <textarea id="share_area" name="content" class="form-control"></textarea>
+                        
+                        <textarea id="share_area" name="content" cols="30" class="form-control"></textarea>
 
                             <div class="row preview www">
 
@@ -70,11 +80,9 @@ include("menu.php");
                                 </div>
 
                             </div>
-                            <input type="file" id="img" multiple name="img[]" class="form-control" />
-                            
                             <input type="hidden" name="metadata" id="metadata" />
                             <input type="text" name="mail" class="hide" value="" />
-                            <button class="btn btn-lg btn-info"><?php echo _('Share now!'); ?></button>
+                            <button class="btn btn-lg btn-info pull-right"><i class="glyphicon glyphicon-heart"></i> <?php echo _('Share now!'); ?></button>
                             
                         </form>
                     </div>

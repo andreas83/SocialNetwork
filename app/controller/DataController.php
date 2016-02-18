@@ -133,8 +133,12 @@ class DataController extends BaseController {
     function stream($request=false) {
         
         $data = new Content;
+        $this->assign("title", "Social Network - free open and anonym ");
+        $this->assign("keyword", "open, anyonm, funny, cat, video, gif, webm, lol, weird, free, open");
+        $this->assign("description", "Our main goal is to create a free and open community available to anyone anonymously or not");
+        
         $this->assign("show_share", true);
-        $this->assign("title", "Public Stream");
+        
         $this->render("stream.php");
     }
 
@@ -200,7 +204,16 @@ class DataController extends BaseController {
             $res->data=  strip_tags($res->data);
         }
 
-        $this->assign("title", $res->data);
+        $pattern="/(^|\s)#(\w*[a-zA-Z0-9öäü_-]+\w*)/";
+        preg_match_all($pattern, $res->data, $hashtags);
+        
+        $user = new User;
+        $user=$user->get($res->user_id);
+        
+        $this->assign("title", $user->name." - ".$res->data);
+        $this->assign("keyword", implode(",", $hashtags[2]));
+        $this->assign("description", $res->data);
+        
         $media=json_decode($res->media);
         $this->addHeader('<link rel="canonical" href="'.Config::get("address").'permalink/'.$request['id'].'">');
         $this->addHeader('<meta property="og:url" content="'.Config::get("address").'permalink/'.$request['id'].'"/>');
