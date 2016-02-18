@@ -14,12 +14,12 @@ include("menu.php");
                                 <i class="glyphicon glyphicon-cloud-upload"></i> 
                             <input type="file" id="img" multiple name="img[]" class="form-control" />
                             </span>
-                                </h5>
+                            </h5>
                         </div>
                         <div class="col-md-10" >
-                        <?php if (!Helper::isUser()) { ?>
-                            <h5 class="pull-right">You post anonymously:  <a href="/user/register/" class="btn btn-primary btn-sm">signin now!</a></h5>
-                        <?php } ?>
+                        
+                            <h5 class="pull-right"><?php if (!Helper::isUser()) { ?>You post anonymously:  <a href="/user/register/" class="btn btn-primary btn-sm">signin now!</a> <?php } ?></h5>
+                       x
                         </div>
                 <div class="col-md-11 stream-input">
                     
