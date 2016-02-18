@@ -8,6 +8,6 @@ Login: <a href="<?php echo Config::get("address")."/user/login/"; ?>"><?php echo
 <br/>
 <br/>
 Happy Hacking
-
+<br/>
 Bot
 

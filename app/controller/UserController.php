@@ -97,10 +97,10 @@ class UserController extends BaseController
     }
 
     
-    function passwordReset(){
+    function passwordResetConfirmed($request){
         $user = new User();
 
-        $res = $user->find(array("mail" => $_POST['mail']));
+        $res = $user->getUserbyAPIKey($request['hash']);
         if (count($res) == 0) {
             $error['pw_error'] = _("Account not found.");
         }else{
@@ -130,6 +130,55 @@ class UserController extends BaseController
 
             $mail->Subject = _("Password Reset")." - ".Config::get("address");
             $mail->Body    = $this->render("email/pw_forgot.php", true);
+
+            $mail->isHTML(true);
+            $mail->CharSet = 'UTF-8';
+            
+            if (!$mail->send()) {
+                die( "Mailer Error: " . $mail->ErrorInfo );
+            } 
+            $this->assign("pwreset", true);
+            
+
+        }
+        
+            
+   
+    }
+    
+    function passwordReset(){
+        $user = new User();
+
+        $res = $user->find(array("mail" => $_POST['mail']));
+        if (count($res) == 0) {
+            $error['pw_error'] = _("Account not found.");
+        }else{
+      
+            
+            $mail = new PHPMailer;
+            
+            if(Config::get("smtp")=="true")
+            {
+                $mail->isSMTP();
+                $mail->SMTPAuth = true;
+                $mail->Username = Config::get("smtp_user");
+                $mail->Password = Config::get("smtp_pass");
+                $mail->Port = Config::get("smtp_port");
+                $mail->Host = Config::get("smtp_host");
+                
+            }
+            
+            
+            $mail->From =  Config::get("mail_from");
+            $mail->FromName =  Config::get("mail_from_name");
+            $mail->addAddress($res[0]->mail, $res[0]->name);
+            
+
+            $mail->Subject = _("Confirm Password Reset")." - ".Config::get("address");
+            
+            $this->assign("confirm_url", Config::get("address")."/user/password/reset/".$res[0]->api_key."/");
+            
+            $mail->Body    = $this->render("email/pw_confirm.php", true);
 
             $mail->isHTML(true);
             $mail->CharSet = 'UTF-8';
