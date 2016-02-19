@@ -19,7 +19,7 @@ include("menu.php");
                         <div class="col-md-10" >
                         
                             <h5 class="pull-right"><?php if (!Helper::isUser()) { ?>You post anonymously:  <a href="/user/register/" class="btn btn-primary btn-sm">signin now!</a> <?php } ?></h5>
-                       x
+                       
                         </div>
                 <div class="col-md-11 stream-input">
                     

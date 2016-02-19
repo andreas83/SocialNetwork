@@ -47,7 +47,9 @@ class DataController extends BaseController {
         $res=$content->getNext(Content::maxid, 1, false, false, false, false, false);
         $this->assign("random", $res[0]->id);
         
-        $this->assign("title", "Das merken die nie");
+        $this->assign("title", "Social Network - Random Post");
+        $this->assign("description", "Random post, quite a lot cats, gifs and other meaningful pictures");
+        $this->assign("keyword", "random, pictures, gif, webm, videos, funny, cat, images");
         $this->assign("scope", "random");
         $this->render("stream.php");
     }

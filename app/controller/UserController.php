@@ -137,8 +137,12 @@ class UserController extends BaseController
             if (!$mail->send()) {
                 die( "Mailer Error: " . $mail->ErrorInfo );
             } 
-            $this->assign("pwreset", true);
             
+            $data= new Content;
+            $this->assign("stream", $data->getNext(false, 5 , "cat", false, "img", "order by rand()"));
+            $this->assign("scope", "frontpage password_reset_form");
+            $this->assign("status", "new_pw_send");
+            $this->render("main.php");
 
         }
         
@@ -175,7 +179,7 @@ class UserController extends BaseController
             
 
             $mail->Subject = _("Confirm Password Reset")." - ".Config::get("address");
-            
+            $this->assign("name", $res[0]->name );
             $this->assign("confirm_url", Config::get("address")."/user/password/reset/".$res[0]->api_key."/");
             
             $mail->Body    = $this->render("email/pw_confirm.php", true);
@@ -186,7 +190,7 @@ class UserController extends BaseController
             if (!$mail->send()) {
                 die( "Mailer Error: " . $mail->ErrorInfo );
             } 
-            $this->assign("pwreset", true);
+            $this->assign("status", "confirm");
             
 
         }
@@ -197,6 +201,7 @@ class UserController extends BaseController
         $this->assign("title", "Password Reset");
         $this->assign("error", $error);
         $this->assign("scope", "frontpage password_reset_form");
+        $this->title("title", _("Password reset"));
         $this->render("main.php");
     }
     

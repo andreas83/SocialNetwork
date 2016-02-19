@@ -62,9 +62,12 @@
 <form id="password_reset_form" class="<?php echo(isset($scope) && strpos($scope, "password_reset_form") === false ? "hide" : ""); ?>"
       action="/user/password/reset/" method="post">
       <?php
-      if(isset($pwreset))
+      if(isset($status))
       {
-          echo "<h2><label>"._("Pls check your mail")."</label></h2>"; 
+          if($status=="new_pw_send")
+            echo "<h2><label>"._("New Password was send")."</label></h2>"; 
+          if($status=="confirm")
+            echo "<h2><label>"._("Pls check your mail")."</label></h2>"; 
       }else{
       
       ?>
@@ -82,7 +85,7 @@
     <?php } ?>
 </form>
 <?php
-if(!isset($pwreset))
+if(!isset($status))
 {?>
 <a href="#" id="passsword_reset"><?php echo _("Password Reset"); ?></a>
 <?php } ?>
