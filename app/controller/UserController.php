@@ -201,7 +201,7 @@ class UserController extends BaseController
         $this->assign("title", "Password Reset");
         $this->assign("error", $error);
         $this->assign("scope", "frontpage password_reset_form");
-        $this->title("title", _("Password reset"));
+        $this->assign("title", _("Password reset"));
         $this->render("main.php");
     }
     
