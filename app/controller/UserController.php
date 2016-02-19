@@ -180,7 +180,7 @@ class UserController extends BaseController
 
             $mail->Subject = _("Confirm Password Reset")." - ".Config::get("address");
             $this->assign("name", $res[0]->name );
-            $this->assign("confirm_url", Config::get("address")."/user/password/reset/".$res[0]->api_key."/");
+            $this->assign("confirm_url", Config::get("address")."user/password/reset/".$res[0]->api_key."/");
             
             $mail->Body    = $this->render("email/pw_confirm.php", true);
 
