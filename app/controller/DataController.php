@@ -149,6 +149,18 @@ class DataController extends BaseController {
      * @param type $request
      */
     function get_user($request){
+        
+        $user = new User;
+        $res=$user->find(array("name"=> str_replace(".", " ", $request['user'])));
+        if(empty($res))
+        {
+            header("HTTP/1.0 404 Not Found");
+            $data= new Content;
+            $this->assign("stream", $data->getNext(false, 1 , "cat", false, "img", "order by rand()"));
+            $this->render("404.php");
+            return true;
+        }
+        
         $this->assign("user", $request['user']);
         $this->assign("title", "Stream from ".str_replace(".", " ", $request['user'] ));
         $this->addHeader('<meta property="og:url" content="'.Config::get("address").''.$request['user'].'"/>');
@@ -178,12 +190,12 @@ class DataController extends BaseController {
         }
         
         $this->addHeader('<meta property="og:url" content="'.Config::get("address").'hash/'.$request['hash'].'"/>');
-        $this->addHeader('<meta property="og:title" content="All about #'.$request['hash'].'"/>');
+        $this->addHeader('<meta property="og:title" content="Posts about #'.$request['hash'].'"/>');
         $this->addHeader('<meta property="og:type" content="website" />');
         
         $this->assign("show_share", false);
         $this->assign("hash", $request['hash']);
-        $this->assign("title", "All about ".$request['hash'] );
+        $this->assign("title", "#".$request['hash'] );
         $this->render("stream.php");
     }
     
@@ -196,6 +208,16 @@ class DataController extends BaseController {
     function get_permalink($request){
         $data = new Content;
         $res=$data->get($request['id']);
+        
+        
+        if(empty($res))
+        {
+            header("HTTP/1.0 404 Not Found");
+            $data= new Content;
+            $this->assign("stream", $data->getNext(false, 1 , "cat", false, "img", "order by rand()"));
+            $this->render("404.php");
+            return true;
+        }
         
         if(strpos($res->data, "<code")!==false)
         {
