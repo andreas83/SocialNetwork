@@ -4,26 +4,28 @@ include("menu.php");
 ?>    
 <div class="col-md-7 col-sm-8 col-xs-12 ">
     
-        
+            
                 <?php
                 if(isset($show_share) && $show_share===true)
                 { ?>
-                        <div class="col-md-1" >
+                        
+                <div class="col-md-11" >
+
+                    <h5 class="pull-right"><?php if (!Helper::isUser()) { ?>You post anonymously:  <a href="/user/register/" class="btn btn-primary btn-sm">signin now!</a> <?php } ?></h5>
+
+                </div>
+                <div class="col-md-11 stream-input">
+                    <form method="post" action="/api/content/" enctype="multipart/form-data">
+                    <div class="col-md-1" >
                             
                             <h5><span class="btn btn-sm btn-warning btn-file">
                                 <i class="glyphicon glyphicon-cloud-upload"></i> 
                             <input type="file" id="img" multiple name="img[]" class="form-control" />
                             </span>
+                                
                             </h5>
                         </div>
-                        <div class="col-md-10" >
-                        
-                            <h5 class="pull-right"><?php if (!Helper::isUser()) { ?>You post anonymously:  <a href="/user/register/" class="btn btn-primary btn-sm">signin now!</a> <?php } ?></h5>
-                       
-                        </div>
-                <div class="col-md-11 stream-input">
                     
-                    <form method="post" action="/api/content/" enctype="multipart/form-data">
                         
                         <textarea id="share_area" name="content" cols="30" class="form-control"></textarea>
 
