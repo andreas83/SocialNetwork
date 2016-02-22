@@ -11,10 +11,29 @@
         var editBtn;
         if(this.props.id==user_id)
         {
-            editBtn=<ul className="AuthorMenu">
-                        <li className="btn btn-info" onClick={this.props.editContent}>Edit</li>
-                        <li className="btn btn-warning" onClick={this.props.deleteContent}>Delete</li>
-                    </ul>;
+            editBtn=
+        <div className="dropdown">
+        <button className="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        <span className="caret"></span>
+        </button>
+                    <ul className="dropdown-menu">
+                        <li><a href="#"  onClick={this.props.editContent}>Edit</a></li>
+                        <li><a href="#" onClick={this.props.deleteContent}>Delete</a></li>
+                        <li><a href="#" onClick={this.props.reportContent}>Report</a></li>
+                    </ul>
+        </div>;
+        }
+        else
+        {
+            editBtn=
+        <div className="dropdown">
+        <button className="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        <span className="caret"></span>
+        </button>
+                    <ul className="dropdown-menu">
+                        <li><a href="#" onClick={this.props.reportContent}>Report</a></li>
+                    </ul>
+        </div>;
         }
         var permalink="/permalink/"+this.props.contentID;
         var authorlink="/"+this.props.author.name.replace(" ", ".");
@@ -24,7 +43,7 @@
 
         return (
             <div className="author">
-                <div className="left">
+                <div className="col-md-10 col-xs-10">
                     <img className="img-circle" src={imgpath} />
                     <strong>
                             <a href={authorlink}>{this.props.author.name}</a>
@@ -32,7 +51,7 @@
                     <br/>
                     <a href={permalink}>#{this.props.contentID}</a> 
                 </div>
-                <div className="right">
+                <div className="col-md-2 col-xs-2">
                     {editBtn}
                 </div>
                 

@@ -29,6 +29,9 @@ $router->map('GET', '/api/content/', 'DataController#content');
 $router->map('GET', '/api/metadata/', 'DataController#metadata');
 $router->map('DELETE', '/api/content/[i:id]', 'DataController#delete');
 $router->map('PUT', '/api/content/[i:id]', 'DataController#update');
+$router->map('POST', '/api/content/report/[i:id]', 'DataController#report');
+
+
 
 //for autocomplete
 $router->map('GET', '/api/hashtags/[a:auto]', 'HashController#get');
@@ -47,7 +50,7 @@ $router->map('GET', '/[page|permalink]/[i:id]', 'DataController#get_permalink');
 $router->map('GET', '/hash/[a:hash]', 'DataController#get_hash');
 
 
-$router->map('GET|POST', '/help/', 'DataController#help');
+$router->map('GET|POST', '/help/', 'WebController#help');
 
 
 

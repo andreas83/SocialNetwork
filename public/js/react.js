@@ -12,17 +12,66 @@ var Author = React.createClass({
         var editBtn;
         if (this.props.id == user_id) {
             editBtn = React.createElement(
-                "ul",
-                { className: "AuthorMenu" },
+                "div",
+                { className: "dropdown" },
                 React.createElement(
-                    "li",
-                    { className: "btn btn-info", onClick: this.props.editContent },
-                    "Edit"
+                    "button",
+                    { className: "btn btn-default dropdown-toggle", type: "button", id: "dropdownMenu1", "data-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "true" },
+                    React.createElement("span", { className: "caret" })
                 ),
                 React.createElement(
-                    "li",
-                    { className: "btn btn-warning", onClick: this.props.deleteContent },
-                    "Delete"
+                    "ul",
+                    { className: "dropdown-menu" },
+                    React.createElement(
+                        "li",
+                        null,
+                        React.createElement(
+                            "a",
+                            { href: "#", onClick: this.props.editContent },
+                            "Edit"
+                        )
+                    ),
+                    React.createElement(
+                        "li",
+                        null,
+                        React.createElement(
+                            "a",
+                            { href: "#", onClick: this.props.deleteContent },
+                            "Delete"
+                        )
+                    ),
+                    React.createElement(
+                        "li",
+                        null,
+                        React.createElement(
+                            "a",
+                            { href: "#", onClick: this.props.reportContent },
+                            "Report"
+                        )
+                    )
+                )
+            );
+        } else {
+            editBtn = React.createElement(
+                "div",
+                { className: "dropdown" },
+                React.createElement(
+                    "button",
+                    { className: "btn btn-default dropdown-toggle", type: "button", id: "dropdownMenu1", "data-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "true" },
+                    React.createElement("span", { className: "caret" })
+                ),
+                React.createElement(
+                    "ul",
+                    { className: "dropdown-menu" },
+                    React.createElement(
+                        "li",
+                        null,
+                        React.createElement(
+                            "a",
+                            { href: "#", onClick: this.props.reportContent },
+                            "Report"
+                        )
+                    )
                 )
             );
         }
@@ -34,7 +83,7 @@ var Author = React.createClass({
             { className: "author" },
             React.createElement(
                 "div",
-                { className: "left" },
+                { className: "col-md-10 col-xs-10" },
                 React.createElement("img", { className: "img-circle", src: imgpath }),
                 React.createElement(
                     "strong",
@@ -57,7 +106,7 @@ var Author = React.createClass({
             ),
             React.createElement(
                 "div",
-                { className: "right" },
+                { className: "col-md-2 col-xs-2" },
                 editBtn
             )
         );
@@ -320,10 +369,22 @@ var StreamList = React.createClass({
                     }
                 });
             };
+            var reportContent = function () {
+
+                $.ajax({
+                    url: '/api/content/report/' + data.stream.id,
+                    type: 'POST',
+                    success: function (result) {
+                        if (result.status == "reported") {
+                            $(".stream-item[data-id=" + data.stream.id + "]").html("<h2 class='text-center'>Reported</h2><p class='text-center'>Thank you, we will validate the post soon</p>");
+                        }
+                    }
+                });
+            };
             return React.createElement(
                 "div",
                 { "data-id": data.stream.id, className: "row stream-item" },
-                React.createElement(Author, { editContent: editContent, deleteContent: deleteContent, id: data.author.id, author: data.author, contentID: data.stream.id, time: data.stream.date }),
+                React.createElement(Author, { editContent: editContent, deleteContent: deleteContent, reportContent: reportContent, id: data.author.id, author: data.author, contentID: data.stream.id, time: data.stream.date }),
                 React.createElement(AuthorText, { id: data.stream.id, data: data.stream }),
                 React.createElement(Content, { id: data.stream.id, data: data.stream }),
                 React.createElement(Likebox, { id: data.stream.id }),

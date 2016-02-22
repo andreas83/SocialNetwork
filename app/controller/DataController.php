@@ -418,16 +418,38 @@ class DataController extends BaseController {
     }
     
     
-    function help(){
-        $user= new User;
-        if(Helper::isUser())
-        {
-            $user=$user->get(Helper::getUserID());
-            $this->assign("api_key", $user->api_key);
-        }
-        $this->assign("title", "API Documentation");
-        $this->addFooter("<script> hljs.initHighlightingOnLoad(); </script>");
-        $this->render("help.php");
+    function report($request){
+        
+        $mail = new PHPMailer;
+            
+            if(Config::get("smtp")=="true")
+            {
+                $mail->isSMTP();
+                $mail->SMTPAuth = true;
+                $mail->Username = Config::get("smtp_user");
+                $mail->Password = Config::get("smtp_pass");
+                $mail->Port = Config::get("smtp_port");
+                $mail->Host = Config::get("smtp_host");
+                
+            }
+            
+            
+            $mail->From =  Config::get("mail_from");
+            $mail->FromName =  Config::get("mail_from_name");
+            $mail->addAddress(Config::get("abuse_mail"), Config::get("abuse_mail"));
+            
+            $this->assign($url, Config::get("address")."permalink/".$request['id']);
+            $mail->Subject = _("Verify Content")." - ".Config::get("address");
+            $mail->Body    = $this->render("email/report_content.php", true);
+
+            $mail->isHTML(true);
+            $mail->CharSet = 'UTF-8';
+            
+            if (!$mail->send()) {
+                die( "Mailer Error: " . $mail->ErrorInfo );
+            } 
+            header('Content-Type: application/json');   
+            echo json_encode(array("status" => "reported"));
     }
     
 

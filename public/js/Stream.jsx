@@ -36,9 +36,21 @@
                 }
             });
         }
+        var reportContent = function(){
+        
+            $.ajax({
+                url: '/api/content/report/'+data.stream.id,
+                type: 'POST',
+                success: function(result) {
+                    if(result.status=="reported"){
+                            $(".stream-item[data-id="+data.stream.id+"]").html("<h2 class='text-center'>Reported</h2><p class='text-center'>Thank you, we will validate the post soon</p>");
+                    }
+                }
+            });
+        }
         return (
                 <div data-id={data.stream.id} className="row stream-item">
-                    <Author editContent={editContent} deleteContent={deleteContent} id={data.author.id} author={data.author} contentID={data.stream.id} time={data.stream.date}></Author>
+                    <Author editContent={editContent} deleteContent={deleteContent} reportContent={reportContent} id={data.author.id} author={data.author} contentID={data.stream.id} time={data.stream.date}></Author>
                     <AuthorText id={data.stream.id} data={data.stream}></AuthorText>   
                     <Content id={data.stream.id} data={data.stream}></Content>
                     <Likebox id={data.stream.id}></Likebox>
