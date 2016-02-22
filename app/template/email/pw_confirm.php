@@ -1,12 +1,17 @@
-Hello <?php echo $name; ?>,<br/> 
+<html>
+    <body>
+        
+        <p>Hello <?php echo $name; ?>,</p>
 
-someone is trying to reset your Password at <?php echo Config::get("address"); ?><br/>
+        <p>someone is trying to reset your Password at <?php echo Config::get("address"); ?></p>
 
-Please follow this link if you really like to reset your Password:<br/>
+        <p>Please follow this link if you really like to reset your Password:</p>
 
-<a href="<?php echo $confirm_url; ?>"><?php echo $confirm_url; ?></a>
+        <a href="<?php echo $confirm_url; ?>"><?php echo $confirm_url; ?></a>
 
-<br/><br/>
-Best Regards
+        <br/><br/>
+        Best Regards
 
-<br/>
+        <br/>
+    </body>
+</html>

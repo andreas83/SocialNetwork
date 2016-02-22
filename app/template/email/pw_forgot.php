@@ -1,13 +1,16 @@
-Hello <?php echo $name; ?><br/>
+<html>
+    <body>
+        
+        <p>Hello <?php echo $name; ?>,</p>
 
-Your new password is : <?php echo $newpw; ?><br/>
+        <p>Your new password is : <?php echo $newpw; ?></p>
+        <p> You can change your password at user settings.</p>
+        <p>Login: <a href="<?php echo Config::get("address")."user/login/"; ?>"><?php echo Config::get("address")."user/login/"; ?></a></p>
+        <br/>
+        <br/>
+        Happy Hacking
+        <br/>
+        Bot
 
-
-You can change your password at user settings.<br/>
-Login: <a href="<?php echo Config::get("address")."user/login/"; ?>"><?php echo Config::get("address")."user/login/"; ?></a><br/>
-<br/>
-<br/>
-Happy Hacking
-<br/>
-Bot
-
+    </body>
+</html>
