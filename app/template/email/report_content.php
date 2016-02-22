@@ -1,6 +1,6 @@
-Please validate following content
+Please validate following content:
 
-<?php echo $url; ?>
+<a href="<?php echo $url; ?>"><?php echo $url; ?></a>
 
 <br/>
 Happy Hacking
