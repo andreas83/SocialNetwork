@@ -266,6 +266,18 @@ class DataController extends BaseController {
             if(isset($_POST['mail']) && !empty($_POST['mail']))
                 return false;
             
+            if(
+                isset($_POST['content']) && empty($_POST['content']) && 
+                isset($_POST['metadata']) && empty($_POST['metadata'])
+              )
+            {
+               $this->redirect("/public/stream/");
+               return false;
+            }
+            
+            
+            
+            
             $content = new Content();
             $content->data = $_POST['content'];
             $pattern="/(^|\s)#(\w*[a-zA-Z0-9öäü_-]+\w*)/";
@@ -307,7 +319,7 @@ class DataController extends BaseController {
                 $metadata=(object)($this->og_parser($metadata->url));
                 $metadata->url = $tmp_url;
             }
-
+     
             if (isset($_FILES) && !empty($_FILES['img']['name'][0]) && is_array($_FILES)) {
                 $i=0;
                 foreach ($_FILES['img']['tmp_name'] as $i => $file) {
