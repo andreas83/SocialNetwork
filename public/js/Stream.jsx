@@ -4,7 +4,8 @@
     render: function () {
     var streamNodes = this.props.data.map(function (data) {
         
-        var editContent = function(){
+        var editContent = function(e){
+            e.preventDefault();
             var streamItem=$(".stream-item[data-id="+data.stream.id+"]");
             streamItem.find(".text").attr("contenteditable", "true").focus();
             streamItem.find(".text").html(streamItem.find(".text").text());
@@ -25,7 +26,8 @@
                 });
             });
         }
-        var deleteContent = function(){
+        var deleteContent = function(e){
+            e.preventDefault();
             $.ajax({
                 url: '/api/content/'+data.stream.id,
                 type: 'DELETE',
@@ -36,8 +38,8 @@
                 }
             });
         }
-        var reportContent = function(){
-        
+        var reportContent = function(e){
+            e.preventDefault();
             $.ajax({
                 url: '/api/content/report/'+data.stream.id,
                 type: 'POST',
