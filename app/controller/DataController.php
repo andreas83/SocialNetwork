@@ -438,7 +438,7 @@ class DataController extends BaseController {
             $mail->FromName =  Config::get("mail_from_name");
             $mail->addAddress(Config::get("abuse_mail"), Config::get("abuse_mail"));
             
-            $this->assign($url, Config::get("address")."permalink/".$request['id']);
+            $this->assign("url", Config::get("address")."permalink/".$request['id']);
             $mail->Subject = _("Verify Content")." - ".Config::get("address");
             $mail->Body    = $this->render("email/report_content.php", true);
 
