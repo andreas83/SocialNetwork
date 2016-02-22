@@ -3,7 +3,7 @@ $(document).ready(function () {
         var input = $(this),
             numFiles = input.get(0).files ? input.get(0).files.length : 1,
             label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-            $(".btn-file").append(label);
+            $(".fileinfo").html(label);
         input.trigger('fileselect', [numFiles, label]);
     });
     
@@ -44,7 +44,7 @@ $(document).ready(function () {
         if (input.files && input.files[0]) {
 
             var files = input.files;
-
+            $('#uploadPreview').html("");
             for (var i = 0; i < files.length; i++)
             {
                 var file = files[i];

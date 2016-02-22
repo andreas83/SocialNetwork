@@ -268,7 +268,8 @@ class DataController extends BaseController {
             
             if(
                 isset($_POST['content']) && empty($_POST['content']) && 
-                isset($_POST['metadata']) && empty($_POST['metadata'])
+                isset($_POST['metadata']) && empty($_POST['metadata']) &&
+                isset($_FILES) && empty($_FILES['img']['name'][0])
               )
             {
                $this->redirect("/public/stream/");
