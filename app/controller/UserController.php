@@ -130,6 +130,7 @@ class UserController extends BaseController
 
             $mail->Subject = _("Password Reset")." - ".Config::get("address");
             $mail->Body    = $this->render("email/pw_forgot.php", true);
+            $mail->AltBody    = $this->render("email/pw_forgot_txt.php", true);
 
             $mail->isHTML(true);
             $mail->CharSet = 'UTF-8';
@@ -181,7 +182,7 @@ class UserController extends BaseController
             $mail->Subject = _("Confirm Password Reset")." - ".Config::get("address");
             $this->assign("name", $res[0]->name );
             $this->assign("confirm_url", Config::get("address")."user/password/reset/".$res[0]->api_key."/");
-            
+            $mail->AltBody= $this->render("email/pw_confirm_txt.php", true);
             $mail->Body    = $this->render("email/pw_confirm.php", true);
 
             $mail->isHTML(true);
