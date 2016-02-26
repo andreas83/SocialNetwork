@@ -12,7 +12,7 @@
         if(this.props.id==user_id)
         {
             editBtn=
-        <div className="dropdown">
+        <div className="dropdown pull-right">
         <button className="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
         <span className="caret"></span>
         </button>
@@ -26,11 +26,11 @@
         else
         {
             editBtn=
-        <div className="dropdown">
+        <div className="dropdown pull-right">
         <button className="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
         <span className="caret"></span>
         </button>
-                    <ul className="dropdown-menu">
+                    <ul className="dropdown-menu ">
                         <li><a href="#" onClick={this.props.reportContent}>Report</a></li>
                     </ul>
         </div>;

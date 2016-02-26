@@ -13,7 +13,7 @@ var Author = React.createClass({
         if (this.props.id == user_id) {
             editBtn = React.createElement(
                 "div",
-                { className: "dropdown" },
+                { className: "dropdown pull-right" },
                 React.createElement(
                     "button",
                     { className: "btn btn-default dropdown-toggle", type: "button", id: "dropdownMenu1", "data-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "true" },
@@ -54,7 +54,7 @@ var Author = React.createClass({
         } else {
             editBtn = React.createElement(
                 "div",
-                { className: "dropdown" },
+                { className: "dropdown pull-right" },
                 React.createElement(
                     "button",
                     { className: "btn btn-default dropdown-toggle", type: "button", id: "dropdownMenu1", "data-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "true" },
@@ -62,7 +62,7 @@ var Author = React.createClass({
                 ),
                 React.createElement(
                     "ul",
-                    { className: "dropdown-menu" },
+                    { className: "dropdown-menu " },
                     React.createElement(
                         "li",
                         null,
@@ -541,6 +541,9 @@ var Likebox = React.createClass({
 
         e.preventDefault();
 
+        if (user_id == 0) {
+            $(e.target).parent().parent().html('<p>To vote please <a class="btn btn-success" href="/user/register/">join us</a></p>');
+        }
         $.ajax({
             url: '/api/score/' + target + '/' + this.props.id,
             method: "POST",
@@ -561,7 +564,7 @@ var Likebox = React.createClass({
             null,
             React.createElement(
                 'form',
-                { className: 'Likebox', onSubmit: this.handleSubmit },
+                { 'data-id': '{this.props.id}', className: 'Likebox', onSubmit: this.handleSubmit },
                 React.createElement(
                     'span',
                     { onClick: this.handleSubmit.bind(this, "add"), dest: 'up', className: 'glyphicon glyphicon-chevron-up btn' },

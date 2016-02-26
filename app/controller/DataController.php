@@ -588,7 +588,8 @@ class DataController extends BaseController {
             else
                 $base=$url;
             
-            $imgSrc=$dom->getElementsByTagName('img')->item(0)->attributes->getNamedItem("src")->value;
+            if($dom->getElementsByTagName('img')->length>0)
+                $imgSrc=$dom->getElementsByTagName('img')->item(0)->attributes->getNamedItem("src")->value;
             
             if(substr($imgSrc, 0, 4)=="http")
                 $data['og_img'] = $imgSrc;
