@@ -210,9 +210,13 @@
         var isLoading = false;
         var endofdata = false;
 
-        React.render(
+        ReactDOM.render(
                 <InitStream data={data}  /> ,
                 document.getElementsByClassName('stream')[0]
+        );
+        ReactDOM.render(
+                <ShareBox data={data}  /> ,
+                document.getElementById("ShareBox")
         );
 
     

@@ -297,6 +297,9 @@ class DataController extends BaseController {
             if(isset($_POST['metadata']) && !empty($_POST['metadata']))
             {
                 $metadata = json_decode($_POST['metadata']);
+                if(is_array($metadata) && count($metadata)==0)
+                    $metadata=NULL;
+                
             }
             if (isset($metadata->type) && $metadata->type == "img") {
                 $metadata->url = $this->download($metadata->url);
@@ -502,7 +505,7 @@ class DataController extends BaseController {
         if (isset($path_parts['extension'])) {
             $extensions = array("svg", "png", "jpg", "gif", "jpeg");
             if (in_array(strtolower($path_parts['extension']), $extensions)) {
-                $data = array("type" => "img");
+                $data = array("type" => "img", "url" => $url);
                 echo json_encode($data);
                 return;
             }
@@ -543,7 +546,7 @@ class DataController extends BaseController {
     function og_parser($url){
         
         //check for og tag
-        $data = array("type" => "www");
+        $data = array("type" => "www", "url"=>$url);
         $ch = curl_init();
         $optArray = array(
             CURLOPT_URL => $url,
