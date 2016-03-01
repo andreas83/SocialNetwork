@@ -35,6 +35,9 @@ $router->map('POST', '/api/content/report/[i:id]', 'DataController#report');
 
 //for autocomplete
 $router->map('GET', '/api/hashtags/[a:auto]', 'HashController#get');
+$router->map('GET', '/api/users/[a:user]', 'UserController#get');
+
+// Api for Hashtag Scoring
 $router->map('POST', '/api/hashtag/score/[a:hash]', 'HashController#addScore');
 
 //Comment API

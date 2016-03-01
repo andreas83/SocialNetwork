@@ -141,7 +141,7 @@ var AuthorText = React.createClass({
     render: function () {
 
         var content = this.props.data.text;
-        var re = /(\<code[\]\>[\s\S]*?(?:.*?)<\/code\>*?[\s\S])|(#\S*)/gi;
+        var re = /(\<code[\]\>[\s\S]*?(?:.*?)<\/code\>*?[\s\S])|(#\S*)|(@\S*)/gi;
 
         var m;
         var hash;
@@ -154,6 +154,10 @@ var AuthorText = React.createClass({
             if (typeof m[2] != "undefined") {
                 hash = m[2].replace("#", "");
                 tmp_content = tmp_content.replace(m[2], '<a href="/hash/' + hash + '">#' + hash + '</a>');
+            }
+            if (typeof m[3] != "undefined") {
+                user = m[3].replace("@", "");
+                tmp_content = tmp_content.replace(m[3], '<a href="/' + user + '">@' + user + '</a>');
             }
         }
 
@@ -782,8 +786,10 @@ var ShareBox = React.createClass({
 });
 
 function Replacehashtags(string) {
+    string = string.replace(/#(\S*)/g, '<a class="hash" href="/hash/$1">#$1</a>');
+    string = string.replace(/@(\S*)/g, '<a class="user" href="/$1">@$1</a>');
 
-    return string.replace(/#(\S*)/g, '<a class="hash" href="/hash/$1">#$1</a>');
+    return string;
 }
 
 var InitStream = React.createClass({

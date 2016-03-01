@@ -19,6 +19,7 @@ echo "<script>var notification_server=\"".Config::get("notification_server")."\"
 
 <script src="/vendor/components/highlightjs/highlight.pack.min.js"></script>
 <script src="/vendor/components/jquery/jquery.min.js"></script>
+<script src="/public/js/jquery.textcomplete.min.js"></script>
 <script src="https://fb.me/react-0.14.7.min.js"></script>
 <script src="https://fb.me/react-dom-0.14.7.min.js"></script>
 <script src="/public/js/main.js"></script>
@@ -26,6 +27,7 @@ echo "<script>var notification_server=\"".Config::get("notification_server")."\"
 <script src="/public/js/react.js"></script>
 
 <link rel="stylesheet" href="/vendor/components/highlightjs/styles/railscasts.css">
+<link rel="stylesheet" href="https://raw.githubusercontent.com/yuku-t/jquery-textcomplete/master/dist/jquery.textcomplete.css">
 
 <?php
 

@@ -214,6 +214,17 @@ class UserController extends BaseController
         return $default;
     }
     
+    
+    function get($request){
+        $user= new User;
+        
+        $res=$user->getUserbyName($request['user']);
+        
+        header('Content-Type: application/json');
+        echo json_encode($res);
+        
+    }
+    
     function settings()
     {
         $user = new User();

@@ -7,7 +7,63 @@ $(document).ready(function () {
         input.trigger('fileselect', [numFiles, label]);
     });
     
+    $('textarea').textcomplete([
+    { // mention strategy
+      match: /(^|\s)#(\w*)$/,
+      search: function (term, callback) {
+        
+        $.getJSON('/api/hashtags/'+term)
+          .done(function (resp) { 
+              var data=[];
+              $(resp).each(function(key, val){
+                  data.push(val.hashtag);
+              });
+              callback(data);
+            })
+          .fail(function ()     { callback([]);   });
+      },
+      replace: function (value) {
+          
+        return '$1#' + value + ' ';
+      },
+      cache: true
+    },
+    { // mention strategy
+      match: /(^|\s)@(\w*)$/,
+      search: function (term, callback) {
+        
+        $.getJSON('/api/users/'+term)
+          .done(function (resp) { 
+              var data=[];
+              $(resp).each(function(key, val){
+                  settings=JSON.parse(val.settings);
+                  
+                  data.push([val.name, settings.profile_picture]);
+              });
+              callback(data);
+            })
+          .fail(function ()     { callback([]);   });
+      },
+      template: function (value) {
+          console.log(value[0]);
+          var img;
+          if(typeof(value[1])!="undefined")
+          {
+              img='<img  width="20" src="'+upload_address+value[1] + '"></img>';
+          }
+          else{
+              img='<img width="20" src=/public/img/no-profile.jpg>';
+          }
+            return img+'  ' + value[0];
+    },
+      replace: function (value) {
+          
+        return '$1@' + value[0].replace(" ", ".") + ' ';
+      },
+      cache: true
+    },
     
+  ], { maxCount: 20, debounce: 500 });
    
 
     function readURL(input) {
