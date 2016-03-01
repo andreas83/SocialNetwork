@@ -1,0 +1,24 @@
+{
+  "name": "dmdn",
+  "version": "0.0.1",
+  "description": "dmdn socket IO chat",
+  "dependencies": {
+    "bower": "*",
+    "sass": "*",
+    "gulp": "*",
+    "gulp-sass": "*",
+    "gulp-minify-css": "*",
+    "gulp-jshint": "*",
+    "gulp-concat": "*",
+    "gulp-uglify": "*",
+    "gulp-livereload": "*",
+    "gulp-cache" : "*",
+    "gulp-notify" : "*",
+    "gulp-rename" : "*",
+    "del" : "*",
+    "react-tools": "*"
+  },
+  "scripts": {
+    "start" : ""
+  }
+}

@@ -28,11 +28,8 @@ class CommentController extends BaseController{
             }
             $i++;
         }
-        if (isset($std))
-            echo json_encode($std);
-        else {
-            echo json_encode(array());
-        }
+
+        $this->asJson(isset($std) ? $std : []);
     }
     
     /**
@@ -63,7 +60,7 @@ class CommentController extends BaseController{
                     
             
         } elseif ($_POST && !Helper::isUser()) {
-            header('HTTP/1.0 403 Forbidden');
+            $this->getResponse()->setHeaders('HTTP/1.0 403 Forbidden');
             return false;
         }
         

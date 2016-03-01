@@ -3,9 +3,8 @@
 /**
  * Class WebController
  */
-class WebController extends BaseController {
-
-    
+class WebController extends BaseController
+{
 
     function sitemap() {
         $data= new Content();

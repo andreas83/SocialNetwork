@@ -3,29 +3,28 @@
 /**
  * Class Hashcontroller
  */
-class HashController extends BaseController {
+class HashController extends BaseController
+{
     
-    function get($request){
+    function get($request)
+    {
         $hash= new Hashtags;
         
         $res=$hash->findHashtags($request['auto']);
-        
-        header('Content-Type: application/json');
-        echo json_encode($res);
-        
+
+        $this->asJson($res);
     }
     
-    function addScore($request){
+    function addScore($request)
+    {
         $hash= new Hashtags;
         
         $res=$hash->find(array("hashtag" => $request['hash']));
         
         $res[0]->pop=$res[0]->pop+1;
         $res[0]->save();
-        
-        header('Content-Type: application/json');
-        echo json_encode($res);
-        
+
+        $this->asJson($res);
     }
 }
 

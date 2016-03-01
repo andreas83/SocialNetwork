@@ -3,9 +3,8 @@
 /**
  * Class DataController
  */
-class DataController extends BaseController {
-
-    
+class DataController extends BaseController
+{
 
     function frontend() {
 
@@ -77,7 +76,6 @@ class DataController extends BaseController {
         }
 
         $data = $data->getNext($id, $show, $hash, $user, false, false, $settings->show_nsfw);
-        header('Content-Type: application/json');
         $i = 0;
 
         foreach ($data as $res) {
@@ -119,11 +117,8 @@ class DataController extends BaseController {
             $i++;
         }
 
-        if (isset($std))
-            echo json_encode($std);
-        else {
-            echo json_encode(array());
-        }
+
+        $this->asJson(isset($std) ? $std : []);
     }
 
     
@@ -132,9 +127,8 @@ class DataController extends BaseController {
      * 
      * @param type $request
      */
-    function stream($request=false) {
-        
-        $data = new Content;
+    function stream($request=false)
+    {
         $this->assign("title", "Social Network - free open and anonym ");
         $this->assign("keyword", "open, anyonm, funny, cat, video, gif, webm, lol, weird, free, open");
         $this->assign("description", "Our main goal is to create a free and open community available to anyone anonymously or not");
@@ -148,13 +142,16 @@ class DataController extends BaseController {
      * loads inital data for /<username>
      * @param type $request
      */
-    function get_user($request){
-        
+    function get_user($request)
+    {
         $user = new User;
         $res=$user->find(array("name"=> str_replace(".", " ", $request['user'])));
         if(empty($res))
         {
-            header("HTTP/1.0 404 Not Found");
+            $this->getResponse()
+                ->addHeader("HTTP/1.0 404 Not Found")
+                ->executeHeaders();
+
             $data= new Content;
             $this->assign("stream", $data->getNext(false, 1 , "cat", false, "img", "order by rand()"));
             $this->render("404.php");
@@ -212,7 +209,10 @@ class DataController extends BaseController {
         
         if(empty($res))
         {
-            header("HTTP/1.0 404 Not Found");
+            $this->getResponse()
+                ->addHeader("HTTP/1.0 404 Not Found")
+                ->executeHeaders();
+
             $data= new Content;
             $this->assign("stream", $data->getNext(false, 1 , "cat", false, "img", "order by rand()"));
             $this->render("404.php");
@@ -276,9 +276,7 @@ class DataController extends BaseController {
                return false;
             }
             
-            
-            
-            
+
             $content = new Content();
             $content->data = $_POST['content'];
             $pattern="/(^|\s)#(\w*[a-zA-Z0-9öäü_-]+\w*)/";
@@ -292,9 +290,7 @@ class DataController extends BaseController {
                     $hashdb->save();
                 }
             }
-          
-            
-            
+
             
             $metadata= NULL;
                     
@@ -329,7 +325,6 @@ class DataController extends BaseController {
             }
      
             if (isset($_FILES) && !empty($_FILES['img']['name'][0]) && is_array($_FILES)) {
-                $i=0;
                 foreach ($_FILES['img']['tmp_name'] as $i => $file) {
                     $uniq = uniqid("", true) . "_" . $_FILES['img']['name'][$i];
                     $upload_path = Config::get("dir") . Config::get("upload_path");
@@ -342,15 +337,15 @@ class DataController extends BaseController {
                     $metadata->files[$i]->src = $uniq;
                     $metadata->files[$i]->name = $_FILES['img']['name'][$i];
                     $metadata->files[$i]->type = $mime;
-               
-                    $i++;
                 }
             }
+
             $content->media = json_encode($metadata);
-            if(Helper::isUser())
+            if(Helper::isUser()) {
                 $content->user_id = Helper::getUserID();
-            else
+            } else {
                 $content->user_id = 1;
+            }
             
            
             $new_id=$content->date=date("U");
@@ -382,52 +377,73 @@ class DataController extends BaseController {
                 }
             }
             
-            
-            
             if(isset($_REQUEST['api_key']) && !empty($_REQUEST['api_key']))
             {
-                header('Content-Type: application/json'); 
-                echo json_encode(array("status" => "done", "id" =>$new_id));
-                
-            }else
+                $this->asJson(
+                    [
+                        "status" => "done",
+                        "id" => $new_id
+                    ]
+                );
+            }
+            else
             {
                $this->redirect("/public/stream/");
             }
         }
     }
 
-    
-    function delete($request){
+
+    /**
+     * @param $request
+     */
+    function delete($request)
+    {
         $content = new Content();
         $res=$content->find(array("user_id" => Helper::getUserID(), "id" =>$request['id'] ));
-        header('Content-Type: application/json');
+
         if(count($res)>0)
         {
             $content->delete($request['id']);
-            echo json_encode(array("status" => "deleted"));
+            $this->asJson(
+                [
+                    "status" => "deleted"
+                ]
+            );
         }
         
     }
-    function update($request){
+
+    function update($request)
+    {
         
         parse_str(file_get_contents("php://input"),$put_vars);
         
         
-        if(isset($put_vars['api_key']))
+        if(isset($put_vars['api_key'])) {
             $_REQUEST['api_key']=$put_vars['api_key'];
+        }
         
-        if(!Helper::isUser()){
-            header('HTTP/1.0 403 Forbidden');
+        if(!Helper::isUser())
+        {
+            $this->getResponse()
+                ->addHeader('HTTP/1.0 403 Forbidden')
+                ->executeHeaders();
+
             echo "Please validate your API Key: ".$_REQUEST['api_key'];
-            
             return;
         }
         
         $content = new Content();
         
         
-        $res=$content->find(array("user_id" => Helper::getUserID(), "id" =>$request['id'] ));
-        header('Content-Type: application/json');
+        $res=$content->find(
+            [
+                "user_id" => Helper::getUserID(),
+                "id" => $request['id']
+            ]
+        );
+
         if(count($res)>0)
         {
             
@@ -446,8 +462,11 @@ class DataController extends BaseController {
                 }
             }
             
-            
-            echo json_encode(array("status" => "done"));
+            $this->asJson(
+                [
+                    "status" => "done"
+                ]
+            );
         }
         
     }
@@ -482,9 +501,13 @@ class DataController extends BaseController {
             
             if (!$mail->send()) {
                 die( "Mailer Error: " . $mail->ErrorInfo );
-            } 
-            header('Content-Type: application/json');   
-            echo json_encode(array("status" => "reported"));
+            }
+
+            $this->asJson(
+                [
+                    "status" => "reported"
+                ]
+            );
     }
     
 
@@ -510,8 +533,9 @@ class DataController extends BaseController {
 
         $path_parts = pathinfo($url);
         $filename = hash("sha512", $url);
-        if(isset($path_parts['extension']))
+        if(isset($path_parts['extension'])) {
             $filename.=".".$path_parts['extension'];
+        }
         
         
         $fullpath = Config::get("dir") . Config::get("upload_path") . $filename;
@@ -530,18 +554,17 @@ class DataController extends BaseController {
      */
     function metadata() {
         $url = $_GET['url'];
-        
-        header('Content-Type: application/json; charset=utf-8');
+
         //check for image
         $path_parts = pathinfo($url);
         if (isset($path_parts['extension'])) {
             $extensions = array("svg", "png", "jpg", "gif", "jpeg");
             if (in_array(strtolower($path_parts['extension']), $extensions)) {
                 $data = array("type" => "img", "url" => $url);
-                echo json_encode($data);
-                return;
+                $this->asJson($data);
             }
         }
+
         //check for video
         $extensions = array("webm", "mpeg", "mp4");
         if ((isset($path_parts['extension']) &&
@@ -560,12 +583,12 @@ class DataController extends BaseController {
                 "type" => "video",
                 "html" => DataController::replaceVideo($url),
                 "dl" => $downloadable);
-            echo json_encode($data);
+            $this->asJson($data);
             return;
         }
 
         $data=$this->og_parser($url);
-        echo json_encode($data);
+        $this->asJson($data);
     }
     
     /**
@@ -647,12 +670,15 @@ class DataController extends BaseController {
         return $data;
     }
 
-    static function replaceLinks($txt) {
-        return preg_replace('@((www|http://|https://)[^ ]+)@', '<a href="\1">\1</a>', $txt);
+    static function replaceLinks($txt)
+    {
+        return \transformer\TransformerFactory::makeStatic('string\\html\\LinkTransformer')->transform($txt);
     }
 
-    static function replaceHash($txt) {
-        return preg_replace('/(^|\s)#(\w*[a-zA-Z0-9öäü_-]+\w*)/', '\1<a href="http://www.dasmerkendienie.com/hash/\2">#\2</a>', $txt);
+
+    static function replaceHash($txt)
+    {
+        return \transformer\TransformerFactory::makeStatic('string\\html\\HashTransformer')->transform($txt);
     }
 
     /**
@@ -684,7 +710,8 @@ class DataController extends BaseController {
         return $data;
     }
 
-    static function replaceVideo($input, $dimension = false) {
+    static function replaceVideo($input, $dimension = false)
+    {
 
         if (is_array($dimension)) {
             $width = $dimension['width'];
@@ -694,26 +721,28 @@ class DataController extends BaseController {
             $height = 350;
         }
 
-        $search = "/(.+(\?|&)v=([a-zA-Z0-9_-]+).*)|https\:\/\/youtu.be\/([a-zA-Z0-9_-]+).*/";
 
-        $youtube = '<iframe id="ytplayer" type="text/html"  width="' . $width . '" height="' . $height . '" src="https://www.youtube.com/embed/$3$4" frameborder="0"> </iframe> ';
-        $input = preg_replace($search, $youtube, $input);
+        // create a transformer storage and iterate over them
+        $transformerFactory = new \transformer\TransformerFactory();
+        $transformerFactory->makeFromArray([
+            "string\\html\\YoutubeTransformer",
+            "string\\html\\VimeoTransformer",
+            "string\\html\\RedtubeTransformer",
+            "string\\html\\WebVideoTransformer",
+        ]);
 
-        $search = '/((http|https)\:\/\/)?([w]{3}\.)?vimeo.com\/(\d+)+/i';
-
-        $vimeo = '<iframe src="http://player.vimeo.com/video/$4?badge=0" width="' . $width . '" height="' . $height . '" frameborder="0" webkitAllowFullScreen="true" mozallowfullscreen="true" 
-allowFullScreen="true"></iframe>';
-        $input = preg_replace($search, $vimeo, $input);
-
-        $search = '/((http|https)\:\/\/)?([w]{3}\.)?redtube.com\/(\d+)+/i';
-        $redtube = '<iframe src="http://embed.redtube.com/?id=$4" width="' . $width . '" height="' . $height . '" frameborder="0" scrolling="no"></iframe>';
-        $input = preg_replace($search, $redtube, $input);
-
-        $path_parts = pathinfo($input);
-        if (isset($path_parts['extension']) && ($path_parts['extension'] == "webm" || $path_parts['extension'] == "mpeg" || $path_parts['extension'] == "mp4")) {
-            $input = '<video width="' . $width . '" height="' . $height . '" autoplay="autoplay" loop controls ><source src="' . $input . '" type="video/webm">Your browser does not support the video tag 
-or webm</video>';
-#       $input ='<video controls loop ><source src="'.$input.'" type="video/webm">Your browser does not support the video tag or webm</video>';
+        // reformat the string
+        /**
+         * @var IStringTransformer $transformer
+         */
+        foreach ($transformerFactory as $transformer) {
+            $input = $transformer->transform(
+                $input,
+                [
+                    'width' => $width,
+                    'height' => $height
+                ]
+            );
         }
 
         return $input;

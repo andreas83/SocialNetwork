@@ -1,0 +1,3 @@
+[submodule "phing-build"]
+	path = phing-build
+	url = git@github.com:chilimatic/phing-build.git

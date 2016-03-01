@@ -11,8 +11,10 @@ class UserController extends BaseController
      */
     function login()
     {
+        $request = new Request();
+
         $error = false;
-        if ($_POST) {
+        if ($request->isPost()) {
             $user = new User();
             $res = $user->find(array("mail" => $_POST['mail'], "password" => md5($_POST['pass'] . Config::get("salat"))));
             if (count($res) == 0) {
@@ -28,6 +30,7 @@ class UserController extends BaseController
                 $this->redirect("/public/stream/");
             }
         }
+
         $data= new Content;
         $this->assign("stream", $data->getNext(false, 5 , "cat", false, "img", "order by rand()"));
         
@@ -41,9 +44,9 @@ class UserController extends BaseController
 
     function register()
     {
-
+        $request = new Request();
         $error = false;
-        if ($_POST) {
+        if ($request->isPost()) {
             if (!filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL)) {
                 $error['mail'] = _("Please validate your email");
             }
@@ -97,7 +100,8 @@ class UserController extends BaseController
     }
 
     
-    function passwordResetConfirmed($request){
+    function passwordResetConfirmed($request)
+    {
         $user = new User();
 
         $res = $user->getUserbyAPIKey($request['hash']);
@@ -146,12 +150,11 @@ class UserController extends BaseController
             $this->render("main.php");
 
         }
-        
-            
    
     }
     
-    function passwordReset(){
+    function passwordReset()
+    {
         $user = new User();
 
         $res = $user->find(array("mail" => $_POST['mail']));
@@ -219,10 +222,8 @@ class UserController extends BaseController
         $user= new User;
         
         $res=$user->getUserbyName($request['user']);
-        
-        header('Content-Type: application/json');
-        echo json_encode($res);
-        
+
+        $this->asJson($res);
     }
     
     function settings()
@@ -311,25 +312,29 @@ class UserController extends BaseController
           exit;
         }
 
-        if (! isset($accessToken)) {
-          if ($helper->getError()) {
-            header('HTTP/1.0 401 Unauthorized');
-            echo "Error: " . $helper->getError() . "\n";
-            echo "Error Code: " . $helper->getErrorCode() . "\n";
-            echo "Error Reason: " . $helper->getErrorReason() . "\n";
-            echo "Error Description: " . $helper->getErrorDescription() . "\n";
-          } else {
-            header('HTTP/1.0 400 Bad Request');
-            echo 'Bad request';
-          }
-          exit;
+        if (!isset($accessToken)) {
+            if ($helper->getError()) {
+                $this->getResponse()
+                    ->addHeader('HTTP/1.0 401 Unauthorized')
+                    ->executeHeaders();
+
+                echo "Error: " . $helper->getError() . "\n";
+                echo "Error Code: " . $helper->getErrorCode() . "\n";
+                echo "Error Reason: " . $helper->getErrorReason() . "\n";
+                echo "Error Description: " . $helper->getErrorDescription() . "\n";
+            } else {
+                $this->getResponse()
+                    ->addHeader('HTTP/1.0 400 Bad Request')
+                    ->executeHeaders();
+                echo 'Bad request';
+            }
+            exit;
         }
 
         // The OAuth 2.0 client handler helps us manage access tokens
         $oAuth2Client = $fb->getOAuth2Client();
 
-      
-      
+
         try {
           // Returns a `Facebook\FacebookResponse` object
           $response = $fb->get('/me?fields=id,name,email', $accessToken->getValue());
@@ -350,7 +355,6 @@ class UserController extends BaseController
         // If you know the user ID this access token belongs to, you can validate it here
         $tokenMetadata->validateUserId($fbuser['id']);
         $tokenMetadata->validateExpiration();
-        
         
 
         $user = new User();
@@ -375,7 +379,6 @@ class UserController extends BaseController
             $user->mail = $fbuser['email'];
             $user->password = md5(uniqid(). Config::get("salat"));
 
-
             $user->settings = json_encode(UserController::defaultSettings());
             $user->api_key = md5(uniqid()+date("Y-m-d H:i:s"));
             $user->created = date("Y-m-d H:i:s");
@@ -386,12 +389,6 @@ class UserController extends BaseController
             return true;
         }
         
-      
-      
-      
-
-
-      
 
       $_SESSION['fb_access_token'] = (string) $accessToken;
       
