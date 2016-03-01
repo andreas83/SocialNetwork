@@ -1,7 +1,8 @@
 <?php
 
 
-class CommentController extends BaseController{
+class CommentController extends BaseController
+{
 
     /**
      * get_comment 
@@ -15,7 +16,6 @@ class CommentController extends BaseController{
         
         $data = $comment->getComment($request['id']);
 
-        header('Content-Type: application/json');
         $i = 0;
         foreach ($data as $res) {
             $std[$i] = new stdClass();
@@ -60,7 +60,9 @@ class CommentController extends BaseController{
                     
             
         } elseif ($_POST && !Helper::isUser()) {
-            $this->getResponse()->setHeaders('HTTP/1.0 403 Forbidden');
+            $this->getResponse()
+                ->setHeaders('HTTP/1.0 403 Forbidden');
+
             return false;
         }
         
