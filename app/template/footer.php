@@ -27,7 +27,6 @@ echo "<script>var notification_server=\"".Config::get("notification_server")."\"
 <script src="/public/js/react.js"></script>
 
 <link rel="stylesheet" href="/vendor/components/highlightjs/styles/railscasts.css">
-<link rel="stylesheet" href="https://raw.githubusercontent.com/yuku-t/jquery-textcomplete/master/dist/jquery.textcomplete.css">
 
 <?php
 
