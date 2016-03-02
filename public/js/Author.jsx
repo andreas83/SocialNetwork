@@ -12,7 +12,7 @@
         if(this.props.id==user_id)
         {
             editBtn=
-        <div className="dropdown">
+        <div className="dropdown pull-right">
         <button className="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
         <span className="caret"></span>
         </button>
@@ -26,11 +26,11 @@
         else
         {
             editBtn=
-        <div className="dropdown">
+        <div className="dropdown pull-right">
         <button className="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
         <span className="caret"></span>
         </button>
-                    <ul className="dropdown-menu">
+                    <ul className="dropdown-menu ">
                         <li><a href="#" onClick={this.props.reportContent}>Report</a></li>
                     </ul>
         </div>;
@@ -96,7 +96,7 @@
     render: function () {
         
         var content=this.props.data.text;
-        var re = /(\<code[\]\>[\s\S]*?(?:.*?)<\/code\>*?[\s\S])|(#\S*)/gi; 
+        var re = /(\<code[\]\>[\s\S]*?(?:.*?)<\/code\>*?[\s\S])|(#\S*)|(@\S*)/gi; 
         
         var m;
         var hash;
@@ -110,7 +110,15 @@
             {
                 hash=m[2].replace("#","");
                 tmp_content=tmp_content.replace(m[2], '<a href="/hash/'+hash+'">#'+hash+'</a>');
+                
             }
+            if(typeof m[3] !="undefined")
+            {
+                user=m[3].replace("@","");
+                tmp_content=tmp_content.replace(m[3], '<a href="/'+user+'">@'+user+'</a>');
+                
+            }
+
             
         }
 

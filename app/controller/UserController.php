@@ -127,9 +127,10 @@ class UserController extends BaseController
             $mail->FromName =  Config::get("mail_from_name");
             $mail->addAddress($res[0]->mail, $res[0]->name);
             
-
+            $this->assign("name", $res[0]->name);
             $mail->Subject = _("Password Reset")." - ".Config::get("address");
             $mail->Body    = $this->render("email/pw_forgot.php", true);
+            $mail->AltBody    = $this->render("email/pw_forgot_txt.php", true);
 
             $mail->isHTML(true);
             $mail->CharSet = 'UTF-8';
@@ -181,7 +182,7 @@ class UserController extends BaseController
             $mail->Subject = _("Confirm Password Reset")." - ".Config::get("address");
             $this->assign("name", $res[0]->name );
             $this->assign("confirm_url", Config::get("address")."user/password/reset/".$res[0]->api_key."/");
-            
+            $mail->AltBody= $this->render("email/pw_confirm_txt.php", true);
             $mail->Body    = $this->render("email/pw_confirm.php", true);
 
             $mail->isHTML(true);
@@ -211,6 +212,17 @@ class UserController extends BaseController
         $default->autoplay = "yes";
         $default->mute_video = "yes";
         return $default;
+    }
+    
+    
+    function get($request){
+        $user= new User;
+        
+        $res=$user->getUserbyName($request['user']);
+        
+        header('Content-Type: application/json');
+        echo json_encode($res);
+        
     }
     
     function settings()

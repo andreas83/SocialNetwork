@@ -9,7 +9,7 @@ class notificationServer extends WebSocketServer {
   protected function process ($user, $message) {
     
       $data=  json_decode($message);
-      if($data->action == "getNotifications")
+      if($data->action == "getNotifications" && $data->auth_cookie!="")
       {
           $notifications = new Notification;
           $res=$notifications->getNotifications($data->auth_cookie);

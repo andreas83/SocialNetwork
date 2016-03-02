@@ -1,3 +1,6 @@
+27.2.2016
+moved the share box (textarea) to react as part of js refactoring
+
 22.2.2016
 improved upload handling
 added reporting function

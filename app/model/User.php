@@ -52,4 +52,23 @@ class User extends BaseModel
         
     }
     
+    /*
+     * Attention, the result is used by autocompleter,
+     * do not select sensitive information here.
+     */
+    public function getUserbyName($name){
+        $sql = "select name, settings from User where name like :name";
+        
+        $stmt = $this->dbh->prepare($sql);
+
+        $stmt->bindValue(':name', "%".$name."%", PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, 'User');
+
+        return $obj;
+        
+    }
+    
 }

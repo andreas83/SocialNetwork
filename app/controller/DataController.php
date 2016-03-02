@@ -292,11 +292,18 @@ class DataController extends BaseController {
                     $hashdb->save();
                 }
             }
+          
+            
+            
+            
             $metadata= NULL;
                     
             if(isset($_POST['metadata']) && !empty($_POST['metadata']))
             {
                 $metadata = json_decode($_POST['metadata']);
+                if(is_array($metadata) && count($metadata)==0)
+                    $metadata=NULL;
+                
             }
             if (isset($metadata->type) && $metadata->type == "img") {
                 $metadata->url = $this->download($metadata->url);
@@ -349,6 +356,34 @@ class DataController extends BaseController {
             $new_id=$content->date=date("U");
             
             $content->save();
+            
+            //save notification for mentions @username
+            $pattern="/(^|\s)@(\w*[a-zA-Z0-9öäü._-]+\w*)/";
+            preg_match_all($pattern, $content->data, $users);
+            if(count($users[0])>0)
+            {
+                
+                $user = new User;
+                $notification = new Notification;
+                $notification->from_user_id=Helper::getUserID();
+                $notification->date=date("U");
+                $notification->message='mention you in a '
+                        . '<a href="/permalink/'.$new_id.'">post</a>';
+                
+                foreach($users[0] as $username)
+                {
+                    $username = trim(str_replace(array("@", "."), " ", $username));
+                    $res = $user->find(array("name" => $username));
+                    
+                    $notification->to_user_id=$res[0]->id;
+                    
+                    if($notification->to_user_id!=Helper::getUserID())
+                        $notification->save();
+                }
+            }
+            
+            
+            
             if(isset($_REQUEST['api_key']) && !empty($_REQUEST['api_key']))
             {
                 header('Content-Type: application/json'); 
@@ -502,7 +537,7 @@ class DataController extends BaseController {
         if (isset($path_parts['extension'])) {
             $extensions = array("svg", "png", "jpg", "gif", "jpeg");
             if (in_array(strtolower($path_parts['extension']), $extensions)) {
-                $data = array("type" => "img");
+                $data = array("type" => "img", "url" => $url);
                 echo json_encode($data);
                 return;
             }
@@ -543,7 +578,7 @@ class DataController extends BaseController {
     function og_parser($url){
         
         //check for og tag
-        $data = array("type" => "www");
+        $data = array("type" => "www", "url"=>$url);
         $ch = curl_init();
         $optArray = array(
             CURLOPT_URL => $url,
@@ -588,7 +623,8 @@ class DataController extends BaseController {
             else
                 $base=$url;
             
-            $imgSrc=$dom->getElementsByTagName('img')->item(0)->attributes->getNamedItem("src")->value;
+            if($dom->getElementsByTagName('img')->length>0)
+                $imgSrc=$dom->getElementsByTagName('img')->item(0)->attributes->getNamedItem("src")->value;
             
             if(substr($imgSrc, 0, 4)=="http")
                 $data['og_img'] = $imgSrc;

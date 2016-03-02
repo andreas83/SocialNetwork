@@ -7,38 +7,64 @@ $(document).ready(function () {
         input.trigger('fileselect', [numFiles, label]);
     });
     
+    $('textarea').textcomplete([
+    { // mention strategy
+      match: /(^|\s)#(\w*)$/,
+      search: function (term, callback) {
+        
+        $.getJSON('/api/hashtags/'+term)
+          .done(function (resp) { 
+              var data=[];
+              $(resp).each(function(key, val){
+                  data.push(val.hashtag);
+              });
+              callback(data);
+            })
+          .fail(function ()     { callback([]);   });
+      },
+      replace: function (value) {
+          
+        return '$1#' + value + ' ';
+      },
+      cache: true
+    },
+    { // mention strategy
+      match: /(^|\s)@(\w*)$/,
+      search: function (term, callback) {
+        
+        $.getJSON('/api/users/'+term)
+          .done(function (resp) { 
+              var data=[];
+              $(resp).each(function(key, val){
+                  settings=JSON.parse(val.settings);
+                  
+                  data.push([val.name, settings.profile_picture]);
+              });
+              callback(data);
+            })
+          .fail(function ()     { callback([]);   });
+      },
+      template: function (value) {
+          console.log(value[0]);
+          var img;
+          if(typeof(value[1])!="undefined")
+          {
+              img='<img  width="20" src="'+upload_address+value[1] + '"></img>';
+          }
+          else{
+              img='<img width="20" src=/public/img/no-profile.jpg>';
+          }
+            return img+'  ' + value[0];
+    },
+      replace: function (value) {
+          
+        return '$1@' + value[0].replace(" ", ".") + ' ';
+      },
+      cache: true
+    },
     
-    var isMetaLoading = false;
-    $("#share_area").on("input propertychange", function () {
-        var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-        if ($(this).val().match(urlRegex)) {
-            url = $(this).val().match(urlRegex);
-            if (isMetaLoading)
-                return false;
-
-            isMetaLoading = true;
-
-            $.get('/api/metadata/?url=' + url, function (data) {
-
-                if (data.type == "www")
-                    renderWebPreview(data, url);
-                if (data.type == "img")
-                    renderImgPreview(url);
-                if (data.type == "video")
-                    renderVideoPreview(data);
-                data.url = url[0];
-
-                $("#metadata").val(JSON.stringify(data));
-            });
-        }
-    });
-    $(".close").click(function (e) {
-        e.preventDefault();
-        $(".preview").hide();
-        $("#img").val("");
-        $("#metadata").val("");
-        isMetaLoading = false;
-    });
+  ], { maxCount: 20, debounce: 500 });
+   
 
     function readURL(input) {
         if (input.files && input.files[0]) {
@@ -68,29 +94,6 @@ $(document).ready(function () {
     $("#img").change(function () {
         readURL(this);
     });
-
-
-    function renderWebPreview(data, url) {
-        $(".preview").hide();
-        $(".preview.www").show();
-        $("#og_img").attr("src", data.og_img);
-        $("#og_title").html(data.og_title);
-        $("#og_desc").html(data.og_description);
-        $("#www_link").html(url).attr("href", url);
-        if ($("#share_area").val() == url)
-            $("#share_area").val("");
-    }
-    function renderImgPreview(url) {
-        $(".preview").hide();
-        $(".preview.img").show();
-        $("#preview_img").attr("src", url);
-    }
-    function renderVideoPreview(data) {
-        $(".preview").hide();
-        $(".preview.video").show();
-        $("#video_target").html(data.html);
-    }
-
 
     $("#search").find("input[type=text]").on("keyup", function ()
     {
@@ -144,7 +147,6 @@ $(document).ready(function () {
     });
 
     $("#next").on("click", function () {
-        
         randomPost();
     });
     $( document.body ).on('keydown',  function(event) {
