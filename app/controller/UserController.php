@@ -76,7 +76,7 @@ class UserController extends BaseController
                               
                 
                 $user->settings = json_encode(UserController::defaultSettings());
-                $user->api_key = md5($_POST['nick']+date("Y-m-d H:i:s"));
+                $user->api_key = md5($_POST['nick'].date("Y-m-d H:i:s"));
                 $user->created = date("Y-m-d H:i:s");
                 $user->id = $user->save();
                 $_SESSION['login'] = $user->id;
@@ -365,7 +365,7 @@ class UserController extends BaseController
 
 
             $user->settings = json_encode(UserController::defaultSettings());
-            $user->api_key = md5(uniqid()+date("Y-m-d H:i:s"));
+            $user->api_key = md5(uniqid().date("Y-m-d H:i:s"));
             $user->created = date("Y-m-d H:i:s");
             $user->id = $user->save();
             $_SESSION['login'] = $user->id;
