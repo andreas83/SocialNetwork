@@ -268,15 +268,15 @@ class DataController extends BaseController {
             
             if(
                 isset($_POST['content']) && empty($_POST['content']) && 
-                isset($_POST['metadata']) && empty($_POST['metadata']) &&
-                isset($_FILES) && empty($_FILES['img']['name'][0])
+                isset($_POST['metadata']) && empty(json_decode($_POST['metadata'])) &&
+                isset($_FILES) && empty($_FILES['img']['name'][0])    
               )
             {
                $this->redirect("/public/stream/");
                return false;
             }
             
-            
+           
             
             
             $content = new Content();
@@ -322,10 +322,7 @@ class DataController extends BaseController {
             }
             
             if (isset($metadata->type) && $metadata->type == "www") {
-                
-                $tmp_url=$metadata->url;
-                $metadata=(object)($this->og_parser($metadata->url));
-                $metadata->url = $tmp_url;
+               $metadata=(object)($this->og_parser($metadata->url));
             }
      
             if (isset($_FILES) && !empty($_FILES['img']['name'][0]) && is_array($_FILES)) {
