@@ -352,9 +352,9 @@ class DataController extends BaseController {
                 $content->user_id = 1;
             
            
-            $new_id=$content->date=date("U");
+            $content->date=date("U");
             
-            $content->save();
+            $new_id=$content->save();
             
             //save notification for mentions @username
             $pattern="/(^|\s)@(\w*[a-zA-Z0-9öäü._-]+\w*)/";
