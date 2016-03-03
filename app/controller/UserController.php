@@ -232,11 +232,25 @@ class UserController extends BaseController
         $setting = json_decode($user->settings);
         $error = false;
         if ($_POST) {
-
+            
+            
+            
             if (isset($_FILES['picture']['tmp_name']) && !empty($_FILES['picture']['tmp_name'])) {
-                $uniq = uniqid("", true) . "_" . $_FILES['picture']['name'];
-                move_uploaded_file($_FILES['picture']['tmp_name'], Config::get("dir").Config::get("upload_path") . "$uniq");
-                $setting->profile_picture = $uniq;
+                
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $mime = finfo_file($finfo, $_FILES['picture']['tmp_name']);
+                $allowed_mime=array("image/jpeg", "image/gif", "image/png", "image/bmp");
+                
+                if(in_array($mime, $allowed_mime))
+                {
+                    $uniq = uniqid("", true) . "_" . $_FILES['picture']['name'];
+                    move_uploaded_file($_FILES['picture']['tmp_name'], Config::get("dir").Config::get("upload_path") . "$uniq");
+                    $setting->profile_picture = $uniq;
+                }else{
+                    $error['image']=_("Image type is not allowed");
+                }
+                
+                
             }
             
             $setting->show_nsfw = $_POST['nsfw'];

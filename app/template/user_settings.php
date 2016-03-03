@@ -18,6 +18,11 @@ include("menu.php");
                     ?>
                     <img src="<?php echo $profile_url; ?>" alt="...">
                 </a>
+                <?php
+                if (isset($error['image'])) {
+                    echo "<b>" . $error['image'] . "</b>";
+                }
+                ?>
                 <input name="picture" class="form-control" type="file">
             </div>
 
