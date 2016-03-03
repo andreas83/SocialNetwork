@@ -335,6 +335,8 @@ class DataController extends BaseController {
                     $upload_path = Config::get("dir") . Config::get("upload_path");
                     move_uploaded_file($file, $upload_path . $uniq);
                     
+                    $metadata= (is_null($metadata) ? new stdClass() : $metadata);
+                    
                     $metadata->type = "upload";
                     
                     $mime = mime_content_type($upload_path . $uniq);
