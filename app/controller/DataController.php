@@ -268,7 +268,7 @@ class DataController extends BaseController {
             
             if(
                 isset($_POST['content']) && empty($_POST['content']) && 
-                isset($_POST['metadata']) && empty(json_decode($_POST['metadata'])) &&
+                isset($_POST['metadata']) && count(json_decode($_POST['metadata']))==0 &&
                 isset($_FILES) && empty($_FILES['img']['name'][0])    
               )
             {
