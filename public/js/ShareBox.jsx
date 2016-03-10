@@ -42,12 +42,6 @@ var ShareBox = React.createClass({
     },
     handleInput: function (event) {
 
-    //        hashtags = $(this).val().match(/(^|\W)(#[a-z\d][\w-]*)/ig);
-    //        hashtag = hashtags[hashtags.length-1].replace("#", "");
-    //        
-    //        $.get('/api/hashtags/'+hashtag, function (data) {
-    //            
-    //        });
 
             var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
             if ($("#share_area").val().match(urlRegex)) {

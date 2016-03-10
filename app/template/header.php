@@ -24,14 +24,7 @@
                         </a>
                     </div>
                     <div class="col-md-4 col-xs-6">
-                        <form id="search" class="navbar-form navbar-left " method="post" role="search">
-                            <div class="form-group">
-                                <input  type="text" class="form-control" placeholder="#hash">
-                                <ul class="searchresult">
-                                </ul>
-                            </div>
-                            <button type="submit" class="btn btn-default hidden-xs">Search</button>
-                        </form>
+                        <div id="SearchBox"></div>
                     </div>
                     <div class="col-md-2 hidden-xs hidden-sm">
                         <ul class="nav navbar-nav navbar-right">

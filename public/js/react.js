@@ -623,13 +623,6 @@ var ShareBox = React.createClass({
     },
     handleInput: function (event) {
 
-        //        hashtags = $(this).val().match(/(^|\W)(#[a-z\d][\w-]*)/ig);
-        //        hashtag = hashtags[hashtags.length-1].replace("#", "");
-        //       
-        //        $.get('/api/hashtags/'+hashtag, function (data) {
-        //           
-        //        });
-
         var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
         if ($("#share_area").val().match(urlRegex)) {
             url = $("#share_area").val().match(urlRegex);
@@ -780,6 +773,80 @@ var ShareBox = React.createClass({
                         React.createElement('p', { className: 'fileinfo' })
                     )
                 )
+            )
+        );
+    }
+});
+
+var SearchBox = React.createClass({
+    displayName: 'SearchBox',
+
+    getInitialState: function () {
+        return { data: [], hashtag: [], user: [] };
+    },
+    componentDidMount: function () {},
+
+    handleChange: function (event) {
+        if (event.target.value == "") {
+            this.setState({ hashtag: [] });
+            this.setState({ user: [] });
+            return true;
+        }
+        this.serverRequest = $.get('/api/hashtags/' + event.target.value, function (data) {
+
+            this.setState({ hashtag: data });
+        }.bind(this));
+
+        this.serverRequest = $.get('/api/users/' + event.target.value, function (data) {
+
+            this.setState({ user: data });
+        }.bind(this));
+    },
+
+    render: function () {
+        console.log(this.state);
+        return React.createElement(
+            'div',
+            { className: 'form-group navbar-form navbar-left ' },
+            React.createElement('input', { onChange: this.handleChange, type: 'text', className: 'form-control', placeholder: '#hash or @user' }),
+            React.createElement(
+                'ul',
+                { className: 'searchresult' },
+                this.state.user.map(function (user, i) {
+                    if (i > 4) return true;
+                    setting = JSON.parse(user.settings);
+                    if (typeof setting.profile_picture != "undefined") {
+                        img_src = upload_address + setting.profile_picture;
+                    } else {
+                        img_src = '/public/img/no-profile.jpg';
+                    }
+                    user_href = "/" + user.name.replace(" ", ".");
+                    return React.createElement(
+                        'li',
+                        null,
+                        React.createElement(
+                            'a',
+                            { href: user_href },
+                            user.name,
+                            ' ',
+                            React.createElement('img', { width: '20', className: 'pull-right', src: img_src })
+                        )
+                    );
+                }),
+                this.state.hashtag.map(function (item, i) {
+                    if (i > 4) return true;
+                    hashtag_href = "/hash/" + item.hashtag;
+                    return React.createElement(
+                        'li',
+                        null,
+                        React.createElement(
+                            'a',
+                            { href: hashtag_href },
+                            '#',
+                            item.hashtag
+                        )
+                    );
+                })
             )
         );
     }
@@ -975,4 +1042,5 @@ var isLoading = false;
 var endofdata = false;
 
 ReactDOM.render(React.createElement(InitStream, { data: data }), document.getElementsByClassName('stream')[0]);
+ReactDOM.render(React.createElement(SearchBox, { data: data }), document.getElementById("SearchBox"));
 ReactDOM.render(React.createElement(ShareBox, { data: data }), document.getElementById("ShareBox"));

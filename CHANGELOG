@@ -1,3 +1,10 @@
+11.3.2016
+moved searchbox into react component 
+
+01.3.2016
+
+added mention @username #hashtag autocompleter and notification
+
 27.2.2016
 moved the share box (textarea) to react as part of js refactoring
 

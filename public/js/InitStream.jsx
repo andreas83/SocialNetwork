@@ -217,8 +217,13 @@
                 document.getElementsByClassName('stream')[0]
         );
         ReactDOM.render(
+                <SearchBox data={data} /> ,
+                document.getElementById("SearchBox")
+        );
+        ReactDOM.render(
                 <ShareBox data={data}  /> ,
                 document.getElementById("ShareBox")
         );
+        
 
     

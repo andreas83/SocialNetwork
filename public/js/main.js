@@ -45,7 +45,7 @@ $(document).ready(function () {
           .fail(function ()     { callback([]);   });
       },
       template: function (value) {
-          console.log(value[0]);
+          
           var img;
           if(typeof(value[1])!="undefined")
           {
@@ -85,9 +85,6 @@ $(document).ready(function () {
                 }
                 reader.readAsDataURL(file);
             }
-
-
-
         }
     }
 
@@ -95,56 +92,7 @@ $(document).ready(function () {
         readURL(this);
     });
 
-    $("#search").find("input[type=text]").on("keyup", function ()
-    {
-        clearSearchResult();
-        if ($(this).val().length == 0)
-            return false;
 
-        $.get('/api/hashtags/' + $(this).val().replace("#", ""), function (data) {
-            $(data).each(function (res, d) {
-                $("#search").find(".searchresult").append("<li>#" + d.hashtag + "</li>")
-
-            });
-            $("#search").find(".searchresult li").click(function () {
-
-                if (user_settings == false && $(this).text().replace("#", "") == "nsfw")
-                {
-                    var info = '\
-                        <div className="content">\
-                            You need to be over +18 to watch nsfw content, \
-                            please <a href="/user/register/">register here.</a>\
-                        </div>';
-
-                    $(".stream").html(info);
-                    return false;
-                }
-
-                $.post('/api/hashtag/score/' + $(this).text().replace("#", ""), function (data) {
-                    console.log(data);
-                });
-
-                if ($(".frontpage").length > 0)
-                {
-                    window.location.href = "/hash/" + $(this).text().replace("#", "");
-                    return true;
-                }
-                clearSearchResult();
-                clearStream();
-
-                //set input from search res
-                $("#search").find("input[type=text]").val($(this).text());
-
-
-                var container = document.getElementsByClassName('stream')[0];
-
-                var component = React.createElement(InitStream, {hashtag: $(this).text()});
-                React.render(component, container);
-
-
-            });
-        });
-    });
 
     $("#next").on("click", function () {
         randomPost();
