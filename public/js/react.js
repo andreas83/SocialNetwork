@@ -888,7 +888,8 @@ var InitStream = React.createClass({
     },
 
     handleKeyDown: function (event) {
-        if (event.keyCode == 82) {
+
+        if (event.target.tagName == "BODY" && event.keyCode == 82) {
             this.randomPost();
         }
     },
@@ -901,6 +902,7 @@ var InitStream = React.createClass({
         this.setState({
             data: [],
             random: true,
+            endofData: true,
             id: getRandomInt(1, parseInt($(".stream-row").attr("data-maxid")) + 1)
         });
 
@@ -918,11 +920,8 @@ var InitStream = React.createClass({
         var show = 5;
         var lastid = "";
 
-        if (this.id > 0) {
+        if (this.id > 0 || typeof id == "undefined") {
             this.setID(parseInt($(".stream-item").last().attr("data-id")));
-        }
-        if (typeof id == "undefined") {
-            this.setID(parseInt($(".stream-row").attr("data-maxid")));
         }
 
         if ($(".stream-row").attr("data-permalink") > 0) {
