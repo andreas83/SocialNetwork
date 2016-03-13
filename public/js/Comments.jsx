@@ -22,6 +22,7 @@
         },
         componentDidMount: function () {
             this.loadCommentsFromServer();
+            bindMention();
             //setInterval(this.loadCommentsFromServer, 10000);
         },
         loadCommentsFromServer: function () {
@@ -80,7 +81,7 @@
                 
                 return (
                         <Comment author={comment.author}>
-                        {comment.text}
+                        {Replacehashtags(comment.text)}
                         </Comment>
                         );
             });

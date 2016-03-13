@@ -48,7 +48,7 @@ class CommentController extends BaseController{
             $comment->save();
             
             
-            #start notification 
+            #start notification for post owner
             $content= new Content;
             $content=$content->get($request['id']);
             
@@ -61,6 +61,33 @@ class CommentController extends BaseController{
             if($notification->to_user_id!=Helper::getUserID())
                 $notification->save();
                     
+            
+            #notification for @users mention
+            $pattern="/(^|\s)@(\w*[a-zA-Z0-9öäü._-]+\w*)/";
+            preg_match_all($pattern, $comment->comment, $users);
+            if(count($users[0])>0)
+            {
+                
+                $user = new User;
+                
+                $notification->from_user_id=Helper::getUserID();
+                $notification->date=date("U");
+                $notification->message='mention you in a '
+                        . '<a href="/permalink/'.$request['id'].'">comment</a>';
+                
+                foreach($users[0] as $username)
+                {
+                    $username = trim(str_replace(array("@", "."), " ", $username));
+                    $res = $user->find(array("name" => $username));
+                    
+                    $notification->to_user_id=$res[0]->id;
+                    
+                    if($notification->to_user_id!=Helper::getUserID())
+                        $notification->save();
+                }
+            }
+            
+            
             
         } elseif ($_POST && !Helper::isUser()) {
             header('HTTP/1.0 403 Forbidden');

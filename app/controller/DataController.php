@@ -5,7 +5,13 @@
  */
 class DataController extends BaseController {
 
-    
+    function __construct() {
+                
+        $content= new Content();
+        //get max id for rand min/max
+        $res=$content->getNext(Content::maxid, 1, false, false, false, false, false);
+        $this->assign("maxid", $res[0]->id);
+    }
 
     function frontend() {
 
@@ -34,26 +40,7 @@ class DataController extends BaseController {
         $this->assign("scope", "frontpage register");
         $this->render("main.php");
     }
-
-    /**
-     * this function loads the inital data for /random
-     * it gets the max id from db, so the client can do 
-     * some min/max calulation.
-     */
-    function random(){
-        
-        $content= new Content();
-        //get max id for rand min/max
-        $res=$content->getNext(Content::maxid, 1, false, false, false, false, false);
-        $this->assign("random", $res[0]->id);
-        
-        $this->assign("title", "Social Network - Random Post");
-        $this->assign("description", "Random post, quite a lot cats, gifs and other meaningful pictures");
-        $this->assign("keyword", "random, pictures, gif, webm, videos, funny, cat, images");
-        $this->assign("scope", "random");
-        $this->render("stream.php");
-    }
-    
+ 
     /**
      * this method handles all requests arround stream data
      * and returns data as json formted string
@@ -134,10 +121,13 @@ class DataController extends BaseController {
      */
     function stream($request=false) {
         
-        $data = new Content;
+        
         $this->assign("title", "Social Network - free open and anonym ");
         $this->assign("keyword", "open, anyonm, funny, cat, video, gif, webm, lol, weird, free, open");
         $this->assign("description", "Our main goal is to create a free and open community available to anyone anonymously or not");
+        
+
+        
         
         $this->assign("show_share", true);
         

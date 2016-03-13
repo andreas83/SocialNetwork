@@ -1,7 +1,7 @@
 
 var ShareBox = React.createClass({
         getInitialState: function () {
-        return {data: []};
+        return {data: [], showShareBox:true};
     },
     componentDidMount: function () {
 
@@ -42,7 +42,7 @@ var ShareBox = React.createClass({
     },
     handleInput: function (event) {
 
-
+            console.log(this.props);
             var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
             if ($("#share_area").val().match(urlRegex)) {
                 url = $("#share_area").val().match(urlRegex);
@@ -67,7 +67,7 @@ var ShareBox = React.createClass({
             }
     },
     render: function(){
-
+        console.log(this.props.visible);
         return(<div>
             <form method="post" action="/api/content/" encType="multipart/form-data">
                     <div className="row">

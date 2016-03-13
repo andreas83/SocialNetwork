@@ -17,7 +17,7 @@
         <span className="caret"></span>
         </button>
                     <ul className="dropdown-menu">
-                        <li><a href="#"  onClick={this.props.editContent}>Edit</a></li>
+                        <li><a href="#" onClick={this.props.editContent}>Edit</a></li>
                         <li><a href="#" onClick={this.props.deleteContent}>Delete</a></li>
                         <li><a href="#" onClick={this.props.reportContent}>Report</a></li>
                     </ul>

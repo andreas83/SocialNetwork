@@ -13,11 +13,11 @@ include("menu.php");
                     
                 <?php } ?>
         
-        <div class=" stream-row animated bounceInDown" 
+        <div class="stream-row animated bounceInDown" 
              data-permalink="<?php echo (isset($permalink) ? $permalink : ""); ?>" 
              data-hash="<?php echo (isset($hash) && !empty($hash) ? $hash : ""); ?>"
              data-user="<?php echo (isset($user) && !empty($user) ? $user : ""); ?>"
-             data-random="<?php echo (isset($random) && !empty($random) ? $random : ""); ?>"
+             data-maxid="<?php echo (isset($maxid) && !empty($maxid) ? $maxid : ""); ?>"
              >
             <div class="stream col-md-11"></div>
         </div>

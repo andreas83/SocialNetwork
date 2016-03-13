@@ -211,6 +211,7 @@ var CommentBox = React.createClass({
     },
     componentDidMount: function () {
         this.loadCommentsFromServer();
+        bindMention();
         //setInterval(this.loadCommentsFromServer, 10000);
     },
     loadCommentsFromServer: function () {
@@ -269,7 +270,7 @@ var CommentList = React.createClass({
             return React.createElement(
                 Comment,
                 { author: comment.author },
-                comment.text
+                Replacehashtags(comment.text)
             );
         });
         return React.createElement(
@@ -590,7 +591,7 @@ var ShareBox = React.createClass({
     displayName: 'ShareBox',
 
     getInitialState: function () {
-        return { data: [] };
+        return { data: [], showShareBox: true };
     },
     componentDidMount: function () {
 
@@ -623,6 +624,7 @@ var ShareBox = React.createClass({
     },
     handleInput: function (event) {
 
+        console.log(this.props);
         var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
         if ($("#share_area").val().match(urlRegex)) {
             url = $("#share_area").val().match(urlRegex);
@@ -642,7 +644,7 @@ var ShareBox = React.createClass({
         }
     },
     render: function () {
-
+        console.log(this.props.visible);
         return React.createElement(
             'div',
             null,
@@ -784,7 +786,13 @@ var SearchBox = React.createClass({
     getInitialState: function () {
         return { data: [], hashtag: [], user: [] };
     },
-    componentDidMount: function () {},
+    componentDidMount: function () {
+
+        $('html').click(function () {
+            this.setState({ hashtag: [] });
+            this.setState({ user: [] });
+        }.bind(this));
+    },
 
     handleChange: function (event) {
         if (event.target.value == "") {
@@ -804,7 +812,7 @@ var SearchBox = React.createClass({
     },
 
     render: function () {
-        console.log(this.state);
+
         return React.createElement(
             'div',
             { className: 'form-group navbar-form navbar-left ' },
@@ -864,17 +872,39 @@ var InitStream = React.createClass({
 
     getInitialState: function () {
 
-        return { data: [] };
+        return { data: [], random: false };
     },
     componentDidMount: function () {
         this.loadStreamFromServer();
 
         document.addEventListener('scroll', this.handleScroll);
+        document.addEventListener('keydown', this.handleKeyDown);
+        $("#next").on("click", this.randomPost);
 
         //@todo better soloution would be to save the complete data as state
         window.onpopstate = event => {
             window.location.href = event.state.url;
         };
+    },
+
+    handleKeyDown: function (event) {
+        if (event.keyCode == 82) {
+            this.randomPost();
+        }
+    },
+
+    randomPost: function () {
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        this.setState({
+            data: [],
+            random: true,
+            id: getRandomInt(1, parseInt($(".stream-row").attr("data-maxid")) + 1)
+        });
+
+        this.loadStreamFromServer();
     },
     componentWillUnmount() {
         document.removeEventListener('scroll', this.handleScroll);
@@ -888,9 +918,13 @@ var InitStream = React.createClass({
         var show = 5;
         var lastid = "";
 
-        if (this.id > 0 || typeof id == "undefined") {
+        if (this.id > 0) {
             this.setID(parseInt($(".stream-item").last().attr("data-id")));
         }
+        if (typeof id == "undefined") {
+            this.setID(parseInt($(".stream-row").attr("data-maxid")));
+        }
+
         if ($(".stream-row").attr("data-permalink") > 0) {
 
             this.setID(parseInt($(".stream-row").attr("data-permalink")) + 1);
@@ -899,35 +933,20 @@ var InitStream = React.createClass({
                 endofData: true
             });
         }
-        if ($(".stream-row").attr("data-random") > 0) {
-            function getRandomInt(min, max) {
-                return Math.floor(Math.random() * (max - min + 1)) + min;
-            }
-            this.setID(getRandomInt(1, parseInt($(".stream-row").attr("data-random")) + 1));
-
-            show = 1;
-            this.setState({
-                endofData: true,
-                random: true
-            });
-        }
-
         if ($(".stream-row").attr("data-hash") != "") {
             hash = $(".stream-row").attr("data-hash");
         }
-
         if ($(".stream-row").attr("data-user") != "") {
             user = $(".stream-row").attr("data-user");
         }
 
-        if (typeof this.props.hashtag != "undefined") {
-            //we do a full page load
-            //when the search is called via /user or /permalink
-            //reson: url reflect content
-
-            if (show == 1 || user != "") window.location.href = "/hash/" + this.props.hashtag.replace("#", "");else hash = this.props.hashtag.replace("#", "");
+        if (this.state.random) {
+            show = 1;
+            this.setID(this.state.id);
         }
+
         if (this.state.lastID == this.id) {
+
             this.setState({
                 endofData: true
             });
@@ -1038,8 +1057,6 @@ var InitStream = React.createClass({
 });
 
 var data = {};
-var isLoading = false;
-var endofdata = false;
 
 ReactDOM.render(React.createElement(InitStream, { data: data }), document.getElementsByClassName('stream')[0]);
 ReactDOM.render(React.createElement(SearchBox, { data: data }), document.getElementById("SearchBox"));

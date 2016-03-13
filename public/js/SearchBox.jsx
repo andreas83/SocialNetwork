@@ -5,7 +5,10 @@
         },
         componentDidMount: function () {
             
-            
+            $('html').click(function() {
+                this.setState({hashtag: []});
+                this.setState({user: []});
+            }.bind(this));
         },
         
         handleChange: function(event) {
@@ -28,7 +31,7 @@
        
         
         render: function(){
-            console.log(this.state);
+            
             return(
             
             <div className="form-group navbar-form navbar-left ">

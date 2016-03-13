@@ -7,64 +7,7 @@ $(document).ready(function () {
         input.trigger('fileselect', [numFiles, label]);
     });
     
-    $('textarea').textcomplete([
-    { // mention strategy
-      match: /(^|\s)#(\w*)$/,
-      search: function (term, callback) {
-        
-        $.getJSON('/api/hashtags/'+term)
-          .done(function (resp) { 
-              var data=[];
-              $(resp).each(function(key, val){
-                  data.push(val.hashtag);
-              });
-              callback(data);
-            })
-          .fail(function ()     { callback([]);   });
-      },
-      replace: function (value) {
-          
-        return '$1#' + value + ' ';
-      },
-      cache: true
-    },
-    { // mention strategy
-      match: /(^|\s)@(\w*)$/,
-      search: function (term, callback) {
-        
-        $.getJSON('/api/users/'+term)
-          .done(function (resp) { 
-              var data=[];
-              $(resp).each(function(key, val){
-                  settings=JSON.parse(val.settings);
-                  
-                  data.push([val.name, settings.profile_picture]);
-              });
-              callback(data);
-            })
-          .fail(function ()     { callback([]);   });
-      },
-      template: function (value) {
-          
-          var img;
-          if(typeof(value[1])!="undefined")
-          {
-              img='<img  width="20" src="'+upload_address+value[1] + '"></img>';
-          }
-          else{
-              img='<img width="20" src=/public/img/no-profile.jpg>';
-          }
-            return img+'  ' + value[0];
-    },
-      replace: function (value) {
-          
-        return '$1@' + value[0].replace(" ", ".") + ' ';
-      },
-      cache: true
-    },
     
-  ], { maxCount: 20, debounce: 500 });
-   
 
     function readURL(input) {
         if (input.files && input.files[0]) {
@@ -93,35 +36,6 @@ $(document).ready(function () {
     });
 
 
-
-    $("#next").on("click", function () {
-        randomPost();
-    });
-    $( document.body ).on('keydown',  function(event) {
-        if (!$(event.target).is('input, textarea')){
-            if(event.keyCode==82)
-            {
-                randomPost();
-            }
-        }
-    });
-    
-    function isNumeric(n) {
-        return !isNaN(parseFloat(n)) && isFinite(n);
-    }
-    function randomPost(){
-
-        if (!isNumeric($(".stream-row").attr("data-random")))
-        {
-            window.location.href = "/random/";
-            return true;
-        }
-        clearStream();
-        var container = document.getElementsByClassName('stream')[0];
-        var component = React.createElement(InitStream, {random: parseInt($(".stream-row").attr("data-random"))});
-
-        ReactDOM.render(component, container);
-    }
 
     $("#search").on("submit", function (e) {
         e.preventDefault();
@@ -246,3 +160,66 @@ $(document).ready(function () {
 
 
 });
+
+
+function bindMention(){
+        $('textarea').textcomplete('destroy');
+
+        $('textarea').textcomplete([
+        { // mention strategy
+          match: /(^|\s)#(\w*)$/,
+          search: function (term, callback) {
+
+            $.getJSON('/api/hashtags/'+term)
+              .done(function (resp) { 
+                  var data=[];
+                  $(resp).each(function(key, val){
+                      data.push(val.hashtag);
+                  });
+                  callback(data);
+                })
+              .fail(function ()     { callback([]);   });
+          },
+          replace: function (value) {
+
+            return '$1#' + value + ' ';
+          },
+          cache: true
+        },
+        { // mention strategy
+          match: /(^|\s)@(\w*)$/,
+          search: function (term, callback) {
+
+            $.getJSON('/api/users/'+term)
+              .done(function (resp) { 
+                  var data=[];
+                  $(resp).each(function(key, val){
+                      settings=JSON.parse(val.settings);
+
+                      data.push([val.name, settings.profile_picture]);
+                  });
+                  callback(data);
+                })
+              .fail(function ()     { callback([]);   });
+          },
+          template: function (value) {
+
+              var img;
+              if(typeof(value[1])!="undefined")
+              {
+                  img='<img  width="20" src="'+upload_address+value[1] + '"></img>';
+              }
+              else{
+                  img='<img width="20" src=/public/img/no-profile.jpg>';
+              }
+                return img+'  ' + value[0];
+        },
+          replace: function (value) {
+
+            return '$1@' + value[0].replace(" ", ".") + ' ';
+          },
+          cache: true
+        },
+
+      ], { maxCount: 20, debounce: 500 });
+    }
