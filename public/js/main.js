@@ -37,29 +37,6 @@ $(document).ready(function () {
 
 
 
-    $("#search").on("submit", function (e) {
-        e.preventDefault();
-        if ($(".frontpage").length > 0)
-        {
-            window.location.href = "/hash/" + $("#search").find("input[type=text]").val().replace("#", "");
-            return true;
-        }
-        clearSearchResult();
-        clearStream();
-        var container = document.getElementsByClassName('stream')[0];
-        var component = React.createElement(InitStream, {hashtag: $("#search").find("input[type=text]").val()});
-
-        React.render(component, container);
-    });
-
-    function clearSearchResult() {
-        $("#search").find(".searchresult").html("");
-    }
-
-    function clearStream() {
-        React.unmountComponentAtNode(document.getElementsByClassName('stream')[0]);
-        $(".stream").html("");
-    }
 
     $(".toggleform").on("click", function (e) {
         e.preventDefault();
@@ -110,8 +87,6 @@ $(document).ready(function () {
 
     //start notification block
     var socket;
-
-
 
 
     try {

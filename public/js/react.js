@@ -921,7 +921,12 @@ var InitStream = React.createClass({
         var lastid = "";
 
         if (this.id > 0 || typeof id == "undefined") {
-            this.setID(parseInt($(".stream-item").last().attr("data-id")));
+
+            var ids = $(".stream-item").map(function () {
+                return parseInt($(this).attr("data-id"), 10);
+            }).get();
+
+            this.setID(Math.min.apply(Math, ids));
         }
 
         if ($(".stream-row").attr("data-permalink") > 0) {
@@ -932,10 +937,10 @@ var InitStream = React.createClass({
                 endofData: true
             });
         }
-        if ($(".stream-row").attr("data-hash") != "") {
+        if ($(".stream-row").attr("data-hash") != "" && this.state.random != true) {
             hash = $(".stream-row").attr("data-hash");
         }
-        if ($(".stream-row").attr("data-user") != "") {
+        if ($(".stream-row").attr("data-user") != "" && this.state.random != true) {
             user = $(".stream-row").attr("data-user");
         }
 
@@ -961,7 +966,7 @@ var InitStream = React.createClass({
 
                 data = this.state.data.concat(data);
 
-                if ($(".stream-row").attr("data-user") != "") {
+                if ($(".stream-row").attr("data-user") != "" && this.state.random != true) {
                     $("#custom_css").html(data[0].author.custom_css);
                 }
 

@@ -68,18 +68,23 @@ class Content extends BaseModel
             $esql.="  data not like '%nsfw%' AND";
         }
         
-        $orderby="ORDER BY Content.id desc";        
+        $orderby="order by  DATE(from_unixtime(Content.date)) desc, score desc, Content.id desc";        
         if($order)
         {
             $orderby=$order;
         }
         
-        $sql = "SELECT *, Content.id AS id, User.id as user_id FROM Content, User "
+        $sql = "SELECT *, count(Score.id) as score, Content.id AS id, User.id as user_id "
+                . "FROM Content "
+                . "INNER JOIN User on Content.user_id=User.id "
+                . "LEFT JOIN Score on Content.id=Score.content_id "
                 . "WHERE  $esql "
-                . "Content.user_id=User.id AND "
+                
                 . "Content.id < $id "
+                . "group by Content.id "
                 . "$orderby limit $show";
-       
+  
+        
         $stmt = $this->dbh->prepare($sql);
 
         if($hash)

@@ -126,9 +126,6 @@ class DataController extends BaseController {
         $this->assign("keyword", "open, anyonm, funny, cat, video, gif, webm, lol, weird, free, open");
         $this->assign("description", "Our main goal is to create a free and open community available to anyone anonymously or not");
         
-
-        
-        
         $this->assign("show_share", true);
         
         $this->render("stream.php");
