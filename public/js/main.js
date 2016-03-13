@@ -64,6 +64,10 @@ $(document).ready(function () {
         }
         return "";
     }
+    
+    /*
+     * @todo is defined twice (see Author.jsx)
+     */
     function prettyDate(time) {
         var date = new Date(time * 1000),
                 diff = (((new Date()).getTime() - date.getTime()) / 1000),

@@ -74,7 +74,7 @@ class Content extends BaseModel
             $orderby=$order;
         }
         
-        $sql = "SELECT *, count(Score.id) as score, Content.id AS id, User.id as user_id "
+        $sql = "SELECT *, count(Score.id) as score, Content.id AS id, Content.date, User.id as user_id "
                 . "FROM Content "
                 . "INNER JOIN User on Content.user_id=User.id "
                 . "LEFT JOIN Score on Content.id=Score.content_id "
