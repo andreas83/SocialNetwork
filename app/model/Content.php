@@ -67,17 +67,27 @@ class Content extends BaseModel
         {
             $esql.="  data not like '%nsfw%' AND";
         }
+              
+        $orderby="order by Content.id desc"; 
         
-        $orderby="order by  DATE(from_unixtime(Content.date)) desc, score desc, Content.id desc";        
         if($order)
         {
             $orderby=$order;
         }
         
-        $sql = "SELECT *, count(Score.id) as score, Content.id AS id, Content.date, User.id as user_id "
+        //do ranking by score (except if only one id is requested)
+        $leftJoin="";
+        $score="";
+        if($show!="1")
+        {
+            $orderby="order by  DATE(from_unixtime(Content.date)) desc, score desc, Content.id desc"; 
+            $leftJoin=" LEFT JOIN Score on Content.id=Score.content_id ";
+            $score ="count(Score.id) as score,";
+        }
+        $sql = "SELECT *, $score Content.id AS id, Content.date, User.id as user_id "
                 . "FROM Content "
                 . "INNER JOIN User on Content.user_id=User.id "
-                . "LEFT JOIN Score on Content.id=Score.content_id "
+                .$leftJoin
                 . "WHERE  $esql "
                 
                 . "Content.id < $id "
