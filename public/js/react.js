@@ -607,7 +607,7 @@ var ShareBox = React.createClass({
      * @todo remove jquery 
      */
     closePreview: function (e) {
-
+        e.preventDefault();
         $(".preview").hide();
         $("#img").val("");
         $("#metadata").val("");
