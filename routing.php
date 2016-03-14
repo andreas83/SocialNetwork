@@ -49,7 +49,7 @@ $router->map('GET', '/api/score/[i:id]', 'ScoreController#get_score');
 
 //Permalink and hash url
 $router->map('GET', '/[page|permalink]/[i:id]', 'DataController#get_permalink');
-$router->map('GET', '/hash/[a:hash]', 'DataController#get_hash');
+$router->map('GET', '/hash/[*:hash]', 'DataController#get_hash');
 
 
 $router->map('GET|POST', '/help/', 'WebController#help');
