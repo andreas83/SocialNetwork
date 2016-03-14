@@ -324,7 +324,7 @@ class DataController extends BaseController {
                     $metadata->type = "upload";
                     
                     $mime = mime_content_type($upload_path . $uniq);
-
+                    $metadata->files[$i]=new stdClass();
                     $metadata->files[$i]->src = $uniq;
                     $metadata->files[$i]->name = $_FILES['img']['name'][$i];
                     $metadata->files[$i]->type = $mime;
