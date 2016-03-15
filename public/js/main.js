@@ -117,8 +117,8 @@ $(document).ready(function () {
 
                 $("#notifications").append("\
                     <li class=list-group-item>" + user_link_pic + " \n\
-                        " + data[key].message + "<br/>\n\
-                        " + user_link + " " + prettyDate(parseInt(data[key].date)) + "\
+                        " + user_link + " " + data[key].message + "<br/>\n\
+                        " + prettyDate(parseInt(data[key].date)) + "\
                     </li>");
             });
         };
