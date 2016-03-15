@@ -7,22 +7,39 @@ class notificationServer extends WebSocketServer {
   //protected $maxBufferSize = 1048576; //1MB... overkill for an echo server, but potentially plausible for other applications.
   
   protected function process ($user, $message) {
-    
+      
       $data=  json_decode($message);
+      
       if($data->action == "getNotifications" && $data->auth_cookie!="")
       {
           $notifications = new Notification;
-          $res=$notifications->getNotifications($data->auth_cookie);
+          $res=$notifications->getNotificationsByCookie($data->auth_cookie);
+          $user->uid=$res[0]->to_user_id;
+          
           $this->send($user, json_encode($res));
       }
-      
+      if($data->action =="update" && $data->uid>0)
+      {
+          //here we just update given user
+          $this->send($user, "close");
+          foreach($this->users as $user){
+              if($user->uid == $data->uid)
+              {
+                  $notifications = new Notification;
+                  $res=$notifications->getNotificationsByID($data->uid);
+                  $this->send($user, json_encode($res));
+              }
+          }
+          
+      }
   }
   
   protected function connected ($user) {
      
       $notifications = new Notification;
       //remove some old notifications first aka garbage collection
-      $notifications->cleanup();
+      //$notifications->cleanup();
+      
   }
   
   

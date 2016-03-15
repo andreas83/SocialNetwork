@@ -1,3 +1,9 @@
+16.3.2016
+websocket server now update clients properly
+
+15.3.2016
+added Oauth2 lib (google login added)
+
 14.3.2016 
 score now affects ranking 
 small bugfixes

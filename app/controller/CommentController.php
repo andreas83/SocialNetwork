@@ -1,5 +1,5 @@
 <?php
-
+use WebSocket\Client;
 
 class CommentController extends BaseController{
 
@@ -47,6 +47,7 @@ class CommentController extends BaseController{
             $comment->user_id = Helper::getUserID();
             $comment->save();
             
+            $client = new Client(Config::get("notification_server"));
             
             #start notification for post owner
             $content= new Content;
@@ -60,7 +61,8 @@ class CommentController extends BaseController{
                     . ' <a href="/permalink/'.$request['id'].'">post</a>';
             if($notification->to_user_id!=Helper::getUserID())
                 $notification->save();
-                    
+            
+            $client->send(json_encode(array("action"=>"update", "uid" =>$notification->to_user_id))); 
             
             #notification for @users mention
             $pattern="/(^|\s)@(\w*[a-zA-Z0-9öäü._-]+\w*)/";
@@ -84,8 +86,13 @@ class CommentController extends BaseController{
                     
                     if($notification->to_user_id!=Helper::getUserID())
                         $notification->save();
+                    
+                    //we notifiy the socket server about an update
+                    $client->send(json_encode(array("action"=>"update", "uid" =>$notification->to_user_id)));
                 }
             }
+            
+            
             
             
             

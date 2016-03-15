@@ -103,7 +103,7 @@ $(document).ready(function () {
         socket.onmessage = function (msg) {
             
             data = JSON.parse(msg.data);
-
+            $("#notifications").html("");
             $(data).each(function (key) {
 
                 if (typeof JSON.parse(data[key].settings).profile_picture !== "undefined")

@@ -1,4 +1,5 @@
 <?php
+use WebSocket\Client;
 
 /**
  * Class DataController
@@ -348,7 +349,7 @@ class DataController extends BaseController {
             preg_match_all($pattern, $content->data, $users);
             if(count($users[0])>0)
             {
-                
+                $client = new Client(Config::get("notification_server"));
                 $user = new User;
                 $notification = new Notification;
                 $notification->from_user_id=Helper::getUserID();
@@ -365,6 +366,8 @@ class DataController extends BaseController {
                     
                     if($notification->to_user_id!=Helper::getUserID())
                         $notification->save();
+                    
+                    $client->send(json_encode(array("action"=>"update", "uid" =>$notification->to_user_id))); 
                 }
             }
             
