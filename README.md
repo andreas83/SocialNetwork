@@ -12,15 +12,20 @@ Bitcoins: 1GqMSGseij18JnAoB9f3LHJRozNr1QeHkh
 ##API Documentation
 http://www.dasmerkendienie.com/help/
 
-##Features:
+##Features
 
 * Share (Websites, Images, Videos, SourceCode)
 * Like / Dislike / Comments
 * #hash tag search (orderd by popularity)
+* @user mentions and notifications
 * REST API
-* Backend
-* Facebook login
+* Oauth2 (Facebook, Google+)
+* Backend 
 
+##Requirement
+
+Webserver (Apache2 or Nginx)
+PHP 5.5 
 
 # Instalation
 
@@ -70,12 +75,17 @@ For security reasons please don`t forget to change the salat to some other rando
 salat="KJMnmnNUU&/§N(JH/h80h87fnunu43h8u7"
 ```
 
-If you like to use the Facebook login, following settings are required:
+If you like to use the Facebook or Google login, following settings are required:
 ```
 # Facebook Auth
 facebook_auth=true; //set to false if you dont like fb login
 facebook_app_id="";
 facebook_app_secret="";
+
+# Google Auth
+google_auth=true; 
+google_app_id="";
+google_app_secret="";
 ```
 
 ##Permissions
