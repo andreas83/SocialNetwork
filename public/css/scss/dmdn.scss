@@ -264,6 +264,25 @@ video {
     background-color: #3b5998;
    
 }
+#glogin{
+    background-color: rgba(199, 43, 43, 0.75);
+    color:#fff;    
+}
+#glogin:hover{
+    background-color: #F90101;
+   
+}
+.btn-circle {
+    width: 46px;
+    height: 46px;
+    text-align: center;
+    padding: 7px 0;
+    font-size: 22px;
+    line-height: 1.42;
+    border-radius: 35px;
+}
+
+
 
 #notifications img{
     max-height: 50px;

@@ -10,6 +10,7 @@ $router->map('GET|POST', '/user/logout/', 'UserController#logout');
 $router->map('GET|POST', '/user/password/reset/', 'UserController#passwordReset');
 $router->map('GET|POST', '/user/password/reset/[a:hash]/', 'UserController#passwordResetConfirmed');
 $router->map('GET|POST', '/user/fblogin/', 'UserController#fbcallback');
+$router->map('GET|POST', '/user/glogin/', 'UserController#gcallback');
 $router->map('GET|POST', '/my/settings/', 'UserController#settings');
 
 
