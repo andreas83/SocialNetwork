@@ -70,15 +70,6 @@ class Content extends BaseModel
               
         $orderby="order by Content.id desc"; 
         
-        //do ranking by score (except if only one id is requested)
-        $leftJoin="";
-        $score="";
-        if($show!="1")
-        {
-            $orderby="order by  DATE(from_unixtime(Content.date)) desc, score desc, Content.id desc"; 
-            $leftJoin=" LEFT JOIN Score on Content.id=Score.content_id ";
-            $score ="count(Score.id) as score,";
-        }
         if($order)
         {
             $orderby=$order;
@@ -87,12 +78,9 @@ class Content extends BaseModel
         
         $sql = "SELECT *, $score Content.id AS id, Content.date, User.id as user_id "
                 . "FROM Content "
-                . "INNER JOIN User on Content.user_id=User.id "
-                .$leftJoin
+                . "INNER JOIN User on Content.user_id=User.id "               
                 . "WHERE  $esql "
-                
                 . "Content.id < $id "
-                . "group by Content.id "
                 . "$orderby limit $show";
   
         
