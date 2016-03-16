@@ -38,7 +38,7 @@ class notificationServer extends WebSocketServer {
      
       $notifications = new Notification;
       //remove some old notifications first aka garbage collection
-      //$notifications->cleanup();
+      $notifications->cleanup();
       
   }
   
