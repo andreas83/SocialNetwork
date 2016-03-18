@@ -233,6 +233,10 @@
                 document.getElementById("SearchBox")
         );
         ReactDOM.render(
+                <ChatBox data={data} /> ,
+                document.getElementById("ChatBox")
+        );
+        ReactDOM.render(
                 <ShareBox data={data}  /> ,
                 document.getElementById("ShareBox")
         );

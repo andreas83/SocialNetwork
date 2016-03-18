@@ -624,7 +624,6 @@ var ShareBox = React.createClass({
     },
     handleInput: function (event) {
 
-        console.log(this.props);
         var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
         if ($("#share_area").val().match(urlRegex)) {
             url = $("#share_area").val().match(urlRegex);
@@ -644,7 +643,7 @@ var ShareBox = React.createClass({
         }
     },
     render: function () {
-        console.log(this.props.visible);
+
         return React.createElement(
             'div',
             null,
@@ -859,6 +858,107 @@ var SearchBox = React.createClass({
         );
     }
 });
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+    }
+    return "";
+}
+function swap(json) {
+    var ret = {};
+    for (var key in json) {
+        ret[json[key]] = key;
+    }
+    return ret;
+}
+
+var socket;
+var ChatBox = React.createClass({
+    displayName: 'ChatBox',
+
+    getInitialState: function () {
+        return { channel: [], activeUser: [] };
+    },
+
+    componentDidMount: function () {
+
+        try {
+            socket = new WebSocket(notification_server);
+
+            socket.onopen = function (msg) {
+
+                socket.send(JSON.stringify({ action: "openroom", auth_cookie: getCookie("auth") }));
+            };
+            socket.onmessage = function (msg) {
+
+                data = JSON.parse(msg.data);
+
+                this.setState({ activeUser: Object.keys(swap(data.activeUsers)), channel: data.channel.default });
+                var objDiv = document.getElementById("textframe");
+                objDiv.scrollTop = objDiv.scrollHeight;
+            }.bind(this);
+            socket.onclose = function (msg) {};
+        } catch (ex) {
+
+            console.log(ex);
+        }
+    },
+
+    handleSubmit: function (event) {
+        event.preventDefault();
+        socket.send(JSON.stringify({ action: "chat", text: document.getElementById("chatinput").value, auth_cookie: getCookie("auth") }));
+        document.getElementById("chatinput").value = "";
+        var objDiv = document.getElementById("textframe");
+        objDiv.scrollTop = objDiv.scrollHeight;
+    },
+
+    render: function () {
+
+        return React.createElement(
+            'div',
+            null,
+            React.createElement(
+                'div',
+                { id: 'chat', className: 'col-md-9 bounceIn' },
+                React.createElement(
+                    'div',
+                    { id: 'textframe' },
+                    this.state.channel.map(function (chat, i) {
+                        return React.createElement(
+                            'p',
+                            null,
+                            chat
+                        );
+                    })
+                ),
+                React.createElement(
+                    'form',
+                    { className: 'chatForm', onSubmit: this.handleSubmit },
+                    React.createElement('input', { type: 'text', autoComplete: 'off', id: 'chatinput' })
+                )
+            ),
+            React.createElement(
+                'div',
+                { id: 'ChatUsers', className: 'col-md-3' },
+                React.createElement(
+                    'ul',
+                    null,
+                    this.state.activeUser.map(function (user, i) {
+                        return React.createElement(
+                            'li',
+                            null,
+                            user
+                        );
+                    })
+                )
+            )
+        );
+    }
+});
 
 function Replacehashtags(string) {
     string = string.replace(/#(\S*)/g, '<a class="hash" href="/hash/$1">#$1</a>');
@@ -1064,4 +1164,5 @@ var data = {};
 
 ReactDOM.render(React.createElement(InitStream, { data: data }), document.getElementsByClassName('stream')[0]);
 ReactDOM.render(React.createElement(SearchBox, { data: data }), document.getElementById("SearchBox"));
+ReactDOM.render(React.createElement(ChatBox, { data: data }), document.getElementById("ChatBox"));
 ReactDOM.render(React.createElement(ShareBox, { data: data }), document.getElementById("ShareBox"));

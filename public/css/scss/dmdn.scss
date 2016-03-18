@@ -331,7 +331,25 @@ video {
         transform: translateY(0); 
     } 
 } 
-
+#chat{
+    height:400px;
+    border:1px solid #fff;
+    #textframe{
+        padding-top:10px;
+        height:350px;
+        overflow: auto;
+        p{
+            margin:0px;
+        }
+    }
+    #chatinput{
+        left: 0px;
+        bottom: 0px;
+        position: absolute;
+        width: 100%;
+        color:#000;
+    }
+}
 .bounceInDown { 
     -webkit-animation-name: bounceInDown; 
     animation-name: bounceInDown; 

@@ -35,7 +35,10 @@ $(document).ready(function () {
         readURL(this);
     });
 
-
+    $(".showChat").on("click", function (e) {
+        e.preventDefault();
+        $("#ChatBox").toggleClass("hide");
+    });
 
 
     $(".toggleform").on("click", function (e) {
