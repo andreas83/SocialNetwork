@@ -958,7 +958,11 @@ var NotificationBox = React.createClass({
             socket.onmessage = function (msg) {
 
                 data = JSON.parse(msg.data);
-                console.log(data);
+                if (data.length > 0) {
+                    document.getElementById("NotificationBox").style.visibility = "visible";
+                } else {
+                    document.getElementById("NotificationBox").style.visibility = "hidden";
+                }
                 this.setState({
                     data: data
                 });
@@ -1005,7 +1009,7 @@ var NotificationBox = React.createClass({
         }
         return React.createElement(
             "div",
-            null,
+            { ref: "notification" },
             li
         );
     }

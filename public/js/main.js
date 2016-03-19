@@ -1,4 +1,4 @@
-$(document).ready(function () {
+ $(document).ready(function () {
     $(document).on('change', '.btn-file :file', function() {
         var input = $(this),
             numFiles = input.get(0).files ? input.get(0).files.length : 1,
@@ -38,6 +38,7 @@ $(document).ready(function () {
     $(".showChat").on("click", function (e) {
         e.preventDefault();
         $("#ChatBox").toggleClass("hide");
+        $("#textframe").scrollTop($("#textframe").height());
         
     });
 

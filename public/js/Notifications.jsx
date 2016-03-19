@@ -21,7 +21,17 @@
                 socket.onmessage = function (msg) {
                     
                     data = JSON.parse(msg.data);
-                    console.log(data);
+                    if(data.length>0)
+                    {
+                        document.getElementById("NotificationBox").style.visibility ="visible";
+                        
+                    }
+                    else
+                    {
+                        document.getElementById("NotificationBox").style.visibility ="hidden";
+                        
+                        
+                    }
                     this.setState({
                         data:data
                     });
@@ -65,7 +75,7 @@
                 
             }
             return(
-                <div>
+                <div ref="notification">
                     
                     {li}
                     
