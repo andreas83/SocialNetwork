@@ -24,7 +24,6 @@ echo "<script>var notification_server=\"".Config::get("notification_server")."\"
 <script src="https://fb.me/react-dom-0.14.7.min.js"></script>
 <script src="/public/js/main.js"></script>
 <script src="/vendor/components/bootstrap/js/bootstrap.min.js"></script>
-<script src="/public/js/Functions.jsx"></script>
 <script src="/public/js/react.js"></script>
 
 <link rel="stylesheet" href="/vendor/components/highlightjs/styles/railscasts.css">
