@@ -53,5 +53,20 @@ class Hashtags extends BaseModel
 
         return $obj;        
     }
+    
+        
+    function getRandomHashtags($limit =5){
+        $sql = "select * from Hashtags order by rand() limit ".$limit;
+        
+        $stmt = $this->dbh->prepare($sql);
+
+        
+
+        $stmt->execute();
+
+        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, 'Hashtags');
+
+        return $obj;        
+    }
 }
 ?>

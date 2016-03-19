@@ -31,23 +31,21 @@ include("menu.php");
     </div>
 
 <div class="col-md-3 hidden-sm hidden-xs animated bounceInRight">
-    <?php if (!Helper::isUser()): ?>
+    <?php if (!Helper::isUser() || (Config::get("facebook_auth")  && Config::get("google_auth"))): ?>
     <div class="signinBox">
         
-        <?php if (!Helper::isUser() && Config::get("facebook_auth")==true): ?>
+        <?php if (!Helper::isUser() && Config::get("facebook_auth")): ?>
         <a href='<?php echo UserController::getFBLoginURL(); ?>' class="col-xs-12 col-sm-12 col-md-12 btn" id="fblogin"><i class="fa fa-facebook"></i> Facebook</a>
         <?php endif; ?>
         
-        <?php if (!Helper::isUser() && Config::get("google_auth") == true): ?>
+        <?php if (!Helper::isUser() && Config::get("google_auth") ): ?>
             <a href='<?php echo UserController::getGLoginURL(); ?>' class="col-xs-12 col-sm-12 col-md-12 btn" id="glogin"><i class="fa fa-google-plus"></i> Google</a>
         <?php endif; ?>
             
     </div>
     <?php endif; ?>
     
-    <div id="NotificationBox">
-        
-    </div>
+    <div id="NotificationBox"></div>
     
 </div>
 <?php

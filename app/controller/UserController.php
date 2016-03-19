@@ -277,6 +277,11 @@ class UserController extends BaseController
 
             $user->save();
         }
+                
+        $hashtags= new Hashtags;
+      
+        $this->assign("popularhashtags",   $hashtags->getPopularHashtags());
+        $this->assign("randomhashtags",   $hashtags->getRandomHashtags());
         $this->assign("title", "My Settings");
         $this->assign("error", $error);
         $this->assign("user", $user);

@@ -15,6 +15,7 @@ class DataController extends BaseController {
         $hashtags= new Hashtags;
       
         $this->assign("popularhashtags",   $hashtags->getPopularHashtags());
+        $this->assign("randomhashtags",   $hashtags->getRandomHashtags());
         $this->assign("maxid", $res[0]->id);
     }
 
