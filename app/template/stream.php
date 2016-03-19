@@ -30,13 +30,24 @@ include("menu.php");
         </div>
     </div>
 
-<div class="col-md-3 hidden-sm hidden-xs">
-    
-
-    
-    <ul class="list-group" id="notifications">
+<div class="col-md-3 hidden-sm hidden-xs animated bounceInRight">
+    <?php if (!Helper::isUser()): ?>
+    <div class="signinBox">
         
-    </ul>
+        <?php if (!Helper::isUser() && Config::get("facebook_auth")==true): ?>
+        <a href='<?php echo UserController::getFBLoginURL(); ?>' class="col-xs-12 col-sm-12 col-md-12 btn" id="fblogin"><i class="fa fa-facebook"></i> Facebook</a>
+        <?php endif; ?>
+        
+        <?php if (!Helper::isUser() && Config::get("google_auth") == true): ?>
+            <a href='<?php echo UserController::getGLoginURL(); ?>' class="col-xs-12 col-sm-12 col-md-12 btn" id="glogin"><i class="fa fa-google-plus"></i> Google</a>
+        <?php endif; ?>
+            
+    </div>
+    <?php endif; ?>
+    
+    <div id="NotificationBox">
+        
+    </div>
     
 </div>
 <?php

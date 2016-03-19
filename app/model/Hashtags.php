@@ -39,5 +39,19 @@ class Hashtags extends BaseModel
         
     
     }
+    
+    function getPopularHashtags($limit =5){
+        $sql = "select * from Hashtags order by pop desc limit ".$limit;
+        
+        $stmt = $this->dbh->prepare($sql);
+
+        
+
+        $stmt->execute();
+
+        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, 'Hashtags');
+
+        return $obj;        
+    }
 }
 ?>

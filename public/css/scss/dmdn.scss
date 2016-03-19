@@ -241,6 +241,33 @@ video {
  
 }
 
+a{
+    color:#777;
+}
+a:hover{
+    color:#555;
+}
+
+#popularHashtags{
+    padding-top:75px;
+    a{
+        height:20px;
+        
+    }
+    a:hover{
+        color:#555;
+        
+        background-color:#eee;
+    } 
+    ul{
+        list-style: none;
+        padding-left: 10px;
+    }
+    h3{
+        padding-left: 10px;
+    }
+}
+
 .video {
 	position: relative;
 	padding-bottom: 56.25%; /* 16:9 */
@@ -350,6 +377,21 @@ video {
         color:#000;
     }
 }
+
+.signinBox{
+    height:80px;
+    padding:5px;
+    margin-bottom: 10px;
+    background-color:#fff;
+    border: 1px solid #e6ebfa;
+}
+
+#NotificationBox{
+    padding:5px;
+    background-color:#fff;
+    border: 1px solid #e6ebfa;
+}
+
 .bounceInDown { 
     -webkit-animation-name: bounceInDown; 
     animation-name: bounceInDown; 

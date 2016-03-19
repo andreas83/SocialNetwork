@@ -1,5 +1,5 @@
 
-<div class="col-md-2 col-sm-3 col-xs-12 animated bounceInLeft">
+<div class="col-md-2 col-sm-3 col-xs-12 animated bounceInLeft hidden-xs menuLeft">
     
         <div class="list-group user-box ">
 
@@ -16,24 +16,17 @@
                 ?>
                 
                 <a class="" href="/">
-                    <img class="hidden-xs img-responsive" src="<?php echo  (isset($user_settings->profile_picture) ? Config::get('upload_address') .$user_settings->profile_picture : ""); ?>">
+                    <img class=" img-responsive" src="<?php echo  (isset($user_settings->profile_picture) ? Config::get('upload_address') .$user_settings->profile_picture : ""); ?>">
                 </a>
                 <?php } ?>
-                <a class="btn btn-success hidden-xs col-sm-12 col-md-12" href="/my/settings/"><?php echo _('Settings') ?></a>
+                <a class="btn btn-success  col-sm-12 col-md-12" href="/my/settings/"><?php echo _('Settings') ?></a>
             <?php endif; ?>
         </div>
-        <?php if (!Helper::isUser() && Config::get("facebook_auth")==true): ?>
-        <div class="left-nav hidden-xs">
-            
-            <a href='<?php echo UserController::getFBLoginURL(); ?>' class="col-xs-12 col-sm-12 col-md-12 btn" id="fblogin">Facebook</a>
-            
-        </div>
         
-        <?php endif; ?>
-        <div class="left-nav hidden-xs">
+        <div class="left-nav ">
             <button class="col-xs-12 col-sm-12 col-md-12 btn btn-info" id="next">(R)andom Post</button>
         </div>
-        <div class="left-nav hidden-xs">
+        <div class="left-nav ">
             <a href="/help/" class="col-xs-12 col-sm-12 col-md-12 btn btn-warning" >API Documentation</a>
         </div>
         <?php if (Helper::isUser() ): ?>
@@ -43,5 +36,17 @@
             
         </div>
         <?php endif; ?>
+    
+        <div id="popularHashtags">
+            <h3>Popular</h3>
+            <ul>
+                <?php
+                foreach($popularhashtags as $hashtag)
+                {
+                    echo "<li><a href=\"/hash/".$hashtag->hashtag."\">#".$hashtag->hashtag."</a></li>";
+                }
+                ?>
+            </ul>
+        </div>
         
 </div>

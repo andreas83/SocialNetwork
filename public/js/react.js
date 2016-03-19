@@ -95,7 +95,7 @@ var Author = React.createClass({
                     )
                 ),
                 " ",
-                this.prettyDate(this.props.time),
+                prettyDate(this.props.time),
                 React.createElement("br", null),
                 React.createElement(
                     "a",
@@ -110,15 +110,6 @@ var Author = React.createClass({
                 editBtn
             )
         );
-    },
-    prettyDate: function (time) {
-        var date = new Date(time * 1000),
-            diff = (new Date().getTime() - date.getTime()) / 1000,
-            day_diff = Math.floor(diff / 86400);
-
-        if (isNaN(day_diff) || day_diff < 0 || day_diff >= 31) return;
-
-        return day_diff == 0 && (diff < 60 && "just now" || diff < 120 && "1 minute ago" || diff < 3600 && Math.floor(diff / 60) + " minutes ago" || diff < 7200 && "1 hour ago" || diff < 86400 && Math.floor(diff / 3600) + " hours ago") || day_diff == 1 && "Yesterday" || day_diff < 7 && day_diff + " days ago" || day_diff < 31 && Math.ceil(day_diff / 7) + " weeks ago";
     }
 
 });
@@ -146,6 +137,7 @@ var AuthorText = React.createClass({
         var m;
         var hash;
         var tmp_content = content;
+        var user = "";
         while ((m = re.exec(content)) !== null) {
             if (m.index === re.lastIndex) {
                 re.lastIndex++;
@@ -587,198 +579,6 @@ var Likebox = React.createClass({
     }
 });
 
-var ShareBox = React.createClass({
-    displayName: 'ShareBox',
-
-    getInitialState: function () {
-        return { data: [], showShareBox: true };
-    },
-    componentDidMount: function () {
-
-        this.setState({
-            isMetaLoading: false
-        });
-
-        share_area = document.getElementById('share_area');
-        share_area.addEventListener('input', this.handleInput);
-    },
-
-    /*
-     * @todo remove jquery 
-     */
-    closePreview: function (e) {
-        e.preventDefault();
-        $(".preview").hide();
-        $("#img").val("");
-        $("#metadata").val("");
-        this.setState({
-            isMetaLoading: false
-        });
-    },
-
-    renderPreview: function (scope) {
-        if ($("#share_area").val() == this.state.data.url) $("#share_area").val("");
-
-        $(".preview").hide();
-        $(".preview." + scope).show();
-    },
-    handleInput: function (event) {
-
-        var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-        if ($("#share_area").val().match(urlRegex)) {
-            url = $("#share_area").val().match(urlRegex);
-
-            if (this.state.isMetaLoading) return false;
-
-            this.setState({
-                isMetaLoading: true
-            });
-            this.serverRequest = $.get('/api/metadata/?url=' + url, function (data) {
-                this.setState({
-                    data: data
-                });
-
-                this.renderPreview(data.type);
-            }.bind(this));
-        }
-    },
-    render: function () {
-
-        return React.createElement(
-            'div',
-            null,
-            React.createElement(
-                'form',
-                { method: 'post', action: '/api/content/', encType: 'multipart/form-data' },
-                React.createElement(
-                    'div',
-                    { className: 'row' },
-                    React.createElement(
-                        'div',
-                        { className: 'col-md-11' },
-                        React.createElement('textarea', { id: 'share_area', placeholder: '', name: 'content', rows: '3', className: 'form-control' }),
-                        React.createElement(
-                            'div',
-                            { className: 'row preview www' },
-                            React.createElement(
-                                'p',
-                                { className: 'text-right' },
-                                React.createElement(
-                                    'button',
-                                    { className: 'btn btn-info', onClick: this.closePreview },
-                                    React.createElement('span', { className: 'glyphicon glyphicon-remove', 'aria-hidden': 'true' })
-                                )
-                            ),
-                            React.createElement(
-                                'div',
-                                { className: 'col-md-3' },
-                                React.createElement('img', { className: 'img-responsive', src: this.state.data.og_img, id: 'og_img' })
-                            ),
-                            React.createElement(
-                                'div',
-                                { className: 'col-md-9' },
-                                React.createElement(
-                                    'h3',
-                                    { id: 'og_title' },
-                                    this.state.data.og_title
-                                ),
-                                React.createElement(
-                                    'p',
-                                    { id: 'og_desc' },
-                                    this.state.data.og_description
-                                )
-                            ),
-                            React.createElement(
-                                'div',
-                                { className: 'col-md-12' },
-                                React.createElement(
-                                    'a',
-                                    { href: this.state.data.url, id: 'www_link' },
-                                    this.state.data.url
-                                )
-                            )
-                        ),
-                        React.createElement(
-                            'div',
-                            { className: 'row preview img' },
-                            React.createElement(
-                                'div',
-                                { className: 'col-md-12' },
-                                React.createElement(
-                                    'p',
-                                    { className: 'text-right' },
-                                    React.createElement(
-                                        'button',
-                                        { className: 'btn btn-info', onClick: this.closePreview },
-                                        React.createElement('span', { className: 'glyphicon glyphicon-remove', 'aria-hidden': 'true' })
-                                    )
-                                ),
-                                React.createElement('img', { className: 'img-responsive', src: this.state.data.url, id: 'preview_img' })
-                            )
-                        ),
-                        React.createElement(
-                            'div',
-                            { className: 'row preview upload' },
-                            React.createElement(
-                                'div',
-                                { className: 'col-md-12' },
-                                React.createElement(
-                                    'p',
-                                    { className: 'text-right' },
-                                    React.createElement(
-                                        'button',
-                                        { className: 'btn btn-info', onClick: this.closePreview },
-                                        React.createElement('span', { className: 'glyphicon glyphicon-remove', 'aria-hidden': 'true' })
-                                    )
-                                ),
-                                React.createElement('div', { id: 'uploadPreview' })
-                            )
-                        ),
-                        React.createElement(
-                            'div',
-                            { className: 'row preview video' },
-                            React.createElement(
-                                'div',
-                                { className: 'col-md-12' },
-                                React.createElement(
-                                    'p',
-                                    { className: 'text-right' },
-                                    React.createElement(
-                                        'button',
-                                        { className: 'btn btn-info', onClick: this.closePreview },
-                                        React.createElement('span', { className: 'glyphicon glyphicon-remove', 'aria-hidden': 'true' })
-                                    )
-                                ),
-                                React.createElement('div', { id: 'video_target', className: 'embed-responsive embed-responsive-16by9', dangerouslySetInnerHTML: { __html: this.state.data.html } })
-                            )
-                        ),
-                        React.createElement('input', { type: 'hidden', name: 'metadata', id: 'metadata', value: JSON.stringify(this.state.data) }),
-                        React.createElement('input', { type: 'text', name: 'mail', className: 'hide', value: '' })
-                    ),
-                    React.createElement(
-                        'div',
-                        { className: 'col-md-5' },
-                        React.createElement(
-                            'span',
-                            { className: 'btn btn-lg btn-warning btn-file' },
-                            React.createElement('i', { className: 'glyphicon glyphicon-cloud-upload' }),
-                            ' Upload',
-                            React.createElement('input', { type: 'file', id: 'img', multiple: true, name: 'img[]', className: 'form-control' })
-                        ),
-                        React.createElement(
-                            'button',
-                            { className: 'btn btn-lg btn-info ' },
-                            React.createElement('i', { className: 'glyphicon glyphicon-heart' }),
-                            ' Share!'
-                        ),
-                        React.createElement('p', { className: 'fileinfo' })
-                    )
-                )
-            )
-        );
-    }
-});
-
 var SearchBox = React.createClass({
     displayName: 'SearchBox',
 
@@ -858,27 +658,11 @@ var SearchBox = React.createClass({
         );
     }
 });
-function getCookie(cname) {
-    var name = cname + "=";
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') c = c.substring(1);
-        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
-    }
-    return "";
-}
-function swap(json) {
-    var ret = {};
-    for (var key in json) {
-        ret[json[key]] = key;
-    }
-    return ret;
-}
+
 
 var socket;
 var ChatBox = React.createClass({
-    displayName: 'ChatBox',
+    displayName: "ChatBox",
 
     getInitialState: function () {
         return { channel: [], activeUser: [] };
@@ -919,37 +703,37 @@ var ChatBox = React.createClass({
     render: function () {
 
         return React.createElement(
-            'div',
+            "div",
             null,
             React.createElement(
-                'div',
-                { id: 'chat', className: 'col-md-9 bounceIn' },
+                "div",
+                { id: "chat", className: "col-md-9 bounceIn" },
                 React.createElement(
-                    'div',
-                    { id: 'textframe' },
+                    "div",
+                    { id: "textframe" },
                     this.state.channel.map(function (chat, i) {
                         return React.createElement(
-                            'p',
+                            "p",
                             null,
                             chat
                         );
                     })
                 ),
                 React.createElement(
-                    'form',
-                    { className: 'chatForm', onSubmit: this.handleSubmit },
-                    React.createElement('input', { type: 'text', autoComplete: 'off', id: 'chatinput' })
+                    "form",
+                    { className: "chatForm", onSubmit: this.handleSubmit },
+                    React.createElement("input", { type: "text", autoComplete: "off", id: "chatinput" })
                 )
             ),
             React.createElement(
-                'div',
-                { id: 'ChatUsers', className: 'col-md-3' },
+                "div",
+                { id: "ChatUsers", className: "col-md-3" },
                 React.createElement(
-                    'ul',
+                    "ul",
                     null,
                     this.state.activeUser.map(function (user, i) {
                         return React.createElement(
-                            'li',
+                            "li",
                             null,
                             user
                         );
@@ -960,12 +744,273 @@ var ChatBox = React.createClass({
     }
 });
 
-function Replacehashtags(string) {
-    string = string.replace(/#(\S*)/g, '<a class="hash" href="/hash/$1">#$1</a>');
-    string = string.replace(/@(\S*)/g, '<a class="user" href="/$1">@$1</a>');
+var ShareBox = React.createClass({
+    displayName: "ShareBox",
 
-    return string;
-}
+    getInitialState: function () {
+        return { data: [], showShareBox: true };
+    },
+    componentDidMount: function () {
+
+        this.setState({
+            isMetaLoading: false
+        });
+
+        var share_area = this.refs.share_area;
+        share_area.addEventListener('input', this.handleInput);
+    },
+
+    /*
+     * @todo remove jquery 
+     */
+    closePreview: function (e) {
+        e.preventDefault();
+        $(".preview").hide();
+        $("#img").val("");
+        $("#metadata").val("");
+        this.setState({
+            isMetaLoading: false
+        });
+    },
+
+    renderPreview: function (scope) {
+        if ($("#share_area").val() == this.state.data.url) $("#share_area").val("");
+
+        $(".preview").hide();
+        $(".preview." + scope).show();
+    },
+    handleInput: function (event) {
+
+        var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+        if ($("#share_area").val().match(urlRegex)) {
+
+            var url = this.refs.share_area.value.match(urlRegex);
+
+            if (this.state.isMetaLoading) return false;
+
+            this.setState({
+                isMetaLoading: true
+            });
+            this.serverRequest = $.get('/api/metadata/?url=' + url, function (data) {
+                this.setState({
+                    data: data
+                });
+
+                this.renderPreview(data.type);
+            }.bind(this));
+        }
+    },
+    render: function () {
+
+        return React.createElement(
+            "div",
+            null,
+            React.createElement(
+                "form",
+                { method: "post", action: "/api/content/", encType: "multipart/form-data" },
+                React.createElement(
+                    "div",
+                    { className: "row" },
+                    React.createElement(
+                        "div",
+                        { className: "col-md-11" },
+                        React.createElement("textarea", { id: "share_area", ref: "share_area", placeholder: "", name: "content", rows: "3", className: "form-control" }),
+                        React.createElement(
+                            "div",
+                            { className: "row preview www" },
+                            React.createElement(
+                                "p",
+                                { className: "text-right" },
+                                React.createElement(
+                                    "button",
+                                    { className: "btn btn-info", onClick: this.closePreview },
+                                    React.createElement("span", { className: "glyphicon glyphicon-remove", "aria-hidden": "true" })
+                                )
+                            ),
+                            React.createElement(
+                                "div",
+                                { className: "col-md-3" },
+                                React.createElement("img", { className: "img-responsive", src: this.state.data.og_img, id: "og_img" })
+                            ),
+                            React.createElement(
+                                "div",
+                                { className: "col-md-9" },
+                                React.createElement(
+                                    "h3",
+                                    { id: "og_title" },
+                                    this.state.data.og_title
+                                ),
+                                React.createElement(
+                                    "p",
+                                    { id: "og_desc" },
+                                    this.state.data.og_description
+                                )
+                            ),
+                            React.createElement(
+                                "div",
+                                { className: "col-md-12" },
+                                React.createElement(
+                                    "a",
+                                    { href: this.state.data.url, id: "www_link" },
+                                    this.state.data.url
+                                )
+                            )
+                        ),
+                        React.createElement(
+                            "div",
+                            { className: "row preview img" },
+                            React.createElement(
+                                "div",
+                                { className: "col-md-12" },
+                                React.createElement(
+                                    "p",
+                                    { className: "text-right" },
+                                    React.createElement(
+                                        "button",
+                                        { className: "btn btn-info", onClick: this.closePreview },
+                                        React.createElement("span", { className: "glyphicon glyphicon-remove", "aria-hidden": "true" })
+                                    )
+                                ),
+                                React.createElement("img", { className: "img-responsive", src: this.state.data.url, id: "preview_img" })
+                            )
+                        ),
+                        React.createElement(
+                            "div",
+                            { className: "row preview upload" },
+                            React.createElement(
+                                "div",
+                                { className: "col-md-12" },
+                                React.createElement(
+                                    "p",
+                                    { className: "text-right" },
+                                    React.createElement(
+                                        "button",
+                                        { className: "btn btn-info", onClick: this.closePreview },
+                                        React.createElement("span", { className: "glyphicon glyphicon-remove", "aria-hidden": "true" })
+                                    )
+                                ),
+                                React.createElement("div", { id: "uploadPreview" })
+                            )
+                        ),
+                        React.createElement(
+                            "div",
+                            { className: "row preview video" },
+                            React.createElement(
+                                "div",
+                                { className: "col-md-12" },
+                                React.createElement(
+                                    "p",
+                                    { className: "text-right" },
+                                    React.createElement(
+                                        "button",
+                                        { className: "btn btn-info", onClick: this.closePreview },
+                                        React.createElement("span", { className: "glyphicon glyphicon-remove", "aria-hidden": "true" })
+                                    )
+                                ),
+                                React.createElement("div", { id: "video_target", className: "embed-responsive embed-responsive-16by9", dangerouslySetInnerHTML: { __html: this.state.data.html } })
+                            )
+                        ),
+                        React.createElement("input", { type: "hidden", name: "metadata", id: "metadata", value: JSON.stringify(this.state.data) }),
+                        React.createElement("input", { type: "text", name: "mail", className: "hide", value: "" })
+                    ),
+                    React.createElement(
+                        "div",
+                        { className: "col-md-5" },
+                        React.createElement(
+                            "span",
+                            { className: "btn btn-lg btn-warning btn-file" },
+                            React.createElement("i", { className: "glyphicon glyphicon-cloud-upload" }),
+                            " Upload",
+                            React.createElement("input", { type: "file", id: "img", multiple: true, name: "img[]", className: "form-control" })
+                        ),
+                        React.createElement(
+                            "button",
+                            { className: "btn btn-lg btn-info " },
+                            React.createElement("i", { className: "glyphicon glyphicon-heart" }),
+                            " Share!"
+                        ),
+                        React.createElement("p", { className: "fileinfo" })
+                    )
+                )
+            )
+        );
+    }
+});
+
+
+var NotificationBox = React.createClass({
+    displayName: "NotificationBox",
+
+    getInitialState: function () {
+        return { data: [] };
+    },
+
+    componentDidMount: function () {
+
+        var socket;
+        try {
+            socket = new WebSocket(notification_server);
+
+            socket.onopen = function (msg) {
+
+                socket.send(JSON.stringify({ action: "getNotifications", auth_cookie: getCookie("auth") }));
+            };
+            socket.onmessage = function (msg) {
+
+                data = JSON.parse(msg.data);
+                console.log(data);
+                this.setState({
+                    data: data
+                });
+            }.bind(this);
+            socket.onclose = function (msg) {};
+        } catch (ex) {
+
+            console.log(ex);
+        }
+    },
+
+    render: function () {
+        var li = [];
+        for (notification in this.state.data) {
+
+            notification = this.state.data[notification];
+            console.log(notification);
+            if (typeof JSON.parse(notification.settings).profile_picture !== "undefined") {
+                var img_src = upload_address + JSON.parse(notification.settings).profile_picture;
+                profile_pic = React.createElement("img", { src: img_src });
+            } else profile_pic = React.createElement("img", { src: "/public/img/no-profile.jpg" });
+
+            safe_username = notification.name.replace(" ", ".");
+            user_link_pic = React.createElement(
+                "a",
+                { href: safe_username },
+                profile_pic
+            );
+            user_link = React.createElement(
+                "a",
+                { href: safe_username },
+                notification.name
+            );
+
+            li.push(React.createElement(
+                "p",
+                null,
+                user_link_pic,
+                " ",
+                user_link,
+                " ",
+                React.createElement("span", { dangerouslySetInnerHTML: { __html: notification.message } })
+            ));
+        }
+        return React.createElement(
+            "div",
+            null,
+            li
+        );
+    }
+});
+
 
 var InitStream = React.createClass({
     displayName: 'InitStream',
@@ -1164,5 +1209,6 @@ var data = {};
 
 ReactDOM.render(React.createElement(InitStream, { data: data }), document.getElementsByClassName('stream')[0]);
 ReactDOM.render(React.createElement(SearchBox, { data: data }), document.getElementById("SearchBox"));
+ReactDOM.render(React.createElement(NotificationBox, { data: data }), document.getElementById("NotificationBox"));
 ReactDOM.render(React.createElement(ChatBox, { data: data }), document.getElementById("ChatBox"));
 ReactDOM.render(React.createElement(ShareBox, { data: data }), document.getElementById("ShareBox"));

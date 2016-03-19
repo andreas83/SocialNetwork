@@ -70,7 +70,7 @@ class Helper
             return $res['0']->id;
         }
         
-        return $_SESSION['login'];
+        return (isset($_SESSION['login']) ? $_SESSION['login'] : "1") ;
     }
       
     public static function getUserSettings()

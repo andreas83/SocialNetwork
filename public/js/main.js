@@ -38,6 +38,7 @@ $(document).ready(function () {
     $(".showChat").on("click", function (e) {
         e.preventDefault();
         $("#ChatBox").toggleClass("hide");
+        
     });
 
 
@@ -55,85 +56,8 @@ $(document).ready(function () {
     });
 
 
-    function getCookie(cname) {
-        var name = cname + "=";
-        var ca = document.cookie.split(';');
-        for (var i = 0; i < ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0) == ' ')
-                c = c.substring(1);
-            if (c.indexOf(name) == 0)
-                return c.substring(name.length, c.length);
-        }
-        return "";
-    }
-    
-    /*
-     * @todo is defined twice (see Author.jsx)
-     */
-    function prettyDate(time) {
-        var date = new Date(time * 1000),
-                diff = (((new Date()).getTime() - date.getTime()) / 1000),
-                day_diff = Math.floor(diff / 86400);
-
-        if (isNaN(day_diff) || day_diff < 0 || day_diff >= 31)
-            return;
-
-        return day_diff == 0 && (
-                diff < 60 && "just now" ||
-                diff < 120 && "1 minute ago" ||
-                diff < 3600 && Math.floor(diff / 60) + " minutes ago" ||
-                diff < 7200 && "1 hour ago" ||
-                diff < 86400 && Math.floor(diff / 3600) + " hours ago") ||
-                day_diff == 1 && "Yesterday" ||
-                day_diff < 7 && day_diff + " days ago" ||
-                day_diff < 31 && Math.ceil(day_diff / 7) + " weeks ago";
-    }
 
 
-
-    //start notification block
-    var socket;
-
-
-    try {
-        socket = new WebSocket(notification_server);
-
-        socket.onopen = function (msg) {
-            
-            socket.send(JSON.stringify({action: "getNotifications", auth_cookie: getCookie("auth")}));
-        };
-        socket.onmessage = function (msg) {
-            
-            data = JSON.parse(msg.data);
-            $("#notifications").html("");
-            $(data).each(function (key) {
-
-                if (typeof JSON.parse(data[key].settings).profile_picture !== "undefined")
-                    profile_pic = '<img  src=' + upload_address + JSON.parse(data[key].settings).profile_picture + '>';
-                else
-                    profile_pic = '<img  src=/public/img/no-profile.jpg>';
-
-                safe_username = data[key].name.replace(" ", ".")
-                user_link_pic = '<a href="/' + safe_username + '">' + profile_pic + '</a>';
-                user_link = '<a href="/' + safe_username + '">' + data[key].name + '</a>';
-
-                $("#notifications").append("\
-                    <li class=list-group-item>" + user_link_pic + " \n\
-                        " + user_link + " " + data[key].message + "<br/>\n\
-                        " + prettyDate(parseInt(data[key].date)) + "\
-                    </li>");
-            });
-        };
-        socket.onclose = function (msg) {
-            $("#notifications").html("Disconected from notification server");
-
-        };
-    }
-    catch (ex) {
-        $("#notifications").text(ex);
-        //console.log(ex); 
-    }
     $("#custom_css").html($("#custom_css_input").val());
     $("#custom_css_input").on("keyup", function () {
         $("#custom_css").html($(this).val());

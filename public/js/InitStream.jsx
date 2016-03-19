@@ -1,10 +1,4 @@
 
-    function Replacehashtags(string){
-        string=string.replace(/#(\S*)/g,'<a class="hash" href="/hash/$1">#$1</a>');
-        string=string.replace(/@(\S*)/g,'<a class="user" href="/$1">@$1</a>');
-
-        return string;
-    }
     
     var InitStream  = React.createClass({
         getInitialState: function () {
@@ -231,6 +225,10 @@
         ReactDOM.render(
                 <SearchBox data={data} /> ,
                 document.getElementById("SearchBox")
+        );
+        ReactDOM.render(
+                <NotificationBox data={data} /> ,
+                document.getElementById("NotificationBox")
         );
         ReactDOM.render(
                 <ChatBox data={data} /> ,

@@ -11,6 +11,10 @@ class DataController extends BaseController {
         $content= new Content();
         //get max id for rand min/max
         $res=$content->getNext(Content::maxid, 1, false, false, false, false, false);
+        
+        $hashtags= new Hashtags;
+      
+        $this->assign("popularhashtags",   $hashtags->getPopularHashtags());
         $this->assign("maxid", $res[0]->id);
     }
 

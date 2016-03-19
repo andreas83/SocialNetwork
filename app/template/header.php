@@ -19,14 +19,15 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-6 col-xs-6">
-                        <a class="navbar-brand " href="/public/stream/">
-                            Share some <span class="glyphicon glyphicon-heart red"></span>
+                        <a class="navbar-brand " href="/public/stream/" ><span class="fa fa-home"></span></a>
+                        <a class="navbar-brand hidden-xs" href="bitcoin:1GqMSGseij18JnAoB9f3LHJRozNr1QeHkh">
+                            Donate some <span class="fa-bitcoin fa"></span>
                         </a>
                     </div>
                     <div class="col-md-4 col-xs-6">
                         <div id="SearchBox"></div>
                         
-                        <ul class="nav navbar-nav navbar-right">
+                        <ul class="nav navbar-nav hidden-xs navbar-right">
                             <li><a href="#" class="navbar-default showChat"><span class="glyphicon glyphicon-envelope "></span></a></li>
                         </ul>
                         
@@ -34,7 +35,7 @@
                     </div>
                     <div class="col-md-2 hidden-xs hidden-sm">
                         <ul class="nav navbar-nav navbar-right">
-                            <li><a href="https://github.com/andreas83/SocialNetwork" class="navbar-default"><span class="glyphicon glyphicon-grain "></span> Fork me on Github</a></li>
+                            <li><a href="https://github.com/andreas83/SocialNetwork" class="navbar-default"><span class="fa fa-github "></span> Fork me on Github</a></li>
                         </ul>
                     </div>
                 </div>

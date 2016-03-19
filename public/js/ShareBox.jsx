@@ -9,7 +9,7 @@ var ShareBox = React.createClass({
             isMetaLoading:false,
         });
 
-        share_area= document.getElementById('share_area');
+        var share_area= this.refs.share_area;
         share_area.addEventListener('input', this.handleInput);
 
 
@@ -44,7 +44,8 @@ var ShareBox = React.createClass({
 
             var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
             if ($("#share_area").val().match(urlRegex)) {
-                url = $("#share_area").val().match(urlRegex);
+                
+                var url = this.refs.share_area.value.match(urlRegex);
 
                 if(this.state.isMetaLoading)
                     return false;
@@ -64,6 +65,7 @@ var ShareBox = React.createClass({
                   }.bind(this));
 
             }
+            
     },
     render: function(){
         
@@ -73,7 +75,7 @@ var ShareBox = React.createClass({
 
 
                     <div className="col-md-11">
-                        <textarea id="share_area" placeholder="" name="content" rows="3" className="form-control"></textarea>
+                        <textarea id="share_area" ref="share_area" placeholder="" name="content" rows="3" className="form-control"></textarea>
 
                         <div className="row preview www">
 

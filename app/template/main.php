@@ -34,7 +34,7 @@ include("header.php");
                     <?php endif; ?>
                     </div>
                     <div class="col-md-2 col-xs-1">
-                        <?php if (!Helper::isUser() && Config::get("google_auth") == true): ?>
+                    <?php if (!Helper::isUser() && Config::get("google_auth") == true): ?>
                         <a href='<?php echo UserController::getGLoginURL(); ?>' class="col-xs-12 col-sm-12 col-md-4 btn btn-lg btn-circle " id="glogin">G+</a>
                     <?php endif; ?>
                     </div>
@@ -52,7 +52,7 @@ include("header.php");
                 
             <?php
             $nick=(isset($_POST['nick']) ? $_POST['nick'] : "" );
-            $mail=(isset($_POST['mail']) ? $_POST['mail'] : "" );
+            $mail=(isset($_POST['mail']) && !isset($error['login']) ? $_POST['mail'] : "" );
             ?>
                 
             <form id="registerform" 
