@@ -298,7 +298,7 @@ class UserController extends BaseController
         $provider = new League\OAuth2\Client\Provider\Facebook([
             'clientId'          => Config::get("facebook_app_id"),
             'clientSecret'      => Config::get("facebook_app_secret"),
-            'redirectUri'       => Config::get("address")."/user/fblogin/",
+            'redirectUri'       => Config::get("address")."user/fblogin/",
             'graphApiVersion'   => 'v2.5',
         ]);
         
@@ -318,7 +318,7 @@ class UserController extends BaseController
         $provider = new League\OAuth2\Client\Provider\Facebook([
             'clientId'          => Config::get("facebook_app_id"),
             'clientSecret'      => Config::get("facebook_app_secret"),
-            'redirectUri'       => Config::get("address")."/user/fblogin/",
+            'redirectUri'       => Config::get("address")."user/fblogin/",
             'graphApiVersion'   => 'v2.5',
         ]);
         
