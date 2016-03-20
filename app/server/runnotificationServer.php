@@ -14,7 +14,10 @@ class notificationServer extends WebSocketServer {
       {
           $notifications = new Notification;
           $res=$notifications->getNotificationsByCookie($data->auth_cookie);
-          $user->uid=$res[0]->to_user_id;
+          
+          $userObj = new User;
+          $userObj->find(array("auth_cookie" => $data->auth_cookie));
+          $user->uid=$userObj[0]->to_user_id;
           
           $this->send($user, json_encode($res));
       }
