@@ -712,11 +712,7 @@ var ChatBox = React.createClass({
                     "div",
                     { id: "textframe" },
                     this.state.channel.map(function (chat, i) {
-                        return React.createElement(
-                            "p",
-                            null,
-                            chat
-                        );
+                        return React.createElement("p", { dangerouslySetInnerHTML: { __html: chat } });
                     })
                 ),
                 React.createElement(
@@ -735,7 +731,7 @@ var ChatBox = React.createClass({
                         return React.createElement(
                             "li",
                             null,
-                            user
+                            React.createElement("span", { dangerouslySetInnerHTML: { __html: user } })
                         );
                     })
                 )

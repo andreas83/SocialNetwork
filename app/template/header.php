@@ -16,7 +16,7 @@
     <body class="<?php echo (isset($scope) ? $scope : ""); ?>">
     <top-menu>
         <nav class="navbar navbar-default navbar-fixed-top">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-6 col-xs-6">
                         <a class="navbar-brand " href="/public/stream/" ><span class="fa fa-home"></span></a>
@@ -46,4 +46,3 @@
             </div>
         </nav>
     </top-menu>
-   

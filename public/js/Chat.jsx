@@ -54,7 +54,7 @@
                 <div id="chat" className="col-md-9 bounceIn">
                     <div id="textframe">
                         {this.state.channel.map(function(chat, i) {
-                        return (<p>{chat}</p>)
+                        return (<p dangerouslySetInnerHTML = {{__html: chat}}/>)
                         })}
                     </div>
                     <form className="chatForm" onSubmit={this.handleSubmit}>
@@ -64,7 +64,7 @@
                 <div id="ChatUsers" className="col-md-3">
                 <ul>
                 {this.state.activeUser.map(function(user, i) {
-                    return (<li>{user}</li>)
+                    return (<li><span dangerouslySetInnerHTML = {{__html: user}} /></li>)
                 })}
                 </ul>
                 </div>

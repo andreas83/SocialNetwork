@@ -39,6 +39,7 @@
         e.preventDefault();
         $("#ChatBox").toggleClass("hide");
         $("#textframe").scrollTop($("#textframe").height());
+        console.log(socket);
         
     });
 

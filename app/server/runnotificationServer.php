@@ -4,7 +4,7 @@ require_once 'app/lib/AutoLoader.php';
 
 
 class notificationServer extends WebSocketServer {
-  //protected $maxBufferSize = 1048576; //1MB... overkill for an echo server, but potentially plausible for other applications.
+  protected $maxBufferSize = 1048576; 
   
   protected function process ($user, $message) {
       
@@ -16,7 +16,7 @@ class notificationServer extends WebSocketServer {
           $res=$notifications->getNotificationsByCookie($data->auth_cookie);
           
           $userObj = new User;
-          $userObj->find(array("auth_cookie" => $data->auth_cookie));
+          $userObj=$userObj->find(array("auth_cookie" => $data->auth_cookie));
           $user->uid=$userObj[0]->to_user_id;
           
           $this->send($user, json_encode($res));
@@ -25,23 +25,31 @@ class notificationServer extends WebSocketServer {
       {
           $userObj = new User;
           $res = $userObj->find(array("auth_cookie" => $data->auth_cookie));
+          $username=str_replace(" ", ".", $res[0]->name);
+          $settings=  json_decode($res[0]->settings);
+          $profile_img="";
           
-          $this->activeUser[$user->id]=$res[0]->name;
-          $this->channel["default"][]="Welcome " . $this->activeUser[$user->id];
+          if ($settings->profile_picture != "") {
+             $img_url = Config::get("upload_address") . $settings->profile_picture;
+             $profile_img="<img src=\"$img_url\" />&nbsp;";
+          }
+          
+          $this->activeUser[$user->id]='<a href="/'.$username.'">'.$profile_img.$res[0]->name.'</a>';
+          
           $this->send($user, json_encode(array("activeUsers" => $this->activeUser ,"channel"=>$this->channel)));      
       }
       if($data->action == "openroom" && $data->auth_cookie=="")
       {
           
           $this->activeUser[$user->id]="Anonymous - ".  uniqid();
-          $this->channel["default"][]="Welcome " . $this->activeUser[$user->id];
+          
           $this->send($user, json_encode(array("activeUsers" => $this->activeUser ,"channel"=>$this->channel)));      
           $this->updateUsers();
       }  
       if($data->action=="chat")
       {
           
-          $this->channel["default"][]=  html_entity_decode($this->activeUser[$user->id]. ": ".$data->text);
+          $this->channel["default"][]=  html_entity_decode($this->activeUser[$user->id]. ": ".strip_tags($data->text, "<b><a>"));
           
           $this->send($user, json_encode(array("activeUsers" => $this->activeUser, "channel"=>$this->channel)));        
           $this->updateUsers();
