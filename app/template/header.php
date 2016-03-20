@@ -14,15 +14,13 @@
         ?>
     </head>
     <body class="<?php echo (isset($scope) ? $scope : ""); ?>">
-    <top-menu>
+     <top-menu>
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-6 col-xs-6">
-                        <a class="navbar-brand " href="/public/stream/" ><span class="fa fa-home"></span></a>
-                        <a class="navbar-brand hidden-xs" href="bitcoin:1GqMSGseij18JnAoB9f3LHJRozNr1QeHkh">
-                            Donate some <span class="fa-bitcoin fa"></span>
-                        </a>
+                        <a class="navbar-brand " href="/public/stream/" ><span class="fa fa-home"></span> Home</a>
+                        
                     </div>
                     <div class="col-md-4 col-xs-6">
                         <div id="SearchBox"></div>
@@ -37,6 +35,7 @@
                         <ul class="nav navbar-nav navbar-right">
                             <li><a href="https://github.com/andreas83/SocialNetwork" class="navbar-default"><span class="fa fa-github "></span> Fork me on Github</a></li>
                         </ul>
+                        
                     </div>
                 </div>
                 <div class="row">

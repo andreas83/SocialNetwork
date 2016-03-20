@@ -712,6 +712,7 @@ var ChatBox = React.createClass({
                     "div",
                     { id: "textframe" },
                     this.state.channel.map(function (chat, i) {
+                        chat = Replacehashtags(chat);
                         return React.createElement("p", { dangerouslySetInnerHTML: { __html: chat } });
                     })
                 ),
@@ -938,7 +939,7 @@ var NotificationBox = React.createClass({
     displayName: "NotificationBox",
 
     getInitialState: function () {
-        return { data: [] };
+        return { data: [], init: true };
     },
 
     componentDidMount: function () {
@@ -954,14 +955,15 @@ var NotificationBox = React.createClass({
             socket.onmessage = function (msg) {
 
                 data = JSON.parse(msg.data);
-                if (data.length > 0) {
-                    document.getElementById("NotificationBox").style.visibility = "visible";
-                } else {
-                    document.getElementById("NotificationBox").style.visibility = "hidden";
+                if (typeof data.notificaton != "undefined") {
+                    //play only sound on new notifications
+                    if (this.state.init === false) new Audio('/public/notification.mp3').play();
+
+                    this.setState({
+                        data: data.notificaton,
+                        init: false
+                    });
                 }
-                this.setState({
-                    data: data
-                });
             }.bind(this);
             socket.onclose = function (msg) {};
         } catch (ex) {
@@ -971,11 +973,12 @@ var NotificationBox = React.createClass({
     },
 
     render: function () {
+
         var li = [];
         for (notification in this.state.data) {
 
             notification = this.state.data[notification];
-            console.log(notification);
+
             if (typeof JSON.parse(notification.settings).profile_picture !== "undefined") {
                 var img_src = upload_address + JSON.parse(notification.settings).profile_picture;
                 profile_pic = React.createElement("img", { src: img_src });

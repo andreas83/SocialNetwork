@@ -70,6 +70,7 @@ var ShareBox = React.createClass({
     render: function(){
         
         return(<div>
+            
             <form method="post" action="/api/content/" encType="multipart/form-data">
                     <div className="row">
 
@@ -143,6 +144,7 @@ var ShareBox = React.createClass({
                             <input type="file" id="img" multiple name="img[]" className="form-control" />
                             </span>
                         <button className="btn btn-lg btn-info "><i className="glyphicon glyphicon-heart"></i> Share!</button>
+                        
                         <p className="fileinfo"></p>
                         </div>
                     </div>

@@ -3,7 +3,7 @@
     
     var NotificationBox = React.createClass({
             getInitialState: function () {
-            return {data:[]};
+            return {data:[], init:true};
         },
         
     
@@ -21,20 +21,17 @@
                 socket.onmessage = function (msg) {
                     
                     data = JSON.parse(msg.data);
-                    if(data.length>0)
+                    if(typeof data.notificaton!="undefined")
                     {
-                        document.getElementById("NotificationBox").style.visibility ="visible";
+                        //play only sound on new notifications
+                        if(this.state.init===false)
+                            new Audio('/public/notification.mp3').play();
                         
+                        this.setState({
+                            data:data.notificaton,
+                            init:false
+                        });
                     }
-                    else
-                    {
-                        document.getElementById("NotificationBox").style.visibility ="hidden";
-                        
-                        
-                    }
-                    this.setState({
-                        data:data
-                    });
                     
                 
                 }.bind(this);
@@ -53,11 +50,12 @@
        
        
         render: function(){
+            
             var li=[];
             for(notification in this.state.data){
 
                 notification=this.state.data[notification];
-                console.log(notification);
+               
                 if (typeof JSON.parse(notification.settings).profile_picture !== "undefined")
                 {
                     var img_src=upload_address+JSON.parse(notification.settings).profile_picture;

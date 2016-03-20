@@ -54,6 +54,7 @@
                 <div id="chat" className="col-md-9 bounceIn">
                     <div id="textframe">
                         {this.state.channel.map(function(chat, i) {
+                        chat=Replacehashtags(chat);
                         return (<p dangerouslySetInnerHTML = {{__html: chat}}/>)
                         })}
                     </div>

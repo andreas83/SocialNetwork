@@ -38,8 +38,7 @@
     $(".showChat").on("click", function (e) {
         e.preventDefault();
         $("#ChatBox").toggleClass("hide");
-        $("#textframe").scrollTop($("#textframe").height());
-        console.log(socket);
+        $("#textframe").scrollTop($("#textframe").height());        
         
     });
 
@@ -120,9 +119,9 @@ function swap(json) {
 }
 
 function bindMention(){
-        $('textarea').textcomplete('destroy');
+        $('textarea, #chatinput').textcomplete('destroy');
 
-        $('textarea').textcomplete([
+        $('textarea, #chatinput').textcomplete([
         { // mention strategy
           match: /(^|\s)#(\w*)$/,
           search: function (term, callback) {

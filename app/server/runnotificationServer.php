@@ -17,9 +17,10 @@ class notificationServer extends WebSocketServer {
           
           $userObj = new User;
           $userObj=$userObj->find(array("auth_cookie" => $data->auth_cookie));
-          $user->uid=$userObj[0]->to_user_id;
           
-          $this->send($user, json_encode($res));
+          $user->uid=$userObj[0]->id;
+          
+          $this->send($user, json_encode(array("notificaton"=>$res)));
       }
       if($data->action == "openroom" && $data->auth_cookie!="")
       {
@@ -48,7 +49,46 @@ class notificationServer extends WebSocketServer {
       }  
       if($data->action=="chat")
       {
+          $userObj = new User;
           
+          if($data->auth_cookie=="")
+            $res = $userObj->find(array("id" => 1));
+          else
+            $res = $userObj->find(array("auth_cookie" => $data->auth_cookie));
+          
+          //save notification for mentions @username
+            $pattern="/(^|\s)@(\w*[a-zA-Z0-9öäü._-]+\w*)/";
+            preg_match_all($pattern, $data->text, $users);
+            if(count($users[0])>0)
+            {
+                
+                $notification = new Notification;
+                $notification->from_user_id=$res[0]->id;
+                $notification->date=date("U");
+                $notification->message='mention you in chat';
+                $user_ids=array();
+                foreach($users[0] as $username)
+                {
+                    $username = trim(str_replace(array("@", "."), " ", $username));
+                    $res = $userObj->find(array("name" => $username));
+                    if(count($res)>0)
+                    {
+                        $notification->to_user_id=$res[0]->id;
+                        $notification->save();
+                        $user_ids[]=$notification->to_user_id;
+                    }
+                }
+                foreach($this->users as $activeuser){
+                    if(in_array($activeuser->uid, $user_ids))
+                    {
+                        
+                        $notifications = new Notification;
+                        $res=$notifications->getNotificationsByID($activeuser->uid);
+                        $this->send($activeuser, json_encode(array("notificaton"=>$res)));
+                    }
+                }
+            }
+            
           $this->channel["default"][]=  html_entity_decode($this->activeUser[$user->id]. ": ".strip_tags($data->text, "<b><a>"));
           
           $this->send($user, json_encode(array("activeUsers" => $this->activeUser, "channel"=>$this->channel)));        
@@ -66,7 +106,7 @@ class notificationServer extends WebSocketServer {
               {
                   $notifications = new Notification;
                   $res=$notifications->getNotificationsByID($data->uid);
-                  $this->send($user, json_encode($res));
+                  $this->send($user, json_encode(array("notificaton"=>$res)));
               }
           }
           
