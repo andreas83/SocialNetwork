@@ -31,7 +31,7 @@ include("menu.php");
     </div>
 
 <div class="col-md-3 hidden-sm hidden-xs animated bounceInRight">
-    <?php if (!Helper::isUser() || (Config::get("facebook_auth")  && Config::get("google_auth"))): ?>
+    <?php if (!Helper::isUser() && (Config::get("facebook_auth")  && Config::get("google_auth"))): ?>
     <div class="signinBox">
         
         <?php if (!Helper::isUser() && Config::get("facebook_auth")): ?>
