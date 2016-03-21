@@ -42,7 +42,11 @@
         
     });
 
-
+    $("#MobileMenu").on("click", function (e) {
+        e.preventDefault();
+        $(".menuLeft").toggleClass("hidden-xs");
+        $(".menuLeft").toggleClass("mobile");
+    });
     $(".toggleform").on("click", function (e) {
         e.preventDefault();
         $("#registerform").toggleClass("hide");

@@ -21,20 +21,28 @@
             <?php endif; ?>
         </div>
         
-    
+        <?php if (!Helper::isUser()): ?>
         <div class="left-nav ">
-            <?php if (!Helper::isUser()): ?>
                 <a class="btn btn-success col-xs-12 col-sm-12 col-md-12" href="/user/register/  "><?php echo _('Join us'); ?></a>
-            <?php endif; ?>
         </div>
-        <div class="left-nav ">
-            <button class="col-xs-12 col-sm-12 col-md-12 btn btn-info" id="next">(R)andom Post</button>
+        <?php endif; ?>
+        <?php if (!Helper::isUser() && Config::get("facebook_auth")): ?>
+        
+        <a href='<?php echo UserController::getFBLoginURL(); ?>' class="col-xs-12 visible-xs btn" id="fblogin"><i class="fa fa-facebook"></i> Facebook</a>
+        
+        <?php endif; ?>
+    
+        <?php if (!Helper::isUser() && Config::get("google_auth") ): ?>
+            <a href='<?php echo UserController::getGLoginURL(); ?>' class="col-xs-12 visible-xs btn" id="glogin"><i class="fa fa-google-plus"></i> Google</a>
+        <?php endif; ?>
+        <div class="left-nav hidden-xs">
+            <button class=" col-sm-12 col-md-12 btn btn-info" id="next">(R)andom Post</button>
         </div>
         <div class="left-nav ">
             <a href="/help/" class="col-xs-12 col-sm-12 col-md-12 btn btn-warning" >API Documentation</a>
         </div>
         <?php if (Helper::isUser() ): ?>
-        <div class="left-nav hidden-xs">
+        <div class="left-nav">
             
             <a href='/user/logout/' class="col-xs-12 col-sm-12 col-md-12 btn btn-danger"><?php echo _("Logout"); ?></a>
             

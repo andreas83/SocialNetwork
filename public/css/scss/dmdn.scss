@@ -34,6 +34,15 @@ body {
     border-color: #000;
     color: #fff!important;
 }
+.menuLeft.mobile{
+    position:absolute;
+    z-index:1000;
+    background-color: 010;
+    top:40;
+    height: 100%;
+    padding-top:20px;
+    
+}
 .searchresult{
     position:absolute;
     padding:0px;
