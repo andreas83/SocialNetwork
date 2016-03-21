@@ -46,7 +46,19 @@
         e.preventDefault();
         $(".menuLeft").toggleClass("hidden-xs");
         $(".menuLeft").toggleClass("mobile");
+        
+        $(".menuLeft").css("top", $(document).scrollTop()+40);
+        if($(".menuLeft").hasClass("mobile"))
+        {
+            $( document ).scroll(function() {
+                $(".menuLeft").css("top", $(document).scrollTop()+40);
+            });
+        }else
+        {
+            $( document ).unbind("scroll");
+        }
     });
+    
     $(".toggleform").on("click", function (e) {
         e.preventDefault();
         $("#registerform").toggleClass("hide");

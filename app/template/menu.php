@@ -13,11 +13,11 @@
                 if(isset($user_settings->profile_picture)){
                 ?>
                 
-                <a class="" href="/">
+                <a class="hidden-xs" href="/">
                     <img class=" img-responsive" src="<?php echo  (isset($user_settings->profile_picture) ? Config::get('upload_address') .$user_settings->profile_picture : ""); ?>">
                 </a>
                 <?php } ?>
-                <a class="btn btn-success  col-sm-12 col-md-12" href="/my/settings/"><?php echo _('Settings') ?></a>
+                <a class="btn btn-success col-xs-12 col-sm-12 col-md-12" href="/my/settings/"><?php echo _('Settings') ?></a>
             <?php endif; ?>
         </div>
         
