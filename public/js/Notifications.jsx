@@ -64,7 +64,7 @@
                 else
                     profile_pic = <img src="/public/img/no-profile.jpg"/>;
 
-                safe_username = notification.name.replace(" ", ".")
+                safe_username = "/"+notification.name.replace(" ", ".")
                 user_link_pic = <a href={safe_username}>{profile_pic}</a>;
                 user_link = <a href={safe_username}>{notification.name}</a>;
 

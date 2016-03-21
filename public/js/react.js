@@ -984,7 +984,7 @@ var NotificationBox = React.createClass({
                 profile_pic = React.createElement("img", { src: img_src });
             } else profile_pic = React.createElement("img", { src: "/public/img/no-profile.jpg" });
 
-            safe_username = notification.name.replace(" ", ".");
+            safe_username = "/" + notification.name.replace(" ", ".");
             user_link_pic = React.createElement(
                 "a",
                 { href: safe_username },
