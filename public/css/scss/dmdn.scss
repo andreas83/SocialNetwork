@@ -35,7 +35,7 @@ body {
     color: #fff!important;
 }
 .menuLeft.mobile{
-    position:absolute;
+    position:fixed;
     z-index:1000;
     background-color: 010;
     top:40;
@@ -260,9 +260,12 @@ a:hover{
 .left-nav{
     height:33px;
 }
+.hashtag:first-child{
+    padding-top: 200px;
+}
 
 .hashtag{
-   
+    
     a{
         height:20px;
         
