@@ -14,9 +14,8 @@
             $("#next").on("click", this.randomPost);
 
 
-            
             //@todo better soloution would be to save the complete data as state
-            window.onpopstate = (event) => {
+            window.onpopstate = function(event) {
                 window.location.href=event.state.url;
             };
                     
