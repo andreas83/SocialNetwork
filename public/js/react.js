@@ -448,6 +448,13 @@ var Upload = React.createClass({
                 if (data.type != false && data.type.match("image")) {
                     return React.createElement("img", { className: "img-responsive", src: FilePath });
                 }
+                if (data.type != false && data.type.match("video")) {
+                    return React.createElement(
+                        "video",
+                        null,
+                        React.createElement("source", { src: FilePath, type: data.type })
+                    );
+                }
                 return React.createElement(
                     "p",
                     null,
