@@ -100,5 +100,16 @@ class Content extends BaseModel
 
         return $obj;
     }
+    
+    function getStats(){
+        
+        $sql="select Month(FROM_UNIXTIME(date)) as Month, YEAR(FROM_UNIXTIME(date)) as Year, count(*) as cnt from Content GROUP BY Month(FROM_UNIXTIME(date)), YEAR(FROM_UNIXTIME(date)) order by date";
+        $stmt = $this->dbh->prepare($sql);
+        $stmt->execute();
+
+        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, 'StdClass');
+
+        return $obj;
+    }
 
 }

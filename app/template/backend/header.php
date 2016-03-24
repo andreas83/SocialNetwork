@@ -9,7 +9,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-    
+    <script src="http://d3js.org/d3.v3.min.js"></script>
 
     <?php
     foreach($header as $script)
@@ -32,30 +32,27 @@
 </head>
 <body >
 
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
+<nav class="navbar navbar-inverse">
+<div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" href="#">
-        
+
         
       </a>
         <ul class="nav navbar-nav">
+            <li><a href="/backend/dashboard/" class="">Dashboard</a></li>
             <?php
                 foreach ($BackendModels as $BackendModel){
             ?>
+            
             <li><a href="/backend/<?php echo $BackendModel; ?>/list/" class=""><?php echo $BackendModel; ?></a></li>
             <?php } ?>
-        </ul>
-    </div>
+            </ul>
+        </div>
   </div>
 </nav>
 <div class="container-fluid">
 
     <div class="row">
-        <div class="col-md-1">
-        <?php 
-        #include("menu.php"); 
-        ?>
-
-        </div>
-        <div class="col-md-10">
+       
+        <div class="col-md-12">

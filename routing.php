@@ -64,7 +64,9 @@ $router->map("POST|GET", "/backend/[a:model]/edit/[i:id]/", "BackendController#e
 $router->map("POST|GET", "/backend/[a:model]/list/", "BackendController#table");
 $router->map("POST|GET", "/backend/[a:model]/list/page/[i:page]/", "BackendController#table");
 $router->map("POST|GET", "/backend/login/", "BackendController#login");
-
+$router->map("POST|GET", "/backend/dashboard/", "BackendController#dashboard");
+$router->map("POST|GET", "/backend/dashboard/hashtags/", "BackendController#dashboard_hashtags");
+$router->map("POST|GET", "/backend/dashboard/content/", "BackendController#dashboard_content");
 
 $router->map("GET", "/sitemap.xml", "WebController#sitemap");
 
