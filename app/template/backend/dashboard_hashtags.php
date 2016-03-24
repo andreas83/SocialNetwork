@@ -21,7 +21,7 @@ text{
 </style>
 <script>
 
-var width = $("h1").width();
+var width = $("h1").width()/1.3;
     height = $(window).height();
 
 var color = d3.scale.category20();

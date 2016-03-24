@@ -68,14 +68,27 @@
             pointHighlightFill: "#fff",
             pointHighlightStroke: "rgba(220,220,220,1)",
             data: []
+        },
+        {
+            label: "Overall",
+            fillColor: "rgba(220,220,220,0.2)",
+            strokeColor: "rgba(220,220,220,1)",
+            pointColor: "rgba(220,220,220,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: []
         }
     ]
 };
 
     $.get("/backend/dashboard/content/", function(res){
         res=JSON.parse(res);
+        var all=0;
         $(res).each(function(key, val){
+            all=all+parseInt(val.cnt)
             data.datasets[0].data.push(parseInt(val.cnt));
+            data.datasets[1].data.push(all);
             
             data.labels.push(val.Month +"."+val.Year);
             
