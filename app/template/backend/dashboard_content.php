@@ -3,8 +3,8 @@
     
     <canvas id="myChart" width="" height="400"></canvas>
     <script>        
-        $("#myChart").width($("h1").width()/2).height(200);
-        $("#myChart").width($("h1").width()/2);
+        $("#myChart").width($("h1").width()/1.3).height(400);
+        
     var ctx = $("#myChart").get(0).getContext("2d");
     var opt={
 
