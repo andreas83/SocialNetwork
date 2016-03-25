@@ -26,6 +26,8 @@
                         //play only sound on new notifications
                         if(this.state.init===false)
                             new Audio('/public/notification.mp3').play();
+                        if(data.notificaton.length>0)
+                            document.getElementById("NotificationBox").className = "";
                         
                         this.setState({
                             data:data.notificaton,
@@ -36,7 +38,7 @@
                 
                 }.bind(this);
                 socket.onclose = function (msg) {
-
+                    document.getElementById("NotificationBox").style.display = "none";
                 };
             }
             catch (ex) {
@@ -73,11 +75,7 @@
                 
             }
             return(
-                <div ref="notification">
-                    
-                    {li}
-                    
-                </div>
+                <div ref="notification">{li}</div>
             )
         }
     });

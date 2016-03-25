@@ -45,7 +45,7 @@ include("menu.php");
     </div>
     <?php endif; ?>
     
-    <div id="NotificationBox"></div>
+    <div id="NotificationBox" class="hide"></div>
     
 </div>
 <?php

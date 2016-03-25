@@ -965,6 +965,7 @@ var NotificationBox = React.createClass({
                 if (typeof data.notificaton != "undefined") {
                     //play only sound on new notifications
                     if (this.state.init === false) new Audio('/public/notification.mp3').play();
+                    if (data.notificaton.length > 0) document.getElementById("NotificationBox").className = "";
 
                     this.setState({
                         data: data.notificaton,
@@ -972,7 +973,9 @@ var NotificationBox = React.createClass({
                     });
                 }
             }.bind(this);
-            socket.onclose = function (msg) {};
+            socket.onclose = function (msg) {
+                document.getElementById("NotificationBox").style.display = "none";
+            };
         } catch (ex) {
 
             console.log(ex);
