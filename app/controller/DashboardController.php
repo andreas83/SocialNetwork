@@ -23,11 +23,27 @@ class DashboardController extends BaseController  {
         
          $this->render("backend/dashboard_".$request['target'].".php");
     }
+ 
+    
+    function dashboard_user(){
+        $user = new User();
+        
+        $res=$user->getActiveUsers(date("n"), date("Y"));
+        $this->assign("thismonth", $res);
+        
+        $month=date("n", strtotime("-1 month"));
+        $year =date("Y", strtotime("-1 month"));
+        
+        $res=$user->getActiveUsers($month, $year);
+        $this->assign("lastmonth", $res);
+        $this->render("backend/dashboard_user.php");
+    }
+    
     
     /*
      * @todo refactoring
      */
-    function dashboard_hashtags(){
+    function dashboard_json_hashtags(){
         $sql = 'SELECT data FROM Content WHERE data like "%#%" ';
         //we create a array with unique hashes and a count/weight 
         foreach( $this->dbh->query( $sql ) as $row )
@@ -92,12 +108,12 @@ class DashboardController extends BaseController  {
         echo $output;
     }
     
-    function dashboard_content(){
+    function dashboard_json_content(){
         $content = new Content();
         $res=$content->getStats();
         echo json_encode($res);
     }
-    function dashboard_user(){
+    function dashboard_json_user(){
         $user = new User();
         $res=$user->getStats();
         echo json_encode($res);

@@ -110,6 +110,22 @@ include("header.php");
     <p>Overall: <span id="overall"></span></p> 
     <p>Last month: <span id="lastmonth"></span></p> 
 
+    <h3>Active Users (this month)
+    <?php
+    foreach($thismonth as $user)
+    {
+        echo '<p><a href="/'.str_replace(" ",".", $user->name).'">'.$user->name.'</a></p>';
+    }
+    ?>    
+    
+    <h3>Active Users (last month)
+    <?php
+    foreach($lastmonth as $user)
+    {
+        echo '<p><a href="/'.str_replace(" ",".", $user->name).'">'.$user->name.'</a></p>';
+    }
+    ?>
+
 
 <?php
 include("footer.php");

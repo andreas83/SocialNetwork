@@ -89,4 +89,21 @@ class User extends BaseModel
         return $obj;
     }
     
+    function getActiveUsers($month, $year)
+    {
+        $sql = "select name from User where year(modified)=:year and month(modified)=:month";
+        
+        $stmt = $this->dbh->prepare($sql);
+
+        $stmt->bindValue(':year', $year, PDO::PARAM_STR);
+        $stmt->bindValue(':month', $month, PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, 'User');
+
+        return $obj;
+                
+    }
+    
 }
