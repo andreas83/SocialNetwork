@@ -17,10 +17,10 @@ http://www.dasmerkendienie.com/help/
 * Share (Websites, Images, Videos, SourceCode)
 * Like / Dislike / Comments
 * #hash tag search (orderd by popularity)
-* @user mentions and notifications
+* @user mentions and notifications via websockets
 * REST API
 * Oauth2 (Facebook, Google+)
-* Backend 
+* Backend with Dashboard 
 
 ##Requirement
 
@@ -51,15 +51,15 @@ composer install
 you can adjust the db credentials in app/config/main.cfg 
 ```
 db_name="dmdn"
-db_user="root"
-db_pass="nv8xy0815d"
+db_user="user"
+db_pass="pass"
 ```
 You will find the [database.sql](https://raw.githubusercontent.com/andreas83/SocialNetwork/andrea/database.sql) file in repro
 
 Also you should adopt following configuration parameter
 ```
 address="http://www.yourdomain.com"
-dir="/home/lissi/tmp/dmdn/trunk";
+dir="/var/www/vhost";
 ```
 
 the upload_address is useful for large installation, if you plan to host your images on
