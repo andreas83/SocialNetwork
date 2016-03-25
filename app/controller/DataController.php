@@ -281,8 +281,22 @@ class DataController extends BaseController {
                 $hashdb= new Hashtags;
                 foreach($hashtags[0] as $hashtag)
                 {
-                    $hashdb->hashtag=trim(str_replace("#", "", $hashtag));
-                    $hashdb->save();
+                    $res=$hashdb->find(array("hashtag"=> trim(str_replace("#", "", $hashtag))));
+                    
+                    if(count($res)==0)
+                    {
+                        $hashdb->hashtag=trim(str_replace("#", "", $hashtag));
+                        $hashdb->save();
+                    }
+                    else
+                    {
+                      
+                    
+                        $res[0]->pop++;
+                        $res[0]->save();
+                         
+                    }
+                    
                 }
             }
           

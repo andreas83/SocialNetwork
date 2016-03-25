@@ -1,14 +1,14 @@
 <?php
 include("header.php");
 ?>
-<h2>Content per Month </h2>
+<h2>Users per Month</h2>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js" ></script>
     
-    <canvas id="myChart" width="" height="400"></canvas>
+    <canvas id="userChart" width="" height="400"></canvas>
     <script>        
-        $("#myChart").width($("h2").width()/1.3).height(400);
+        $("#userChart").width($("h2").width()/1.3).height(400);
         
-    var ctx = $("#myChart").get(0).getContext("2d");
+    var ctx = $("#userChart").get(0).getContext("2d");
     var opt={
 
     ///Boolean - Whether grid lines are shown across the chart
@@ -63,7 +63,7 @@ include("header.php");
     labels: [],
     datasets: [
         {
-            label: "Post per Month",
+            label: "User per Month",
             fillColor: "rgba(220,220,220,0.2)",
             strokeColor: "rgba(220,220,220,1)",
             pointColor: "rgba(220,220,220,1)",
@@ -85,7 +85,7 @@ include("header.php");
     ]
 };
 
-    $.get("/backend/dashboard/json/content/", function(res){
+    $.get("/backend/dashboard/json/user/", function(res){
         res=JSON.parse(res);
         var all=0;
         $(res).each(function(key, val){
@@ -105,10 +105,12 @@ include("header.php");
     
     
 </script>
+
     <h3>Stats</h3>
     <p>Overall: <span id="overall"></span></p> 
     <p>Last month: <span id="lastmonth"></span></p> 
-    
+
+
 <?php
 include("footer.php");
 ?>

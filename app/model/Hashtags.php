@@ -6,12 +6,18 @@ class Hashtags extends BaseModel
     public $id = "";
     public $hashtag = "";
     public $pop = "";
+    public $modified = "";
     
     
 
     public function getPrimary()
     {
         return "id";
+    }
+    
+    function save(){
+        $this->modified=date("Y-m-d H:i:s");
+        parent::save();
     }
     
     public function getBackendConfiguration(){

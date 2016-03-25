@@ -1,5 +1,7 @@
+        </div>
     </div>
 </div>
+
 
     <?php
     foreach($footer as $script)

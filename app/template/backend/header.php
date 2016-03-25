@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
@@ -40,7 +40,7 @@
         
       </a>
         <ul class="nav navbar-nav">
-            <li><a href="/backend/dashboard/" class="">Dashboard</a></li>
+            
             <?php
                 foreach ($BackendModels as $BackendModel){
             ?>
@@ -55,4 +55,12 @@
 
     <div class="row">
        
-        <div class="col-md-12">
+        <div class="col-md-2">
+            <ul class="nav nav-sidebar">
+                <li><h3>Dashboard</h3></li>
+            <li><a href="/backend/dashboard/content/">Content</a></li>
+            <li><a href="/backend/dashboard/user/">Users</a></li>
+            <li><a href="/backend/dashboard/hashtag/">Hashtags</a></li>
+          </ul>
+        </div>
+        <div class="col-md-9">

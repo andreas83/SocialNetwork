@@ -19,6 +19,7 @@ class User extends BaseModel
     public $auth_cookie = "";
     public $isAdmin = "0";
     public $created = "";
+    public $modified= "";
 
     public function getPrimary()
     {
@@ -69,6 +70,23 @@ class User extends BaseModel
 
         return $obj;
         
+    }
+    
+    function save(){
+        $this->modified=date("Y-m-d H:i:s");
+        parent::save();
+    }
+    
+    function getStats(){
+        
+        $sql="select Month(created) as Month, YEAR(created) as Year, count(*) as cnt from User GROUP BY Month(created), YEAR(created) order by created";
+        
+        $stmt = $this->dbh->prepare($sql);
+        $stmt->execute();
+
+        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, 'StdClass');
+
+        return $obj;
     }
     
 }

@@ -64,10 +64,12 @@ $router->map("POST|GET", "/backend/[a:model]/edit/[i:id]/", "BackendController#e
 $router->map("POST|GET", "/backend/[a:model]/list/", "BackendController#table");
 $router->map("POST|GET", "/backend/[a:model]/list/page/[i:page]/", "BackendController#table");
 $router->map("POST|GET", "/backend/login/", "BackendController#login");
-$router->map("POST|GET", "/backend/dashboard/", "BackendController#dashboard");
-$router->map("POST|GET", "/backend/dashboard/hashtags/", "BackendController#dashboard_hashtags");
-$router->map("POST|GET", "/backend/dashboard/content/", "BackendController#dashboard_content");
+$router->map("POST|GET", "/backend/dashboard/", "DashboardController#dashboard");
 
+$router->map("POST|GET", "/backend/dashboard/json/hashtags/", "DashboardController#dashboard_hashtags");
+$router->map("POST|GET", "/backend/dashboard/json/content/", "DashboardController#dashboard_content");
+$router->map("POST|GET", "/backend/dashboard/json/user/", "DashboardController#dashboard_user");
+$router->map("POST|GET", "/backend/dashboard/[a:target]/", "DashboardController#dashboard");
 $router->map("GET", "/sitemap.xml", "WebController#sitemap");
 
 $router->map('GET', '/[*:user]', 'DataController#get_user');
