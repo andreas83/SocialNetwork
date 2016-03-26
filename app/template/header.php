@@ -21,7 +21,7 @@
                     <div class="col-md-6 col-xs-6">
                         <a class="navbar-brand visible-xs " id="MobileMenu" href="" ><span class="fa fa-bars"></span> </a>
                         
-                        <a class="navbar-brand " href="/public/stream/" ><span class="fa fa-home"></span> Home</a>
+                        <a class="navbar-brand hidden-xs" href="/public/stream/" ><span class="fa fa-home"></span> Home</a>
                         
                         
                     </div>
