@@ -12,6 +12,23 @@
         },
         
         handleChange: function(event) {
+            if(event.which==13)
+            {
+                
+                if(this.state.user.length ==1 && this.state.hashtag.length==0)
+                {
+                    
+                    username= this.state.user[0].name.replace(" ", ".");
+                    window.location="/"+username;
+                }
+                if(this.state.user.length ==0 && this.state.hashtag.length==1)
+                {
+                    
+                    window.location="/hash/"+this.state.hashtag[0].hashtag;
+                }
+
+                
+            }
             if(event.target.value=="")
             {
                 this.setState({hashtag: []});
@@ -35,7 +52,7 @@
             return(
             
             <div className="form-group navbar-form navbar-left ">
-                <input onChange={this.handleChange} type="text" className="form-control" placeholder="#hash or @user" />
+                <input  onKeyUp={this.handleChange} type="text" className="form-control" placeholder="#hash or @user" />
                 <ul className="searchresult"> 
 
                     {this.state.user.map(function(user, i) {

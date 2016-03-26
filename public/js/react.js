@@ -587,7 +587,7 @@ var Likebox = React.createClass({
 });
 
 var SearchBox = React.createClass({
-    displayName: 'SearchBox',
+    displayName: "SearchBox",
 
     getInitialState: function () {
         return { data: [], hashtag: [], user: [] };
@@ -601,6 +601,18 @@ var SearchBox = React.createClass({
     },
 
     handleChange: function (event) {
+        if (event.which == 13) {
+
+            if (this.state.user.length == 1 && this.state.hashtag.length == 0) {
+
+                username = this.state.user[0].name.replace(" ", ".");
+                window.location = "/" + username;
+            }
+            if (this.state.user.length == 0 && this.state.hashtag.length == 1) {
+
+                window.location = "/hash/" + this.state.hashtag[0].hashtag;
+            }
+        }
         if (event.target.value == "") {
             this.setState({ hashtag: [] });
             this.setState({ user: [] });
@@ -620,12 +632,12 @@ var SearchBox = React.createClass({
     render: function () {
 
         return React.createElement(
-            'div',
-            { className: 'form-group navbar-form navbar-left ' },
-            React.createElement('input', { onChange: this.handleChange, type: 'text', className: 'form-control', placeholder: '#hash or @user' }),
+            "div",
+            { className: "form-group navbar-form navbar-left " },
+            React.createElement("input", { onKeyUp: this.handleChange, type: "text", className: "form-control", placeholder: "#hash or @user" }),
             React.createElement(
-                'ul',
-                { className: 'searchresult' },
+                "ul",
+                { className: "searchresult" },
                 this.state.user.map(function (user, i) {
                     if (i > 4) return true;
                     setting = JSON.parse(user.settings);
@@ -636,14 +648,14 @@ var SearchBox = React.createClass({
                     }
                     user_href = "/" + user.name.replace(" ", ".");
                     return React.createElement(
-                        'li',
+                        "li",
                         null,
                         React.createElement(
-                            'a',
+                            "a",
                             { href: user_href },
                             user.name,
-                            ' ',
-                            React.createElement('img', { width: '20', className: 'pull-right', src: img_src })
+                            " ",
+                            React.createElement("img", { width: "20", className: "pull-right", src: img_src })
                         )
                     );
                 }),
@@ -651,12 +663,12 @@ var SearchBox = React.createClass({
                     if (i > 4) return true;
                     hashtag_href = "/hash/" + item.hashtag;
                     return React.createElement(
-                        'li',
+                        "li",
                         null,
                         React.createElement(
-                            'a',
+                            "a",
                             { href: hashtag_href },
-                            '#',
+                            "#",
                             item.hashtag
                         )
                     );
