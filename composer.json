@@ -3,14 +3,18 @@
     "description": "works pretty similar to a well known social network, but you can host it on your very own infrastructure or intranet.",
     "type": "project",
     "require": {
-        "altorouter/altorouter": "^1.1",
-	"leafo/scssphp": "^0.6.3",
-        "facebook/php-sdk-v4" : "~5.0",
-        "components/jquery" : "^2.2.0",
-        "components/highlightjs": "^9.1",
-        "components/bootstrap": "^3.3",
-        "phpmailer/phpmailer": "^5.2"
-        
+        "php"                       : ">=5.4",
+        "altorouter/altorouter"     : "^1.1",
+        "leafo/scssphp"             : "^0.6.3",
+        "facebook/php-sdk-v4"       : "~5.0",
+        "components/jquery"         : "^2.2.0",
+        "components/highlightjs"    : "^9.1",
+        "components/bootstrap"      : "^3.3",
+        "phpmailer/phpmailer"       : "^5.2",
+        "phpunit"                   : "4.*"
+    },
+    "config": {
+        "bin-dir": "bin/"
     },
     "license": "MIT",
     "authors": [
