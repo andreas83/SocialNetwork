@@ -37,8 +37,6 @@ class UserController extends BaseController
             }
         }
 
-        $data= new Content;
-        $this->assign("stream", $data->getNext(false, 5 , "cat", false, "img", "order by rand()"));
         
         $this->assign("scope", "login frontpage");
         $this->assign("title", "Login");
@@ -97,8 +95,6 @@ class UserController extends BaseController
 
         }
         
-        $data= new Content;
-        $this->assign("stream", $data->getNext(false, 5 , "cat", false, "img", "order by rand()"));
         
         $this->assign("title", "Register an account");
         $this->assign("error", $error);
@@ -150,11 +146,12 @@ class UserController extends BaseController
                 die( "Mailer Error: " . $mail->ErrorInfo );
             } 
             
-            $data= new Content;
-            $this->assign("stream", $data->getNext(false, 5 , "cat", false, "img", "order by rand()"));
-            $this->assign("scope", "frontpage password_reset_form");
+
+            $this->assign("scope", "frontpage ");
             $this->assign("status", "new_pw_send");
-            $this->render("main.php");
+            $this->assign("scope", "frontpage ");
+            $this->assign("title", _("Password reset"));
+            $this->render("pw_forgot.php");
 
         }
    
@@ -162,12 +159,16 @@ class UserController extends BaseController
     
     function passwordReset()
     {
-        $user = new User();
+        $error=false;
+        if(isset($_POST) && !empty($_POST))
+        {
 
-        $res = $user->find(array("mail" => $_POST['mail']));
-        if (count($res) == 0) {
-            $error['pw_error'] = _("Account not found.");
-        }else{
+            $user = new User();
+
+            $res = $user->find(array("mail" => $_POST['mail']));
+            if (count($res) == 0) {
+                $error['pw_error'] = _("Account not found.");
+            }else{
       
             
             $mail = new PHPMailer;
@@ -184,36 +185,38 @@ class UserController extends BaseController
             }
             
             
-            $mail->From =  Config::get("mail_from");
-            $mail->FromName =  Config::get("mail_from_name");
-            $mail->addAddress($res[0]->mail, $res[0]->name);
-            
 
-            $mail->Subject = _("Confirm Password Reset")." - ".Config::get("address");
-            $this->assign("name", $res[0]->name );
-            $this->assign("confirm_url", Config::get("address")."user/password/reset/".$res[0]->api_key."/");
-            $mail->AltBody= $this->render("email/pw_confirm_txt.php", true);
-            $mail->Body    = $this->render("email/pw_confirm.php", true);
+                $mail->From =  Config::get("mail_from");
+                $mail->FromName =  Config::get("mail_from_name");
+                $mail->addAddress($res[0]->mail, $res[0]->name);
 
-            $mail->isHTML(true);
-            $mail->CharSet = 'UTF-8';
-            
-            if (!$mail->send()) {
-                die( "Mailer Error: " . $mail->ErrorInfo );
-            } 
-            $this->assign("status", "confirm");
-            
 
+                $mail->Subject = _("Confirm Password Reset")." - ".Config::get("address");
+                $this->assign("name", $res[0]->name );
+                $this->assign("confirm_url", Config::get("address")."user/password/reset/".$res[0]->api_key."/");
+                $mail->AltBody= $this->render("email/pw_confirm_txt.php", true);
+                $mail->Body    = $this->render("email/pw_confirm.php", true);
+
+                $mail->isHTML(true);
+                $mail->CharSet = 'UTF-8';
+
+                if (!$mail->send()) {
+                    die( "Mailer Error: " . $mail->ErrorInfo );
+                } 
+                $this->assign("status", "confirm");
+
+
+            }
+        
         }
         
             
-        $data= new Content;
-        $this->assign("stream", $data->getNext(false, 5 , "cat", false, "img", "order by rand()"));
+
         $this->assign("title", "Password Reset");
         $this->assign("error", $error);
-        $this->assign("scope", "frontpage password_reset_form");
+        $this->assign("scope", "frontpage ");
         $this->assign("title", _("Password reset"));
-        $this->render("main.php");
+        $this->render("pw_forgot.php");
     }
     
     static function defaultSettings(){
@@ -240,11 +243,25 @@ class UserController extends BaseController
         $setting = json_decode($user->settings);
         $error = false;
         if ($_POST) {
-
+            
+            
+            
             if (isset($_FILES['picture']['tmp_name']) && !empty($_FILES['picture']['tmp_name'])) {
-                $uniq = uniqid("", true) . "_" . $_FILES['picture']['name'];
-                move_uploaded_file($_FILES['picture']['tmp_name'], Config::get("dir").Config::get("upload_path") . "$uniq");
-                $setting->profile_picture = $uniq;
+                
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $mime = finfo_file($finfo, $_FILES['picture']['tmp_name']);
+                $allowed_mime=array("image/jpeg", "image/gif", "image/png", "image/bmp");
+                
+                if(in_array($mime, $allowed_mime))
+                {
+                    $uniq = uniqid("", true) . "_" . $_FILES['picture']['name'];
+                    move_uploaded_file($_FILES['picture']['tmp_name'], Config::get("dir").Config::get("upload_path") . "$uniq");
+                    $setting->profile_picture = $uniq;
+                }else{
+                    $error['image']=_("Image type is not allowed");
+                }
+                
+                
             }
             
             $setting->show_nsfw = $_POST['nsfw'];
@@ -269,6 +286,11 @@ class UserController extends BaseController
 
             $user->save();
         }
+                
+        $hashtags= new Hashtags;
+      
+        $this->assign("popularhashtags",   $hashtags->getPopularHashtags());
+        $this->assign("randomhashtags",   $hashtags->getRandomHashtags());
         $this->assign("title", "My Settings");
         $this->assign("error", $error);
         $this->assign("user", $user);
@@ -280,97 +302,108 @@ class UserController extends BaseController
 
     static function getFBLoginURL(){
        
-        $fb = new Facebook\Facebook([
-        'app_id' => Config::get("facebook_app_id"),
-        'app_secret' => Config::get("facebook_app_secret"),
-        'default_graph_version' => 'v2.2'
+     
+
+        $provider = new League\OAuth2\Client\Provider\Facebook([
+            'clientId'          => Config::get("facebook_app_id"),
+            'clientSecret'      => Config::get("facebook_app_secret"),
+            'redirectUri'       => Config::get("address")."user/fblogin/",
+            'graphApiVersion'   => 'v2.5',
         ]);
         
-      $helper = $fb->getRedirectLoginHelper();
+        $authUrl = $provider->getAuthorizationUrl(['scope' => ['email']]);
+        $_SESSION['oauth2state'] = $provider->getState();
+        
+        
+        
       
-      $permissions = ['email']; // Optional permissions
-      $loginUrl = $helper->getLoginUrl(Config::get("address")."/user/fblogin/", $permissions);
       
-      
-      return htmlspecialchars($loginUrl);
+      return htmlspecialchars($authUrl);
 
     }
     
     
     function fbcallback(){
+        $provider = new League\OAuth2\Client\Provider\Facebook([
+            'clientId'          => Config::get("facebook_app_id"),
+            'clientSecret'      => Config::get("facebook_app_secret"),
+            'redirectUri'       => Config::get("address")."user/fblogin/",
+            'graphApiVersion'   => 'v2.5',
+        ]);
         
-        $fb = new Facebook\Facebook([
-        'app_id' => Config::get("facebook_app_id"), // Replace {app-id} with your app id
-        'app_secret' => Config::get("facebook_app_secret"),
-        'default_graph_version' => 'v2.2',
+        // Try to get an access token (using the authorization code grant)
+        $token = $provider->getAccessToken('authorization_code', [
+            'code' => $_GET['code']
+        ]);
+        $_SESSION['oauth2state'] = $provider->getState();
+        try {
+
+            $ownerDetails = $provider->getResourceOwner($token);
+            $this->oAuth( $ownerDetails->getFirstName(). " ". $ownerDetails->getLastName(), $ownerDetails->getEmail());
+
+        } catch (Exception $e) {
+
+            // Failed to get user details
+            exit('Something went wrong: ' . $e->getMessage());
+
+        }
+        
+    }
+    
+    
+    static function getGLoginURL(){
+        $provider = new League\OAuth2\Client\Provider\Google([
+            'clientId'     => Config::get("google_app_id"),
+            'clientSecret' => Config::get("google_app_secret"),
+            'redirectUri'  => Config::get("address")."user/glogin/",
+            'hostedDomain' => Config::get("address"),
         ]);
 
-        $helper = $fb->getRedirectLoginHelper();
-
-        try {
-          $accessToken = $helper->getAccessToken();
-        } catch(Facebook\Exceptions\FacebookResponseException $e) {
-          // When Graph returns an error
-          echo 'Graph returned an error: ' . $e->getMessage();
-          exit;
-        } catch(Facebook\Exceptions\FacebookSDKException $e) {
-          // When validation fails or other local issues
-          echo 'Facebook SDK returned an error: ' . $e->getMessage();
-          exit;
-        }
-
-        if (!isset($accessToken)) {
-            if ($helper->getError()) {
-                $this->getResponse()
-                    ->addHeader('HTTP/1.0 401 Unauthorized')
-                    ->executeHeaders();
-
-                echo "Error: " . $helper->getError() . "\n";
-                echo "Error Code: " . $helper->getErrorCode() . "\n";
-                echo "Error Reason: " . $helper->getErrorReason() . "\n";
-                echo "Error Description: " . $helper->getErrorDescription() . "\n";
-            } else {
-                $this->getResponse()
-                    ->addHeader('HTTP/1.0 400 Bad Request')
-                    ->executeHeaders();
-                echo 'Bad request';
-            }
-            exit;
-        }
-
-        // The OAuth 2.0 client handler helps us manage access tokens
-        $oAuth2Client = $fb->getOAuth2Client();
-
-
-        try {
-          // Returns a `Facebook\FacebookResponse` object
-          $response = $fb->get('/me?fields=id,name,email', $accessToken->getValue());
-        } catch(Facebook\Exceptions\FacebookResponseException $e) {
-          echo 'Graph returned an error: ' . $e->getMessage();
-          exit;
-        } catch(Facebook\Exceptions\FacebookSDKException $e) {
-          echo 'Facebook SDK returned an error: ' . $e->getMessage();
-          exit;
-        }
-
-        $fbuser = $response->getGraphUser();
-        // Get the access token metadata from /debug_token
-        $tokenMetadata = $oAuth2Client->debugToken($accessToken);
+        $authUrl = $provider->getAuthorizationUrl();
+        $_SESSION['oauth2state'] = $provider->getState();
         
-        // Validation (these will throw FacebookSDKException's when they fail)
-        $tokenMetadata->validateAppId(Config::get("facebook_app_id")); // Replace {app-id} with your app id
-        // If you know the user ID this access token belongs to, you can validate it here
-        $tokenMetadata->validateUserId($fbuser['id']);
-        $tokenMetadata->validateExpiration();
-        
+      return htmlspecialchars($authUrl);
 
-        $user = new User();
-        $error=false;
-        $res = $user->find(array("name" => $fbuser['name']));
+    }
+    
+    function gcallback(){
+        $provider = new League\OAuth2\Client\Provider\Google([
+            'clientId'     => Config::get("google_app_id"),
+            'clientSecret' => Config::get("google_app_secret"),
+            'redirectUri'  => Config::get("address")."user/glogin/",
+            'hostedDomain' => Config::get("address"),
+        ]);
+        // Try to get an access token (using the authorization code grant)
+        $token = $provider->getAccessToken('authorization_code', [
+            'code' => $_GET['code']
+        ]);
+        $_SESSION['oauth2state'] = $provider->getState();
+        try {
+
+            
+            $ownerDetails = $provider->getResourceOwner($token);
+       
+            $this->oAuth( $ownerDetails->getFirstName(). " ". $ownerDetails->getLastName(), $ownerDetails->getEmail());
+            
+           
+
+        } catch (Exception $e) {
+
+            // Failed to get user details
+            exit('Something went wrong: ' . $e->getMessage());
+
+        }
+    }
+    
+    
+    function oAuth($username, $mail){
+        
+        $user= new User;
+        $res = $user->find(array("name" => $username));
         if (count($res) > 0) {
             $error=true;
         }
-        $res = $user->find(array("mail" => $fbuser['email']));
+        $res = $user->find(array("mail" => $mail));
         if (count($res) > 0) {
             $_SESSION['login'] = $res[0]->id;
             $_SESSION['user_settings']=$res[0]->settings;
@@ -382,12 +415,12 @@ class UserController extends BaseController
         }
         if(!$error)
         {
-            $user->name = $fbuser['name'];
-            $user->mail = $fbuser['email'];
+            $user->name = $username;
+            $user->mail = $mail;
             $user->password = md5(uniqid(). Config::get("salat"));
 
             $user->settings = json_encode(UserController::defaultSettings());
-            $user->api_key = md5(uniqid()+date("Y-m-d H:i:s"));
+            $user->api_key = md5(uniqid().date("Y-m-d H:i:s"));
             $user->created = date("Y-m-d H:i:s");
             $user->id = $user->save();
             $_SESSION['login'] = $user->id;
@@ -402,6 +435,7 @@ class UserController extends BaseController
       $this->assing("error", array("nick" =>_("A User with this nick already exist.") ));
       $this->register();
     }
+    
     
     /**
      * 

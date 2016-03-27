@@ -1,10 +1,24 @@
 <?php
+use WebSocket\Client;
 
 /**
  * Class DataController
  */
 class DataController extends BaseController
 {
+
+    function __construct() {
+                
+        $content= new Content();
+        //get max id for rand min/max
+        $res=$content->getNext(Content::maxid, 1, false, false, false, false, false);
+        
+        $hashtags= new Hashtags;
+      
+        $this->assign("popularhashtags",   $hashtags->getPopularHashtags());
+        $this->assign("randomhashtags",   $hashtags->getRandomHashtags());
+        $this->assign("maxid", $res[0]->id);
+    }
 
     function frontend() {
 
@@ -34,31 +48,6 @@ class DataController extends BaseController
         $this->render("main.php");
     }
 
-    /**
-     * this function loads the inital data for /random
-     * it gets the max id from db, so the client can do 
-     * some min/max calulation.
-     */
-    function random(){
-        
-        $content= new Content();
-        //get max id for rand min/max
-        $res=$content->getNext(Content::maxid, 1, false, false, false, false, false);
-        if ($res) {
-            $this->assign("random", $res[0]->id);
-        } else {
-            $this->assign("random", 0);
-        }
-
-
-
-        $this->assign("title", "Social Network - Random Post");
-        $this->assign("description", "Random post, quite a lot cats, gifs and other meaningful pictures");
-        $this->assign("keyword", "random, pictures, gif, webm, videos, funny, cat, images");
-        $this->assign("scope", "random");
-        $this->render("stream.php");
-    }
-    
     /**
      * this method handles all requests arround stream data
      * and returns data as json formted string
@@ -135,6 +124,7 @@ class DataController extends BaseController
      */
     function stream($request=false)
     {
+
         $this->assign("title", "Social Network - free open and anonym ");
         $this->assign("keyword", "open, anyonm, funny, cat, video, gif, webm, lol, weird, free, open");
         $this->assign("description", "Our main goal is to create a free and open community available to anyone anonymously or not");
@@ -274,14 +264,13 @@ class DataController extends BaseController
             
             if(
                 isset($_POST['content']) && empty($_POST['content']) && 
-                isset($_POST['metadata']) && empty($_POST['metadata']) &&
-                isset($_FILES) && empty($_FILES['img']['name'][0])
+                isset($_POST['metadata']) && count(json_decode($_POST['metadata']))==0 &&
+                isset($_FILES) && empty($_FILES['img']['name'][0])    
               )
             {
                $this->redirect("/public/stream/");
                return false;
             }
-            
 
             $content = new Content();
             $content->data = $_POST['content'];
@@ -292,8 +281,22 @@ class DataController extends BaseController
                 $hashdb= new Hashtags;
                 foreach($hashtags[0] as $hashtag)
                 {
-                    $hashdb->hashtag=trim(str_replace("#", "", $hashtag));
-                    $hashdb->save();
+                    $res=$hashdb->find(array("hashtag"=> trim(str_replace("#", "", $hashtag))));
+                    
+                    if(count($res)==0)
+                    {
+                        $hashdb->hashtag=trim(str_replace("#", "", $hashtag));
+                        $hashdb->save();
+                    }
+                    else
+                    {
+                      
+                    
+                        $res[0]->pop++;
+                        $res[0]->save();
+                         
+                    }
+                    
                 }
             }
 
@@ -324,10 +327,7 @@ class DataController extends BaseController
             }
             
             if (isset($metadata->type) && $metadata->type == "www") {
-                
-                $tmp_url=$metadata->url;
-                $metadata=(object)($this->og_parser($metadata->url));
-                $metadata->url = $tmp_url;
+               $metadata=(object)($this->og_parser($metadata->url));
             }
      
             if (isset($_FILES) && !empty($_FILES['img']['name'][0]) && is_array($_FILES)) {
@@ -336,10 +336,12 @@ class DataController extends BaseController
                     $upload_path = Config::get("dir") . Config::get("upload_path");
                     move_uploaded_file($file, $upload_path . $uniq);
                     
+                    $metadata= (is_null($metadata) ? new stdClass() : $metadata);
+                    
                     $metadata->type = "upload";
                     
                     $mime = mime_content_type($upload_path . $uniq);
-
+                    $metadata->files[$i]=new stdClass();
                     $metadata->files[$i]->src = $uniq;
                     $metadata->files[$i]->name = $_FILES['img']['name'][$i];
                     $metadata->files[$i]->type = $mime;
@@ -354,16 +356,16 @@ class DataController extends BaseController
             }
             
            
-            $new_id=$content->date=date("U");
+            $content->date=date("U");
             
-            $content->save();
+            $new_id=$content->save();
             
             //save notification for mentions @username
             $pattern="/(^|\s)@(\w*[a-zA-Z0-9öäü._-]+\w*)/";
             preg_match_all($pattern, $content->data, $users);
             if(count($users[0])>0)
             {
-                
+                $client = new Client(Config::get("notification_server"));
                 $user = new User;
                 $notification = new Notification;
                 $notification->from_user_id=Helper::getUserID();
@@ -380,6 +382,8 @@ class DataController extends BaseController
                     
                     if($notification->to_user_id!=Helper::getUserID())
                         $notification->save();
+                    
+                    $client->send(json_encode(array("action"=>"update", "uid" =>$notification->to_user_id))); 
                 }
             }
             
@@ -687,34 +691,7 @@ class DataController extends BaseController
         return \transformer\TransformerFactory::makeStatic('string\\html\\HashTransformer')->transform($txt);
     }
 
-    /**
-     * this function replaced video and image filers
-     * now this taks is done on client side
-     * @todo can be removed 
-     * @param string $media
-     * @param array $size
-     * @return string
-     */
-    static function replaceMedia($media, $size = false) {
 
-        if (!$size) {
-            $width = 630;
-            $height = 630;
-        } else {
-            $width = $size['width'];
-            $height = $size['height'];
-        }
-        $data = DataController::replaceVideo($media, true, $size);
-
-        $path_parts = pathinfo($media);
-
-        $extensions = array("svg", "png", "jpg", "gif", "jpeg");
-        if (in_array(strtolower($path_parts['extension']), $extensions)) {
-            $data = "<img src=\"".Config::get("upload_address").$path_parts['basename'] . "\">";
-        }
-
-        return $data;
-    }
 
     static function replaceVideo($input, $dimension = false)
     {

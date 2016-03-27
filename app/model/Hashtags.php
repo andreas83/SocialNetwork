@@ -6,12 +6,18 @@ class Hashtags extends BaseModel
     public $id = "";
     public $hashtag = "";
     public $pop = "";
+    public $modified = "";
     
     
 
     public function getPrimary()
     {
         return "id";
+    }
+    
+    function save(){
+        $this->modified=date("Y-m-d H:i:s");
+        parent::save();
     }
     
     public function getBackendConfiguration(){
@@ -38,6 +44,35 @@ class Hashtags extends BaseModel
         return $obj;
         
     
+    }
+    
+    function getPopularHashtags($limit =5){
+        $sql = "select * from Hashtags order by pop desc limit ".$limit;
+        
+        $stmt = $this->dbh->prepare($sql);
+
+        
+
+        $stmt->execute();
+
+        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, 'Hashtags');
+
+        return $obj;        
+    }
+    
+        
+    function getRandomHashtags($limit =5){
+        $sql = "select * from Hashtags order by rand() limit ".$limit;
+        
+        $stmt = $this->dbh->prepare($sql);
+
+        
+
+        $stmt->execute();
+
+        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, 'Hashtags');
+
+        return $obj;        
     }
 }
 ?>

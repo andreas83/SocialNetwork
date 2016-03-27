@@ -1,29 +1,50 @@
 
-    function Replacehashtags(string){
-        string=string.replace(/#(\S*)/g,'<a class="hash" href="/hash/$1">#$1</a>');
-        string=string.replace(/@(\S*)/g,'<a class="user" href="/$1">@$1</a>');
-
-        return string;
-    }
     
     var InitStream  = React.createClass({
         getInitialState: function () {
            
-           return {data:[]}
+           return {data:[], random:false}
             
         },
         componentDidMount: function () {
             this.loadStreamFromServer();
             
             document.addEventListener('scroll', this.handleScroll);
-            
+            document.addEventListener('keydown', this.handleKeyDown);
+            $("#next").on("click", this.randomPost);
+
+
             //@todo better soloution would be to save the complete data as state
-            window.onpopstate = (event) => {
+            window.onpopstate = function(event) {
                 window.location.href=event.state.url;
             };
+                    
+        },
 
-
+        handleKeyDown: function(event){
             
+            if(event.target.tagName=="BODY" && event.keyCode==82)
+            {
+                this.randomPost();
+                
+            }
+        },
+
+        randomPost: function(){
+                function getRandomInt(min, max) {
+                    return Math.floor(Math.random() * (max - min + 1)) + min;
+                }
+               
+                
+                this.setState({
+                        data:[],
+                        random:true,
+                        endofData:true,
+                        id:getRandomInt(1, parseInt($(".stream-row").attr("data-maxid"))+1)
+                    });
+                
+                this.loadStreamFromServer();
+
         },
         componentWillUnmount() {
             document.removeEventListener('scroll', this.handleScroll);
@@ -36,69 +57,54 @@
 
             var show =5;
             var lastid="";
-
+            
+            
 
             if (this.id>0 || typeof(id)=="undefined")
-            {
-                this.setID(parseInt($(".stream-item").last().attr("data-id")));
+            {   
+
+                var ids = $(".stream-item").map(function() {
+                    return parseInt($(this).attr("data-id"), 10);
+                }).get();
+
+                this.setID(Math.min.apply(Math, ids));
             }
+            
+
             if($(".stream-row").attr("data-permalink")>0)
             {
-                
+
                 this.setID(parseInt($(".stream-row").attr("data-permalink"))+1);
                 show = 1;
                 this.setState({
                         endofData:true,
                     });
             }
-            if($(".stream-row").attr("data-random")>0)
-            {
-                function getRandomInt(min, max) {
-                    return Math.floor(Math.random() * (max - min + 1)) + min;
-                }
-                this.setID(getRandomInt(1, parseInt($(".stream-row").attr("data-random"))+1));
-                
-        
-                
-                show = 1;
-                this.setState({
-                        endofData:true,
-                        random:true
-                    });
-            }
-
-            
-            
-            if($(".stream-row").attr("data-hash")!="")
+            if($(".stream-row").attr("data-hash")!="" && this.state.random!=true)
             {
                 hash=$(".stream-row").attr("data-hash");
-            } 
-            
-
-            if($(".stream-row").attr("data-user")!="")
+            }
+            if($(".stream-row").attr("data-user")!="" && this.state.random!=true )
             {
                 user=$(".stream-row").attr("data-user");
             } 
 
-            if(typeof this.props.hashtag !="undefined")
-            {
-                //we do a full page load
-                //when the search is called via /user or /permalink
-                //reson: url reflect content
-               
-                if(show==1 || user!="")
-                    window.location.href="/hash/"+this.props.hashtag.replace("#", "");
-                else
-                    hash = this.props.hashtag.replace("#", "");
+
+            if(this.state.random){
+                show=1;
+                this.setID(this.state.id);
             }
+
+            
             if(this.state.lastID==this.id)
             {
+
                 this.setState({
                     endofData:true,
                 });
             }
             this.state.lastID=this.id;
-
+            
             $(".spinner").show();
             $.ajax({
                 url: '/api/content/?id=' + this.id +'&hash='+hash+'&user='+user+'&show='+show,
@@ -108,7 +114,7 @@
                     
                     data=this.state.data.concat(data);
                     
-                    if($(".stream-row").attr("data-user")!="")
+                    if($(".stream-row").attr("data-user")!="" && this.state.random!=true)
                     {
                         $("#custom_css").html(data[0].author.custom_css); 
                     }
@@ -209,16 +215,28 @@
     });
     
         var data={}
-        var isLoading = false;
-        var endofdata = false;
+
 
         ReactDOM.render(
-                <InitStream data={data}  /> ,
+                <InitStream data={data} /> ,
                 document.getElementsByClassName('stream')[0]
+        );
+        ReactDOM.render(
+                <SearchBox data={data} /> ,
+                document.getElementById("SearchBox")
+        );
+        ReactDOM.render(
+                <NotificationBox data={data} /> ,
+                document.getElementById("NotificationBox")
+        );
+        ReactDOM.render(
+                <ChatBox data={data} /> ,
+                document.getElementById("ChatBox")
         );
         ReactDOM.render(
                 <ShareBox data={data}  /> ,
                 document.getElementById("ShareBox")
         );
+        
 
     

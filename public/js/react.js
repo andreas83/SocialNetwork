@@ -95,7 +95,7 @@ var Author = React.createClass({
                     )
                 ),
                 " ",
-                this.prettyDate(this.props.time),
+                prettyDate(this.props.time),
                 React.createElement("br", null),
                 React.createElement(
                     "a",
@@ -110,15 +110,6 @@ var Author = React.createClass({
                 editBtn
             )
         );
-    },
-    prettyDate: function (time) {
-        var date = new Date(time * 1000),
-            diff = (new Date().getTime() - date.getTime()) / 1000,
-            day_diff = Math.floor(diff / 86400);
-
-        if (isNaN(day_diff) || day_diff < 0 || day_diff >= 31) return;
-
-        return day_diff == 0 && (diff < 60 && "just now" || diff < 120 && "1 minute ago" || diff < 3600 && Math.floor(diff / 60) + " minutes ago" || diff < 7200 && "1 hour ago" || diff < 86400 && Math.floor(diff / 3600) + " hours ago") || day_diff == 1 && "Yesterday" || day_diff < 7 && day_diff + " days ago" || day_diff < 31 && Math.ceil(day_diff / 7) + " weeks ago";
     }
 
 });
@@ -146,6 +137,7 @@ var AuthorText = React.createClass({
         var m;
         var hash;
         var tmp_content = content;
+        var user = "";
         while ((m = re.exec(content)) !== null) {
             if (m.index === re.lastIndex) {
                 re.lastIndex++;
@@ -211,6 +203,7 @@ var CommentBox = React.createClass({
     },
     componentDidMount: function () {
         this.loadCommentsFromServer();
+        bindMention();
         //setInterval(this.loadCommentsFromServer, 10000);
     },
     loadCommentsFromServer: function () {
@@ -269,7 +262,7 @@ var CommentList = React.createClass({
             return React.createElement(
                 Comment,
                 { author: comment.author },
-                comment.text
+                Replacehashtags(comment.text)
             );
         });
         return React.createElement(
@@ -455,6 +448,13 @@ var Upload = React.createClass({
                 if (data.type != false && data.type.match("image")) {
                     return React.createElement("img", { className: "img-responsive", src: FilePath });
                 }
+                if (data.type != false && data.type.match("video")) {
+                    return React.createElement(
+                        "video",
+                        null,
+                        React.createElement("source", { src: FilePath, type: data.type })
+                    );
+                }
                 return React.createElement(
                     "p",
                     null,
@@ -586,11 +586,185 @@ var Likebox = React.createClass({
     }
 });
 
-var ShareBox = React.createClass({
-    displayName: 'ShareBox',
+var SearchBox = React.createClass({
+    displayName: "SearchBox",
 
     getInitialState: function () {
-        return { data: [] };
+        return { data: [], hashtag: [], user: [] };
+    },
+    componentDidMount: function () {
+
+        $('html').click(function () {
+            this.setState({ hashtag: [] });
+            this.setState({ user: [] });
+        }.bind(this));
+    },
+
+    handleChange: function (event) {
+        if (event.which == 13) {
+
+            if (this.state.user.length == 1 && this.state.hashtag.length == 0) {
+
+                username = this.state.user[0].name.replace(" ", ".");
+                window.location = "/" + username;
+            }
+            if (this.state.user.length == 0 && this.state.hashtag.length == 1) {
+
+                window.location = "/hash/" + this.state.hashtag[0].hashtag;
+            }
+        }
+        if (event.target.value == "") {
+            this.setState({ hashtag: [] });
+            this.setState({ user: [] });
+            return true;
+        }
+        this.serverRequest = $.get('/api/hashtags/' + event.target.value, function (data) {
+
+            this.setState({ hashtag: data });
+        }.bind(this));
+
+        this.serverRequest = $.get('/api/users/' + event.target.value, function (data) {
+
+            this.setState({ user: data });
+        }.bind(this));
+    },
+
+    render: function () {
+
+        return React.createElement(
+            "div",
+            { className: "form-group navbar-form navbar-left " },
+            React.createElement("input", { onKeyUp: this.handleChange, type: "text", className: "form-control", placeholder: "#hash or @user" }),
+            React.createElement(
+                "ul",
+                { className: "searchresult" },
+                this.state.user.map(function (user, i) {
+                    if (i > 4) return true;
+                    setting = JSON.parse(user.settings);
+                    if (typeof setting.profile_picture != "undefined") {
+                        img_src = upload_address + setting.profile_picture;
+                    } else {
+                        img_src = '/public/img/no-profile.jpg';
+                    }
+                    user_href = "/" + user.name.replace(" ", ".");
+                    return React.createElement(
+                        "li",
+                        null,
+                        React.createElement(
+                            "a",
+                            { href: user_href },
+                            user.name,
+                            " ",
+                            React.createElement("img", { width: "20", className: "pull-right", src: img_src })
+                        )
+                    );
+                }),
+                this.state.hashtag.map(function (item, i) {
+                    if (i > 4) return true;
+                    hashtag_href = "/hash/" + item.hashtag;
+                    return React.createElement(
+                        "li",
+                        null,
+                        React.createElement(
+                            "a",
+                            { href: hashtag_href },
+                            "#",
+                            item.hashtag
+                        )
+                    );
+                })
+            )
+        );
+    }
+});
+
+
+var socket;
+var ChatBox = React.createClass({
+    displayName: "ChatBox",
+
+    getInitialState: function () {
+        return { channel: [], activeUser: [] };
+    },
+
+    componentDidMount: function () {
+
+        try {
+            socket = new WebSocket(notification_server);
+
+            socket.onopen = function (msg) {
+
+                socket.send(JSON.stringify({ action: "openroom", auth_cookie: getCookie("auth") }));
+            };
+            socket.onmessage = function (msg) {
+
+                data = JSON.parse(msg.data);
+
+                this.setState({ activeUser: Object.keys(swap(data.activeUsers)), channel: data.channel.default });
+                var objDiv = document.getElementById("textframe");
+                objDiv.scrollTop = objDiv.scrollHeight;
+            }.bind(this);
+            socket.onclose = function (msg) {};
+        } catch (ex) {
+
+            console.log(ex);
+        }
+    },
+
+    handleSubmit: function (event) {
+        event.preventDefault();
+        socket.send(JSON.stringify({ action: "chat", text: document.getElementById("chatinput").value, auth_cookie: getCookie("auth") }));
+        document.getElementById("chatinput").value = "";
+        var objDiv = document.getElementById("textframe");
+        objDiv.scrollTop = objDiv.scrollHeight;
+    },
+
+    render: function () {
+
+        return React.createElement(
+            "div",
+            null,
+            React.createElement(
+                "div",
+                { id: "chat", className: "col-md-9 bounceIn" },
+                React.createElement(
+                    "div",
+                    { id: "textframe" },
+                    this.state.channel.map(function (chat, i) {
+                        chat = Replacehashtags(chat);
+                        return React.createElement("p", { dangerouslySetInnerHTML: { __html: chat } });
+                    })
+                ),
+                React.createElement(
+                    "form",
+                    { className: "chatForm", onSubmit: this.handleSubmit },
+                    React.createElement("input", { type: "text", autoComplete: "off", id: "chatinput" })
+                )
+            ),
+            React.createElement(
+                "div",
+                { id: "ChatUsers", className: "col-md-3" },
+                React.createElement(
+                    "ul",
+                    null,
+                    this.state.activeUser.map(function (user, i) {
+                        return React.createElement(
+                            "li",
+                            null,
+                            React.createElement("span", { dangerouslySetInnerHTML: { __html: user } })
+                        );
+                    })
+                )
+            )
+        );
+    }
+});
+
+var ShareBox = React.createClass({
+    displayName: "ShareBox",
+
+    getInitialState: function () {
+        return { data: [], showShareBox: true };
     },
     componentDidMount: function () {
 
@@ -598,7 +772,7 @@ var ShareBox = React.createClass({
             isMetaLoading: false
         });
 
-        share_area = document.getElementById('share_area');
+        var share_area = this.refs.share_area;
         share_area.addEventListener('input', this.handleInput);
     },
 
@@ -606,7 +780,7 @@ var ShareBox = React.createClass({
      * @todo remove jquery 
      */
     closePreview: function (e) {
-
+        e.preventDefault();
         $(".preview").hide();
         $("#img").val("");
         $("#metadata").val("");
@@ -623,16 +797,10 @@ var ShareBox = React.createClass({
     },
     handleInput: function (event) {
 
-        //        hashtags = $(this).val().match(/(^|\W)(#[a-z\d][\w-]*)/ig);
-        //        hashtag = hashtags[hashtags.length-1].replace("#", "");
-        //       
-        //        $.get('/api/hashtags/'+hashtag, function (data) {
-        //           
-        //        });
-
         var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
         if ($("#share_area").val().match(urlRegex)) {
-            url = $("#share_area").val().match(urlRegex);
+
+            var url = this.refs.share_area.value.match(urlRegex);
 
             if (this.state.isMetaLoading) return false;
 
@@ -651,133 +819,133 @@ var ShareBox = React.createClass({
     render: function () {
 
         return React.createElement(
-            'div',
+            "div",
             null,
             React.createElement(
-                'form',
-                { method: 'post', action: '/api/content/', encType: 'multipart/form-data' },
+                "form",
+                { method: "post", action: "/api/content/", encType: "multipart/form-data" },
                 React.createElement(
-                    'div',
-                    { className: 'row' },
+                    "div",
+                    { className: "row" },
                     React.createElement(
-                        'div',
-                        { className: 'col-md-11' },
-                        React.createElement('textarea', { id: 'share_area', placeholder: '', name: 'content', rows: '3', className: 'form-control' }),
+                        "div",
+                        { className: "col-md-11" },
+                        React.createElement("textarea", { id: "share_area", ref: "share_area", placeholder: "", name: "content", rows: "3", className: "form-control" }),
                         React.createElement(
-                            'div',
-                            { className: 'row preview www' },
+                            "div",
+                            { className: "row preview www" },
                             React.createElement(
-                                'p',
-                                { className: 'text-right' },
+                                "p",
+                                { className: "text-right" },
                                 React.createElement(
-                                    'button',
-                                    { className: 'btn btn-info', onClick: this.closePreview },
-                                    React.createElement('span', { className: 'glyphicon glyphicon-remove', 'aria-hidden': 'true' })
+                                    "button",
+                                    { className: "btn btn-info", onClick: this.closePreview },
+                                    React.createElement("span", { className: "glyphicon glyphicon-remove", "aria-hidden": "true" })
                                 )
                             ),
                             React.createElement(
-                                'div',
-                                { className: 'col-md-3' },
-                                React.createElement('img', { className: 'img-responsive', src: this.state.data.og_img, id: 'og_img' })
+                                "div",
+                                { className: "col-md-3" },
+                                React.createElement("img", { className: "img-responsive", src: this.state.data.og_img, id: "og_img" })
                             ),
                             React.createElement(
-                                'div',
-                                { className: 'col-md-9' },
+                                "div",
+                                { className: "col-md-9" },
                                 React.createElement(
-                                    'h3',
-                                    { id: 'og_title' },
+                                    "h3",
+                                    { id: "og_title" },
                                     this.state.data.og_title
                                 ),
                                 React.createElement(
-                                    'p',
-                                    { id: 'og_desc' },
+                                    "p",
+                                    { id: "og_desc" },
                                     this.state.data.og_description
                                 )
                             ),
                             React.createElement(
-                                'div',
-                                { className: 'col-md-12' },
+                                "div",
+                                { className: "col-md-12" },
                                 React.createElement(
-                                    'a',
-                                    { href: this.state.data.url, id: 'www_link' },
+                                    "a",
+                                    { href: this.state.data.url, id: "www_link" },
                                     this.state.data.url
                                 )
                             )
                         ),
                         React.createElement(
-                            'div',
-                            { className: 'row preview img' },
+                            "div",
+                            { className: "row preview img" },
                             React.createElement(
-                                'div',
-                                { className: 'col-md-12' },
+                                "div",
+                                { className: "col-md-12" },
                                 React.createElement(
-                                    'p',
-                                    { className: 'text-right' },
+                                    "p",
+                                    { className: "text-right" },
                                     React.createElement(
-                                        'button',
-                                        { className: 'btn btn-info', onClick: this.closePreview },
-                                        React.createElement('span', { className: 'glyphicon glyphicon-remove', 'aria-hidden': 'true' })
+                                        "button",
+                                        { className: "btn btn-info", onClick: this.closePreview },
+                                        React.createElement("span", { className: "glyphicon glyphicon-remove", "aria-hidden": "true" })
                                     )
                                 ),
-                                React.createElement('img', { className: 'img-responsive', src: this.state.data.url, id: 'preview_img' })
+                                React.createElement("img", { className: "img-responsive", src: this.state.data.url, id: "preview_img" })
                             )
                         ),
                         React.createElement(
-                            'div',
-                            { className: 'row preview upload' },
+                            "div",
+                            { className: "row preview upload" },
                             React.createElement(
-                                'div',
-                                { className: 'col-md-12' },
+                                "div",
+                                { className: "col-md-12" },
                                 React.createElement(
-                                    'p',
-                                    { className: 'text-right' },
+                                    "p",
+                                    { className: "text-right" },
                                     React.createElement(
-                                        'button',
-                                        { className: 'btn btn-info', onClick: this.closePreview },
-                                        React.createElement('span', { className: 'glyphicon glyphicon-remove', 'aria-hidden': 'true' })
+                                        "button",
+                                        { className: "btn btn-info", onClick: this.closePreview },
+                                        React.createElement("span", { className: "glyphicon glyphicon-remove", "aria-hidden": "true" })
                                     )
                                 ),
-                                React.createElement('div', { id: 'uploadPreview' })
+                                React.createElement("div", { id: "uploadPreview" })
                             )
                         ),
                         React.createElement(
-                            'div',
-                            { className: 'row preview video' },
+                            "div",
+                            { className: "row preview video" },
                             React.createElement(
-                                'div',
-                                { className: 'col-md-12' },
+                                "div",
+                                { className: "col-md-12" },
                                 React.createElement(
-                                    'p',
-                                    { className: 'text-right' },
+                                    "p",
+                                    { className: "text-right" },
                                     React.createElement(
-                                        'button',
-                                        { className: 'btn btn-info', onClick: this.closePreview },
-                                        React.createElement('span', { className: 'glyphicon glyphicon-remove', 'aria-hidden': 'true' })
+                                        "button",
+                                        { className: "btn btn-info", onClick: this.closePreview },
+                                        React.createElement("span", { className: "glyphicon glyphicon-remove", "aria-hidden": "true" })
                                     )
                                 ),
-                                React.createElement('div', { id: 'video_target', className: 'embed-responsive embed-responsive-16by9', dangerouslySetInnerHTML: { __html: this.state.data.html } })
+                                React.createElement("div", { id: "video_target", className: "embed-responsive embed-responsive-16by9", dangerouslySetInnerHTML: { __html: this.state.data.html } })
                             )
                         ),
-                        React.createElement('input', { type: 'hidden', name: 'metadata', id: 'metadata', value: JSON.stringify(this.state.data) }),
-                        React.createElement('input', { type: 'text', name: 'mail', className: 'hide', value: '' })
+                        React.createElement("input", { type: "hidden", name: "metadata", id: "metadata", value: JSON.stringify(this.state.data) }),
+                        React.createElement("input", { type: "text", name: "mail", className: "hide", value: "" })
                     ),
                     React.createElement(
-                        'div',
-                        { className: 'col-md-5' },
+                        "div",
+                        { className: "col-md-5" },
                         React.createElement(
-                            'span',
-                            { className: 'btn btn-lg btn-warning btn-file' },
-                            React.createElement('i', { className: 'glyphicon glyphicon-cloud-upload' }),
-                            ' Upload',
-                            React.createElement('input', { type: 'file', id: 'img', multiple: true, name: 'img[]', className: 'form-control' })
+                            "span",
+                            { className: "btn btn-lg btn-warning btn-file" },
+                            React.createElement("i", { className: "glyphicon glyphicon-cloud-upload" }),
+                            " Upload",
+                            React.createElement("input", { type: "file", id: "img", multiple: true, name: "img[]", className: "form-control" })
                         ),
                         React.createElement(
-                            'button',
-                            { className: 'btn btn-lg btn-info ' },
-                            React.createElement('i', { className: 'glyphicon glyphicon-heart' }),
-                            ' Share!'
+                            "button",
+                            { className: "btn btn-lg btn-info " },
+                            React.createElement("i", { className: "glyphicon glyphicon-heart" }),
+                            " Share!"
                         ),
-                        React.createElement('p', { className: 'fileinfo' })
+                        React.createElement("p", { className: "fileinfo" })
                     )
                 )
             )
@@ -785,29 +953,130 @@ var ShareBox = React.createClass({
     }
 });
 
-function Replacehashtags(string) {
-    string = string.replace(/#(\S*)/g, '<a class="hash" href="/hash/$1">#$1</a>');
-    string = string.replace(/@(\S*)/g, '<a class="user" href="/$1">@$1</a>');
 
-    return string;
-}
+var NotificationBox = React.createClass({
+    displayName: "NotificationBox",
+
+    getInitialState: function () {
+        return { data: [], init: true };
+    },
+
+    componentDidMount: function () {
+
+        var socket;
+        try {
+            socket = new WebSocket(notification_server);
+
+            socket.onopen = function (msg) {
+
+                socket.send(JSON.stringify({ action: "getNotifications", auth_cookie: getCookie("auth") }));
+            };
+            socket.onmessage = function (msg) {
+
+                data = JSON.parse(msg.data);
+                if (typeof data.notificaton != "undefined") {
+                    //play only sound on new notifications
+                    if (this.state.init === false) new Audio('/public/notification.mp3').play();
+                    if (data.notificaton.length > 0) document.getElementById("NotificationBox").className = "";
+
+                    this.setState({
+                        data: data.notificaton,
+                        init: false
+                    });
+                }
+            }.bind(this);
+            socket.onclose = function (msg) {
+                document.getElementById("NotificationBox").style.display = "none";
+            };
+        } catch (ex) {
+
+            console.log(ex);
+        }
+    },
+
+    render: function () {
+
+        var li = [];
+        for (notification in this.state.data) {
+
+            notification = this.state.data[notification];
+
+            if (typeof JSON.parse(notification.settings).profile_picture !== "undefined") {
+                var img_src = upload_address + JSON.parse(notification.settings).profile_picture;
+                profile_pic = React.createElement("img", { src: img_src });
+            } else profile_pic = React.createElement("img", { src: "/public/img/no-profile.jpg" });
+
+            safe_username = "/" + notification.name.replace(" ", ".");
+            user_link_pic = React.createElement(
+                "a",
+                { href: safe_username },
+                profile_pic
+            );
+            user_link = React.createElement(
+                "a",
+                { href: safe_username },
+                notification.name
+            );
+
+            li.push(React.createElement(
+                "p",
+                null,
+                user_link_pic,
+                " ",
+                user_link,
+                " ",
+                React.createElement("span", { dangerouslySetInnerHTML: { __html: notification.message } })
+            ));
+        }
+        return React.createElement(
+            "div",
+            { ref: "notification" },
+            li
+        );
+    }
+});
+
 
 var InitStream = React.createClass({
     displayName: 'InitStream',
 
     getInitialState: function () {
 
-        return { data: [] };
+        return { data: [], random: false };
     },
     componentDidMount: function () {
         this.loadStreamFromServer();
 
         document.addEventListener('scroll', this.handleScroll);
+        document.addEventListener('keydown', this.handleKeyDown);
+        $("#next").on("click", this.randomPost);
 
         //@todo better soloution would be to save the complete data as state
-        window.onpopstate = event => {
+        window.onpopstate = function (event) {
             window.location.href = event.state.url;
         };
+    },
+
+    handleKeyDown: function (event) {
+
+        if (event.target.tagName == "BODY" && event.keyCode == 82) {
+            this.randomPost();
+        }
+    },
+
+    randomPost: function () {
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        this.setState({
+            data: [],
+            random: true,
+            endofData: true,
+            id: getRandomInt(1, parseInt($(".stream-row").attr("data-maxid")) + 1)
+        });
+
+        this.loadStreamFromServer();
     },
     componentWillUnmount() {
         document.removeEventListener('scroll', this.handleScroll);
@@ -822,8 +1091,14 @@ var InitStream = React.createClass({
         var lastid = "";
 
         if (this.id > 0 || typeof id == "undefined") {
-            this.setID(parseInt($(".stream-item").last().attr("data-id")));
+
+            var ids = $(".stream-item").map(function () {
+                return parseInt($(this).attr("data-id"), 10);
+            }).get();
+
+            this.setID(Math.min.apply(Math, ids));
         }
+
         if ($(".stream-row").attr("data-permalink") > 0) {
 
             this.setID(parseInt($(".stream-row").attr("data-permalink")) + 1);
@@ -832,35 +1107,20 @@ var InitStream = React.createClass({
                 endofData: true
             });
         }
-        if ($(".stream-row").attr("data-random") > 0) {
-            function getRandomInt(min, max) {
-                return Math.floor(Math.random() * (max - min + 1)) + min;
-            }
-            this.setID(getRandomInt(1, parseInt($(".stream-row").attr("data-random")) + 1));
-
-            show = 1;
-            this.setState({
-                endofData: true,
-                random: true
-            });
-        }
-
-        if ($(".stream-row").attr("data-hash") != "") {
+        if ($(".stream-row").attr("data-hash") != "" && this.state.random != true) {
             hash = $(".stream-row").attr("data-hash");
         }
-
-        if ($(".stream-row").attr("data-user") != "") {
+        if ($(".stream-row").attr("data-user") != "" && this.state.random != true) {
             user = $(".stream-row").attr("data-user");
         }
 
-        if (typeof this.props.hashtag != "undefined") {
-            //we do a full page load
-            //when the search is called via /user or /permalink
-            //reson: url reflect content
-
-            if (show == 1 || user != "") window.location.href = "/hash/" + this.props.hashtag.replace("#", "");else hash = this.props.hashtag.replace("#", "");
+        if (this.state.random) {
+            show = 1;
+            this.setID(this.state.id);
         }
+
         if (this.state.lastID == this.id) {
+
             this.setState({
                 endofData: true
             });
@@ -876,7 +1136,7 @@ var InitStream = React.createClass({
 
                 data = this.state.data.concat(data);
 
-                if ($(".stream-row").attr("data-user") != "") {
+                if ($(".stream-row").attr("data-user") != "" && this.state.random != true) {
                     $("#custom_css").html(data[0].author.custom_css);
                 }
 
@@ -971,8 +1231,9 @@ var InitStream = React.createClass({
 });
 
 var data = {};
-var isLoading = false;
-var endofdata = false;
 
 ReactDOM.render(React.createElement(InitStream, { data: data }), document.getElementsByClassName('stream')[0]);
+ReactDOM.render(React.createElement(SearchBox, { data: data }), document.getElementById("SearchBox"));
+ReactDOM.render(React.createElement(NotificationBox, { data: data }), document.getElementById("NotificationBox"));
+ReactDOM.render(React.createElement(ChatBox, { data: data }), document.getElementById("ChatBox"));
 ReactDOM.render(React.createElement(ShareBox, { data: data }), document.getElementById("ShareBox"));

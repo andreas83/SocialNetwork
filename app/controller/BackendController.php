@@ -12,12 +12,14 @@
  * 
  * @author andreas <andreas@moving-bytes.at>
  */
-class BackendController extends BaseController {
+class BackendController extends BaseController  {
     
+
+
     
     function __construct() {
         
-        $this->assign("BackendModels", $this->getConfiguredBackendModels());
+        $this->assign("BackendModels", BackendController::getConfiguredBackendModels());
     }
     
     /*
@@ -63,7 +65,7 @@ class BackendController extends BaseController {
      * @todo caching or find another way to get configured backend models
      */
     
-    function getConfiguredBackendModels(){
+    static function getConfiguredBackendModels(){
         if ($handle = opendir('./app/model')) {
             while (false !== ($entry = readdir($handle))) {
                 if ($entry != "." && $entry != "..") {
@@ -134,6 +136,7 @@ class BackendController extends BaseController {
         $this->render("backend/generic_list.php");
     }
     
+   
     
     /**
      * handles the delete requests

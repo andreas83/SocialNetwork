@@ -1,7 +1,7 @@
 
 var ShareBox = React.createClass({
         getInitialState: function () {
-        return {data: []};
+        return {data: [], showShareBox:true};
     },
     componentDidMount: function () {
 
@@ -9,7 +9,7 @@ var ShareBox = React.createClass({
             isMetaLoading:false,
         });
 
-        share_area= document.getElementById('share_area');
+        var share_area= this.refs.share_area;
         share_area.addEventListener('input', this.handleInput);
 
 
@@ -20,7 +20,7 @@ var ShareBox = React.createClass({
      * @todo remove jquery 
      */
     closePreview: function(e){
-
+        e.preventDefault();
         $(".preview").hide();
         $("#img").val("");
         $("#metadata").val("");
@@ -42,16 +42,10 @@ var ShareBox = React.createClass({
     },
     handleInput: function (event) {
 
-    //        hashtags = $(this).val().match(/(^|\W)(#[a-z\d][\w-]*)/ig);
-    //        hashtag = hashtags[hashtags.length-1].replace("#", "");
-    //        
-    //        $.get('/api/hashtags/'+hashtag, function (data) {
-    //            
-    //        });
-
             var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
             if ($("#share_area").val().match(urlRegex)) {
-                url = $("#share_area").val().match(urlRegex);
+                
+                var url = this.refs.share_area.value.match(urlRegex);
 
                 if(this.state.isMetaLoading)
                     return false;
@@ -71,16 +65,18 @@ var ShareBox = React.createClass({
                   }.bind(this));
 
             }
+            
     },
     render: function(){
-
+        
         return(<div>
+            
             <form method="post" action="/api/content/" encType="multipart/form-data">
                     <div className="row">
 
 
                     <div className="col-md-11">
-                        <textarea id="share_area" placeholder="" name="content" rows="3" className="form-control"></textarea>
+                        <textarea id="share_area" ref="share_area" placeholder="" name="content" rows="3" className="form-control"></textarea>
 
                         <div className="row preview www">
 
@@ -148,6 +144,7 @@ var ShareBox = React.createClass({
                             <input type="file" id="img" multiple name="img[]" className="form-control" />
                             </span>
                         <button className="btn btn-lg btn-info "><i className="glyphicon glyphicon-heart"></i> Share!</button>
+                        
                         <p className="fileinfo"></p>
                         </div>
                     </div>

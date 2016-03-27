@@ -34,6 +34,16 @@ body {
     border-color: #000;
     color: #fff!important;
 }
+.menuLeft.mobile{
+    position:fixed;
+    z-index:1000;
+    background-color: 010;
+    top:40;
+    height: 100%;
+    padding-top:20px;
+    width:66%;
+    
+}
 .searchresult{
     position:absolute;
     padding:0px;
@@ -241,6 +251,40 @@ video {
  
 }
 
+a{
+    color:#777;
+}
+a:hover{
+    color:#555;
+}
+
+.left-nav{
+    height:33px;
+}
+.hashtag:first-child{
+    padding-top: 200px;
+}
+
+.hashtag{
+    
+    a{
+        height:20px;
+        
+    }
+    a:hover{
+        color:#555;
+        
+        background-color:#eee;
+    } 
+    ul{
+        list-style: none;
+        padding-left: 10px;
+    }
+    h3{
+        padding-left: 10px;
+    }
+}
+
 .video {
 	position: relative;
 	padding-bottom: 56.25%; /* 16:9 */
@@ -264,14 +308,27 @@ video {
     background-color: #3b5998;
    
 }
-
-#notifications img{
-    max-height: 50px;
-    max-width: 50px;
-    float:left;
-    margin-right: 5px;
-    
+#glogin{
+    background-color: rgba(199, 43, 43, 0.75);
+    color:#fff;    
 }
+#glogin:hover{
+    background-color: #F90101;
+   
+}
+.btn-circle {
+    width: 46px;
+    height: 46px;
+    text-align: center;
+    padding: 7px 0;
+    font-size: 22px;
+    line-height: 1.42;
+    border-radius: 35px;
+}
+
+
+
+
 .animated { 
     -webkit-animation-duration: 1s; 
     animation-duration: 1s; 
@@ -312,6 +369,55 @@ video {
         transform: translateY(0); 
     } 
 } 
+#chat{
+    height:400px;
+    border:1px solid #fff;
+    #textframe{
+        padding-top:10px;
+        height:350px;
+        overflow: auto;
+        p{
+            margin:0px;
+        }
+    }
+    img{
+        max-height: 40px;
+        max-width: 40px;
+    }
+    #chatinput{
+        left: 0px;
+        bottom: 0px;
+        position: absolute;
+        width: 100%;
+        color:#000;
+    }
+}
+#ChatUsers{
+    img{
+        max-height: 20px;
+        max-width: 20px;
+    }  
+}
+
+.signinBox{
+    
+    height:80px;
+    padding:5px;
+    margin-bottom: 10px;
+    background-color:#fff;
+    border: 1px solid #e6ebfa;
+}
+
+#NotificationBox{
+    padding:5px;
+    background-color:#fff;
+    border: 1px solid #e6ebfa;
+    img{
+        max-height: 45px;
+        max-width: 45px;
+
+    }
+}
 
 .bounceInDown { 
     -webkit-animation-name: bounceInDown; 

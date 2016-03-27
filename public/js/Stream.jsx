@@ -124,6 +124,10 @@
                         <img className="img-responsive" src={FilePath} />
                         );
                     }
+                    if(data.type!=false && data.type.match("video"))
+                    {
+                        return (<video><source src={FilePath} type={data.type} /></video> );
+                    }
                     return (
                     <p><a href={FilePath} target="_blank"><span className="glyphicon glyphicon-circle-arrow-down"></span>  {data.name}</a></p>
                     );

@@ -44,7 +44,7 @@ class Notification extends BaseModel
         $stmt->execute();
     }
     
-    public function getNotifications($auth_cookie) {
+    public function getNotificationsByCookie($auth_cookie) {
         
         $sql = "select Notification.*, "
                 . "fromUser.* from Notification"
@@ -57,6 +57,28 @@ class Notification extends BaseModel
         $stmt = $this->dbh->prepare($sql);
 
         $stmt->bindValue(':auth_cookie', $auth_cookie, PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, "stdClass");
+
+        return $obj;
+        
+    
+    }
+    public function getNotificationsByID($id) {
+        
+        $sql = "select Notification.*, "
+                . "fromUser.* from Notification"
+                . " inner join User on "
+                . "Notification.to_user_id=User.id and "
+                . "User.id=:id "
+                . " left join User fromUser on "
+                . "Notification.from_user_id = fromUser.id order by date desc";
+        
+        $stmt = $this->dbh->prepare($sql);
+
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
 
         $stmt->execute();
 

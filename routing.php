@@ -10,11 +10,11 @@ $router->map('GET|POST', '/user/logout/', 'UserController#logout');
 $router->map('GET|POST', '/user/password/reset/', 'UserController#passwordReset');
 $router->map('GET|POST', '/user/password/reset/[a:hash]/', 'UserController#passwordResetConfirmed');
 $router->map('GET|POST', '/user/fblogin/', 'UserController#fbcallback');
+$router->map('GET|POST', '/user/glogin/', 'UserController#gcallback');
 $router->map('GET|POST', '/my/settings/', 'UserController#settings');
 
 
 //Fronten STREAM
-$router->map('GET|POST', '/random/', 'DataController#random');
 
 $router->map('GET|POST', '/public/stream/', 'DataController#stream');
 
@@ -50,7 +50,7 @@ $router->map('GET', '/api/score/[i:id]', 'ScoreController#get_score');
 
 //Permalink and hash url
 $router->map('GET', '/[page|permalink]/[i:id]', 'DataController#get_permalink');
-$router->map('GET', '/hash/[a:hash]', 'DataController#get_hash');
+$router->map('GET', '/hash/[*:hash]', 'DataController#get_hash');
 
 
 $router->map('GET|POST', '/help/', 'WebController#help');
@@ -64,8 +64,13 @@ $router->map("POST|GET", "/backend/[a:model]/edit/[i:id]/", "BackendController#e
 $router->map("POST|GET", "/backend/[a:model]/list/", "BackendController#table");
 $router->map("POST|GET", "/backend/[a:model]/list/page/[i:page]/", "BackendController#table");
 $router->map("POST|GET", "/backend/login/", "BackendController#login");
+$router->map("POST|GET", "/backend/dashboard/", "DashboardController#dashboard");
 
-
+$router->map("POST|GET", "/backend/dashboard/json/hashtags/", "DashboardController#dashboard_json_hashtags");
+$router->map("POST|GET", "/backend/dashboard/json/content/", "DashboardController#dashboard_json_content");
+$router->map("POST|GET", "/backend/dashboard/json/user/", "DashboardController#dashboard_json_user");
+$router->map("POST|GET", "/backend/dashboard/user/", "DashboardController#dashboard_user");
+$router->map("POST|GET", "/backend/dashboard/[a:target]/", "DashboardController#dashboard");
 $router->map("GET", "/sitemap.xml", "WebController#sitemap");
 
 $router->map('GET', '/[*:user]', 'DataController#get_user');

@@ -12,15 +12,20 @@ Bitcoins: 1GqMSGseij18JnAoB9f3LHJRozNr1QeHkh
 ##API Documentation
 http://www.dasmerkendienie.com/help/
 
-##Features:
+##Features
 
 * Share (Websites, Images, Videos, SourceCode)
 * Like / Dislike / Comments
 * #hash tag search (orderd by popularity)
+* @user mentions and notifications via websockets
 * REST API
-* Backend
-* Facebook login
+* Oauth2 (Facebook, Google+)
+* Backend with Dashboard 
 
+##Requirement
+
+Webserver (Apache2 or Nginx)
+PHP 5.5 
 
 # Instalation
 
@@ -46,15 +51,15 @@ composer install
 you can adjust the db credentials in app/config/main.cfg 
 ```
 db_name="dmdn"
-db_user="root"
-db_pass="nv8xy0815d"
+db_user="user"
+db_pass="pass"
 ```
 You will find the [database.sql](https://raw.githubusercontent.com/andreas83/SocialNetwork/andrea/database.sql) file in repro
 
 Also you should adopt following configuration parameter
 ```
 address="http://www.yourdomain.com"
-dir="/home/lissi/tmp/dmdn/trunk";
+dir="/var/www/vhost";
 ```
 
 the upload_address is useful for large installation, if you plan to host your images on
@@ -70,12 +75,17 @@ For security reasons please don`t forget to change the salat to some other rando
 salat="KJMnmnNUU&/§N(JH/h80h87fnunu43h8u7"
 ```
 
-If you like to use the Facebook login, following settings are required:
+If you like to use the Facebook or Google login, following settings are required:
 ```
 # Facebook Auth
 facebook_auth=true; //set to false if you dont like fb login
 facebook_app_id="";
 facebook_app_secret="";
+
+# Google Auth
+google_auth=true; 
+google_app_id="";
+google_app_secret="";
 ```
 
 ##Permissions

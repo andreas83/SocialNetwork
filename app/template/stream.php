@@ -13,11 +13,11 @@ include("menu.php");
                     
                 <?php } ?>
         
-        <div class=" stream-row animated bounceInDown" 
+        <div class="stream-row animated bounceInDown" 
              data-permalink="<?php echo (isset($permalink) ? $permalink : ""); ?>" 
              data-hash="<?php echo (isset($hash) && !empty($hash) ? $hash : ""); ?>"
              data-user="<?php echo (isset($user) && !empty($user) ? $user : ""); ?>"
-             data-random="<?php echo (isset($random) && !empty($random) ? $random : ""); ?>"
+             data-maxid="<?php echo (isset($maxid) && !empty($maxid) ? $maxid : ""); ?>"
              >
             <div class="stream col-md-11"></div>
         </div>
@@ -30,13 +30,22 @@ include("menu.php");
         </div>
     </div>
 
-<div class="col-md-3 hidden-sm hidden-xs">
-    
-
-    
-    <ul class="list-group" id="notifications">
+<div class="col-md-3 hidden-sm hidden-xs animated bounceInRight">
+    <?php if (!Helper::isUser() && (Config::get("facebook_auth")  && Config::get("google_auth"))): ?>
+    <div class="signinBox">
         
-    </ul>
+        <?php if (!Helper::isUser() && Config::get("facebook_auth")): ?>
+        <a href='<?php echo UserController::getFBLoginURL(); ?>' class="col-xs-12 col-sm-12 col-md-12 btn" id="fblogin"><i class="fa fa-facebook"></i> Facebook</a>
+        <?php endif; ?>
+        
+        <?php if (!Helper::isUser() && Config::get("google_auth") ): ?>
+            <a href='<?php echo UserController::getGLoginURL(); ?>' class="col-xs-12 col-sm-12 col-md-12 btn" id="glogin"><i class="fa fa-google-plus"></i> Google</a>
+        <?php endif; ?>
+            
+    </div>
+    <?php endif; ?>
+    
+    <div id="NotificationBox" class="hide"></div>
     
 </div>
 <?php

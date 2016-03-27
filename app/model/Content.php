@@ -67,19 +67,23 @@ class Content extends BaseModel
         {
             $esql.="  data not like '%nsfw%' AND";
         }
+              
+        $orderby="order by Content.id desc"; 
         
-        $orderby="ORDER BY Content.id desc";        
         if($order)
         {
             $orderby=$order;
         }
         
-        $sql = "SELECT *, Content.id AS id, User.id as user_id FROM Content, User "
+        
+        $sql = "SELECT *, $score Content.id AS id, Content.date, User.id as user_id "
+                . "FROM Content "
+                . "INNER JOIN User on Content.user_id=User.id "               
                 . "WHERE  $esql "
-                . "Content.user_id=User.id AND "
                 . "Content.id < $id "
                 . "$orderby limit $show";
-       
+  
+        
         $stmt = $this->dbh->prepare($sql);
 
         if($hash)
@@ -93,6 +97,17 @@ class Content extends BaseModel
         $stmt->execute();
 
         $obj = $stmt->fetchALL(PDO::FETCH_CLASS, 'Content');
+
+        return $obj;
+    }
+    
+    function getStats(){
+        
+        $sql="select Month(FROM_UNIXTIME(date)) as Month, YEAR(FROM_UNIXTIME(date)) as Year, count(*) as cnt from Content GROUP BY Month(FROM_UNIXTIME(date)), YEAR(FROM_UNIXTIME(date)) order by date";
+        $stmt = $this->dbh->prepare($sql);
+        $stmt->execute();
+
+        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, 'StdClass');
 
         return $obj;
     }

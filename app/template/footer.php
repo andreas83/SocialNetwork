@@ -13,7 +13,7 @@ if (Helper::isUser()) {
 echo "<script>var upload_address=\"".Config::get("upload_address")."\";  </script>";
 echo "<script>var notification_server=\"".Config::get("notification_server")."\";  </script>";
 ?>
-
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="/vendor/components/bootstrap/css/bootstrap.min.css" />
 <link rel="stylesheet" href="/public/css/scss.php/dmdn.scss" />
 
@@ -27,7 +27,6 @@ echo "<script>var notification_server=\"".Config::get("notification_server")."\"
 <script src="/public/js/react.js"></script>
 
 <link rel="stylesheet" href="/vendor/components/highlightjs/styles/railscasts.css">
-<link rel="stylesheet" href="https://raw.githubusercontent.com/yuku-t/jquery-textcomplete/master/dist/jquery.textcomplete.css">
 
 <?php
 
