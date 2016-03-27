@@ -1,10 +1,10 @@
 {
-  "name": "Das merken die nie",
+  "name": "SocialNetwork",
   "version": "0.0.1",
   "dependencies": {
     "bootstrap-css": "~3.2.0",
     "jquery": "*",
-    "react": "0.13.3",
+    "react": "0.14.0",
     "animate.css" : "*"
   }
 }
