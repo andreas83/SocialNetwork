@@ -24,7 +24,7 @@ trait NoOptionsTransformerTrait
             return $content;
         }
 
-        return preg_replace(self::PATTERN, self::REPLACE_PATTEN, $content);
+        return preg_replace(self::PATTERN, sprintf(self::REPLACE_PATTEN, $options['url']), $content);
     }
 
     /**
