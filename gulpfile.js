@@ -9,6 +9,7 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     concat = require('gulp-concat'),
     cache = require('gulp-cache'),
+    babel = require('gulp-babel'),
     livereload = require('gulp-livereload'),
     del = require('del');
 
@@ -22,6 +23,13 @@ gulp.task('styles', function() {
         .pipe(gulp.dest('public/css/assets'))
 });
 
+gulp.task('default', () =>
+    gulp.src('public/js/*.jsx')
+        .pipe(babel({
+            presets: ['react']
+        }))
+        .pipe(gulp.dest('dist'))
+);
 
 gulp.task('scripts', function() {
     return gulp.src('public/js/*.js')
