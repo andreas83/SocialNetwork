@@ -6,3 +6,5 @@ public/vendor
 node_modules
 public/css/assets/*
 public/js/assets/*
+vendor
+bin
