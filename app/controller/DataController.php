@@ -684,7 +684,7 @@ class DataController extends BaseController
 
     static function replaceHash($txt)
     {
-        return \transformer\TransformerFactory::makeStatic('string\\html\\HashTransformer')->transform($txt);
+        return \transformer\TransformerFactory::makeStatic('string\\html\\HashTransformer')->transform($txt, ['url' => Config::get('address')]);
     }
 
     /**
@@ -745,8 +745,9 @@ class DataController extends BaseController
             $input = $transformer->transform(
                 $input,
                 [
-                    'width' => $width,
-                    'height' => $height
+                    'width'     => $width,
+                    'height'    => $height,
+                    'url'       => Config::get('address')
                 ]
             );
         }

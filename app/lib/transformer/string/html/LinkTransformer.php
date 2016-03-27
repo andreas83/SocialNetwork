@@ -11,7 +11,7 @@ use transformer\string\IStringTransformer;
  *
  * File: LinkTransformer.php
  */
-class RedtubeTransformer implements IStringTransformer
+class LinkTransformer implements IStringTransformer
 {
     /**
      * DRY
