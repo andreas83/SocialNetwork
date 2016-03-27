@@ -1,15 +1,17 @@
 <html>
     <head>
-        <title><?php echo $title; ?></title>
+        <title><?php echo isset($title) ? $title : ''; ?></title>
 
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <meta name="description" content="<?php echo $description; ?>" />
-        <meta name="keywords" content="<?php echo $keyword; ?>">
+        <meta name="description" content="<?php echo isset($description) ? $description : ''; ?>" />
+        <meta name="keywords" content="<?php echo isset($keyword) ? $keyword : ''; ?>">
         <?php
-        foreach ($header as $script) {
-            echo $script;
+        if (!empty($header)) {
+            foreach ($header as $script) {
+                echo $script;
+            }
         }
         ?>
     </head>

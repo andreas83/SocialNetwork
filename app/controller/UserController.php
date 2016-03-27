@@ -16,7 +16,13 @@ class UserController extends BaseController
         $error = false;
         if ($request->isPost()) {
             $user = new User();
-            $res = $user->find(array("mail" => $_POST['mail'], "password" => md5($_POST['pass'] . Config::get("salat"))));
+            $res = $user->find(
+                array(
+                    "mail"      => $request->getPost('mail'),
+                    "password"  => md5($request->getPost('pass') . Config::get("salat"))
+                )
+            );
+
             if (count($res) == 0) {
                 $error['login'] = _("Your login is incoreect");
 
@@ -24,7 +30,7 @@ class UserController extends BaseController
 
                 $_SESSION['login'] = $res[0]->id;
                 $_SESSION['user_settings']=$res[0]->settings;
-                $res[0]->auth_cookie=md5($_POST['mail'] . $_POST['pass'] . Config::get("salat"));
+                $res[0]->auth_cookie=md5( $request->getPost('mail').  $request->getPost('pass') . Config::get("salat"));
                 $res[0]->save();
                 setcookie("auth", $res[0]->auth_cookie, strtotime( '+1 year' ), "/");
                 $this->redirect("/public/stream/");
@@ -46,40 +52,41 @@ class UserController extends BaseController
     {
         $request = new Request();
         $error = false;
-        if ($request->isPost()) {
-            if (!filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL)) {
+        if ($request->isPost())
+        {
+            if (!filter_var($request->getPost('mail'), FILTER_VALIDATE_EMAIL)) {
                 $error['mail'] = _("Please validate your email");
             }
 
-            if (strlen($_POST['pass']) < 4) {
+            if (strlen($request->getPost('pass')) < 4) {
                 $error['pass'] = "Your password is to short";
             }
 
 
-            if (strlen($_POST['nick']) < 2) {
+            if (strlen($request->getPost('nick')) < 2) {
                 $error['nick'] = _("Nickname is to short 2.");
             }
 
-            if (!isset($_POST['nick']) || empty($_POST['nick'])) {
+            if (!$request->getPost('nick')) {
                 $error['nick'] = "Required field";
             }
 
             $user = new User();
 
-            $res = $user->find(array("name" => $_POST['nick']));
+            $res = $user->find(array("name" => $request->getPost('nick')));
             if (count($res) > 0) {
                 $error['nick'] = _("A User with this nick already exist.");
             }
 
             if ($error === false) {
 
-                $user->name = $_POST['nick'];
-                $user->mail = $_POST['mail'];
-                $user->password = md5($_POST['pass'] . Config::get("salat"));
+                $user->name =$request->getPost('nick');
+                $user->mail = $request->getPost('mail');
+                $user->password = md5($request->getPost('pass') . Config::get("salat"));
                               
                 
                 $user->settings = json_encode(UserController::defaultSettings());
-                $user->api_key = md5($_POST['nick']+date("Y-m-d H:i:s"));
+                $user->api_key = md5($request->getPost('nick')+date("Y-m-d H:i:s"));
                 $user->created = date("Y-m-d H:i:s");
                 $user->id = $user->save();
                 $_SESSION['login'] = $user->id;

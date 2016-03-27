@@ -5,11 +5,12 @@
  */
 class BaseController
 {
+    private $response;
 
     /**
      * @var array
      */
-    private $_templateVars = false;
+    protected $_templateVars = false;
 
     /**
      * @param string $name
@@ -115,6 +116,10 @@ class BaseController
     // execute the http headers
     public function __destruct()
     {
-        $this->getResponse()->executeHeaders();
+        if ($this->response) {
+            $this->getResponse()->executeHeaders();
+        }
+
+
     }
 }

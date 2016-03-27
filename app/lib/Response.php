@@ -6,7 +6,8 @@
  * Time: 10:38
  */
 
-class Response implements JsonSerializable {
+class Response implements JsonSerializable
+{
 
     /**
      * @var array

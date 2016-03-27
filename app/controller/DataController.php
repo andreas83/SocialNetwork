@@ -44,8 +44,14 @@ class DataController extends BaseController
         $content= new Content();
         //get max id for rand min/max
         $res=$content->getNext(Content::maxid, 1, false, false, false, false, false);
-        $this->assign("random", $res[0]->id);
-        
+        if ($res) {
+            $this->assign("random", $res[0]->id);
+        } else {
+            $this->assign("random", 0);
+        }
+
+
+
         $this->assign("title", "Social Network - Random Post");
         $this->assign("description", "Random post, quite a lot cats, gifs and other meaningful pictures");
         $this->assign("keyword", "random, pictures, gif, webm, videos, funny, cat, images");
