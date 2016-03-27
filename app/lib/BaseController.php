@@ -90,7 +90,7 @@ class BaseController
             ->setContent($data)
             ->executeHeaders();
 
-        die(json_encode($this->getResponse(), JSON_NUMERIC_CHECK));
+        die(json_encode($this->getResponse()));
     }
 
     /**
