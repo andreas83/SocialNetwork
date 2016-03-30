@@ -74,7 +74,7 @@ class User extends BaseModel
     
     function save(){
         $this->modified=date("Y-m-d H:i:s");
-        parent::save();
+        return parent::save();
     }
     
     function getStats(){
