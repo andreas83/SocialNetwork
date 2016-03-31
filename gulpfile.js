@@ -1,5 +1,7 @@
 /**
  * Created by j on 14.08.15.
+ * Modifed by nfo on 31.3.16
+ * @todo remove sass and every not related 
  */
 var gulp = require('gulp'),
     sass = require('gulp-sass'),
@@ -23,13 +25,14 @@ gulp.task('styles', function() {
         .pipe(gulp.dest('public/css/assets'))
 });
 
-gulp.task('default', () =>
-    gulp.src('public/js/*.jsx')
+gulp.task('react', function() {
+    gulp.src('public/js/jsx/*.jsx')
         .pipe(babel({
             presets: ['react']
         }))
-        .pipe(gulp.dest('dist'))
-);
+        .pipe(concat('react.js'))
+        .pipe(gulp.dest('public/js/'))
+});
 
 gulp.task('scripts', function() {
     return gulp.src('public/js/*.js')

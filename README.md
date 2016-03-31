@@ -44,7 +44,9 @@ https://github.com/andreas83/SocialNetwork/archive/andrea.zip
 ```
 cd SocialNetwork
 composer install
+bower install
 ```
+
 
 ## Configuration 
 

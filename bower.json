@@ -7,6 +7,7 @@
     "react": "0.14.0",
     "animate.css" : "*",
     "highlightjs" : "*",
-    "fontawesome" : "*"
+    "fontawesome" : "*", 
+    "jquery-textcomplete" : "*"
   }
 }
