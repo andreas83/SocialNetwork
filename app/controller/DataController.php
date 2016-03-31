@@ -14,10 +14,14 @@ class DataController extends BaseController
         $res=$content->getNext(Content::maxid, 1, false, false, false, false, false);
         
         $hashtags= new Hashtags;
-      
-        $this->assign("popularhashtags",   $hashtags->getPopularHashtags());
+        
+        $trending=$hashtags->getTrendingHashtags();
+        if(count($trending)==0)
+            $trending=$hashtags->getPopularHashtags();
+        
+        $this->assign("popularhashtags", $trending);
         $this->assign("randomhashtags",   $hashtags->getRandomHashtags());
-        $this->assign("maxid", $res[0]->id);
+        $this->assign("maxid", $res[0]->id);        
     }
 
     function frontend() {

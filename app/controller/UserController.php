@@ -261,7 +261,6 @@ class UserController extends BaseController
                     $error['image']=_("Image type is not allowed");
                 }
                 
-                
             }
             
             $setting->show_nsfw = $_POST['nsfw'];
@@ -407,7 +406,7 @@ class UserController extends BaseController
         if (count($res) > 0) {
             $_SESSION['login'] = $res[0]->id;
             $_SESSION['user_settings']=$res[0]->settings;
-            $res[0]->auth_cookie=md5($fbuser['name'] . $fbuser['email']. uniqid() . Config::get("salat"));
+            $res[0]->auth_cookie=md5($res[0]->name . $res[0]->mail. uniqid() . Config::get("salat"));
             $res[0]->save();
             setcookie("auth", $res[0]->auth_cookie, strtotime( '+1 year' ), "/");
             $this->redirect("/public/stream/");
@@ -422,9 +421,11 @@ class UserController extends BaseController
             $user->settings = json_encode(UserController::defaultSettings());
             $user->api_key = md5(uniqid().date("Y-m-d H:i:s"));
             $user->created = date("Y-m-d H:i:s");
+            $user->auth_cookie=md5($user->name . $user->mail. uniqid() . Config::get("salat"));
             $user->id = $user->save();
             $_SESSION['login'] = $user->id;
             $_SESSION['user_settings'] = $user->settings;
+            setcookie("auth", $user->auth_cookie, strtotime( '+1 year' ), "/");
             $this->redirect("/public/stream/");
             return true;
         }

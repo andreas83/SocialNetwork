@@ -1,3 +1,10 @@
+28.3.2016
+
+merge request from jakob 
+added response &  request as well the string transformator.
+also extended jakobs gulp file with babael for jsx transformation
+
+
 25.3.2016
 dashboard improvements
 modified tracking of hashtags for trending statistics
