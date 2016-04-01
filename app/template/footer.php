@@ -17,14 +17,11 @@ echo "<script>var notification_server=\"".Config::get("notification_server")."\"
 <link rel="stylesheet" href="/bower_components/bootstrap-css/css/bootstrap.min.css" />
 <link rel="stylesheet" href="/public/css/scss.php/dmdn.scss" />
 
-<script src="/bower_components/highlightjs/highlight.pack.min.js"></script>
-<script src="/bower_components/jquery/dist/jquery.slim.js"></script>
-<script src="/bower_components/jquery-textcomplete/dist/jquery.textcomplete.min.js"></script>
-<script src="https://fb.me/react-0.14.7.min.js"></script>
-<script src="https://fb.me/react-dom-0.14.7.min.js"></script>
-<script src="/public/js/main.js"></script>
-<script src="/bower_components/bootstrap-css/js/bootstrap.min.js"></script>
-<script src="/public/js/react.js"></script>
+<script src="https://fb.me/react-0.14.7.js"></script>
+<script src="https://fb.me/react-dom-0.14.7.js"></script>
+<script src="/public/js/app.js"></script>
+
+
 
 <link rel="stylesheet" href="/bower_components/highlightjs/styles/railscasts.css">
 
