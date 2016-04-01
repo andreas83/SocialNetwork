@@ -4,32 +4,20 @@
  * @todo remove sass and every not related 
  */
 var gulp = require('gulp'),
-    sass = require('gulp-sass'),
     minifycss = require('gulp-minify-css'),
     jshint = require('gulp-jshint'),
     uglify = require('gulp-uglify'),
     rename = require('gulp-rename'),
     concat = require('gulp-concat'),
     cache = require('gulp-cache'),
-    babel = require('gulp-babel'),
-    livereload = require('gulp-livereload'),
+    babel = require("gulp-babel");
     del = require('del');
 
-gulp.task('styles', function() {
 
-    return gulp.src('public/css/scss/*.scss')
-        .pipe(sass().on('error', sass.logError))
-        .pipe(gulp.dest('public/css/assets'))
-        .pipe(rename({suffix: '.min'}))
-        .pipe(minifycss())
-        .pipe(gulp.dest('public/css/assets'))
-});
 
 gulp.task('react', function() {
-    gulp.src('public/js/jsx/*.jsx')
-        .pipe(babel({
-            presets: ['react']
-        }))
+    return gulp.src('public/js/jsx/*.jsx')
+        .pipe(babel())
         .pipe(concat('react.js'))
         .pipe(gulp.dest('public/js/'))
 });
@@ -53,12 +41,12 @@ gulp.task('watch', function() {
     // Watch .scss files
     gulp.watch('public/css/**/*.scss', ['styles']);
 
-    // Watch .js files
-    gulp.watch('public/js/*.js', ['scripts']);
+    // Watch .jsx files
+    gulp.watch('public/jsx/*.jsx', ['react']);
 });
 
 gulp.task('default', function() {
-    gulp.start('styles', 'scripts');
+    gulp.start('react', 'scripts');
 });
 
 
