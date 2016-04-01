@@ -1078,7 +1078,7 @@ var InitStream = React.createClass({
 
         this.loadStreamFromServer();
     },
-    componentWillUnmount() {
+    componentWillUnmount: function () {
         document.removeEventListener('scroll', this.handleScroll);
     },
 
@@ -1206,7 +1206,7 @@ var InitStream = React.createClass({
         this.id = id;
     },
 
-    handleScroll(event) {
+    handleScroll: function (event) {
 
         if (this.state.endofData) {
             return true;

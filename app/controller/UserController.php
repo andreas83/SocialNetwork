@@ -11,10 +11,18 @@ class UserController extends BaseController
      */
     function login()
     {
+        $request = new Request();
+
         $error = false;
-        if ($_POST) {
+        if ($request->isPost()) {
             $user = new User();
-            $res = $user->find(array("mail" => $_POST['mail'], "password" => md5($_POST['pass'] . Config::get("salat"))));
+            $res = $user->find(
+                array(
+                    "mail"      => $request->getPost('mail'),
+                    "password"  => md5($request->getPost('pass') . Config::get("salat"))
+                )
+            );
+
             if (count($res) == 0) {
                 $error['login'] = _("Your login is incoreect");
 
@@ -22,12 +30,13 @@ class UserController extends BaseController
 
                 $_SESSION['login'] = $res[0]->id;
                 $_SESSION['user_settings']=$res[0]->settings;
-                $res[0]->auth_cookie=md5($_POST['mail'] . $_POST['pass'] . Config::get("salat"));
+                $res[0]->auth_cookie=md5( $request->getPost('mail').  $request->getPost('pass') . Config::get("salat"));
                 $res[0]->save();
                 setcookie("auth", $res[0]->auth_cookie, strtotime( '+1 year' ), "/");
                 $this->redirect("/public/stream/");
             }
         }
+
         
         $this->assign("scope", "login frontpage");
         $this->assign("title", "Login");
@@ -39,42 +48,43 @@ class UserController extends BaseController
 
     function register()
     {
-
+        $request = new Request();
         $error = false;
-        if ($_POST) {
-            if (!filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL)) {
+        if ($request->isPost())
+        {
+            if (!filter_var($request->getPost('mail'), FILTER_VALIDATE_EMAIL)) {
                 $error['mail'] = _("Please validate your email");
             }
 
-            if (strlen($_POST['pass']) < 4) {
+            if (strlen($request->getPost('pass')) < 4) {
                 $error['pass'] = "Your password is to short";
             }
 
 
-            if (strlen($_POST['nick']) < 2) {
+            if (strlen($request->getPost('nick')) < 2) {
                 $error['nick'] = _("Nickname is to short 2.");
             }
 
-            if (!isset($_POST['nick']) || empty($_POST['nick'])) {
+            if (!$request->getPost('nick')) {
                 $error['nick'] = "Required field";
             }
 
             $user = new User();
 
-            $res = $user->find(array("name" => $_POST['nick']));
+            $res = $user->find(array("name" => $request->getPost('nick')));
             if (count($res) > 0) {
                 $error['nick'] = _("A User with this nick already exist.");
             }
 
             if ($error === false) {
 
-                $user->name = $_POST['nick'];
-                $user->mail = $_POST['mail'];
-                $user->password = md5($_POST['pass'] . Config::get("salat"));
+                $user->name =$request->getPost('nick');
+                $user->mail = $request->getPost('mail');
+                $user->password = md5($request->getPost('pass') . Config::get("salat"));
                               
                 
                 $user->settings = json_encode(UserController::defaultSettings());
-                $user->api_key = md5($_POST['nick'].date("Y-m-d H:i:s"));
+                $user->api_key = md5($request->getPost('nick')+date("Y-m-d H:i:s"));
                 $user->created = date("Y-m-d H:i:s");
                 $user->id = $user->save();
                 $_SESSION['login'] = $user->id;
@@ -93,7 +103,8 @@ class UserController extends BaseController
     }
 
     
-    function passwordResetConfirmed($request){
+    function passwordResetConfirmed($request)
+    {
         $user = new User();
 
         $res = $user->getUserbyAPIKey($request['hash']);
@@ -143,37 +154,37 @@ class UserController extends BaseController
             $this->render("pw_forgot.php");
 
         }
-        
-            
    
     }
     
-    function passwordReset(){
+    function passwordReset()
+    {
         $error=false;
         if(isset($_POST) && !empty($_POST))
         {
-            
+
             $user = new User();
 
             $res = $user->find(array("mail" => $_POST['mail']));
             if (count($res) == 0) {
                 $error['pw_error'] = _("Account not found.");
             }else{
-
-
-                $mail = new PHPMailer;
-
-                if(Config::get("smtp")=="true")
-                {
-                    $mail->isSMTP();
-                    $mail->SMTPAuth = true;
-                    $mail->Username = Config::get("smtp_user");
-                    $mail->Password = Config::get("smtp_pass");
-                    $mail->Port = Config::get("smtp_port");
-                    $mail->Host = Config::get("smtp_host");
-
-                }
-
+      
+            
+            $mail = new PHPMailer;
+            
+            if(Config::get("smtp")=="true")
+            {
+                $mail->isSMTP();
+                $mail->SMTPAuth = true;
+                $mail->Username = Config::get("smtp_user");
+                $mail->Password = Config::get("smtp_pass");
+                $mail->Port = Config::get("smtp_port");
+                $mail->Host = Config::get("smtp_host");
+                
+            }
+            
+            
 
                 $mail->From =  Config::get("mail_from");
                 $mail->FromName =  Config::get("mail_from_name");
@@ -221,10 +232,8 @@ class UserController extends BaseController
         $user= new User;
         
         $res=$user->getUserbyName($request['user']);
-        
-        header('Content-Type: application/json');
-        echo json_encode($res);
-        
+
+        $this->asJson($res);
     }
     
     function settings()
@@ -251,7 +260,6 @@ class UserController extends BaseController
                 }else{
                     $error['image']=_("Image type is not allowed");
                 }
-                
                 
             }
             
@@ -329,11 +337,8 @@ class UserController extends BaseController
         $_SESSION['oauth2state'] = $provider->getState();
         try {
 
-            
             $ownerDetails = $provider->getResourceOwner($token);
             $this->oAuth( $ownerDetails->getFirstName(). " ". $ownerDetails->getLastName(), $ownerDetails->getEmail());
-            
-           
 
         } catch (Exception $e) {
 
@@ -355,7 +360,6 @@ class UserController extends BaseController
 
         $authUrl = $provider->getAuthorizationUrl();
         $_SESSION['oauth2state'] = $provider->getState();
-        
         
       return htmlspecialchars($authUrl);
 
@@ -414,7 +418,6 @@ class UserController extends BaseController
             $user->mail = $mail;
             $user->password = md5(uniqid(). Config::get("salat"));
 
-
             $user->settings = json_encode(UserController::defaultSettings());
             $user->api_key = md5(uniqid().date("Y-m-d H:i:s"));
             $user->created = date("Y-m-d H:i:s");
@@ -427,7 +430,8 @@ class UserController extends BaseController
             return true;
         }
         
-      
+
+      $_SESSION['fb_access_token'] = (string) $accessToken;
       
       $this->assing("error", array("nick" =>_("A User with this nick already exist.") ));
       $this->register();

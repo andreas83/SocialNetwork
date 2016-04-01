@@ -5,11 +5,12 @@
  */
 class BaseController
 {
+    private $response;
 
     /**
      * @var array
      */
-    private $_templateVars = false;
+    protected $_templateVars = false;
 
     /**
      * @param string $name
@@ -67,11 +68,58 @@ class BaseController
         return '';
     }
 
+
     /**
      * @param $location
      */
     public function redirect($location)
     {
-        header("Location: $location");
+        $this->getResponse()
+            ->setHeaders(["Location: $location"])
+            ->executeHeaders();
+    }
+
+
+    /**
+     * @param $data
+     */
+    public function asJson($data)
+    {
+        $this->getResponse()
+            ->addHeader('Content-Type: application/json')
+            ->setContent($data)
+            ->executeHeaders();
+
+        die(json_encode($this->getResponse()));
+    }
+
+    /**
+     * @return Response
+     */
+    public function getResponse()
+    {
+        if (!$this->response) {
+            $this->response = new Response();
+        }
+
+        return $this->response;
+    }
+
+    /**
+     * @param Response $response
+     */
+    public function setResponse(Response $response)
+    {
+        $this->response = $response;
+    }
+
+    // execute the http headers
+    public function __destruct()
+    {
+        if ($this->response) {
+            $this->getResponse()->executeHeaders();
+        }
+
+
     }
 }

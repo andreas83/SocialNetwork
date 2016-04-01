@@ -1,0 +1,10 @@
+.idea
+app/config/
+public/upload
+public/css/scss/scss_cache
+public/vendor
+node_modules
+public/css/assets/*
+public/js/assets/*
+vendor
+bin

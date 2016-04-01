@@ -13,7 +13,7 @@
                 if(isset($user_settings->profile_picture)){
                 ?>
                 
-                <a class="hidden-xs" href="/">
+                <a class="" href="/">
                     <img class=" img-responsive" src="<?php echo  (isset($user_settings->profile_picture) ? Config::get('upload_address') .$user_settings->profile_picture : ""); ?>">
                 </a>
                 <?php } ?>
@@ -50,7 +50,7 @@
         <?php endif; ?>
         
         <div class="hashtag">
-            <h3>Popular</h3>
+            <h3>Trending</h3>
             <ul>
                 <?php
                 foreach($popularhashtags as $hashtag)

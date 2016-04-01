@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<project name="SocialNetwork" default="build" basedir="." description="This is the automatic build file for the social network.">
+    <!-- import the different tasks -->
+    <import file="phing-build/build-targets/git/pull.xml" />
+    <import file="phing-build/build-targets/php/composer.xml" />
+    <import file="phing-build/build-targets/node/npm.xml" />
+    <import file="phing-build/build-targets/node/bower.xml" />
+    <import file="phing-build/build-targets/node/gulp.xml" />
+
+    <!-- property list -->
+    <property value="" name="outputValue" />
+
+    <!-- prepares the project -->
+    <target name="prepare" depends="php.composer.check, node.npm.check">
+        <phingcall target="git.pull" />
+        <!-- check if npm exists otherwise fail -->
+        <phingcall target="node.npm.install.routine" />
+        <phingcall target="php.composer.install.routine" />
+    </target>
+
+    <!-- unit tests triggered -->
+    <target name="test">
+        <phpunit haltonerror="true" haltonfailure="true">
+            <batchtest>
+                <fileset dir="test">
+                    <include name="*Test.php"/>
+                </fileset>
+            </batchtest>
+        </phpunit>
+    </target>
+
+    <!-- build the package -->
+    <target name="build" depends="test,prepare">
+        <phingcall target="node.bower.install.routine" />
+        <phingcall target="node.gulp.trigger" />
+    </target>
+
+    <target name="clean">
+        <delete dir="vendor" />
+        <delete dir="node_modules" />
+    </target>
+</project>

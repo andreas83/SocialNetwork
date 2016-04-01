@@ -60,6 +60,20 @@ class Hashtags extends BaseModel
         return $obj;        
     }
     
+    function getTrendingHashtags($limit =5){
+        $sql = "select * from Hashtags  WHERE week(modified) = week(now()) order by pop desc limit ".$limit;
+        
+        $stmt = $this->dbh->prepare($sql);
+
+        
+
+        $stmt->execute();
+
+        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, 'Hashtags');
+
+        return $obj;        
+    }
+    
         
     function getRandomHashtags($limit =5){
         $sql = "select * from Hashtags order by rand() limit ".$limit;

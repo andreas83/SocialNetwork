@@ -46,7 +46,7 @@
                 this.loadStreamFromServer();
 
         },
-        componentWillUnmount() {
+        componentWillUnmount: function() {
             document.removeEventListener('scroll', this.handleScroll);
         },
         
@@ -189,7 +189,7 @@
         },
         
         
-        handleScroll(event) {
+        handleScroll: function(event) {
             
             if(this.state.endofData)
             {

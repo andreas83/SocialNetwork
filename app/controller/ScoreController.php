@@ -9,9 +9,8 @@ class ScoreController{
      * @todo make one query for like/dislike
      * @param array $request['id']
      */
-    function get_score($request) {
-
-        
+    function get_score($request)
+    {
         $score = new Score();
         
         $like=$score->find(array(
@@ -22,7 +21,7 @@ class ScoreController{
             "content_id"=>$request['id'], 
             "type" => "sub"));
         
-        header('Content-Type: application/json');
+
    
         if (count($like)>0 || count($dislike)>0)
             echo json_encode(array("like"=>count($like), "dislike"=>count($dislike)));
@@ -34,9 +33,10 @@ class ScoreController{
     /**
      * save like/dislike
      * 
-     * @return void
+     * @return void|bool
      */
-    function post_score($request){
+    function post_score($request)
+    {
         $score = new Score();
         if (isset($request['type']) && Helper::isUser()) {
             
@@ -48,8 +48,8 @@ class ScoreController{
             if(count($find)>0)
             {
                 $find[0]->delete($find[0]->id);
+
                 return $this->get_score($request);
-                    
             }
             
             $score->user_id = Helper::getUserID();
