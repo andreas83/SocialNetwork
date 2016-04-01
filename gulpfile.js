@@ -16,7 +16,10 @@ var gulp = require('gulp'),
 
 
 gulp.task('react', function() {
-    return gulp.src('public/js/jsx/*.jsx')
+    return gulp.src(['public/js/jsx/Author.jsx', 'public/js/jsx/Comments.jsx', 
+		     'public/js/jsx/Stream.jsx', 'public/js/jsx/Likes.jsx', 
+                     'public/js/jsx/SearchBox.jsx', 'public/js/jsx/Chat.jsx',
+                     'public/js/jsx/ShareBox.jsx', 'public/js/jsx/Notifications.jsx', 'public/js/jsx/InitStream.jsx'])
         .pipe(babel({"presets": ["react"]}))
         .pipe(concat('react.js'))
         .pipe(gulp.dest('public/js/'))
