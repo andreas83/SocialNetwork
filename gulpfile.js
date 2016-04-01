@@ -12,6 +12,8 @@ var gulp = require('gulp'),
     cache = require('gulp-cache'),
     babel = require("gulp-babel"),
     gutil = require('gulp-util'),
+    sass = require('gulp-sass'),
+    cssmin = require('gulp-cssmin'),
     del = require('del');
 
 
@@ -43,32 +45,46 @@ gulp.task('compress', function(){
 
 });
 
-gulp.task('scripts', function() {
-    return gulp.src('public/js/*.js')
-        .pipe(jshint('.jshintrc'))
-        .pipe(jshint.reporter('default'))
-        .pipe(concat('main.js'))
-        .pipe(gulp.dest('public/js/assets'))
-        .pipe(rename({suffix: '.min'}))
-        .pipe(uglify())
-        .pipe(gulp.dest('public/js/assets'));
+gulp.task('sass', function () {
+  return gulp.src('public/css/scss/*.scss')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest('public/css'));
 });
 
-gulp.task('clean', function(cb) {
-    del(['public/css/assets', 'public/js/assets'], cb);
+gulp.task('compress', function(){
+
+    return gulp.src(['bower_components/fontawesome/css/font-awesome.min.css',  
+                     'bower_components/bootstrap-css/css/bootstrap.min.css', 
+                     'bower_components/highlightjs/styles/railscasts.css',
+                     'public/css/dmdn.css'])
+    .pipe(concat('style.min.css'))
+    .pipe(cssmin())
+    .pipe(gulp.dest('public/css'));
+
+
 });
+
+
+gulp.task('icons', function() { 
+    return gulp.src(['bower_components/fontawesome/fonts/**.*', 'bower_components/bootstrap-css/fonts/*.*']) 
+        .pipe(gulp.dest('public/fonts')); 
+});
+
+
+
+gulp.task('default', function() {
+    gulp.start('react', 'sass', 'compress', 'icons');
+});
+
 
 gulp.task('watch', function() {
     // Watch .scss files
-    gulp.watch('public/css/**/*.scss', ['styles']);
+    gulp.watch('public/css/scss/*.scss', ['sass']);
 
     // Watch .jsx files
     gulp.watch('public/jsx/*.jsx', ['react']);
 });
 
-gulp.task('default', function() {
-    gulp.start('react', 'compress', 'scripts');
-});
 
 
 gulp.task('watch', function() {
