@@ -17,7 +17,7 @@ var gulp = require('gulp'),
 
 gulp.task('react', function() {
     return gulp.src('public/js/jsx/*.jsx')
-        .pipe(babel())
+        .pipe(babel({"presets": ["react"]}))
         .pipe(concat('react.js'))
         .pipe(gulp.dest('public/js/'))
 });
