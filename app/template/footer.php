@@ -17,8 +17,6 @@ echo "<script>var notification_server=\"".Config::get("notification_server")."\"
 <link rel="stylesheet" href="/bower_components/bootstrap-css/css/bootstrap.min.css" />
 <link rel="stylesheet" href="/public/css/scss.php/dmdn.scss" />
 
-<script src="https://fb.me/react-0.14.7.js"></script>
-<script src="https://fb.me/react-dom-0.14.7.js"></script>
 <script src="/public/js/app.js"></script>
 
 

@@ -30,8 +30,10 @@ gulp.task('compress', function(){
     return gulp.src(["bower_components/highlightjs/highlight.pack.min.js",
                      "bower_components/jquery/dist/jquery.min.js",
 		     "bower_components/jquery-textcomplete/dist/jquery.textcomplete.min.js",
-		     "public/js/main.js",
 		     "bower_components/bootstrap-css/js/bootstrap.min.js",
+                     "bower_components/react/react.min.js",
+                     "bower_components/react/react-dom.min.js",
+		     "public/js/main.js",
 		     "public/js/react.js"])
 		     
                      .pipe(uglify().on('error', gutil.log))

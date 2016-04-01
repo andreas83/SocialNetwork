@@ -4,7 +4,7 @@
   "dependencies": {
     "bootstrap-css": "~3.2.0",
     "jquery": "*",
-    "react": "0.14.0",
+    "react": "0.14.7",
     "animate.css" : "*",
     "highlightjs" : "*",
     "fontawesome" : "*", 
