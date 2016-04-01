@@ -1,7 +1,7 @@
 /**
  * Created by j on 14.08.15.
  * Modifed by nfo on 31.3.16
- * @todo remove sass and every not related 
+ *
  */
 var gulp = require('gulp'),
     minifycss = require('gulp-minify-css'),
@@ -10,7 +10,8 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     concat = require('gulp-concat'),
     cache = require('gulp-cache'),
-    babel = require("gulp-babel");
+    babel = require("gulp-babel"),
+    gutil = require('gulp-util'),
     del = require('del');
 
 
@@ -32,7 +33,9 @@ gulp.task('compress', function(){
 		     "public/js/main.js",
 		     "bower_components/bootstrap-css/js/bootstrap.min.js",
 		     "public/js/react.js"])
-		     .pipe(concat('app.js'))
+		     
+                     .pipe(uglify().on('error', gutil.log))
+                     .pipe(concat('app.js'))
                      .pipe(gulp.dest('public/js/'))
           
 

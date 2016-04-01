@@ -176,88 +176,6 @@ var AuthorText = React.createClass({
     }
 });
 
-
-var socket;
-var ChatBox = React.createClass({
-    displayName: "ChatBox",
-
-    getInitialState: function () {
-        return { channel: [], activeUser: [] };
-    },
-
-    componentDidMount: function () {
-
-        try {
-            socket = new WebSocket(notification_server);
-
-            socket.onopen = function (msg) {
-
-                socket.send(JSON.stringify({ action: "openroom", auth_cookie: getCookie("auth") }));
-            };
-            socket.onmessage = function (msg) {
-
-                data = JSON.parse(msg.data);
-
-                this.setState({ activeUser: Object.keys(swap(data.activeUsers)), channel: data.channel.default });
-                var objDiv = document.getElementById("textframe");
-                objDiv.scrollTop = objDiv.scrollHeight;
-            }.bind(this);
-            socket.onclose = function (msg) {};
-        } catch (ex) {
-
-            console.log(ex);
-        }
-    },
-
-    handleSubmit: function (event) {
-        event.preventDefault();
-        socket.send(JSON.stringify({ action: "chat", text: document.getElementById("chatinput").value, auth_cookie: getCookie("auth") }));
-        document.getElementById("chatinput").value = "";
-        var objDiv = document.getElementById("textframe");
-        objDiv.scrollTop = objDiv.scrollHeight;
-    },
-
-    render: function () {
-
-        return React.createElement(
-            "div",
-            null,
-            React.createElement(
-                "div",
-                { id: "chat", className: "col-md-9 bounceIn" },
-                React.createElement(
-                    "div",
-                    { id: "textframe" },
-                    this.state.channel.map(function (chat, i) {
-                        chat = Replacehashtags(chat);
-                        return React.createElement("p", { dangerouslySetInnerHTML: { __html: chat } });
-                    })
-                ),
-                React.createElement(
-                    "form",
-                    { className: "chatForm", onSubmit: this.handleSubmit },
-                    React.createElement("input", { type: "text", autoComplete: "off", id: "chatinput" })
-                )
-            ),
-            React.createElement(
-                "div",
-                { id: "ChatUsers", className: "col-md-3" },
-                React.createElement(
-                    "ul",
-                    null,
-                    this.state.activeUser.map(function (user, i) {
-                        return React.createElement(
-                            "li",
-                            null,
-                            React.createElement("span", { dangerouslySetInnerHTML: { __html: user } })
-                        );
-                    })
-                )
-            )
-        );
-    }
-});
-
 var CommentList = React.createClass({
     displayName: 'CommentList',
 
@@ -409,243 +327,196 @@ var Comment = React.createClass({
         );
     }
 });
-function Replacehashtags(string) {
-    string = string.replace(/#(\S*)/g, '<a class="hash" href="/hash/$1">#$1</a>');
-    string = string.replace(/@(\S*)/g, '<a class="user" href="/$1">@$1</a>');
 
-    return string;
-}
-
-function prettyDate(time) {
-    var date = new Date(time * 1000),
-        diff = (new Date().getTime() - date.getTime()) / 1000,
-        day_diff = Math.floor(diff / 86400);
-
-    if (isNaN(day_diff) || day_diff < 0 || day_diff >= 31) return;
-
-    return day_diff == 0 && (diff < 60 && "just now" || diff < 120 && "1 minute ago" || diff < 3600 && Math.floor(diff / 60) + " minutes ago" || diff < 7200 && "1 hour ago" || diff < 86400 && Math.floor(diff / 3600) + " hours ago") || day_diff == 1 && "Yesterday" || day_diff < 7 && day_diff + " days ago" || day_diff < 31 && Math.ceil(day_diff / 7) + " weeks ago";
-}
-
-function getCookie(cname) {
-    var name = cname + "=";
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') c = c.substring(1);
-        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
-    }
-    return "";
-}
-
-function swap(json) {
-    var ret = {};
-    for (var key in json) {
-        ret[json[key]] = key;
-    }
-    return ret;
-}
+var StreamList = React.createClass({
+    displayName: "StreamList",
 
 
-var InitStream = React.createClass({
-    displayName: 'InitStream',
+    render: function () {
+        var streamNodes = this.props.data.map(function (data) {
 
-    getInitialState: function () {
-
-        return { data: [], random: false };
-    },
-    componentDidMount: function () {
-        this.loadStreamFromServer();
-
-        document.addEventListener('scroll', this.handleScroll);
-        document.addEventListener('keydown', this.handleKeyDown);
-        $("#next").on("click", this.randomPost);
-
-        //@todo better soloution would be to save the complete data as state
-        window.onpopstate = function (event) {
-            window.location.href = event.state.url;
-        };
-    },
-
-    handleKeyDown: function (event) {
-
-        if (event.target.tagName == "BODY" && event.keyCode == 82) {
-            this.randomPost();
-        }
-    },
-
-    randomPost: function () {
-        function getRandomInt(min, max) {
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
-
-        this.setState({
-            data: [],
-            random: true,
-            endofData: true,
-            id: getRandomInt(1, parseInt($(".stream-row").attr("data-maxid")) + 1)
-        });
-
-        this.loadStreamFromServer();
-    },
-    componentWillUnmount() {
-        document.removeEventListener('scroll', this.handleScroll);
-    },
-
-    loadStreamFromServer: function () {
-
-        var hash = "";
-        var user = "";
-
-        var show = 5;
-        var lastid = "";
-
-        if (this.id > 0 || typeof id == "undefined") {
-
-            var ids = $(".stream-item").map(function () {
-                return parseInt($(this).attr("data-id"), 10);
-            }).get();
-
-            this.setID(Math.min.apply(Math, ids));
-        }
-
-        if ($(".stream-row").attr("data-permalink") > 0) {
-
-            this.setID(parseInt($(".stream-row").attr("data-permalink")) + 1);
-            show = 1;
-            this.setState({
-                endofData: true
-            });
-        }
-        if ($(".stream-row").attr("data-hash") != "" && this.state.random != true) {
-            hash = $(".stream-row").attr("data-hash");
-        }
-        if ($(".stream-row").attr("data-user") != "" && this.state.random != true) {
-            user = $(".stream-row").attr("data-user");
-        }
-
-        if (this.state.random) {
-            show = 1;
-            this.setID(this.state.id);
-        }
-
-        if (this.state.lastID == this.id) {
-
-            this.setState({
-                endofData: true
-            });
-        }
-        this.state.lastID = this.id;
-
-        $(".spinner").show();
-        $.ajax({
-            url: '/api/content/?id=' + this.id + '&hash=' + hash + '&user=' + user + '&show=' + show,
-            dataType: 'json',
-            cache: false,
-            success: function (data) {
-
-                data = this.state.data.concat(data);
-
-                if ($(".stream-row").attr("data-user") != "" && this.state.random != true) {
-                    $("#custom_css").html(data[0].author.custom_css);
-                }
-
-                this.setState({ data: data });
-                if (user_settings == false || user_settings.autoplay == "no") {
-                    this.setAutoplayOff();
-                }
-                if (user_settings == false || user_settings.mute_video == "yes") {
-                    this.setMuted();
-                }
-                if (this.state.random) {
-                    url = "/permalink/" + data[0].stream.id;
-                    var stateObj = { id: data[0].stream.id, url: url };
-                    history.pushState(stateObj, "irgendwas", url);
-                }
-
-                this.setState({
-                    loadingFlag: false
+            var editContent = function (e) {
+                e.preventDefault();
+                var streamItem = $(".stream-item[data-id=" + data.stream.id + "]");
+                streamItem.find(".text").attr("contenteditable", "true").focus();
+                streamItem.find(".text").html(streamItem.find(".text").text());
+                streamItem.find(".action .save").removeClass("hide");
+                streamItem.find(".action .save").click(function () {
+                    $.ajax({
+                        url: '/api/content/' + data.stream.id,
+                        data: { "content": streamItem.find(".text").text() },
+                        type: 'PUT',
+                        success: function (result) {
+                            if (result.status == "done") {
+                                streamItem.find(".action .save").addClass("hide");
+                                streamItem.find(".text").attr("contenteditable", "false");
+                                streamItem.find(".text").html(Replacehashtags(streamItem.find(".text").html()));
+                            }
+                        }
+                    });
                 });
-                $(".spinner").hide();
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.error(this.props.url, status, err.toString());
-            }.bind(this)
+            };
+            var deleteContent = function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '/api/content/' + data.stream.id,
+                    type: 'DELETE',
+                    success: function (result) {
+                        if (result.status == "deleted") {
+                            $(".stream-item[data-id=" + data.stream.id + "]").remove();
+                        }
+                    }
+                });
+            };
+            var reportContent = function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '/api/content/report/' + data.stream.id,
+                    type: 'POST',
+                    success: function (result) {
+                        if (result.status == "reported") {
+                            $(".stream-item[data-id=" + data.stream.id + "]").html("<h2 class='text-center'>Reported</h2><p class='text-center'>Thank you, we will validate the post soon</p>");
+                        }
+                    }
+                });
+            };
+            return React.createElement(
+                "div",
+                { "data-id": data.stream.id, className: "row stream-item" },
+                React.createElement(Author, { editContent: editContent, deleteContent: deleteContent, reportContent: reportContent, id: data.author.id, author: data.author, contentID: data.stream.id, time: data.stream.date }),
+                React.createElement(AuthorText, { id: data.stream.id, data: data.stream }),
+                React.createElement(Content, { id: data.stream.id, data: data.stream }),
+                React.createElement(Likebox, { id: data.stream.id }),
+                React.createElement(CommentBox, { id: data.stream.id, data: "" })
+            );
         });
-    },
+
+        return React.createElement(
+            "div",
+            { className: "stream" },
+            streamNodes
+        );
+    }
+});
+
+var Content = React.createClass({
+    displayName: "Content",
+
 
     render: function () {
 
-        if (user_settings.show_nsfw == "false" && $(".stream-row").attr("data-hash") == "nsfw") {
+        var imgpath = "";
+        if (this.props.data.type == "generic") {
+            return React.createElement("div", { className: "generic" });
+        }
+        if (this.props.data.type == "img") {
+            imgpath = this.props.data.url;
 
             return React.createElement(
-                'div',
-                { className: 'content' },
-                'You disabled not safe for work content'
+                "div",
+                { className: "img" },
+                React.createElement("img", { className: "img-responsive", src: imgpath })
             );
         }
-        if (user_settings == false && $(".stream-row").attr("data-hash") == "nsfw") {
-            return React.createElement(
-                'div',
-                { className: 'content' },
-                'You need to be over +18 to watch nsfw content, please ',
-                React.createElement(
-                    'a',
-                    { href: '/user/register/' },
-                    'register here.'
-                )
-            );
+        if (this.props.data.type == "upload") {
+            return React.createElement(Upload, { id: this.props.data.id, upload: this.props.data });
         }
-        return React.createElement(
-            'div',
-            { className: 'content' },
-            React.createElement(StreamList, { data: this.state.data })
-        );
-    },
-    setAutoplayOff: function () {
-
-        $('video').each(function (index) {
-            $("video").get(index).pause();
-        });
-    },
-    setMuted: function () {
-
-        $("video").prop('muted', true);
-    },
-    setID: function (id) {
-        this.id = id;
-    },
-
-    handleScroll(event) {
-
-        if (this.state.endofData) {
-            return true;
+        if (this.props.data.type == "www") {
+            return React.createElement(WWW, { id: this.props.data.id, meta: this.props.data });
         }
-        //this function will be triggered if user scrolls
-        var windowHeight = $(window).height();
-        var inHeight = window.innerHeight;
-        var scrollT = $(window).scrollTop();
-        var totalScrolled = scrollT + inHeight;
-        if (totalScrolled + 100 > windowHeight) {
-            //user reached at bottom
-            if (!this.state.loadingFlag) {
-                //to avoid multiple request
-                this.setState({
-                    loadingFlag: true
-                });
-
-                this.loadStreamFromServer();
-            }
+        if (this.props.data.type == "video") {
+            return React.createElement(Video, { id: this.props.data.id, meta: this.props.data });
         }
     }
 });
 
-var data = {};
+var Upload = React.createClass({
+    displayName: "Upload",
 
-ReactDOM.render(React.createElement(InitStream, { data: data }), document.getElementsByClassName('stream')[0]);
-ReactDOM.render(React.createElement(SearchBox, { data: data }), document.getElementById("SearchBox"));
-ReactDOM.render(React.createElement(NotificationBox, { data: data }), document.getElementById("NotificationBox"));
-ReactDOM.render(React.createElement(ChatBox, { data: data }), document.getElementById("ChatBox"));
-ReactDOM.render(React.createElement(ShareBox, { data: data }), document.getElementById("ShareBox"));
+
+    render: function () {
+        var ImgPath,
+            FilePath = "";
+        var Img = "";
+        var Files = "";
+        //
+        if (typeof this.props.upload.files != "undefined") {
+
+            var Files = this.props.upload.files.map(function (data) {
+                FilePath = data.src;
+
+                if (data.type != false && data.type.match("image")) {
+                    return React.createElement("img", { className: "img-responsive", src: FilePath });
+                }
+                if (data.type != false && data.type.match("video")) {
+                    return React.createElement(
+                        "video",
+                        null,
+                        React.createElement("source", { src: FilePath, type: data.type })
+                    );
+                }
+                return React.createElement(
+                    "p",
+                    null,
+                    React.createElement(
+                        "a",
+                        { href: FilePath, target: "_blank" },
+                        React.createElement("span", { className: "glyphicon glyphicon-circle-arrow-down" }),
+                        "  ",
+                        data.name
+                    )
+                );
+            });
+        }
+
+        return React.createElement(
+            "div",
+            { className: "upload" },
+            Files
+        );
+    }
+});
+
+var WWW = React.createClass({
+    displayName: "WWW",
+
+
+    render: function () {
+
+        return React.createElement(
+            "div",
+            { className: "www" },
+            React.createElement(
+                "a",
+                { href: this.props.meta.url },
+                React.createElement("img", { className: "img-responsive", src: this.props.meta.og_img }),
+                React.createElement(
+                    "h2",
+                    null,
+                    this.props.meta.og_title
+                )
+            ),
+            React.createElement(
+                "p",
+                null,
+                this.props.meta.og_description
+            )
+        );
+    }
+});
+
+var Video = React.createClass({
+    displayName: "Video",
+
+
+    render: function () {
+        return React.createElement(
+            "div",
+            { className: "video" },
+            React.createElement("div", { className: "embed-responsive embed-responsive-16by9", dangerouslySetInnerHTML: { __html: this.props.meta.html } })
+        );
+    }
+});
 
 var Likebox = React.createClass({
     displayName: 'Likebox',
@@ -711,89 +582,6 @@ var Likebox = React.createClass({
                     this.state.dislike
                 )
             )
-        );
-    }
-});
-
-
-var NotificationBox = React.createClass({
-    displayName: "NotificationBox",
-
-    getInitialState: function () {
-        return { data: [], init: true };
-    },
-
-    componentDidMount: function () {
-
-        var socket;
-        try {
-            socket = new WebSocket(notification_server);
-
-            socket.onopen = function (msg) {
-
-                socket.send(JSON.stringify({ action: "getNotifications", auth_cookie: getCookie("auth") }));
-            };
-            socket.onmessage = function (msg) {
-
-                data = JSON.parse(msg.data);
-                if (typeof data.notificaton != "undefined") {
-                    //play only sound on new notifications
-                    if (this.state.init === false) new Audio('/public/notification.mp3').play();
-                    if (data.notificaton.length > 0) document.getElementById("NotificationBox").className = "";
-
-                    this.setState({
-                        data: data.notificaton,
-                        init: false
-                    });
-                }
-            }.bind(this);
-            socket.onclose = function (msg) {
-                document.getElementById("NotificationBox").style.display = "none";
-            };
-        } catch (ex) {
-
-            console.log(ex);
-        }
-    },
-
-    render: function () {
-
-        var li = [];
-        for (notification in this.state.data) {
-
-            notification = this.state.data[notification];
-
-            if (typeof JSON.parse(notification.settings).profile_picture !== "undefined") {
-                var img_src = upload_address + JSON.parse(notification.settings).profile_picture;
-                profile_pic = React.createElement("img", { src: img_src });
-            } else profile_pic = React.createElement("img", { src: "/public/img/no-profile.jpg" });
-
-            safe_username = "/" + notification.name.replace(" ", ".");
-            user_link_pic = React.createElement(
-                "a",
-                { href: safe_username },
-                profile_pic
-            );
-            user_link = React.createElement(
-                "a",
-                { href: safe_username },
-                notification.name
-            );
-
-            li.push(React.createElement(
-                "p",
-                null,
-                user_link_pic,
-                " ",
-                user_link,
-                " ",
-                React.createElement("span", { dangerouslySetInnerHTML: { __html: notification.message } })
-            ));
-        }
-        return React.createElement(
-            "div",
-            { ref: "notification" },
-            li
         );
     }
 });
@@ -885,6 +673,88 @@ var SearchBox = React.createClass({
                         )
                     );
                 })
+            )
+        );
+    }
+});
+
+
+var socket;
+var ChatBox = React.createClass({
+    displayName: "ChatBox",
+
+    getInitialState: function () {
+        return { channel: [], activeUser: [] };
+    },
+
+    componentDidMount: function () {
+
+        try {
+            socket = new WebSocket(notification_server);
+
+            socket.onopen = function (msg) {
+
+                socket.send(JSON.stringify({ action: "openroom", auth_cookie: getCookie("auth") }));
+            };
+            socket.onmessage = function (msg) {
+
+                data = JSON.parse(msg.data);
+
+                this.setState({ activeUser: Object.keys(swap(data.activeUsers)), channel: data.channel.default });
+                var objDiv = document.getElementById("textframe");
+                objDiv.scrollTop = objDiv.scrollHeight;
+            }.bind(this);
+            socket.onclose = function (msg) {};
+        } catch (ex) {
+
+            console.log(ex);
+        }
+    },
+
+    handleSubmit: function (event) {
+        event.preventDefault();
+        socket.send(JSON.stringify({ action: "chat", text: document.getElementById("chatinput").value, auth_cookie: getCookie("auth") }));
+        document.getElementById("chatinput").value = "";
+        var objDiv = document.getElementById("textframe");
+        objDiv.scrollTop = objDiv.scrollHeight;
+    },
+
+    render: function () {
+
+        return React.createElement(
+            "div",
+            null,
+            React.createElement(
+                "div",
+                { id: "chat", className: "col-md-9 bounceIn" },
+                React.createElement(
+                    "div",
+                    { id: "textframe" },
+                    this.state.channel.map(function (chat, i) {
+                        chat = Replacehashtags(chat);
+                        return React.createElement("p", { dangerouslySetInnerHTML: { __html: chat } });
+                    })
+                ),
+                React.createElement(
+                    "form",
+                    { className: "chatForm", onSubmit: this.handleSubmit },
+                    React.createElement("input", { type: "text", autoComplete: "off", id: "chatinput" })
+                )
+            ),
+            React.createElement(
+                "div",
+                { id: "ChatUsers", className: "col-md-3" },
+                React.createElement(
+                    "ul",
+                    null,
+                    this.state.activeUser.map(function (user, i) {
+                        return React.createElement(
+                            "li",
+                            null,
+                            React.createElement("span", { dangerouslySetInnerHTML: { __html: user } })
+                        );
+                    })
+                )
             )
         );
     }
@@ -1083,192 +953,287 @@ var ShareBox = React.createClass({
     }
 });
 
-var StreamList = React.createClass({
-    displayName: "StreamList",
 
+var NotificationBox = React.createClass({
+    displayName: "NotificationBox",
 
-    render: function () {
-        var streamNodes = this.props.data.map(function (data) {
+    getInitialState: function () {
+        return { data: [], init: true };
+    },
 
-            var editContent = function (e) {
-                e.preventDefault();
-                var streamItem = $(".stream-item[data-id=" + data.stream.id + "]");
-                streamItem.find(".text").attr("contenteditable", "true").focus();
-                streamItem.find(".text").html(streamItem.find(".text").text());
-                streamItem.find(".action .save").removeClass("hide");
-                streamItem.find(".action .save").click(function () {
-                    $.ajax({
-                        url: '/api/content/' + data.stream.id,
-                        data: { "content": streamItem.find(".text").text() },
-                        type: 'PUT',
-                        success: function (result) {
-                            if (result.status == "done") {
-                                streamItem.find(".action .save").addClass("hide");
-                                streamItem.find(".text").attr("contenteditable", "false");
-                                streamItem.find(".text").html(Replacehashtags(streamItem.find(".text").html()));
-                            }
-                        }
+    componentDidMount: function () {
+
+        var socket;
+        try {
+            socket = new WebSocket(notification_server);
+
+            socket.onopen = function (msg) {
+
+                socket.send(JSON.stringify({ action: "getNotifications", auth_cookie: getCookie("auth") }));
+            };
+            socket.onmessage = function (msg) {
+
+                data = JSON.parse(msg.data);
+                if (typeof data.notificaton != "undefined") {
+                    //play only sound on new notifications
+                    if (this.state.init === false) new Audio('/public/notification.mp3').play();
+                    if (data.notificaton.length > 0) document.getElementById("NotificationBox").className = "";
+
+                    this.setState({
+                        data: data.notificaton,
+                        init: false
                     });
-                });
-            };
-            var deleteContent = function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: '/api/content/' + data.stream.id,
-                    type: 'DELETE',
-                    success: function (result) {
-                        if (result.status == "deleted") {
-                            $(".stream-item[data-id=" + data.stream.id + "]").remove();
-                        }
-                    }
-                });
-            };
-            var reportContent = function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: '/api/content/report/' + data.stream.id,
-                    type: 'POST',
-                    success: function (result) {
-                        if (result.status == "reported") {
-                            $(".stream-item[data-id=" + data.stream.id + "]").html("<h2 class='text-center'>Reported</h2><p class='text-center'>Thank you, we will validate the post soon</p>");
-                        }
-                    }
-                });
-            };
-            return React.createElement(
-                "div",
-                { "data-id": data.stream.id, className: "row stream-item" },
-                React.createElement(Author, { editContent: editContent, deleteContent: deleteContent, reportContent: reportContent, id: data.author.id, author: data.author, contentID: data.stream.id, time: data.stream.date }),
-                React.createElement(AuthorText, { id: data.stream.id, data: data.stream }),
-                React.createElement(Content, { id: data.stream.id, data: data.stream }),
-                React.createElement(Likebox, { id: data.stream.id }),
-                React.createElement(CommentBox, { id: data.stream.id, data: "" })
-            );
-        });
-
-        return React.createElement(
-            "div",
-            { className: "stream" },
-            streamNodes
-        );
-    }
-});
-
-var Content = React.createClass({
-    displayName: "Content",
-
-
-    render: function () {
-
-        var imgpath = "";
-        if (this.props.data.type == "generic") {
-            return React.createElement("div", { className: "generic" });
-        }
-        if (this.props.data.type == "img") {
-            imgpath = this.props.data.url;
-
-            return React.createElement(
-                "div",
-                { className: "img" },
-                React.createElement("img", { className: "img-responsive", src: imgpath })
-            );
-        }
-        if (this.props.data.type == "upload") {
-            return React.createElement(Upload, { id: this.props.data.id, upload: this.props.data });
-        }
-        if (this.props.data.type == "www") {
-            return React.createElement(WWW, { id: this.props.data.id, meta: this.props.data });
-        }
-        if (this.props.data.type == "video") {
-            return React.createElement(Video, { id: this.props.data.id, meta: this.props.data });
-        }
-    }
-});
-
-var Upload = React.createClass({
-    displayName: "Upload",
-
-
-    render: function () {
-        var ImgPath,
-            FilePath = "";
-        var Img = "";
-        var Files = "";
-        //
-        if (typeof this.props.upload.files != "undefined") {
-
-            var Files = this.props.upload.files.map(function (data) {
-                FilePath = data.src;
-
-                if (data.type != false && data.type.match("image")) {
-                    return React.createElement("img", { className: "img-responsive", src: FilePath });
                 }
-                if (data.type != false && data.type.match("video")) {
-                    return React.createElement(
-                        "video",
-                        null,
-                        React.createElement("source", { src: FilePath, type: data.type })
-                    );
-                }
-                return React.createElement(
-                    "p",
-                    null,
-                    React.createElement(
-                        "a",
-                        { href: FilePath, target: "_blank" },
-                        React.createElement("span", { className: "glyphicon glyphicon-circle-arrow-down" }),
-                        "  ",
-                        data.name
-                    )
-                );
-            });
+            }.bind(this);
+            socket.onclose = function (msg) {
+                document.getElementById("NotificationBox").style.display = "none";
+            };
+        } catch (ex) {
+
+            console.log(ex);
         }
-
-        return React.createElement(
-            "div",
-            { className: "upload" },
-            Files
-        );
-    }
-});
-
-var WWW = React.createClass({
-    displayName: "WWW",
-
+    },
 
     render: function () {
 
-        return React.createElement(
-            "div",
-            { className: "www" },
-            React.createElement(
+        var li = [];
+        for (notification in this.state.data) {
+
+            notification = this.state.data[notification];
+
+            if (typeof JSON.parse(notification.settings).profile_picture !== "undefined") {
+                var img_src = upload_address + JSON.parse(notification.settings).profile_picture;
+                profile_pic = React.createElement("img", { src: img_src });
+            } else profile_pic = React.createElement("img", { src: "/public/img/no-profile.jpg" });
+
+            safe_username = "/" + notification.name.replace(" ", ".");
+            user_link_pic = React.createElement(
                 "a",
-                { href: this.props.meta.url },
-                React.createElement("img", { className: "img-responsive", src: this.props.meta.og_img }),
-                React.createElement(
-                    "h2",
-                    null,
-                    this.props.meta.og_title
-                )
-            ),
-            React.createElement(
+                { href: safe_username },
+                profile_pic
+            );
+            user_link = React.createElement(
+                "a",
+                { href: safe_username },
+                notification.name
+            );
+
+            li.push(React.createElement(
                 "p",
                 null,
-                this.props.meta.og_description
-            )
-        );
-    }
-});
-
-var Video = React.createClass({
-    displayName: "Video",
-
-
-    render: function () {
+                user_link_pic,
+                " ",
+                user_link,
+                " ",
+                React.createElement("span", { dangerouslySetInnerHTML: { __html: notification.message } })
+            ));
+        }
         return React.createElement(
             "div",
-            { className: "video" },
-            React.createElement("div", { className: "embed-responsive embed-responsive-16by9", dangerouslySetInnerHTML: { __html: this.props.meta.html } })
+            { ref: "notification" },
+            li
         );
     }
 });
+
+
+var InitStream = React.createClass({
+    displayName: 'InitStream',
+
+    getInitialState: function () {
+
+        return { data: [], random: false };
+    },
+    componentDidMount: function () {
+        this.loadStreamFromServer();
+
+        document.addEventListener('scroll', this.handleScroll);
+        document.addEventListener('keydown', this.handleKeyDown);
+        $("#next").on("click", this.randomPost);
+
+        //@todo better soloution would be to save the complete data as state
+        window.onpopstate = function (event) {
+            window.location.href = event.state.url;
+        };
+    },
+
+    handleKeyDown: function (event) {
+
+        if (event.target.tagName == "BODY" && event.keyCode == 82) {
+            this.randomPost();
+        }
+    },
+
+    randomPost: function () {
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        this.setState({
+            data: [],
+            random: true,
+            endofData: true,
+            id: getRandomInt(1, parseInt($(".stream-row").attr("data-maxid")) + 1)
+        });
+
+        this.loadStreamFromServer();
+    },
+    componentWillUnmount: function () {
+        document.removeEventListener('scroll', this.handleScroll);
+    },
+
+    loadStreamFromServer: function () {
+
+        var hash = "";
+        var user = "";
+
+        var show = 5;
+        var lastid = "";
+
+        if (this.id > 0 || typeof id == "undefined") {
+
+            var ids = $(".stream-item").map(function () {
+                return parseInt($(this).attr("data-id"), 10);
+            }).get();
+
+            this.setID(Math.min.apply(Math, ids));
+        }
+
+        if ($(".stream-row").attr("data-permalink") > 0) {
+
+            this.setID(parseInt($(".stream-row").attr("data-permalink")) + 1);
+            show = 1;
+            this.setState({
+                endofData: true
+            });
+        }
+        if ($(".stream-row").attr("data-hash") != "" && this.state.random != true) {
+            hash = $(".stream-row").attr("data-hash");
+        }
+        if ($(".stream-row").attr("data-user") != "" && this.state.random != true) {
+            user = $(".stream-row").attr("data-user");
+        }
+
+        if (this.state.random) {
+            show = 1;
+            this.setID(this.state.id);
+        }
+
+        if (this.state.lastID == this.id) {
+
+            this.setState({
+                endofData: true
+            });
+        }
+        this.state.lastID = this.id;
+
+        $(".spinner").show();
+        $.ajax({
+            url: '/api/content/?id=' + this.id + '&hash=' + hash + '&user=' + user + '&show=' + show,
+            dataType: 'json',
+            cache: false,
+            success: function (data) {
+
+                data = this.state.data.concat(data);
+
+                if ($(".stream-row").attr("data-user") != "" && this.state.random != true) {
+                    $("#custom_css").html(data[0].author.custom_css);
+                }
+
+                this.setState({ data: data });
+                if (user_settings == false || user_settings.autoplay == "no") {
+                    this.setAutoplayOff();
+                }
+                if (user_settings == false || user_settings.mute_video == "yes") {
+                    this.setMuted();
+                }
+                if (this.state.random) {
+                    url = "/permalink/" + data[0].stream.id;
+                    var stateObj = { id: data[0].stream.id, url: url };
+                    history.pushState(stateObj, "irgendwas", url);
+                }
+
+                this.setState({
+                    loadingFlag: false
+                });
+                $(".spinner").hide();
+            }.bind(this),
+            error: function (xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
+    },
+
+    render: function () {
+
+        if (user_settings.show_nsfw == "false" && $(".stream-row").attr("data-hash") == "nsfw") {
+
+            return React.createElement(
+                'div',
+                { className: 'content' },
+                'You disabled not safe for work content'
+            );
+        }
+        if (user_settings == false && $(".stream-row").attr("data-hash") == "nsfw") {
+            return React.createElement(
+                'div',
+                { className: 'content' },
+                'You need to be over +18 to watch nsfw content, please ',
+                React.createElement(
+                    'a',
+                    { href: '/user/register/' },
+                    'register here.'
+                )
+            );
+        }
+        return React.createElement(
+            'div',
+            { className: 'content' },
+            React.createElement(StreamList, { data: this.state.data })
+        );
+    },
+    setAutoplayOff: function () {
+
+        $('video').each(function (index) {
+            $("video").get(index).pause();
+        });
+    },
+    setMuted: function () {
+
+        $("video").prop('muted', true);
+    },
+    setID: function (id) {
+        this.id = id;
+    },
+
+    handleScroll: function (event) {
+
+        if (this.state.endofData) {
+            return true;
+        }
+        //this function will be triggered if user scrolls
+        var windowHeight = $(window).height();
+        var inHeight = window.innerHeight;
+        var scrollT = $(window).scrollTop();
+        var totalScrolled = scrollT + inHeight;
+        if (totalScrolled + 100 > windowHeight) {
+            //user reached at bottom
+            if (!this.state.loadingFlag) {
+                //to avoid multiple request
+                this.setState({
+                    loadingFlag: true
+                });
+
+                this.loadStreamFromServer();
+            }
+        }
+    }
+});
+
+var data = {};
+
+ReactDOM.render(React.createElement(InitStream, { data: data }), document.getElementsByClassName('stream')[0]);
+ReactDOM.render(React.createElement(SearchBox, { data: data }), document.getElementById("SearchBox"));
+ReactDOM.render(React.createElement(NotificationBox, { data: data }), document.getElementById("NotificationBox"));
+ReactDOM.render(React.createElement(ChatBox, { data: data }), document.getElementById("ChatBox"));
+ReactDOM.render(React.createElement(ShareBox, { data: data }), document.getElementById("ShareBox"));
