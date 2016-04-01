@@ -19,28 +19,40 @@ var gulp = require('gulp'),
 
 
 gulp.task('react', function() {
-    return gulp.src(['public/js/jsx/Author.jsx', 'public/js/jsx/Comments.jsx', 
-		     'public/js/jsx/Stream.jsx', 'public/js/jsx/Likes.jsx', 
-                     'public/js/jsx/SearchBox.jsx', 'public/js/jsx/Chat.jsx',
-                     'public/js/jsx/ShareBox.jsx', 'public/js/jsx/Notifications.jsx', 'public/js/jsx/InitStream.jsx'])
-        .pipe(babel({"presets": ["react"]}))
-        .pipe(concat('react.js'))
-        .pipe(gulp.dest('public/js/'))
+    return gulp.src(
+        [
+            'public/js/jsx/Author.jsx',
+            'public/js/jsx/Comments.jsx',
+            'public/js/jsx/Stream.jsx',
+            'public/js/jsx/Likes.jsx',
+            'public/js/jsx/SearchBox.jsx',
+            'public/js/jsx/Chat.jsx',
+            'public/js/jsx/ShareBox.jsx',
+            'public/js/jsx/Notifications.jsx',
+            'public/js/jsx/InitStream.jsx'
+        ]
+    )
+    .pipe(babel({"presets": ["react"]}))
+    .pipe(concat('react.js'))
+    .pipe(gulp.dest('public/js/'))
 });
 
 gulp.task('compress', function(){
-    return gulp.src(["bower_components/highlightjs/highlight.pack.min.js",
-                     "bower_components/jquery/dist/jquery.min.js",
-		     "bower_components/jquery-textcomplete/dist/jquery.textcomplete.min.js",
-		     "bower_components/bootstrap-css/js/bootstrap.min.js",
-                     "bower_components/react/react.min.js",
-                     "bower_components/react/react-dom.min.js",
-		     "public/js/main.js",
-		     "public/js/react.js"])
-		     
-                     .pipe(uglify().on('error', gutil.log))
-                     .pipe(concat('app.js'))
-                     .pipe(gulp.dest('public/js/'))
+    return gulp.src(
+        [
+            "bower_components/highlightjs/highlight.pack.min.js",
+            "bower_components/jquery/dist/jquery.min.js",
+            "bower_components/jquery-textcomplete/dist/jquery.textcomplete.min.js",
+            "bower_components/bootstrap-css/js/bootstrap.min.js",
+            "bower_components/react/react.min.js",
+            "bower_components/react/react-dom.min.js",
+            "public/js/assets/main.min.js",
+            "public/js/react.js"
+        ]
+    )
+     .pipe(uglify().on('error', gutil.log))
+     .pipe(concat('app.js'))
+     .pipe(gulp.dest('public/js/'))
           
 
 });
