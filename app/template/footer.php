@@ -13,15 +13,9 @@ if (Helper::isUser()) {
 echo "<script>var upload_address=\"".Config::get("upload_address")."\";  </script>";
 echo "<script>var notification_server=\"".Config::get("notification_server")."\";  </script>";
 ?>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="/bower_components/bootstrap-css/css/bootstrap.min.css" />
-<link rel="stylesheet" href="/public/css/scss.php/dmdn.scss" />
-
+<link rel="stylesheet" href="/public/css/style.min.css">
 <script src="/public/js/app.js"></script>
 
-
-
-<link rel="stylesheet" href="/bower_components/highlightjs/styles/railscasts.css">
 
 <?php
 
