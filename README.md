@@ -43,12 +43,19 @@ https://github.com/andreas83/SocialNetwork/archive/andrea.zip
 
 ```
 cd SocialNetwork
+# if composer is installed global [/usr/bin/composer]
 composer install
+# if composer is download local as phar [https://getcomposer.org/download/] 
+php composer.phar install 
+# if you want to have it installed global [sudo / root permissions]
+npm install -g
 bower install
-npm install
 gulp
+# if you want to have it run as a "microservice" [multiple node projects]
+npm install
+./node_modules/.bin/bower install
+./node_modules/.bin/gulp
 ```
-
 
 ## Configuration 
 
