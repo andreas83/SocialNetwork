@@ -1,11 +1,11 @@
 <?php
-namespace app\model;
-use app\lib\BaseModel;
-use app\lib\ConfigureBackend;
+namespace SocialNetwork\app\model;
+use SocialNetwork\app\lib\BaseModel;
+use SocialNetwork\app\lib\ConfigureBackend;
 
 /**
  * Class User
- * @package app\model
+ * @package SocialNetwork\app\model
  */
 class User extends BaseModel
 {

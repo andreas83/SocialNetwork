@@ -1,12 +1,12 @@
 <?php
-namespace app\lib\transformer\string\html;
+namespace SocialNetwork\app\lib\transformer\string\html;
 
 
-use app\lib\transformer\string\IStringTransformer;
+use SocialNetwork\app\lib\transformer\string\IStringTransformer;
 
 /**
  * Class YoutubeTransformer
- * @package app\lib\transformer\string\html
+ * @package SocialNetwork\app\lib\transformer\string\html
  */
 class YoutubeTransformer implements IStringTransformer
 {

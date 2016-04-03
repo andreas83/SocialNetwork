@@ -1,9 +1,9 @@
 <?php
 
-use app\lib\Helper;
-use app\model\Content;
-use app\model\Notification;
-use app\model\Score;
+use SocialNetwork\app\lib\Helper;
+use SocialNetwork\app\model\Content;
+use SocialNetwork\app\model\Notification;
+use SocialNetwork\app\model\Score;
 
 /**
  * Class ScoreController

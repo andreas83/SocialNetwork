@@ -1,10 +1,10 @@
 <?php
-namespace app\controller;
-use app\lib\BaseController;
-use app\lib\Helper;
-use app\model\Content;
-use app\model\Hashtags;
-use app\model\User;
+namespace SocialNetwork\app\controller;
+use SocialNetwork\app\lib\BaseController;
+use SocialNetwork\app\lib\Helper;
+use SocialNetwork\app\model\Content;
+use SocialNetwork\app\model\Hashtags;
+use SocialNetwork\app\model\User;
 
 /**
  * Class WebController

@@ -1,6 +1,6 @@
 <?php
-namespace app\lib\database;
-use app\lib\Config;
+namespace SocialNetwork\app\lib\database;
+use SocialNetwork\app\lib\Config;
 
 /**
  * trait to load the current databasehandler

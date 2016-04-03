@@ -1,15 +1,15 @@
 <?php
-namespace app\controller;
+namespace SocialNetwork\app\controller;
 
-use app\lib\BaseController;
-use app\lib\Config;
-use app\lib\Helper;
-use app\lib\transformer\string\IStringTransformer;
-use app\lib\transformer\TransformerFactory;
-use app\model\Content;
-use app\model\Hashtags;
-use app\model\Notification;
-use app\model\User;
+use SocialNetwork\app\lib\BaseController;
+use SocialNetwork\app\lib\Config;
+use SocialNetwork\app\lib\Helper;
+use SocialNetwork\app\lib\transformer\string\IStringTransformer;
+use SocialNetwork\app\lib\transformer\TransformerFactory;
+use SocialNetwork\app\model\Content;
+use SocialNetwork\app\model\Hashtags;
+use SocialNetwork\app\model\Notification;
+use SocialNetwork\app\model\User;
 use PHPMailer;
 use WebSocket\Client;
 

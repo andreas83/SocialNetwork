@@ -25,5 +25,10 @@
             "email": "andreas@moving-bytes.at"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "SocialNetwork\\app\\": "app/"
+        }
+    },
     "minimum-stability": "beta"
 }

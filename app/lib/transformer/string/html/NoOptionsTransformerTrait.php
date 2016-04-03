@@ -1,9 +1,9 @@
 <?php
-namespace app\lib\transformer\string\html;
+namespace SocialNetwork\app\lib\transformer\string\html;
 
 /**
  * Class NoOptionsTransformerTrait
- * @package app\lib\transformer\string\html
+ * @package SocialNetwork\app\lib\transformer\string\html
  */
 trait NoOptionsTransformerTrait
 {

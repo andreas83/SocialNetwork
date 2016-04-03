@@ -1,10 +1,10 @@
 <?php
 
-namespace app\lib\transformer\string;
+namespace SocialNetwork\app\lib\transformer\string;
 
 /**
  * Interface IStringTransformer
- * @package app\lib\transformer\string
+ * @package SocialNetwork\app\lib\transformer\string
  */
 interface IStringTransformer {
 

@@ -1,9 +1,9 @@
 <?php
-namespace app\controller;
-use app\lib\BaseController;
-use app\lib\database\DBTrait;
-use app\model\Content;
-use app\model\User;
+namespace SocialNetwork\app\controller;
+use SocialNetwork\app\lib\BaseController;
+use SocialNetwork\app\lib\database\DBTrait;
+use SocialNetwork\app\model\Content;
+use SocialNetwork\app\model\User;
 
 
 /**

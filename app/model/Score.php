@@ -1,11 +1,11 @@
 <?php
-namespace app\model;
+namespace SocialNetwork\app\model;
 
-use app\lib\BaseModel;
+use SocialNetwork\app\lib\BaseModel;
 
 /**
  * Class Score
- * @package app\model
+ * @package SocialNetwork\app\model
  */
 class Score extends BaseModel
 {

@@ -1,9 +1,9 @@
 <?php
-namespace app\lib\transformer\string;
+namespace SocialNetwork\app\lib\transformer\string;
 
 /**
  * Class NameSpacePrepend
- * @package app\lib\transformer\string
+ * @package SocialNetwork\app\lib\transformer\string
  */
 class NameSpacePrepend implements IStringTransformer
 {

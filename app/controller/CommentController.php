@@ -1,19 +1,19 @@
 <?php
-namespace app\controller;
+namespace SocialNetwork\app\controller;
 
 
-use app\lib\BaseController;
-use app\lib\Config;
-use app\lib\Helper;
-use app\model\Comment;
-use app\model\Content;
-use app\model\Notification;
-use app\model\User;
+use SocialNetwork\app\lib\BaseController;
+use SocialNetwork\app\lib\Config;
+use SocialNetwork\app\lib\Helper;
+use SocialNetwork\app\model\Comment;
+use SocialNetwork\app\model\Content;
+use SocialNetwork\app\model\Notification;
+use SocialNetwork\app\model\User;
 use WebSocket\Client;
 
 /**
  * Class CommentController
- * @package app\controller
+ * @package SocialNetwork\app\controller
  */
 class CommentController extends BaseController
 {

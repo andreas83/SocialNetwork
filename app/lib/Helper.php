@@ -1,5 +1,5 @@
 <?php
-namespace app\lib;
+namespace SocialNetwork\app\lib;
 
 class Helper
 {

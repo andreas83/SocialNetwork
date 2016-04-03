@@ -1,10 +1,10 @@
 <?php
-namespace app\server;
+namespace SocialNetwork\app\server;
 
-use app\lib\Config;
-use app\lib\WebSocketServer;
-use app\model\Notification;
-use app\model\User;
+use SocialNetwork\app\lib\Config;
+use SocialNetwork\app\lib\WebSocketServer;
+use SocialNetwork\app\model\Notification;
+use SocialNetwork\app\model\User;
 
 require_once 'app/lib/AutoLoader.php';
 

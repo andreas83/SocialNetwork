@@ -1,9 +1,9 @@
 <?php
-namespace app\lib;
+namespace SocialNetwork\app\lib;
 
 /**
  * Class Config
- * @package app\lib
+ * @package SocialNetwork\app\lib
  */
 class Config
 {

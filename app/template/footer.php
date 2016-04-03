@@ -1,6 +1,6 @@
 <?php
-use app\lib\Config;
-use app\lib\Helper;
+use SocialNetwork\app\lib\Config;
+use SocialNetwork\app\lib\Helper;
 
 if (Helper::isUser()) {
     echo "<script>"

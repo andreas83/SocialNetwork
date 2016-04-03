@@ -1,10 +1,10 @@
 <?php
-namespace app\lib\transformer\string\html;
-use app\lib\transformer\string\IStringTransformer;
+namespace SocialNetwork\app\lib\transformer\string\html;
+use SocialNetwork\app\lib\transformer\string\IStringTransformer;
 
 /**
  * Class RedtubeTransformer
- * @package app\lib\transformer\string\html
+ * @package SocialNetwork\app\lib\transformer\string\html
  */
 class RedtubeTransformer implements IStringTransformer
 {

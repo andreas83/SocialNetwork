@@ -1,10 +1,10 @@
 <?php
-namespace app\controller;
-use app\lib\BaseController;
-use app\lib\Config;
-use app\lib\Request;
-use app\model\Hashtags;
-use app\model\User;
+namespace SocialNetwork\app\controller;
+use SocialNetwork\app\lib\BaseController;
+use SocialNetwork\app\lib\Config;
+use SocialNetwork\app\lib\Request;
+use SocialNetwork\app\model\Hashtags;
+use SocialNetwork\app\model\User;
 use PHPMailer;
 
 /**
@@ -304,7 +304,7 @@ class UserController extends BaseController
 
     static function getFBLoginURL()
     {
-        $provider = new League\OAuth2\Client\Provider\Facebook([
+        $provider = new \League\OAuth2\Client\Provider\Facebook([
             'clientId'          => Config::get("facebook_app_id"),
             'clientSecret'      => Config::get("facebook_app_secret"),
             'redirectUri'       => Config::get("address")."user/fblogin/",
@@ -322,7 +322,7 @@ class UserController extends BaseController
     
     function fbcallback()
     {
-        $provider = new League\OAuth2\Client\Provider\Facebook([
+        $provider = new \League\OAuth2\Client\Provider\Facebook([
             'clientId'          => Config::get("facebook_app_id"),
             'clientSecret'      => Config::get("facebook_app_secret"),
             'redirectUri'       => Config::get("address")."user/fblogin/",
@@ -350,7 +350,7 @@ class UserController extends BaseController
     
     
     static function getGLoginURL(){
-        $provider = new League\OAuth2\Client\Provider\Google([
+        $provider = new \League\OAuth2\Client\Provider\Google([
             'clientId'     => Config::get("google_app_id"),
             'clientSecret' => Config::get("google_app_secret"),
             'redirectUri'  => Config::get("address")."user/glogin/",
@@ -366,7 +366,7 @@ class UserController extends BaseController
     
     function gcallback()
     {
-        $provider = new League\OAuth2\Client\Provider\Google([
+        $provider = new \League\OAuth2\Client\Provider\Google([
             'clientId'     => Config::get("google_app_id"),
             'clientSecret' => Config::get("google_app_secret"),
             'redirectUri'  => Config::get("address")."user/glogin/",

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\lib\traits;
+namespace SocialNetwork\app\lib\traits;
 
 /**
  *

@@ -1,11 +1,11 @@
 <?php
-namespace app\lib\transformer;
-use app\lib\traits\ClassExists;
+namespace SocialNetwork\app\lib\transformer;
+use SocialNetwork\app\lib\traits\ClassExists;
 
 
 /**
  * Class TransformerFactory
- * @package app\lib\transformer
+ * @package SocialNetwork\app\lib\transformer
  */
 class TransformerFactory
 {

@@ -1,5 +1,5 @@
 <?php
-namespace app\lib\database;
+namespace SocialNetwork\app\lib\database;
 
 /**
  * default DB Interface

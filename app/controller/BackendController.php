@@ -1,8 +1,8 @@
 <?php
-namespace app\controller;
+namespace SocialNetwork\app\controller;
 
-use app\lib\BaseController;
-use app\model\User;
+use SocialNetwork\app\lib\BaseController;
+use SocialNetwork\app\model\User;
 
 /**
  * BackendController

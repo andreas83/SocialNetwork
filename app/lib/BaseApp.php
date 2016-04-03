@@ -1,6 +1,6 @@
 <?php
-namespace app\lib;
-use app\lib\database\DBTrait;
+namespace SocialNetwork\app\lib;
+use SocialNetwork\app\lib\database\DBTrait;
 
 
 /**
