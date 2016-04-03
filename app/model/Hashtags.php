@@ -20,6 +20,14 @@ class Hashtags extends BaseModel
     /**
      * @return string
      */
+    public function getSource()
+    {
+        return 'Hashtags';
+    }
+
+    /**
+     * @return string
+     */
     public function getPrimary()
     {
         return "id";

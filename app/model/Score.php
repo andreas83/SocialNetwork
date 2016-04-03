@@ -15,6 +15,15 @@ class Score extends BaseModel
     public $content_id = "";
     public $type = "";
 
+
+    /**
+     * @return string
+     */
+    public function getSource()
+    {
+        return 'Score';
+    }
+
     /**
      * @return string
      */

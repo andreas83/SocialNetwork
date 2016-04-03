@@ -21,6 +21,15 @@ class User extends BaseModel
     public $created = "";
     public $modified= "";
 
+
+    /**
+     * @return string
+     */
+    public function getSource()
+    {
+        return 'User';
+    }
+
     /**
      * @return string
      */

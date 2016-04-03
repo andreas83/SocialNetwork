@@ -17,6 +17,11 @@ abstract class BaseModel
      */
     protected $table;
 
+    /**
+     * @var string
+     */
+    protected $className;
+
 
     /**
      * BaseModel constructor.
@@ -24,12 +29,18 @@ abstract class BaseModel
     public function __construct()
     {
         $this->load_database_handler();
-        $this->table = get_class($this);
+
+        $this->table = $this->getSource();
+        $this->className = get_class($this);
     }
 
+    /**
+     * @return string
+     */
+    abstract public function getSource();
 
     /**
-     * @return mixed
+     * @return string
      */
     abstract public function getPrimary();
 
@@ -49,7 +60,7 @@ abstract class BaseModel
         $sql = "SELECT * FROM " . $this->table . " WHERE $primary = $id";
 
         $stmt = $this->dbh->query($sql);
-        $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, $this->table);
+        $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, $this->className);
         return $obj[0];
     }
 
@@ -62,7 +73,7 @@ abstract class BaseModel
         $sql = "SELECT * FROM " . $this->table;
 
         $stmt = $this->dbh->query($sql);
-        $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, $this->table);
+        $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, $this->className);
         return $obj;
     }
 
@@ -81,7 +92,7 @@ abstract class BaseModel
             /**
              * @var BaseModel $model
              */
-            $model= new $this->table;
+            $model= new $this->className();
             $configuration=$model->getBackendConfiguration();
             
             $searchSQL=array();
@@ -115,7 +126,7 @@ abstract class BaseModel
         
         
         $stmt->execute();
-        $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, $this->table);
+        $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, $this->className);
 
         return $obj;
 
@@ -160,7 +171,7 @@ abstract class BaseModel
         }
 
         $stmt->execute();
-        $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, $this->table);
+        $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, $this->className);
         return $obj;
     }
 
@@ -172,7 +183,7 @@ abstract class BaseModel
     {
         $primary = $this->getPrimary();
 
-        $tmp = get_class_vars($this->table);
+        $tmp = get_class_vars($this->className);
         unset($tmp["dbh"], $tmp["dbobject"], $tmp[$primary], $tmp['container'], $tmp['table']);
         $columns = $tmp;
 

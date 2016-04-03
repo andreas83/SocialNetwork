@@ -14,6 +14,15 @@ class Comment extends BaseModel
     public $comment = "";
     public $date = "";
 
+
+    /**
+     * @return string
+     */
+    public function getSource()
+    {
+        return 'Comment';
+    }
+
     /**
      * @return string
      */

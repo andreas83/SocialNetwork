@@ -18,6 +18,13 @@ class Content extends BaseModel
     public $media = "";
     public $date = "";
 
+    /**
+     * @return string
+     */
+    public function getSource()
+    {
+        return 'Content';
+    }
 
     /**
      * @return string

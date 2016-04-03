@@ -15,6 +15,15 @@ class Notification extends BaseModel
     public $level ="";
     public $date = "";
 
+
+    /**
+     * @return string
+     */
+    public function getSource()
+    {
+        return 'Notifications';
+    }
+
     /**
      * @return string
      */
