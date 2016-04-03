@@ -15,6 +15,7 @@ CREATE TABLE User (
 CREATE TABLE  Content (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
+  `group_id` int(10) unsigned default NULL,
   `data` text COLLATE utf8_unicode_ci NOT NULL,
   `media` text COLLATE utf8_unicode_ci NOT NULL,
   `date` int(10) unsigned NOT NULL,
@@ -61,3 +62,22 @@ CREATE TABLE  Notification (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ;
 
 
+CREATE TABLE  Groups (
+  `group_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
+  `description` text COLLATE utf8_unicode_ci NOT NULL,
+  `image` VARCHAR(255) NOT NULL,
+  `visibility` ENUM('PUBLIC', 'PRIVATE') NOT NULL,
+  `modified` DATETIME,
+  `created` DATETIME
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ;
+
+CREATE TABLE  User_Group (
+  `group_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `isAdmin` tinyint DEFAULT 0,
+  `modified` DATETIME,
+  `created` DATETIME  
+  PRIMARY KEY (`id`), UNIQUE(`user_id`, `content_id`, `type`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

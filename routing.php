@@ -23,7 +23,7 @@ $router->map('GET|POST', '/stream/private', 'DataController#stream');
 $router->map('GET|POST', '/stream/friends', 'DataController#stream');
 
 //Content API
-$router->map('POST', '/api/content/', 'DataController#post_content');
+$router->map('POST', '/api/content/', 'DataController#postContent');
 $router->map('POST', '/api/getmetainformation/', 'DataController#getmeta');
 $router->map('GET', '/api/content/', 'DataController#content');
 $router->map('GET', '/api/metadata/', 'DataController#metadata');
@@ -31,6 +31,11 @@ $router->map('DELETE', '/api/content/[i:id]', 'DataController#delete');
 $router->map('PUT', '/api/content/[i:id]', 'DataController#update');
 $router->map('POST', '/api/content/report/[i:id]', 'DataController#report');
 
+//Group API
+$router->map('POST', '/api/group/', 'GroupController#postGroup');
+$router->map('GET', '/api/group/', 'GroupController#getGroup');
+$router->map('PUT', '/api/group/', 'GroupController#putGroup');
+$router->map('DELETE', '/api/group/', 'GroupController#deleteGroup');
 
 
 //for autocomplete
