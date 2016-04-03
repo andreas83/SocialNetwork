@@ -1,4 +1,5 @@
 <?php
+namespace app\lib;
 
 /**
  * Class BaseController

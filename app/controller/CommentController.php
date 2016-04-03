@@ -1,6 +1,20 @@
 <?php
+namespace app\controller;
+
+
+use app\lib\BaseController;
+use app\lib\Config;
+use app\lib\Helper;
+use app\model\Comment;
+use app\model\Content;
+use app\model\Notification;
+use app\model\User;
 use WebSocket\Client;
 
+/**
+ * Class CommentController
+ * @package app\controller
+ */
 class CommentController extends BaseController
 {
 
@@ -11,14 +25,15 @@ class CommentController extends BaseController
      * 
      * @param type $request
      */
-    function get_comment($request) {
+    function get_comment($request)
+    {
         $comment = new Comment();
         
         $data = $comment->getComment($request['id']);
 
         $i = 0;
         foreach ($data as $res) {
-            $std[$i] = new stdClass();
+            $std[$i] = new \stdClass();
 
             $std[$i]->text = $res->comment;
             $std[$i]->author = json_decode($res->settings);
@@ -36,8 +51,10 @@ class CommentController extends BaseController
      * this function handles new comments
      * 
      */
-    function post_comment($request){
+    function post_comment($request)
+    {
         $comment = new Comment();
+
         if ($_POST && Helper::isUser()) {
             $comment->content_id = $request['id'];
             $comment->comment = $_POST['text'];
@@ -56,8 +73,10 @@ class CommentController extends BaseController
             $notification->date=date("U");
             $notification->message='wrote something about your'
                     . ' <a href="/permalink/'.$request['id'].'">post</a>';
-            if($notification->to_user_id!=Helper::getUserID())
+
+            if($notification->to_user_id!=Helper::getUserID()) {
                 $notification->save();
+            }
             
             $client->send(json_encode(array("action"=>"update", "uid" =>$notification->to_user_id))); 
             
@@ -89,10 +108,6 @@ class CommentController extends BaseController
                 }
             }
             
-            
-            
-            
-            
         } elseif ($_POST && !Helper::isUser()) {
             $this->getResponse()
                 ->setHeaders('HTTP/1.0 403 Forbidden');
@@ -102,5 +117,6 @@ class CommentController extends BaseController
         
         $this->get_comment($request);
 
+        return true;
     }
 }

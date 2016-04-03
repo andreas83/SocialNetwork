@@ -13,6 +13,8 @@ $db->one('SELECT * FROM table WHERE id = ?', array(1), "assoc"/"num");
 $db->get('SELECT * FROM table WHERE id = ?', array(1), "assoc"/"num")[1];
 */
 
+
+
 namespace
 {
     class db

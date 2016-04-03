@@ -1,59 +1,92 @@
 <?php
+namespace app\lib;
 
-
-class ConfigureBackend {
-    
-    var $searchable;
-    var $editable;
-    var $visible;
-    var $properties;
+class ConfigureBackend
+{
+    public $searchable;
+    public $editable;
+    public $visible;
+    public $properties;
     protected $currentField;
-    
+
+    /**
+     * @param $properties
+     * @return $this
+     */
     public function setSearchable($properties){
         $this->searchable=$properties;
         return $this;
     }
-    
+
+    /**
+     * @param $properties
+     * @return $this
+     */
     public function setEditable($properties){
         $this->editable=$properties;
         return $this;
     }
-    
+
+    /**
+     * @param array $properties
+     * @return $this
+     */
     public function setVisible($properties){
         $this->visible=$properties;
         return $this;
     }
-    
-    public function setRelation($propertie, $relatedObject, $relatedField)
+
+    /**
+     * @param string $property
+     * @param $relatedObject
+     * @param $relatedField
+     * @return $this
+     */
+    public function setRelation($property, $relatedObject, $relatedField)
     {
-        $this->currentField=$propertie;
-        $this->properties[$propertie]['relation']=$relatedObject;
-        $this->properties[$propertie]['field']=$relatedField;
+        $this->currentField=$property;
+        $this->properties[$property]['relation']=$relatedObject;
+        $this->properties[$property]['field']=$relatedField;
         return $this;
     }
+
+    /**
+     * @param array $fields
+     */
     public function showFields($fields)
     {
         $this->properties[$this->currentField]['show']=$fields;
     }
-    
-    
-    
-    public function addLabel($propertie, $label)
+
+    /**
+     * @param string $property
+     * @param string $label
+     * @return $this
+     */
+    public function addLabel($property, $label)
     {
-        $this->properties[$propertie]['label']=$label;
+        $this->properties[$property]['label']=$label;
         return $this;
     }
-    
-    public function addCheckbox($propertie, $values){
-        $this->properties[$propertie]['type']="checkbox";
-        $this->properties[$propertie]['values']=$values;
+
+    /**
+     * @param string $property
+     * @param mixed $values
+     * @return $this
+     */
+    public function addCheckbox($property, $values){
+        $this->properties[$property]['type']="checkbox";
+        $this->properties[$property]['values']=$values;
         return $this;
     }
-    public function addTextarea($propertie){
+
+    /**
+     * @param string $property
+     * @return $this
+     */
+    public function addTextarea($property){
         
-        $this->properties[$propertie]['type']="textarea";
+        $this->properties[$property]['type']="textarea";
         return $this;
     }
-    
-    
 }

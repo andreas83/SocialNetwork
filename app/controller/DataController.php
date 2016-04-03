@@ -1,4 +1,16 @@
 <?php
+namespace app\controller;
+
+use app\lib\BaseController;
+use app\lib\Config;
+use app\lib\Helper;
+use app\lib\transformer\string\IStringTransformer;
+use app\lib\transformer\TransformerFactory;
+use app\model\Content;
+use app\model\Hashtags;
+use app\model\Notification;
+use app\model\User;
+use PHPMailer;
 use WebSocket\Client;
 
 /**
@@ -16,15 +28,17 @@ class DataController extends BaseController
         $hashtags= new Hashtags;
         
         $trending=$hashtags->getTrendingHashtags();
-        if(count($trending)==0)
+        if(count($trending)==0) {
             $trending=$hashtags->getPopularHashtags();
+        }
         
         $this->assign("popularhashtags", $trending);
         $this->assign("randomhashtags",   $hashtags->getRandomHashtags());
         $this->assign("maxid", $res[0]->id);        
     }
 
-    function frontend() {
+    function frontend()
+    {
 
         if (Helper::isUser()) {
             $this->stream();
@@ -32,7 +46,6 @@ class DataController extends BaseController
         }
         elseif(isset($_COOKIE['auth']))
         {
-            
             //try reauth 
             $user = new User;
             $res=$user->find(array("auth_cookie"  => $_COOKIE['auth']));
@@ -57,7 +70,8 @@ class DataController extends BaseController
      * and returns data as json formted string
      * 
      */
-    function content() {
+    function content() 
+    {
         $data = new Content;
 
         $id = (isset($_REQUEST['id']) && $_REQUEST['id'] != 0 ? (int) $_REQUEST['id'] : Content::maxid);
@@ -70,7 +84,7 @@ class DataController extends BaseController
         //while user is not logged in
         if($settings==false)
         {
-            $settings=new stdClass();
+            $settings=new \stdClass();
             $settings->show_nsfw="false";
         }
 
@@ -78,8 +92,8 @@ class DataController extends BaseController
         $i = 0;
 
         foreach ($data as $res) {
-            $std[$i] = new stdClass();
-            $std[$i]->stream = new stdClass();
+            $std[$i] = new \stdClass();
+            $std[$i]->stream = new \stdClass();
             $std[$i]->stream->type = "generic";
 
             if (isset($res->media) && $res->media != 'null') {
@@ -160,7 +174,7 @@ class DataController extends BaseController
         
         $this->assign("user", $request['user']);
         $this->assign("title", "Stream from ".str_replace(".", " ", $request['user'] ));
-        $this->addHeader('<meta property="og:url" content="'.Config::get("address").''.$request['user'].'"/>');
+        $this->addHeader('<meta property="og:url" content="'. Config::get("address").''.$request['user'].'"/>');
         $this->addHeader('<meta property="og:title" content="Stream from '.str_replace(".", " ", $request['user'] ).'"/>');
         $this->addHeader('<meta property="og:type" content="website" />');
         $this->render("stream.php");
@@ -340,12 +354,12 @@ class DataController extends BaseController
                     $upload_path = Config::get("dir") . Config::get("upload_path");
                     move_uploaded_file($file, $upload_path . $uniq);
                     
-                    $metadata= (is_null($metadata) ? new stdClass() : $metadata);
+                    $metadata= (is_null($metadata) ? new \stdClass() : $metadata);
                     
                     $metadata->type = "upload";
                     
                     $mime = mime_content_type($upload_path . $uniq);
-                    $metadata->files[$i]=new stdClass();
+                    $metadata->files[$i]=new \stdClass();
                     $metadata->files[$i]->src = $uniq;
                     $metadata->files[$i]->name = $_FILES['img']['name'][$i];
                     $metadata->files[$i]->type = $mime;
@@ -484,10 +498,14 @@ class DataController extends BaseController
         }
         
     }
-    
-    
-    function report($request){
-        
+
+
+    /**
+     * @param array $request
+     * @throws \phpmailerException
+     */
+    function report($request)
+    {
         $mail = new PHPMailer;
             
             if(Config::get("smtp")=="true")
@@ -625,7 +643,7 @@ class DataController extends BaseController
         curl_setopt_array($ch, $optArray);
         $result = curl_exec($ch);
 
-        $dom = new DOMDocument;
+        $dom = new \DOMDocument;
         @$dom->loadHTML($result);
         foreach ($dom->getElementsByTagName('meta') as $tag) {
             if ($tag->getAttribute('property') === 'og:image') {
@@ -686,13 +704,13 @@ class DataController extends BaseController
 
     static function replaceLinks($txt)
     {
-        return \transformer\TransformerFactory::makeStatic('string\\html\\LinkTransformer')->transform($txt);
+        return TransformerFactory::makeStatic('string\\html\\LinkTransformer')->transform($txt);
     }
 
 
     static function replaceHash($txt)
     {
-        return \transformer\TransformerFactory::makeStatic('string\\html\\HashTransformer')->transform($txt, ['url' => Config::get('address')]);
+        return TransformerFactory::makeStatic('string\\html\\HashTransformer')->transform($txt, ['url' => Config::get('address')]);
     }
 
 
@@ -710,7 +728,7 @@ class DataController extends BaseController
 
 
         // create a transformer storage and iterate over them
-        $transformerFactory = new \transformer\TransformerFactory();
+        $transformerFactory = new TransformerFactory();
         $transformerFactory->makeFromArray([
             "string\\html\\YoutubeTransformer",
             "string\\html\\VimeoTransformer",

@@ -1,4 +1,6 @@
 <?php
+namespace app\lib\database;
+
 
 /**
  * Abstract DBHandler Class
@@ -8,11 +10,10 @@
 abstract class DBHandler implements DBInterface
 {
 
-
     /**
      * database handler based on selected extension
      *
-     * @var PDO
+     * @var \PDO
      */
     public $dbh;
 
@@ -37,7 +38,7 @@ abstract class DBHandler implements DBInterface
      *
      * @param \Exception $exception
      */
-    public function fallback_handler(Exception $exception)
+    public function fallback_handler(\Exception $exception)
     {
         die('Uncaught exception: ' . $exception->getMessage());
     }

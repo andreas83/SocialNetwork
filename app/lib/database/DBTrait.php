@@ -1,4 +1,6 @@
 <?php
+namespace app\lib\database;
+use app\lib\Config;
 
 /**
  * trait to load the current databasehandler
@@ -21,7 +23,7 @@ trait DBTrait
     /**
      * only the database handling object
      *
-     * @var mysqli pdo
+     * @var \mysqli|\pdo
      */
     public $dbh;
 
@@ -32,6 +34,9 @@ trait DBTrait
     public $dbobject;
 
 
+    /**
+     * @return bool
+     */
     protected function load_database_handler()
     {
         if (self::$container) {

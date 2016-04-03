@@ -1,4 +1,9 @@
 <?php
+namespace app\model;
+
+
+use app\lib\BaseModel;
+use app\lib\ConfigureBackend;
 
 class Comment extends BaseModel
 {
@@ -9,12 +14,17 @@ class Comment extends BaseModel
     public $comment = "";
     public $date = "";
 
-
+    /**
+     * @return string
+     */
     public function getPrimary()
     {
         return "id";
     }
-    
+
+    /**
+     * @return ConfigureBackend
+     */
     public function getBackendConfiguration(){
         $backend = new ConfigureBackend;
         $backend->setEditable(array("id", "content_id", "user_id", "comment"));
@@ -28,8 +38,11 @@ class Comment extends BaseModel
         return $backend;
         
     }
-    
-    
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
     function getComment($id)
     {
     
@@ -37,15 +50,12 @@ class Comment extends BaseModel
 
         $stmt = $this->dbh->prepare($sql);
 
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
 
         $stmt->execute();
 
-        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, 'Comment');
+        $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, get_class($this));
 
         return $obj;
-    
-    
     }
 }
-?>

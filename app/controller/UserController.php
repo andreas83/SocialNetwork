@@ -1,4 +1,11 @@
 <?php
+namespace app\controller;
+use app\lib\BaseController;
+use app\lib\Config;
+use app\lib\Request;
+use app\model\Hashtags;
+use app\model\User;
+use PHPMailer;
 
 /**
  * Class UserController
@@ -129,7 +136,6 @@ class UserController extends BaseController
                 
             }
             
-            
             $mail->From =  Config::get("mail_from");
             $mail->FromName =  Config::get("mail_from_name");
             $mail->addAddress($res[0]->mail, $res[0]->name);
@@ -168,23 +174,21 @@ class UserController extends BaseController
             $res = $user->find(array("mail" => $_POST['mail']));
             if (count($res) == 0) {
                 $error['pw_error'] = _("Account not found.");
-            }else{
-      
-            
-            $mail = new PHPMailer;
-            
-            if(Config::get("smtp")=="true")
-            {
-                $mail->isSMTP();
-                $mail->SMTPAuth = true;
-                $mail->Username = Config::get("smtp_user");
-                $mail->Password = Config::get("smtp_pass");
-                $mail->Port = Config::get("smtp_port");
-                $mail->Host = Config::get("smtp_host");
-                
             }
-            
-            
+            else
+            {
+                $mail = new PHPMailer;
+
+                if(Config::get("smtp")=="true")
+                {
+                    $mail->isSMTP();
+                    $mail->SMTPAuth = true;
+                    $mail->Username = Config::get("smtp_user");
+                    $mail->Password = Config::get("smtp_pass");
+                    $mail->Port = Config::get("smtp_port");
+                    $mail->Host = Config::get("smtp_host");
+
+                }
 
                 $mail->From =  Config::get("mail_from");
                 $mail->FromName =  Config::get("mail_from_name");
@@ -202,12 +206,9 @@ class UserController extends BaseController
 
                 if (!$mail->send()) {
                     die( "Mailer Error: " . $mail->ErrorInfo );
-                } 
+                }
                 $this->assign("status", "confirm");
-
-
             }
-        
         }
         
             
@@ -218,9 +219,13 @@ class UserController extends BaseController
         $this->assign("title", _("Password reset"));
         $this->render("pw_forgot.php");
     }
-    
-    static function defaultSettings(){
-        $default=new stdClass;
+
+    /**
+     * @return \stdClass
+     */
+    static function defaultSettings()
+    {
+        $default=new \stdClass();
         $default->show_nsfw = "true";
         $default->autoplay = "yes";
         $default->mute_video = "yes";
@@ -243,9 +248,7 @@ class UserController extends BaseController
         $setting = json_decode($user->settings);
         $error = false;
         if ($_POST) {
-            
-            
-            
+
             if (isset($_FILES['picture']['tmp_name']) && !empty($_FILES['picture']['tmp_name'])) {
                 
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -299,30 +302,26 @@ class UserController extends BaseController
 
     
 
-    static function getFBLoginURL(){
-       
-     
-
+    static function getFBLoginURL()
+    {
         $provider = new League\OAuth2\Client\Provider\Facebook([
             'clientId'          => Config::get("facebook_app_id"),
             'clientSecret'      => Config::get("facebook_app_secret"),
             'redirectUri'       => Config::get("address")."user/fblogin/",
             'graphApiVersion'   => 'v2.5',
         ]);
-        
+
         $authUrl = $provider->getAuthorizationUrl(['scope' => ['email']]);
         $_SESSION['oauth2state'] = $provider->getState();
-        
-        
-        
-      
-      
-      return htmlspecialchars($authUrl);
+
+
+        return htmlspecialchars($authUrl);
 
     }
     
     
-    function fbcallback(){
+    function fbcallback()
+    {
         $provider = new League\OAuth2\Client\Provider\Facebook([
             'clientId'          => Config::get("facebook_app_id"),
             'clientSecret'      => Config::get("facebook_app_secret"),
@@ -340,7 +339,7 @@ class UserController extends BaseController
             $ownerDetails = $provider->getResourceOwner($token);
             $this->oAuth( $ownerDetails->getFirstName(). " ". $ownerDetails->getLastName(), $ownerDetails->getEmail());
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
 
             // Failed to get user details
             exit('Something went wrong: ' . $e->getMessage());
@@ -365,7 +364,8 @@ class UserController extends BaseController
 
     }
     
-    function gcallback(){
+    function gcallback()
+    {
         $provider = new League\OAuth2\Client\Provider\Google([
             'clientId'     => Config::get("google_app_id"),
             'clientSecret' => Config::get("google_app_secret"),
@@ -378,31 +378,33 @@ class UserController extends BaseController
         ]);
         $_SESSION['oauth2state'] = $provider->getState();
         try {
-
-            
             $ownerDetails = $provider->getResourceOwner($token);
-       
             $this->oAuth( $ownerDetails->getFirstName(). " ". $ownerDetails->getLastName(), $ownerDetails->getEmail());
-            
-           
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
 
             // Failed to get user details
             exit('Something went wrong: ' . $e->getMessage());
 
         }
     }
-    
-    
-    function oAuth($username, $mail){
-        
+
+    /**
+     * @param string $username
+     * @param string $mail
+     * @return bool
+     */
+    function oAuth($username, $mail)
+    {
         $user= new User;
         $res = $user->find(array("name" => $username));
+        $error = false;
+
         if (count($res) > 0) {
             $error=true;
         }
         $res = $user->find(array("mail" => $mail));
+
         if (count($res) > 0) {
             $_SESSION['login'] = $res[0]->id;
             $_SESSION['user_settings']=$res[0]->settings;
@@ -412,6 +414,7 @@ class UserController extends BaseController
             $this->redirect("/public/stream/");
             return true;
         }
+
         if(!$error)
         {
             $user->name = $username;
@@ -429,12 +432,14 @@ class UserController extends BaseController
             $this->redirect("/public/stream/");
             return true;
         }
-        
 
-      $_SESSION['fb_access_token'] = (string) $accessToken;
+        /**
+         * @todo ? $accessToken does not exist!
+         */
+        $_SESSION['fb_access_token'] = (string) $accessToken;
       
-      $this->assing("error", array("nick" =>_("A User with this nick already exist.") ));
-      $this->register();
+          $this->assing("error", array("nick" =>_("A User with this nick already exist.") ));
+          $this->register();
     }
     
     

@@ -1,17 +1,12 @@
 <?php
+namespace app\lib\transformer;
+use app\lib\traits\ClassExists;
 
-namespace transformer;
-use traits\ClassExists;
 
 /**
- *
- * @author j
- * Date: 10/6/15
- * Time: 8:37 PM
- *
- * File: TransformerFactory.php
+ * Class TransformerFactory
+ * @package app\lib\transformer
  */
-
 class TransformerFactory
 {
 

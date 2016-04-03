@@ -1,5 +1,10 @@
 <?php
+namespace app\lib;
 
+/**
+ * Class Config
+ * @package app\lib
+ */
 class Config
 {
     /**

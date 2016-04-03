@@ -1,16 +1,9 @@
 <?php
-namespace transformer\string;
-
-/**
- * Created by PhpStorm.
- * User: j
- * Date: 28.09.15
- * Time: 23:49
- */
+namespace app\lib\transformer\string;
 
 /**
  * Class NameSpacePrepend
- * @package transformer\string
+ * @package app\lib\transformer\string
  */
 class NameSpacePrepend implements IStringTransformer
 {

@@ -1,5 +1,6 @@
 <?php
-
+namespace app\lib;
+use app\lib\database\DBTrait;
 
 /**
  * Class BaseModel
@@ -17,6 +18,9 @@ abstract class BaseModel
     protected $table;
 
 
+    /**
+     * BaseModel constructor.
+     */
     public function __construct()
     {
         $this->load_database_handler();
@@ -29,6 +33,10 @@ abstract class BaseModel
      */
     abstract public function getPrimary();
 
+    /**
+     * @return mixed
+     */
+    abstract public function getBackendConfiguration();
 
     /**
      * @param $id
@@ -41,7 +49,7 @@ abstract class BaseModel
         $sql = "SELECT * FROM " . $this->table . " WHERE $primary = $id";
 
         $stmt = $this->dbh->query($sql);
-        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, $this->table);
+        $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, $this->table);
         return $obj[0];
     }
 
@@ -54,53 +62,60 @@ abstract class BaseModel
         $sql = "SELECT * FROM " . $this->table;
 
         $stmt = $this->dbh->query($sql);
-        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, $this->table);
+        $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, $this->table);
         return $obj;
     }
-    
-    function getPages($page=false, $term=false, $show=5){
+
+    /**
+     * @param bool $page
+     * @param bool $term
+     * @param int $show
+     * @return mixed
+     */
+    function getPages($page=false, $term=false, $show=5)
+    {
         
         $searchSQL="1=1";
-        if($term)
-        {
+
+        if($term) {
+            /**
+             * @var BaseModel $model
+             */
             $model= new $this->table;
             $configuration=$model->getBackendConfiguration();
+            
             $searchSQL=array();
-            foreach($configuration->searchable as $prop)
-            {
-            $searchSQL[]=  $prop." like :".$prop;
+            foreach($configuration->searchable as $prop) {
+                $searchSQL[]=  $prop." LIKE :".$prop;
             }
-            $searchSQL=  implode(" or ", $searchSQL);
+            $searchSQL=  implode(" OR ", $searchSQL);
         }
          
-        $sql="select *, (select count(id) as cnt from " . $this->table ." WHERE $searchSQL) as cnt from " . $this->table ." WHERE ".$searchSQL;
+        $sql="SELECT *, (SELECT COUNT(id) AS cnt FROM " . $this->table ." WHERE $searchSQL) AS cnt FROM " . $this->table ." WHERE ".$searchSQL;
 
        
-        $sql.=" order by id desc ";
+        $sql.=" ORDER BY id DESC ";
         
         
         if ($page) {
-
             $page_offset = (int) ($page * $show) - $show;
-            $sql.=" limit $show offset $page_offset";
-        } else
-            $sql.=" limit $show";
+            $sql.=" LIMIT $show OFFSET $page_offset";
+        } else  {
+            $sql.=" LIMIT $show";
+        }
 
-        
 
         $stmt = $this->dbh->prepare($sql);
-        
-        if($term)
-        foreach($configuration->searchable as $prop)
-        {
-            $stmt->bindValue(':'.$prop, "%".$term."%", PDO::PARAM_STR);
+
+        if ($term) {
+            foreach($configuration->searchable as $prop) {
+                $stmt->bindValue(':'.$prop, "%".$term."%", \PDO::PARAM_STR);
+            }
         }
         
         
         $stmt->execute();
-        
-        
-        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, $this->table);
+        $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, $this->table);
 
         return $obj;
 
@@ -118,7 +133,7 @@ abstract class BaseModel
         $sql = "DELETE FROM " . $this->table . " WHERE $primary = :id";
 
         $stmt = $this->dbh->prepare($sql);
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
         
         $obj = $stmt->execute();
         return $obj[0];
@@ -141,11 +156,11 @@ abstract class BaseModel
         $stmt = $this->dbh->prepare($sql);
 
         foreach ($arg as $key => $val) {
-            $stmt->bindValue(':' . $key, $val, PDO::PARAM_STR);
+            $stmt->bindValue(':' . $key, $val, \PDO::PARAM_STR);
         }
 
         $stmt->execute();
-        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, $this->table);
+        $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, $this->table);
         return $obj;
     }
 
@@ -161,7 +176,8 @@ abstract class BaseModel
         unset($tmp["dbh"], $tmp["dbobject"], $tmp[$primary], $tmp['container'], $tmp['table']);
         $columns = $tmp;
 
-        if (empty($this->$primary)) {
+        if (empty($this->{$primary}))
+        {
             $sql = 'INSERT INTO ' . $this->table . '
             (' . implode(",", array_keys($columns)) . ') VALUES
             (:' . implode(",:", array_keys($columns)) . ')';
@@ -177,20 +193,20 @@ abstract class BaseModel
             $sql .= " WHERE $primary = :$primary";
             //echo $sql;
             $stmt = $this->dbh->prepare($sql);
-            $stmt->bindValue(':' . $primary, $this->$primary, PDO::PARAM_INT);
+            $stmt->bindValue(':' . $primary, $this->{$primary}, \PDO::PARAM_INT);
         }
 
         foreach ($columns as $key => $value) {
-            if ($this->$key == "NULL") {
-                $stmt->bindValue(':' . $key, null, PDO::PARAM_NULL);
-
-            } else
-
-                $stmt->bindValue(':' . $key, $this->$key, PDO::PARAM_STR);
+            if ($this->{$key} == "NULL") {
+                $stmt->bindValue(':' . $key, null, \PDO::PARAM_NULL);
+            } else {
+                $stmt->bindValue(':' . $key, $this->{$key}, \PDO::PARAM_STR);
+            }
         }
+
         $stmt->execute();
-        //var_dump($stmt->errorInfo()); 
-        if (empty($this->$primary)) {
+
+        if (empty($this->{$primary})) {
             return $this->dbh->lastInsertId();
         }
 

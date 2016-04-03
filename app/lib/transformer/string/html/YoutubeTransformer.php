@@ -1,20 +1,12 @@
 <?php
-namespace transformer\string\html;
-use transformer\string\IStringTransformer;
+namespace app\lib\transformer\string\html;
+
+
+use app\lib\transformer\string\IStringTransformer;
 
 /**
- *
- * @author j
- * Date: 10/6/15
- * Time: 8:27 PM
- *
- * File: YoutubeTransformer.php
- */
-
-/**
- * Class NameSpacePrepend
- *
- * @package transformer\string\html
+ * Class YoutubeTransformer
+ * @package app\lib\transformer\string\html
  */
 class YoutubeTransformer implements IStringTransformer
 {

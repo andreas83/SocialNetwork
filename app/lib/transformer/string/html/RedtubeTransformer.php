@@ -1,20 +1,10 @@
 <?php
-namespace transformer\string\html;
-use transformer\string\IStringTransformer;
-
-/**
- *
- * @author j
- * Date: 10/7/15
- * Time: 8:25 PM
- *
- * File: RedtubeTransformer.php
- */
+namespace app\lib\transformer\string\html;
+use app\lib\transformer\string\IStringTransformer;
 
 /**
  * Class RedtubeTransformer
- *
- * @package transformer\string\html
+ * @package app\lib\transformer\string\html
  */
 class RedtubeTransformer implements IStringTransformer
 {

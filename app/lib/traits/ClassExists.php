@@ -1,7 +1,6 @@
 <?php
 
-namespace traits;
-
+namespace app\lib\traits;
 
 /**
  *
@@ -24,6 +23,17 @@ trait ClassExists
      * @return bool
      */
     public function classExists($namespace, $name)
+    {
+        $className = "$namespace\\$name";
+        return class_exists($className, true);
+    }
+
+    /**
+     * @param string $namespace
+     * @param string $name
+     * @return string mixed
+     */
+    public static function classExistsStatic($namespace, $name)
     {
         $className = "$namespace\\$name";
         return class_exists($className, true);

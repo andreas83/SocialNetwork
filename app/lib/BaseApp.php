@@ -1,4 +1,7 @@
 <?php
+namespace app\lib;
+use app\lib\database\DBTrait;
+
 
 /**
  * Class BaseApp

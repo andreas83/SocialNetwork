@@ -1,4 +1,5 @@
 <?php
+namespace app\lib;
 
 class Helper
 {

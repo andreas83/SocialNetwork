@@ -1,4 +1,6 @@
 <?php
+define('PHP_FILE_EXTENSION', '.php');
+define ('NAMESPACE_DELIMITER', '\\');
 
 /**
  * Auto loader
@@ -7,22 +9,12 @@
  */
 function autoload($className)
 {
-
-    $class = "app/model/" . $className . ".php";
-    if (file_exists($class)) {
-        return require_once($class);
+    $className = str_replace(NAMESPACE_DELIMITER, DIRECTORY_SEPARATOR, $className) . PHP_FILE_EXTENSION;
+    if (file_exists($className)) {
+        return require_once $className;
     }
 
-    $class = "app/controller/" . $className . ".php";
 
-    if (file_exists($class)) {
-        return require_once($class);
-    }
-
-    $class = "app/lib/" . ($className) . ".php";
-    if (file_exists($class)) {
-        return require_once($class);
-    }
 
     $class = "app/lib/database/" . str_replace("_", "/", strtolower($className)) . ".php";
 
