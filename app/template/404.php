@@ -1,4 +1,6 @@
 <?php
+use app\lib\Config;
+
 include("header.php");
 include("menu.php");
 ?>    

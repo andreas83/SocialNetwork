@@ -1,4 +1,12 @@
-<form id="loginform" class="<?php echo(isset($scope) && strpos($scope, "login") === false ? "hide" : ""); ?>"
+<?php
+use app\controller\UserController;
+use app\lib\Config;
+use app\lib\Helper;
+?>
+
+
+<form id="loginform" class="<?php
+echo(isset($scope) && strpos($scope, "login") === false ? "hide" : ""); ?>"
       action="/user/login/" method="post">
 
     <div class="form-group">

@@ -1,3 +1,6 @@
+<?php
+use app\lib\Config;
+?>
 Hello <?php echo $name; ?>,
 
 someone is trying to reset your Password at <?php echo Config::get("address"); ?>

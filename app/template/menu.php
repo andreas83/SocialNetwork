@@ -1,10 +1,17 @@
+<?php
+use app\controller\UserController;
+use app\lib\Config;
+use app\lib\Helper;
+?>
+
 
 <div class="col-md-2 col-sm-3 col-xs-12 animated bounceInLeft hidden-xs menuLeft">
     
         <div class="user-box ">
 
             
-            <?php if (Helper::isUser()): 
+            <?php
+            if (app\lib\Helper::isUser()): 
                 if(isset($_SESSION['user_settings']))
                     $user_settings = json_decode($_SESSION['user_settings']);
 

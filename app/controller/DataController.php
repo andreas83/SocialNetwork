@@ -34,7 +34,14 @@ class DataController extends BaseController
         
         $this->assign("popularhashtags", $trending);
         $this->assign("randomhashtags",   $hashtags->getRandomHashtags());
-        $this->assign("maxid", $res[0]->id);        
+
+        if (!$res) {
+            $this->assign("maxid", 0);
+        } else {
+            $this->assign("maxid", $res[0]->id);
+        }
+
+
     }
 
     function frontend()

@@ -1,4 +1,8 @@
 <?php
+use app\controller\UserController;
+use app\lib\Config;
+use app\lib\Helper;
+
 include("header.php");
 include("menu.php");
 ?>    

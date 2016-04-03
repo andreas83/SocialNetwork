@@ -1,3 +1,6 @@
+<?php
+    use app\lib\Config;
+?>
 <html>
     <body>
         

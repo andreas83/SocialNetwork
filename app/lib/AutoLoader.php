@@ -13,15 +13,6 @@ function autoload($className)
     if (file_exists($className)) {
         return require_once $className;
     }
-
-
-
-    $class = "app/lib/database/" . str_replace("_", "/", strtolower($className)) . ".php";
-
-    if (file_exists($class)) {
-        return require_once($class);
-    }
-    
     return false;
 }
 
