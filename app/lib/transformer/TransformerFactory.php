@@ -50,19 +50,7 @@ class TransformerFactory
      */
     public function make($name)
     {
-        // transformers ares stateless we can reuse them as we like
-        if (isset(self::$runtimeCache[$name])) {
-            return self::$runtimeCache[$name];
-        }
-
-        if (!$this->classExists(__NAMESPACE__, $name)) {
-            return null;
-        }
-        $className = __NAMESPACE__ . '\\' . $name;
-
-        self::$runtimeCache[$name] = new $className();
-
-        return self::$runtimeCache[$name];
+        return static::makeStatic($name);
     }
 
     /**
