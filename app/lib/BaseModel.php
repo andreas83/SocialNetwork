@@ -184,7 +184,7 @@ abstract class BaseModel
         $primary = $this->getPrimary();
 
         $tmp = get_class_vars($this->className);
-        unset($tmp["dbh"], $tmp["dbobject"], $tmp[$primary], $tmp['container'], $tmp['table']);
+        unset($tmp["dbh"], $tmp["dbobject"], $tmp[$primary], $tmp['container'], $tmp['table'], $tmp['className']);
         $columns = $tmp;
 
         if (empty($this->{$primary}))
