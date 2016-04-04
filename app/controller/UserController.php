@@ -82,6 +82,10 @@ class UserController extends BaseController
             if (count($res) > 0) {
                 $error['nick'] = _("A User with this nick already exist.");
             }
+            $res = $user->find(array("mail" => $request->getPost('mail')));
+            if (count($res) > 0) {
+                $error['mail'] = _("A User with this eMail already exist.");
+            }
 
             if ($error === false) {
 
