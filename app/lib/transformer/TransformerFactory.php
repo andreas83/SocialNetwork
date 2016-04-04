@@ -37,7 +37,7 @@ class TransformerFactory
 
         $className = __NAMESPACE__ . '\\' . $name;
 
-        self::$runtimeCache[$name] = $className();
+        self::$runtimeCache[$name] = new $className();
 
         return self::$runtimeCache[$name];
     }
