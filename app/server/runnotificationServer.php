@@ -1,12 +1,14 @@
 <?php
 namespace SocialNetwork\app\server;
+include_once("vendor/autoload.php");
+
+
 
 use SocialNetwork\app\lib\Config;
 use SocialNetwork\app\lib\WebSocketServer;
 use SocialNetwork\app\model\Notification;
 use SocialNetwork\app\model\User;
 
-require_once 'app/lib/AutoLoader.php';
 
 
 class notificationServer extends WebSocketServer
