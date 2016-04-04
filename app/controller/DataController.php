@@ -736,7 +736,7 @@ class DataController extends BaseController
 
         // create a transformer storage and iterate over them
         $transformerFactory = new TransformerFactory();
-        $transformerFactory->makeFromArray([
+        $transformerStack = $transformerFactory->makeFromArray([
             "string\\html\\YoutubeTransformer",
             "string\\html\\VimeoTransformer",
             "string\\html\\RedtubeTransformer",
@@ -747,7 +747,7 @@ class DataController extends BaseController
         /**
          * @var IStringTransformer $transformer
          */
-        foreach ($transformerFactory as $transformer) {
+        foreach ($transformerStack as $transformer) {
             $input = $transformer->transform(
                 $input,
                 [
