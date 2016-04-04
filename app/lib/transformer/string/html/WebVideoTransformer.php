@@ -16,6 +16,6 @@ class WebVideoTransformer implements IStringTransformer
     /**
      * pattern for search and replace
      */
-    const PATTERN = "/((.*)+.(mp4|webm|mpeg)$)/i";
+    const PATTERN = "/((.*)\.(mp4|webm|mpeg))/i";
     const REPLACE_PATTEN = '<video width="%s" height="%s" autoplay="autoplay" loop controls ><source src="$1" type="video/$3">Your browser does not support the video tag or webm</video>';
 }
