@@ -1,4 +1,7 @@
 <?php
+use SocialNetwork\app\lib\Config;
+use SocialNetwork\app\lib\Helper;
+
 if (Helper::isUser()) {
     echo "<script>"
     . "var user_id=" . $_SESSION['login']  . ";"

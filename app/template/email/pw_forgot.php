@@ -1,3 +1,7 @@
+<?php
+use SocialNetwork\app\lib\Config;
+?>
+
 <html>
     <body>
         

@@ -1,14 +1,10 @@
 <?php
-namespace transformer\string\html;
-use transformer\string\IStringTransformer;
+namespace SocialNetwork\app\lib\transformer\string\html;
+use SocialNetwork\app\lib\transformer\string\IStringTransformer;
 
 /**
- *
- * @author j
- * Date: 10/7/15
- * Time: 8:29 PM
- *
- * File: WebVideoTransformer.php
+ * Class WebVideoTransformer
+ * @package SocialNetwork\app\lib\transformer\string\html
  */
 class WebVideoTransformer implements IStringTransformer
 {

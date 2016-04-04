@@ -1,4 +1,8 @@
 <?php
+namespace SocialNetwork\app\model;
+
+use SocialNetwork\app\lib\BaseModel;
+use SocialNetwork\app\lib\ConfigureBackend;
 
 class Notification extends BaseModel
 {
@@ -10,14 +14,29 @@ class Notification extends BaseModel
     public $message ="";
     public $level ="";
     public $date = "";
-    
 
+
+    /**
+     * @return string
+     */
+    public function getSource()
+    {
+        return 'Notifications';
+    }
+
+    /**
+     * @return string
+     */
     public function getPrimary()
     {
         return "id";
     }
-    
-    public function getBackendConfiguration(){
+
+    /**
+     * @return ConfigureBackend
+     */
+    public function getBackendConfiguration()
+    {
         $backend = new ConfigureBackend;
         $backend->setEditable(array("id", "to_user_id", "from_user_id", "message"));
         $backend->setVisible(array("id", "to_user_id",  "from_user_id", "date"));
@@ -33,60 +52,70 @@ class Notification extends BaseModel
         
     }
     
-    public function cleanup(){
+    public function cleanup()
+    {
         $enddate=  strtotime("-2 days");
-        $sql = "delete from Notification where date<:enddate";
+        $sql = "DELETE FROM Notification WHERE date<:enddate";
         
         $stmt = $this->dbh->prepare($sql);
 
-        $stmt->bindValue(':enddate', $enddate, PDO::PARAM_INT);
+        $stmt->bindValue(':enddate', $enddate, \PDO::PARAM_INT);
 
         $stmt->execute();
     }
-    
-    public function getNotificationsByCookie($auth_cookie) {
-        
-        $sql = "select Notification.*, "
-                . "fromUser.* from Notification"
-                . " inner join User on "
-                . "Notification.to_user_id=User.id and "
+
+    /**
+     * @param $auth_cookie
+     * @return mixed
+     */
+    public function getNotificationsByCookie($auth_cookie)
+    {
+        $sql = "SELECT Notification.*, "
+                . "fromUser.* FROM Notification"
+                . " INNER JOIN User ON "
+                . "Notification.to_user_id=User.id AND "
                 . "User.auth_cookie=:auth_cookie "
-                . " left join User fromUser on "
-                . "Notification.from_user_id = fromUser.id order by date desc";
+                . " LEFT JOIN User fromUser ON "
+                . "Notification.from_user_id = fromUser.id ORDER BY date DESC";
         
         $stmt = $this->dbh->prepare($sql);
 
-        $stmt->bindValue(':auth_cookie', $auth_cookie, PDO::PARAM_STR);
+        $stmt->bindValue(':auth_cookie', $auth_cookie, \PDO::PARAM_STR);
 
         $stmt->execute();
 
-        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, "stdClass");
+        $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, "\stdClass");
 
         return $obj;
         
     
     }
-    public function getNotificationsByID($id) {
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    public function getNotificationsByID($id)
+    {
         
-        $sql = "select Notification.*, "
-                . "fromUser.* from Notification"
-                . " inner join User on "
-                . "Notification.to_user_id=User.id and "
+        $sql = "SELECT Notification.*, "
+                . "fromUser.* FROM Notification"
+                . " INNER JOIN User ON "
+                . "Notification.to_user_id=User.id AND "
                 . "User.id=:id "
-                . " left join User fromUser on "
-                . "Notification.from_user_id = fromUser.id order by date desc";
+                . " LEFT JOIN User fromUser on "
+                . "Notification.from_user_id = fromUser.id ORDER BY date DESC";
         
         $stmt = $this->dbh->prepare($sql);
 
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
 
         $stmt->execute();
 
-        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, "stdClass");
+        $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, "\stdClass");
 
         return $obj;
         
     
     }
 }
-?>

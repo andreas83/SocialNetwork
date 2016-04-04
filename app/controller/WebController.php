@@ -1,4 +1,10 @@
 <?php
+namespace SocialNetwork\app\controller;
+use SocialNetwork\app\lib\BaseController;
+use SocialNetwork\app\lib\Helper;
+use SocialNetwork\app\model\Content;
+use SocialNetwork\app\model\Hashtags;
+use SocialNetwork\app\model\User;
 
 /**
  * Class WebController
@@ -6,7 +12,8 @@
 class WebController extends BaseController
 {
 
-    function sitemap() {
+    function sitemap()
+    {
         $data= new Content();
         $res=$data->getAll();
         $this->assign("data", $res);
@@ -14,10 +21,11 @@ class WebController extends BaseController
         $this->render("sitemap.php");
     }
     
-    function help(){
-        $user= new User;
-        if(Helper::isUser())
-        {
+    function help()
+    {
+        $user= new User();
+
+        if(Helper::isUser()) {
             $user=$user->get(Helper::getUserID());
             $this->assign("api_key", $user->api_key);
         }

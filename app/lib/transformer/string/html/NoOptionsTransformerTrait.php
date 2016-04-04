@@ -1,15 +1,10 @@
 <?php
-namespace transformer\string\html;
+namespace SocialNetwork\app\lib\transformer\string\html;
 
 /**
- *
- * @author j
- * Date: 10/7/15
- * Time: 8:41 PM
- *
- * File: NoOptionsTransformerTrait.php
+ * Class NoOptionsTransformerTrait
+ * @package SocialNetwork\app\lib\transformer\string\html
  */
-
 trait NoOptionsTransformerTrait
 {
     /**

@@ -1,4 +1,8 @@
 <?php
+use SocialNetwork\app\controller\UserController;
+use SocialNetwork\app\lib\Config;
+use SocialNetwork\app\lib\Helper;
+
 include("header.php");
 include("menu.php");
 ?>    

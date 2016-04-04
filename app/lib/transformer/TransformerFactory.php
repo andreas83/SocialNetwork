@@ -1,17 +1,12 @@
 <?php
+namespace SocialNetwork\app\lib\transformer;
+use SocialNetwork\app\lib\traits\ClassExists;
 
-namespace transformer;
-use traits\ClassExists;
 
 /**
- *
- * @author j
- * Date: 10/6/15
- * Time: 8:37 PM
- *
- * File: TransformerFactory.php
+ * Class TransformerFactory
+ * @package SocialNetwork\app\lib\transformer
  */
-
 class TransformerFactory
 {
 
@@ -42,7 +37,7 @@ class TransformerFactory
 
         $className = __NAMESPACE__ . '\\' . $name;
 
-        self::$runtimeCache[$name] = $className();
+        self::$runtimeCache[$name] = new $className();
 
         return self::$runtimeCache[$name];
     }
@@ -55,19 +50,7 @@ class TransformerFactory
      */
     public function make($name)
     {
-        // transformers ares stateless we can reuse them as we like
-        if (isset(self::$runtimeCache[$name])) {
-            return self::$runtimeCache[$name];
-        }
-
-        if (!$this->classExists(__NAMESPACE__, $name)) {
-            return null;
-        }
-        $className = __NAMESPACE__ . '\\' . $name;
-
-        self::$runtimeCache[$name] = $className();
-
-        return self::$runtimeCache[$name];
+        return static::makeStatic($name);
     }
 
     /**

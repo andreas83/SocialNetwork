@@ -1,3 +1,7 @@
+<?php
+use SocialNetwork\app\lib\Config;
+?>
+
 Hello <?php echo $name; ?>,
 
 Your new password is : <?php echo $newpw; ?>

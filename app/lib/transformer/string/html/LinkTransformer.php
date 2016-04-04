@@ -1,15 +1,10 @@
 <?php
-namespace transformer\string\html;
-use transformer\string\IStringTransformer;
-
+namespace SocialNetwork\app\lib\transformer\string\html;
+use SocialNetwork\app\lib\transformer\string\IStringTransformer;
 
 /**
- *
- * @author j
- * Date: 10/7/15
- * Time: 8:35 PM
- *
- * File: LinkTransformer.php
+ * Class LinkTransformer
+ * @package SocialNetwork\app\lib\transformer\string\html
  */
 class LinkTransformer implements IStringTransformer
 {

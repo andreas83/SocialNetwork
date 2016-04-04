@@ -1,5 +1,13 @@
 <?php
+namespace SocialNetwork\app\model;
 
+use SocialNetwork\app\lib\BaseModel;
+use SocialNetwork\app\lib\ConfigureBackend;
+
+/**
+ * Class Hashtags
+ * @package SocialNetwork\app\model
+ */
 class Hashtags extends BaseModel
 {
 
@@ -7,19 +15,33 @@ class Hashtags extends BaseModel
     public $hashtag = "";
     public $pop = "";
     public $modified = "";
-    
-    
 
+
+    /**
+     * @return string
+     */
+    public function getSource()
+    {
+        return 'Hashtags';
+    }
+
+    /**
+     * @return string
+     */
     public function getPrimary()
     {
         return "id";
     }
-    
-    function save(){
+
+
+    function save() {
         $this->modified=date("Y-m-d H:i:s");
         parent::save();
     }
-    
+
+    /**
+     * @return ConfigureBackend
+     */
     public function getBackendConfiguration(){
         $backend = new ConfigureBackend;
         $backend->setEditable(array("id", "hashtag", "pop"));
@@ -28,26 +50,33 @@ class Hashtags extends BaseModel
         return $backend;
         
     }
-    
-    public function findHashtags($term) {
-        
-        $sql = "select * from Hashtags where hashtag like :term order by pop desc";
+
+    /**
+     * @param $term
+     * @return mixed
+     */
+    public function findHashtags($term)
+    {
+        $sql = "SELECT * FROM Hashtags WHERE hashtag LIKE :term ORDER BY pop DESC";
         
         $stmt = $this->dbh->prepare($sql);
 
-        $stmt->bindValue(':term', "%".$term."%", PDO::PARAM_STR);
+        $stmt->bindValue(':term', "%".$term."%", \PDO::PARAM_STR);
 
         $stmt->execute();
 
-        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, 'Hashtags');
+        $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, get_class($this));
 
         return $obj;
-        
-    
     }
-    
-    function getPopularHashtags($limit =5){
-        $sql = "select * from Hashtags order by pop desc limit ".$limit;
+
+    /**
+     * @param int $limit
+     * @return mixed
+     */
+    function getPopularHashtags($limit =5)
+    {
+        $sql = "SELECT * FROM Hashtags ORDER BY pop DESC LIMIT ". (int) $limit;
         
         $stmt = $this->dbh->prepare($sql);
 
@@ -55,13 +84,18 @@ class Hashtags extends BaseModel
 
         $stmt->execute();
 
-        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, 'Hashtags');
+        $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, get_class($this));
 
         return $obj;        
     }
-    
-    function getTrendingHashtags($limit =5){
-        $sql = "select * from Hashtags  WHERE week(modified) = week(now()) order by pop desc limit ".$limit;
+
+    /**
+     * @param int $limit
+     * @return mixed
+     */
+    function getTrendingHashtags($limit =5)
+    {
+        $sql = "SELECT * FROM Hashtags  WHERE WEEK(modified) = WEEK(now()) ORDER BY pop DESC limit ". (int) $limit;
         
         $stmt = $this->dbh->prepare($sql);
 
@@ -69,14 +103,18 @@ class Hashtags extends BaseModel
 
         $stmt->execute();
 
-        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, 'Hashtags');
+        $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, get_class($this));
 
         return $obj;        
     }
-    
-        
-    function getRandomHashtags($limit =5){
-        $sql = "select * from Hashtags order by rand() limit ".$limit;
+
+    /**
+     * @param int $limit
+     * @return mixed
+     */
+    function getRandomHashtags($limit =5)
+    {
+        $sql = "SELECT * FROM Hashtags ORDER BY RAND() LIMIT ". (int) $limit;
         
         $stmt = $this->dbh->prepare($sql);
 
@@ -84,9 +122,9 @@ class Hashtags extends BaseModel
 
         $stmt->execute();
 
-        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, 'Hashtags');
+        $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, get_class($this));
 
         return $obj;        
     }
 }
-?>
+

@@ -1,4 +1,7 @@
 <?php
+namespace SocialNetwork\app\lib;
+use SocialNetwork\app\lib\database\DBTrait;
+
 
 /**
  * Class BaseApp

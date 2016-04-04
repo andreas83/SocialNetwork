@@ -1,4 +1,9 @@
 <?php
+namespace SocialNetwork\app\controller;
+
+use SocialNetwork\app\lib\BaseController;
+use SocialNetwork\app\model\User;
+
 /**
  * BackendController
  * 
@@ -12,13 +17,10 @@
  * 
  * @author andreas <andreas@moving-bytes.at>
  */
-class BackendController extends BaseController  {
-    
+class BackendController extends BaseController
+{
 
-
-    
     function __construct() {
-        
         $this->assign("BackendModels", BackendController::getConfiguredBackendModels());
     }
     
@@ -26,10 +28,11 @@ class BackendController extends BaseController  {
      * Login for the backend 
      *
      */
-    function login(){
+    function login()
+    {
         $error=false;
         
-        if($_POST){
+        if ($_POST) {
             $user =  new User;
             $res = $user->find(array("mail" => $_POST['mail'], "password" => md5($_POST['pass'] . Config::get("salat")), "isAdmin" =>1));
             if (count($res) == 0) {
@@ -59,13 +62,16 @@ class BackendController extends BaseController  {
         $this->redirect("/backend/". $models[0]."/list/");
         
     }
+
     /**
      * Get all configured backend models.
-     * 
+     *
      * @todo caching or find another way to get configured backend models
+     * @return array
      */
-    
-    static function getConfiguredBackendModels(){
+    static function getConfiguredBackendModels()
+    {
+        $configuredmodels = [];
         if ($handle = opendir('./app/model')) {
             while (false !== ($entry = readdir($handle))) {
                 if ($entry != "." && $entry != "..") {
@@ -90,26 +96,30 @@ class BackendController extends BaseController  {
      * 
      * @todo validation
      * @param type $request
-     * @return void
      */
-    function edit($request){
+    function edit($request)
+    {
         $model = new $request['model'];
         if($_POST){
-            if(isset($_POST[$model->getPrimary()]) && is_numeric($_POST[$model->getPrimary()]))
+            if(isset($_POST[$model->getPrimary()]) && is_numeric($_POST[$model->getPrimary()])) {
                 $model = $model->get($_POST[$model->getPrimary()]);
+            }
             
-            foreach ($_POST as $key => $val)
-                $model->$key=$val;
+            foreach ($_POST as $key => $val) {
+                $model->{$key}=$val;
+            }
             
             $model->save();
             return $this->table($request);
             
         }
         $this->assign("modelName", $request['model']);
-        if(isset($request['id']))
+        if(isset($request['id'])){
             $this->assign("model", $model->get($request['id']));
-        else
+        } else {
             $this->assign("model", $model);
+        }
+
         
         $this->assign("configuration", $model->getBackendConfiguration());
         $this->render("backend/generic_edit.php");
@@ -141,10 +151,13 @@ class BackendController extends BaseController  {
     /**
      * handles the delete requests
      * 
+     * @todo (sanitize ??? check permissions ! :D pllllssss)
+     * 
      * @param type $request
      * @return type
      */
-    function delete($request){
+    function delete($request)
+    {
         $model = new $request['model'];
         $model->delete($request['id']);
         return $this->table($request);

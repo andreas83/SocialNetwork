@@ -1,4 +1,12 @@
-<form id="loginform" class="<?php echo(isset($scope) && strpos($scope, "login") === false ? "hide" : ""); ?>"
+<?php
+use SocialNetwork\app\controller\UserController;
+use SocialNetwork\app\lib\Config;
+use SocialNetwork\app\lib\Helper;
+?>
+
+
+<form id="loginform" class="<?php
+echo(isset($scope) && strpos($scope, "login") === false ? "hide" : ""); ?>"
       action="/user/login/" method="post">
 
     <div class="form-group">

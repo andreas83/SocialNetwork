@@ -1,4 +1,5 @@
 <?php
+namespace SocialNetwork\app\lib\database;
 
 /**
  * default DB Interface
@@ -19,9 +20,9 @@ Interface DBInterface
     /**
      * fall back exception handler
      *
-     * @param Exception $exception
+     * @param \Exception $exception
      */
-    public function fallback_handler(Exception $exception);
+    public function fallback_handler(\Exception $exception);
 
 
     /**

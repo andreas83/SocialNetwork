@@ -1,4 +1,6 @@
 <?php
+use SocialNetwork\app\lib\Config;
+
 include("header.php");
 include("menu.php");
 ?>    

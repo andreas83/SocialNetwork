@@ -1,6 +1,15 @@
 <?php
 
-class ScoreController{
+use SocialNetwork\app\lib\Helper;
+use SocialNetwork\app\model\Content;
+use SocialNetwork\app\model\Notification;
+use SocialNetwork\app\model\Score;
+
+/**
+ * Class ScoreController
+ */
+class ScoreController
+{
     
     /**
      * get like/dislike information for 
@@ -21,11 +30,10 @@ class ScoreController{
             "content_id"=>$request['id'], 
             "type" => "sub"));
         
-
-   
-        if (count($like)>0 || count($dislike)>0)
+        
+        if (count($like)>0 || count($dislike)>0) {
             echo json_encode(array("like"=>count($like), "dislike"=>count($dislike)));
-        else {
+        } else {
             echo json_encode(array("like" =>0, "dislike" => 0));
         }
     }
@@ -49,7 +57,8 @@ class ScoreController{
             {
                 $find[0]->delete($find[0]->id);
 
-                return $this->get_score($request);
+                $this->get_score($request);
+                return null;
             }
             
             $score->user_id = Helper::getUserID();

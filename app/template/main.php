@@ -1,4 +1,8 @@
 <?php
+use SocialNetwork\app\controller\UserController;
+use SocialNetwork\app\lib\Config;
+use SocialNetwork\app\lib\Helper;
+
 include("header.php");
 ?>
 <div class="container">
@@ -84,9 +88,6 @@ include("header.php");
                 </div>
                 <input type="submit" class="col-md-4  btn-warning  btn btn-lg" value="<?php echo _("Register"); ?>" />
             </form>
-
-            
-                
         </div>
     </div>
 </div>

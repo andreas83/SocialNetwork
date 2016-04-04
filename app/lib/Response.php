@@ -1,12 +1,7 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: j
- * Date: 26.09.15
- * Time: 10:38
- */
+namespace SocialNetwork\app\lib;
 
-class Response implements JsonSerializable
+class Response implements \JsonSerializable
 {
 
     /**

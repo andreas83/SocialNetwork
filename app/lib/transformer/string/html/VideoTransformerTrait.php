@@ -1,8 +1,9 @@
 <?php
-namespace transformer\string\html;
+namespace SocialNetwork\app\lib\transformer\string\html;
 
 /**
  * Class VideoTransformerTrait
+ * @package SocialNetwork\app\lib\transformer\string\html
  */
 trait VideoTransformerTrait
 {

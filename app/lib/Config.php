@@ -1,5 +1,10 @@
 <?php
+namespace SocialNetwork\app\lib;
 
+/**
+ * Class Config
+ * @package SocialNetwork\app\lib
+ */
 class Config
 {
     /**

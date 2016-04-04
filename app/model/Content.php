@@ -1,7 +1,16 @@
 <?php
+namespace SocialNetwork\app\model;
 
+use SocialNetwork\app\lib\BaseModel;
+use SocialNetwork\app\lib\ConfigureBackend;
+
+/**
+ * Class Content
+ * @package SocialNetwork\app\model
+ */
 class Content extends BaseModel
 {
+    const maxid= 1000000000;
 
     public $id = "";
     public $user_id = "";
@@ -9,13 +18,25 @@ class Content extends BaseModel
     public $media = "";
     public $date = "";
 
-    const maxid= 1000000000;
-    
+    /**
+     * @return string
+     */
+    public function getSource()
+    {
+        return 'Content';
+    }
+
+    /**
+     * @return string
+     */
     public function getPrimary()
     {
         return "id";
     }
-    
+
+    /**
+     * @return ConfigureBackend
+     */
     public function getBackendConfiguration(){
      $backend = new ConfigureBackend;
      $backend->setEditable(array("id", "user_id", "data", "media", "date"));
@@ -27,10 +48,8 @@ class Content extends BaseModel
      $backend->setSearchable(array("id", "data", "media"));
      $backend->addTextarea("data");
      
-     
-     
+
      return $backend;
-        
     }
 
     /**
@@ -53,11 +72,11 @@ class Content extends BaseModel
         $esql="";
         
         if ($hash) {
-            $esql.= " (data LIKE :term or media LIKE :term) AND";
+            $esql.= " (data LIKE :term OR media LIKE :term) AND";
         } 
 
         if($user){
-            $esql.= " User.id=(select id from User where name = :username) AND";
+            $esql.= " User.id=(SELECT id FROM User WHERE name = :username) AND";
         }
         if($type){
             $esql.= " (media LIKE :type) AND";
@@ -65,10 +84,10 @@ class Content extends BaseModel
         
         if($show_nsfw=="false")
         {
-            $esql.="  data not like '%nsfw%' AND";
+            $esql.="  data NOT LIKE '%nsfw%' AND";
         }
               
-        $orderby="order by Content.id desc"; 
+        $orderby="ORDER BY Content.id DESC";
         
         if($order)
         {
@@ -76,38 +95,41 @@ class Content extends BaseModel
         }
         
         
-        $sql = "SELECT *, Content.id AS id, Content.date, User.id as user_id "
+        $sql = "SELECT *, Content.id AS id, Content.date, User.id AS user_id "
                 . "FROM Content "
-                . "INNER JOIN User on Content.user_id=User.id "               
+                . "INNER JOIN User ON Content.user_id=User.id "
                 . "WHERE  $esql "
                 . "Content.id < $id "
-                . "$orderby limit $show";
+                . "$orderby LIMIT $show";
   
         
         $stmt = $this->dbh->prepare($sql);
 
         if($hash)
-            $stmt->bindValue(':term', "%" . $hash . "%", PDO::PARAM_STR);
+            $stmt->bindValue(':term', "%" . $hash . "%", \PDO::PARAM_STR);
         if($user)
-            $stmt->bindValue(':username', str_replace(".", " ", $user), PDO::PARAM_STR);
+            $stmt->bindValue(':username', str_replace(".", " ", $user), \PDO::PARAM_STR);
         if($type){
-            $stmt->bindValue(':type', '%type":"'.$type.'"%', PDO::PARAM_STR);
+            $stmt->bindValue(':type', '%type":"'.$type.'"%', \PDO::PARAM_STR);
         }
         
         $stmt->execute();
 
-        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, 'Content');
+        $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, get_class($this));
 
         return $obj;
     }
-    
+
+    /**
+     * @return mixed
+     */
     function getStats(){
         
-        $sql="select Month(FROM_UNIXTIME(date)) as Month, YEAR(FROM_UNIXTIME(date)) as Year, count(*) as cnt from Content GROUP BY Month(FROM_UNIXTIME(date)), YEAR(FROM_UNIXTIME(date)) order by date";
+        $sql="SELECT MONTH(FROM_UNIXTIME(date)) s Month, YEAR(FROM_UNIXTIME(date)) AS Year, COUNT(*) AS cnt FROM Content GROUP BY MONTH(FROM_UNIXTIME(date)), YEAR(FROM_UNIXTIME(date)) ORDER BY date";
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute();
 
-        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, 'StdClass');
+        $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, '\stdClass');
 
         return $obj;
     }

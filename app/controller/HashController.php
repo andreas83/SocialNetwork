@@ -1,11 +1,18 @@
 <?php
+namespace SocialNetwork\app\controller;
+
+use SocialNetwork\app\lib\BaseController;
+use SocialNetwork\app\model\Hashtags;
 
 /**
  * Class Hashcontroller
  */
 class HashController extends BaseController
 {
-    
+
+    /**
+     * @param $request
+     */
     function get($request)
     {
         $hash= new Hashtags;
@@ -14,7 +21,10 @@ class HashController extends BaseController
 
         $this->asJson($res);
     }
-    
+
+    /**
+     * @param $request
+     */
     function addScore($request)
     {
         $hash= new Hashtags;

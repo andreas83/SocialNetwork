@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: j
- * Date: 17.08.15
- * Time: 21:21
- */
+namespace SocialNetwork\app\lib;
 
 
 /**

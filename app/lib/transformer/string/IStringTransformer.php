@@ -1,17 +1,10 @@
 <?php
 
-namespace transformer\string;
-
-/**
- * Created by PhpStorm.
- * User: j
- * Date: 28.09.15
- * Time: 23:49
- */
+namespace SocialNetwork\app\lib\transformer\string;
 
 /**
  * Interface IStringTransformer
- * @package transformer
+ * @package SocialNetwork\app\lib\transformer\string
  */
 interface IStringTransformer {
 
