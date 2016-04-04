@@ -16,6 +16,6 @@ class WebVideoTransformer implements IStringTransformer
     /**
      * pattern for search and replace
      */
-    const PATTERN = "/((http|https)\:\/\/)?([w]{3}\.)?vimeo.com\/(\d+)+/i";
-    const REPLACE_PATTEN = '<iframe src="http://player.vimeo.com/video/$4?badge=0" width="%s" height="%s" frameborder="0" webkitAllowFullScreen="true" mozallowfullscreen="true" allowFullScreen="true"></iframe>';
+    const PATTERN = "/((.*)+.(mp4|webm|mpeg)$)/i";
+    const REPLACE_PATTEN = '<video width="%s" height="%s" autoplay="autoplay" loop controls ><source src="$1" type="video/$3">Your browser does not support the video tag or webm</video>';
 }
