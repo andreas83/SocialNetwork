@@ -1,4 +1,5 @@
 <?php
+namespace SocialNetwork\app\controller;
 
 use SocialNetwork\app\lib\Helper;
 use SocialNetwork\app\model\Content;
