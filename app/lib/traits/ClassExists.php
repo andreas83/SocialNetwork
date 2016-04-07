@@ -24,8 +24,7 @@ trait ClassExists
      */
     public function classExists($namespace, $name)
     {
-        $className = "$namespace\\$name";
-        return class_exists($className, true);
+        return self::classExistsStatic($namespace, $name);
     }
 
     /**

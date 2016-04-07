@@ -2,6 +2,8 @@
 namespace SocialNetwork\app\controller;
 
 use SocialNetwork\app\lib\BaseController;
+use SocialNetwork\app\lib\Config;
+use SocialNetwork\app\lib\model\ModelFactory;
 use SocialNetwork\app\model\User;
 
 /**
@@ -19,22 +21,25 @@ use SocialNetwork\app\model\User;
  */
 class BackendController extends BaseController
 {
+    const MODEL_NAMESPACE_PREFIX = 'SocialNetwork\\app\\model';
 
-    function __construct() {
+    public function __construct() {
         $this->assign("BackendModels", BackendController::getConfiguredBackendModels());
     }
-    
-    /*
-     * Login for the backend 
-     *
+
+
+    /**
+     * @return bool
      */
-    function login()
+    public function login()
     {
         $error=false;
         
         if ($_POST) {
-            $user =  new User;
+            $user =  new User();
             $res = $user->find(array("mail" => $_POST['mail'], "password" => md5($_POST['pass'] . Config::get("salat")), "isAdmin" =>1));
+            $error = [];
+
             if (count($res) == 0) {
                 $error['login'] = _("Your login is incoreect");
             }
@@ -57,8 +62,8 @@ class BackendController extends BaseController
     /**
      * We just redirect to the first configured model after login
      */
-    function init(){
-        $models=$this->getConfiguredBackendModels();
+    public function init(){
+        $models= self::getConfiguredBackendModels();
         $this->redirect("/backend/". $models[0]."/list/");
         
     }
@@ -69,19 +74,17 @@ class BackendController extends BaseController
      * @todo caching or find another way to get configured backend models
      * @return array
      */
-    static function getConfiguredBackendModels()
+    public static function getConfiguredBackendModels()
     {
         $configuredmodels = [];
         if ($handle = opendir('./app/model')) {
             while (false !== ($entry = readdir($handle))) {
-                if ($entry != "." && $entry != "..") {
-                    $model=str_replace(".php", "", $entry);
-                    
-                    if(method_exists($model, "getBackendConfiguration"))
+                if ($entry !== "." && $entry !== "..") {
+                    $model = str_replace(".php", "", $entry);
+                    if(method_exists(self::MODEL_NAMESPACE_PREFIX . '\\' . $model, "getBackendConfiguration"))
                     {
                         $configuredmodels[]=$model;
                     }
-                    
                 }
             }
             closedir($handle);
@@ -95,11 +98,12 @@ class BackendController extends BaseController
      * handles create and update requests for given models
      * 
      * @todo validation
-     * @param type $request
+     * @param array $request
+     * @return void
      */
-    function edit($request)
+    public function edit($request)
     {
-        $model = new $request['model'];
+        $model = ModelFactory::make((string) $request['model']);
         if($_POST){
             if(isset($_POST[$model->getPrimary()]) && is_numeric($_POST[$model->getPrimary()])) {
                 $model = $model->get($_POST[$model->getPrimary()]);
@@ -110,8 +114,8 @@ class BackendController extends BaseController
             }
             
             $model->save();
-            return $this->table($request);
-            
+            $this->table($request);
+            return;
         }
         $this->assign("modelName", $request['model']);
         if(isset($request['id'])){
@@ -131,14 +135,20 @@ class BackendController extends BaseController
      * 
      * 
      */
-    function table($request){
-        $model = new $request['model'];
+    public function table($request)
+    {
+        $model = ModelFactory::make((string) $request['model']);
               
         $page = (isset($request['page']) ? $request['page'] : false);
         $term = (isset($_REQUEST['term']) ? $_REQUEST['term'] : false);
         $res = $model->getPages($page, $term);
 
-        $this->assign("pages", ceil($res[0]->cnt /  5));
+        if (isset($res[0])){
+            $this->assign("pages", ceil($res[0]->cnt /  5));
+        } else {
+            $this->assign("pages", 0);
+        }
+
         $this->assign("term", $term);
         $this->assign("modelName", $request['model']);
         $this->assign("configuration", $model->getBackendConfiguration());
@@ -153,16 +163,14 @@ class BackendController extends BaseController
      * 
      * @todo (sanitize ??? check permissions ! :D pllllssss)
      * 
-     * @param type $request
-     * @return type
+     * @param array $request
+     * @return void
      */
-    function delete($request)
+    public function delete($request)
     {
-        $model = new $request['model'];
+
+        $model = ModelFactory::make((string) $request['model']);
         $model->delete($request['id']);
-        return $this->table($request);
+        $this->table($request);
     }
-    
-    
-    
 }

@@ -8,6 +8,7 @@
     "gulp-minify-css": "*",
     "gulp-jshint": "*",
     "gulp-concat": "*",
+    "jshint"     : "*",
     "gulp-uglify": "*",
     "gulp-cache": "*",
     "gulp-notify": "*",
