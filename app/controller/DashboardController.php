@@ -27,7 +27,7 @@ class DashboardController extends BaseController
     public function dashboard($request)
     {
          $this->render("backend/dashboard_".$request['target'].".php");
-    }
+    }   
 
     public function dashboard_user()
     {
@@ -49,7 +49,7 @@ class DashboardController extends BaseController
      * @todo refactoring
      */
     public function dashboard_json_hashtags(){
-        $sql = 'SELECT data FROM Content WHERE data IKE "%#%" ';
+        $sql = 'SELECT data FROM Content WHERE data LIKE "%#%" ';
         //we create a array with unique hashes and a count/weight
         $id = 0;
         foreach( $this->dbh->query( $sql ) as $row )
@@ -73,10 +73,10 @@ class DashboardController extends BaseController
                 foreach($hashes[0] as $hash)
                 {
                         if(isset($unique_hash[$hashes[0][0]]['id']) && isset($unique_hash[$hash]['id'])){
-                            $link[]=array("source"=> $unique_hash[$hashes[0][0]]['id'],
-                                "target" => $unique_hash[$hash]['id'],
-                                "weight" => $unique_hash[$hashes[0][0]]['count'],
-                                "group" => $unique_hash[$hashes[0][0]]['id']);
+                                $link[]=array("source"=> $unique_hash[$hashes[0][0]]['id'],
+                                                "target" => $unique_hash[$hash]['id'],
+                                                "weight" => $unique_hash[$hashes[0][0]]['count'],
+                                                "group" => $unique_hash[$hashes[0][0]]['id']);
                         }
 
                         $grouphash[$hash]=(isset($grouphash[$hash]) ? $grouphash[$hash] : $group);
@@ -108,7 +108,7 @@ class DashboardController extends BaseController
         ';
 
         
-        $this->asJson($output);
+        echo $output;
     }
 
 
