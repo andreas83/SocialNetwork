@@ -1,6 +1,7 @@
 <?php
 namespace SocialNetwork\app\controller;
 use SocialNetwork\app\lib\BaseController;
+
 use SocialNetwork\app\lib\database\DBTrait;
 use SocialNetwork\app\model\Content;
 use SocialNetwork\app\model\User;
@@ -15,7 +16,7 @@ class DashboardController extends BaseController
 {
     use DBTrait;
     
-    function __construct() {
+    public function __construct() {
         $this->load_database_handler();
         $this->assign("BackendModels", BackendController::getConfiguredBackendModels());
     }
@@ -23,12 +24,12 @@ class DashboardController extends BaseController
     /**
      * @param array $request
      */
-    function dashboard($request)
+    public function dashboard($request)
     {
          $this->render("backend/dashboard_".$request['target'].".php");
-    }   
+    }
 
-    function dashboard_user()
+    public function dashboard_user()
     {
         $user = new User();
         
@@ -47,7 +48,7 @@ class DashboardController extends BaseController
     /*
      * @todo refactoring
      */
-    function dashboard_json_hashtags(){
+    public function dashboard_json_hashtags(){
         $sql = 'SELECT data FROM Content WHERE data IKE "%#%" ';
         //we create a array with unique hashes and a count/weight
         $id = 0;
@@ -69,15 +70,15 @@ class DashboardController extends BaseController
             preg_match_all('/(?<!\w)#\w+/', $row['data'], $hashes);
             if(count($hashes[0]) > 1)
             {
-        #       var_dump($hashes);
                 foreach($hashes[0] as $hash)
                 {
-        #               var_dump($hash);
-                        if(isset($unique_hash[$hashes[0][0]]['id']) && isset($unique_hash[$hash]['id']))
-                                $link[]=array("source"=> $unique_hash[$hashes[0][0]]['id'],
-                                                "target" => $unique_hash[$hash]['id'],
-                                                "weight" => $unique_hash[$hashes[0][0]]['count'],
-                                                "group" => $unique_hash[$hashes[0][0]]['id']);
+                        if(isset($unique_hash[$hashes[0][0]]['id']) && isset($unique_hash[$hash]['id'])){
+                            $link[]=array("source"=> $unique_hash[$hashes[0][0]]['id'],
+                                "target" => $unique_hash[$hash]['id'],
+                                "weight" => $unique_hash[$hashes[0][0]]['count'],
+                                "group" => $unique_hash[$hashes[0][0]]['id']);
+                        }
+
                         $grouphash[$hash]=(isset($grouphash[$hash]) ? $grouphash[$hash] : $group);
                 }
                 $group++;
@@ -111,15 +112,15 @@ class DashboardController extends BaseController
     }
 
 
-    function dashboard_json_content(){
+    public function dashboard_json_content(){
         $content = new Content();
         $res=$content->getStats();
-        echo json_encode($res);
+        $this->asJson($res);
     }
 
-    function dashboard_json_user(){
+    public function dashboard_json_user(){
         $user = new User();
         $res=$user->getStats();
-        echo json_encode($res);
+        $this->asJson($res);
     }
 }
