@@ -1,6 +1,7 @@
 <?php
 include("header.php");
 include("menu.php");
+use SocialNetwork\app\lib\Config;
 ?>
 
 <div class="col-md-10">
