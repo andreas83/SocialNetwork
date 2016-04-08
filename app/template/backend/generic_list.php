@@ -52,7 +52,8 @@ include("header.php");
             {
                 if(isset($configuration->properties[$propertie]['relation']))
                 {
-                    $relation = new $configuration->properties[$propertie]['relation'];
+
+                    $relation = \SocialNetwork\app\lib\model\ModelFactory::make($configuration->properties[$propertie]['relation']);
                     $result=$relation->find(array($configuration->properties[$propertie]['field']=>$model->$propertie));
                     if(count($result)==0)
                         echo "<td>".$model->$propertie."</td>";
