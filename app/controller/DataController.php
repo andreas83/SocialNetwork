@@ -165,6 +165,7 @@ class DataController extends BaseController
      */
     function get_user($request)
     {
+        $request['user']= urldecode($request['user']);
         $user = new User;
         $res=$user->find(array("name"=> str_replace(".", " ", $request['user'])));
         if(empty($res))
