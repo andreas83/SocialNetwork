@@ -2,6 +2,7 @@
 namespace SocialNetwork\app\controller;
 use SocialNetwork\app\lib\BaseController;
 
+use SocialNetwork\app\lib\database\DBTrait;
 use SocialNetwork\app\model\Content;
 use SocialNetwork\app\model\User;
 
@@ -13,8 +14,10 @@ use SocialNetwork\app\model\User;
  */
 class DashboardController extends BaseController
 {
+    use DBTrait;
     
     public function __construct() {
+        $this->load_database_handler();
         $this->assign("BackendModels", BackendController::getConfiguredBackendModels());
     }
 
