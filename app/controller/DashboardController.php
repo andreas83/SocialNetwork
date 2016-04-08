@@ -107,19 +107,19 @@ class DashboardController extends BaseController
         ';
 
         
-        echo $output;
+        $this->asJson($output);
     }
 
 
     function dashboard_json_content(){
         $content = new Content();
         $res=$content->getStats();
-        echo json_encode($res);
+        $this->asJson($res);
     }
 
     function dashboard_json_user(){
         $user = new User();
         $res=$user->getStats();
-        echo json_encode($res);
+        $this->asJson($res);
     }
 }

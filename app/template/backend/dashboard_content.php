@@ -86,7 +86,6 @@ include("header.php");
 };
 
     $.get("/backend/dashboard/json/content/", function(res){
-        res=JSON.parse(res);
         var all=0;
         $(res).each(function(key, val){
             all=all+parseInt(val.cnt)
