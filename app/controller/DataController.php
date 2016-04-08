@@ -169,10 +169,11 @@ class DataController extends BaseController
         $res=$user->find(array("name"=> str_replace(".", " ", $request['user'])));
         if(empty($res))
         {
+            
             $this->getResponse()
-                ->addHeader("HTTP/1.0 404 Not Found")
+                ->addStatusCode(404)
                 ->executeHeaders();
-
+            
             $data= new Content;
             $this->assign("stream", $data->getNext(false, 1 , "cat", false, "img", "order by rand()"));
             $this->render("404.php");
@@ -231,7 +232,7 @@ class DataController extends BaseController
         if(empty($res))
         {
             $this->getResponse()
-                ->addHeader("HTTP/1.0 404 Not Found")
+                ->addStatusCode(404)
                 ->executeHeaders();
 
             $data= new Content;
@@ -434,6 +435,7 @@ class DataController extends BaseController
      */
     function delete($request)
     {
+        
         $content = new Content();
         $res=$content->find(array("user_id" => Helper::getUserID(), "id" =>$request['id'] ));
 
@@ -445,6 +447,16 @@ class DataController extends BaseController
                     "status" => "deleted"
                 ]
             );
+        }else{
+           if(!isset($_REQUEST['api_key']) || empty($_REQUEST['api_key']))
+           {
+               
+               $this->getResponse()->addStatusCode(403)->executeHeaders();
+               die();
+              
+           }
+                     
+            
         }
         
     }

@@ -171,7 +171,7 @@ Text and Image
     var api_key="";
     $.ajax({
             url: '/api/content/'+id,
-            param: {"api_key":api_key}
+            param: {"api_key":api_key},
             type: 'DELETE',
             success: function(result) {
                 if(result.status=="deleted"){

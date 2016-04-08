@@ -106,8 +106,9 @@ if ($match) {
     }
 
 } else {
-    header("HTTP/1.0 404.php Not Found");
+    
     $error = new BaseController();
+    $error->getResponse()->addStatusCode(402)->executeHeaders();
     $error->assign("title", "404");
     $error->render("404.php");
 }
