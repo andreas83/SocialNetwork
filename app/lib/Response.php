@@ -4,6 +4,12 @@ namespace SocialNetwork\app\lib;
 class Response implements \JsonSerializable
 {
 
+    
+    /**
+     * @var int
+     */
+    private $statuscode;
+    
     /**
      * @var array
      */
@@ -21,11 +27,18 @@ class Response implements \JsonSerializable
      */
     public function __construct($content = [], $headers = [])
     {
-        if (!$content) {
+        if (empty($content)) {
             $this->content = [];
         } else {
             $this->content = $content;
         }
+        
+        if (empty($headers)) {
+            $this->headers = [];
+        } else {
+            $this->headers = $headers;
+        }
+        $this->statuscode=200;
     }
 
     /**
@@ -48,6 +61,15 @@ class Response implements \JsonSerializable
     }
 
     /**
+     * @param int $code
+     */
+    public function addStatusCode($code) {
+        $this->statuscode = $code;
+
+        return $this;
+    }
+    
+    /**
      * @param string $header
      */
     public function removeHeader($header) {
@@ -64,6 +86,7 @@ class Response implements \JsonSerializable
      * @return $this
      */
     public function executeHeaders() {
+        http_response_code($this->statuscode);
         $this->headers = array_unique($this->headers);
         foreach ($this->headers as $header) {
             header($header);
