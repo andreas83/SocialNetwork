@@ -108,7 +108,7 @@ class DashboardController extends BaseController
         ';
 
         
-        echo $output;
+        $this->asJson($output);
     }
 
 
