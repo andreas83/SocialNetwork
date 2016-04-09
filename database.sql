@@ -15,6 +15,7 @@ CREATE TABLE User (
 CREATE TABLE  Content (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
+  `group_id` int(10) unsigned default NULL,
   `data` text COLLATE utf8_unicode_ci NOT NULL,
   `media` text COLLATE utf8_unicode_ci NOT NULL,
   `date` int(10) unsigned NOT NULL,

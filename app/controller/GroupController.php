@@ -1,4 +1,6 @@
 <?php
+namespace SocialNetwork\app\controller;
+
 
 /**
  * Description of GroupController

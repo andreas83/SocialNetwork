@@ -39,6 +39,7 @@ class Groups extends BaseModel
     public function getPrimary()
     {
         return "group_id";
+
     }
     
     function save(){
@@ -46,7 +47,6 @@ class Groups extends BaseModel
         if($this->group_id=="")
             $this->created=date("Y-m-d H:i:s");
         
-        $this->modified=date("Y-m-d H:i:s");
         parent::save();
     }
     
