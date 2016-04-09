@@ -101,6 +101,9 @@ label{
 .stream-item{
     background-color:$color-dmdn-white;
     border: 1px solid #E6EBFA;
+    .streamFooter{
+        margin-top:10px;
+    }
 }
 .stream-item,.stream-input{
     
@@ -145,6 +148,20 @@ label{
     }
     .Likebox{
         margin-left: 9px;
+        width:145px;
+        float:left;
+        span.btn{
+                border: 1px solid #eee;
+                margin-right: 10px;
+                font-size: 12px;
+        }
+    }
+    .CommentBox{
+        span.btn{
+                border: 1px solid #eee;
+                margin-right: 10px;
+                font-size: 12px;
+        }   
     }
 }
 a.hash{
@@ -154,7 +171,9 @@ a.hash{
     background-color: #F9F9F9;
     border-bottom: 1px solid #eee;
     height:80px;
-    padding:20px;
+    padding-top:20px;
+    padding-left:10px;
+    padding-right:10px;
     color:#000; 
     
     img{

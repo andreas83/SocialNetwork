@@ -35,10 +35,11 @@
         readURL(this);
     });
 
-    $(".showChat").on("click", function (e) {
+    $(".showGroup").on("click", function (e) {
         e.preventDefault();
-        $("#ChatBox").toggleClass("hide");
-        $("#textframe").scrollTop($("#textframe").height());        
+        
+        React.unmountComponentAtNode(container);
+        
         
     });
 
@@ -125,9 +126,9 @@ function swap(json) {
 }
 
 function bindMention(){
-        $('textarea, #chatinput').textcomplete('destroy');
+        $('textarea').textcomplete('destroy');
 
-        $('textarea, #chatinput').textcomplete([
+        $('textarea').textcomplete([
         { // mention strategy
           match: /(^|\s)#(\w*)$/,
           search: function (term, callback) {

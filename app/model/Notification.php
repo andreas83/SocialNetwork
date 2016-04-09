@@ -21,7 +21,7 @@ class Notification extends BaseModel
      */
     public function getSource()
     {
-        return 'Notifications';
+        return 'Notification';
     }
 
     /**

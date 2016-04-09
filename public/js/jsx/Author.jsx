@@ -64,7 +64,7 @@
     var AuthorText = React.createClass({
 
     componentDidMount: function(){
-        var domNode = this.getDOMNode();
+        var domNode =  ReactDOM.findDOMNode(this);
         var nodes = domNode.querySelectorAll('code');
         if (nodes.length > 0) {
             for (var i = 0; i < nodes.length; i=i+1) {

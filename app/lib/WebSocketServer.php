@@ -7,7 +7,7 @@ require_once('WebSocketUser.php');
 abstract class WebSocketServer
 {
 
-    protected $userClass = 'WebSocketUser'; // redefine this if you want a custom user class.  The custom user class should inherit from WebSocketUser.
+    protected $userClass = 'SocialNetwork\app\lib\WebSocketUser'; // redefine this if you want a custom user class.  The custom user class should inherit from WebSocketUser.
     protected $maxBufferSize;
     protected $master;
     protected $sockets = array();

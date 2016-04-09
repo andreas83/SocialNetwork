@@ -11,12 +11,11 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     cache = require('gulp-cache'),
     babel = require("gulp-babel"),
-    gutil = require('gulp-util'),
     sass = require('gulp-sass'),
     cssmin = require('gulp-cssmin'),
     del = require('del');
 
-
+/*    gutil = require('gulp-util'), */
 
 gulp.task('react', function() {
     return gulp.src(
@@ -26,7 +25,7 @@ gulp.task('react', function() {
             'public/js/jsx/Stream.jsx',
             'public/js/jsx/Likes.jsx',
             'public/js/jsx/SearchBox.jsx',
-            'public/js/jsx/Chat.jsx',
+            'public/js/jsx/GroupBox.jsx',
             'public/js/jsx/ShareBox.jsx',
             'public/js/jsx/Notifications.jsx',
             'public/js/jsx/InitStream.jsx'
@@ -37,7 +36,7 @@ gulp.task('react', function() {
     .pipe(gulp.dest('public/js/'))
 });
 
-gulp.task('compress', function(){
+gulp.task('compressjs', function(){
     return gulp.src(
         [
             "bower_components/highlightjs/highlight.pack.min.js",
@@ -46,11 +45,11 @@ gulp.task('compress', function(){
             "bower_components/bootstrap-css/js/bootstrap.min.js",
             "bower_components/react/react.min.js",
             "bower_components/react/react-dom.min.js",
-            "public/js/assets/main.min.js",
+            "public/js/main.js",
             "public/js/react.js"
         ]
     )
-     .pipe(uglify().on('error', gutil.log))
+     .pipe(uglify())
      .pipe(concat('app.js'))
      .pipe(gulp.dest('public/js/'))
           
@@ -91,18 +90,11 @@ gulp.task('default', function() {
 
 gulp.task('watch', function() {
     // Watch .scss files
-    gulp.watch('public/css/scss/*.scss', ['sass']);
+    gulp.watch('public/css/scss/*.scss', ['sass', 'compress']);
 
     // Watch .jsx files
-    gulp.watch('public/jsx/*.jsx', ['react']);
+    gulp.watch('public/js/jsx/*.jsx', ['react', 'compressjs']);
 });
 
 
 
-gulp.task('watch', function() {
-    // Create LiveReload server
-    livereload.listen();
-
-    // Watch any files in dist/, reload on change
-    gulp.watch(['dist/**']).on('change', livereload.changed);
-});

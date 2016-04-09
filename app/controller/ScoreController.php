@@ -13,7 +13,7 @@ class ScoreController
 {
     
     /**
-     * get like/dislike information for 
+     * get like/dislixxgddgke information for 
      * content element
      * 
      * @todo make one query for like/dislike
@@ -46,6 +46,7 @@ class ScoreController
      */
     function post_score($request)
     {
+        
         $score = new Score();
         if (isset($request['type']) && Helper::isUser()) {
             
@@ -59,6 +60,7 @@ class ScoreController
                 $find[0]->delete($find[0]->id);
 
                 $this->get_score($request);
+                
                 return null;
             }
             
@@ -77,8 +79,8 @@ class ScoreController
             $notification->message='scored your'
                     . ' <a href="/permalink/'.$request['id'].'">post</a>';
             if($content->user_id!=Helper::getUserID())
-                $notification->save();
-            
+                 $notification->save();
+           
             
         } elseif ($_POST && !Helper::isUser()) {
             header('HTTP/1.0 403 Forbidden');

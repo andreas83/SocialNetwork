@@ -59,7 +59,7 @@
             });
         },
         render: function () {
-
+            
             var commentForm="";
             if(user_id > 0)
             {
@@ -74,36 +74,46 @@
         }
     });
 
-    var CommentList = React.createClass({
-        render: function () {
+    var CommentHint = React.createClass({
+      
+        getInitialState: function() {
+            return { showComment: false };
+        },
+        handleClick: function(e){
+            if(this.state.showComment==true)
+            {
+                show=false;
+            }
+            else
+            {
+                show=true;
+            }
+
+            this.setState({ showComment: show });
+        },
+        render: function(){
             
-            var commentNodes = this.props.data.map(function (comment) {
-                
-                return (
-                        <Comment author={comment.author}>
-                        {Replacehashtags(comment.text)}
-                        </Comment>
-                        );
-            });
-            return (
-                    <div className = "commentList">
-                        {commentNodes}
+            return (<div className="CommentBox">
+                        <span onClick={this.handleClick.bind(this, this.props.id)} className="btn fa fa-comments"></span>
+                        { this.state.showComment ? <CommentBox id={this.props.id} /> : null }
                     </div>
-                    );
+                    
+                );
+
         }
-    });
+        });
 
     var CommentForm = React.createClass({
         handleSubmit: function (e) {
             e.preventDefault();
 
-            var text = React.findDOMNode(this.refs.text).value.trim();
+            var text = ReactDOM.findDOMNode(this.refs.text).value.trim();
             if (!text) {
                 return;
             }
 
             this.props.onCommentSubmit({text: text})
-            React.findDOMNode(this.refs.text).value = '';
+            ReactDOM.findDOMNode(this.refs.text).value = '';
             return;
         },
         render: function () {

@@ -230,8 +230,8 @@
                 document.getElementById("NotificationBox")
         );
         ReactDOM.render(
-                <ChatBox data={data} /> ,
-                document.getElementById("ChatBox")
+                <GroupBox data={data} /> ,
+                document.getElementById("GroupBox")
         );
         ReactDOM.render(
                 <ShareBox data={data}  /> ,

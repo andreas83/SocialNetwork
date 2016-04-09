@@ -61,3 +61,22 @@ CREATE TABLE  Notification (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ;
 
 
+CREATE TABLE  Groups (
+  `group_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
+  `description` text COLLATE utf8_unicode_ci NOT NULL,
+  `image` VARCHAR(255) NOT NULL,
+  `visibility` ENUM('PUBLIC', 'PRIVATE') NOT NULL,
+  `modified` DATETIME,
+  `created` DATETIME, 
+  PRIMARY KEY (`group_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ;
+
+CREATE TABLE  User_Group (
+  `group_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `isAdmin` tinyint DEFAULT 0,
+  `modified` DATETIME,
+  `created` DATETIME,
+  UNIQUE(`user_id`, `group_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

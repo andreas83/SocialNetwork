@@ -119,7 +119,7 @@ var AuthorText = React.createClass({
 
 
     componentDidMount: function () {
-        var domNode = this.getDOMNode();
+        var domNode = ReactDOM.findDOMNode(this);
         var nodes = domNode.querySelectorAll('code');
         if (nodes.length > 0) {
             for (var i = 0; i < nodes.length; i = i + 1) {
@@ -252,23 +252,29 @@ var CommentBox = React.createClass({
     }
 });
 
-var CommentList = React.createClass({
-    displayName: 'CommentList',
+var CommentHint = React.createClass({
+    displayName: 'CommentHint',
 
+
+    getInitialState: function () {
+        return { showComment: false };
+    },
+    handleClick: function (e) {
+        if (this.state.showComment == true) {
+            show = false;
+        } else {
+            show = true;
+        }
+
+        this.setState({ showComment: show });
+    },
     render: function () {
 
-        var commentNodes = this.props.data.map(function (comment) {
-
-            return React.createElement(
-                Comment,
-                { author: comment.author },
-                Replacehashtags(comment.text)
-            );
-        });
         return React.createElement(
             'div',
-            { className: 'commentList' },
-            commentNodes
+            { className: 'CommentBox' },
+            React.createElement('span', { onClick: this.handleClick.bind(this, this.props.id), className: 'btn fa fa-comments' }),
+            this.state.showComment ? React.createElement(CommentBox, { id: this.props.id }) : null
         );
     }
 });
@@ -279,13 +285,13 @@ var CommentForm = React.createClass({
     handleSubmit: function (e) {
         e.preventDefault();
 
-        var text = React.findDOMNode(this.refs.text).value.trim();
+        var text = ReactDOM.findDOMNode(this.refs.text).value.trim();
         if (!text) {
             return;
         }
 
         this.props.onCommentSubmit({ text: text });
-        React.findDOMNode(this.refs.text).value = '';
+        ReactDOM.findDOMNode(this.refs.text).value = '';
         return;
     },
     render: function () {
@@ -386,8 +392,12 @@ var StreamList = React.createClass({
                 React.createElement(Author, { editContent: editContent, deleteContent: deleteContent, reportContent: reportContent, id: data.author.id, author: data.author, contentID: data.stream.id, time: data.stream.date }),
                 React.createElement(AuthorText, { id: data.stream.id, data: data.stream }),
                 React.createElement(Content, { id: data.stream.id, data: data.stream }),
-                React.createElement(Likebox, { id: data.stream.id }),
-                React.createElement(CommentBox, { id: data.stream.id, data: "" })
+                React.createElement(
+                    "div",
+                    { className: "streamFooter" },
+                    React.createElement(Likebox, { id: data.stream.id }),
+                    React.createElement(CommentHint, { id: data.stream.id, data: "" })
+                )
             );
         });
 
@@ -678,85 +688,32 @@ var SearchBox = React.createClass({
     }
 });
 
-
-var socket;
-var ChatBox = React.createClass({
-    displayName: "ChatBox",
+var GroupBox = React.createClass({
+    displayName: 'GroupBox',
 
     getInitialState: function () {
-        return { channel: [], activeUser: [] };
+        return { data: [] };
     },
+    componentDidMount: function () {},
 
-    componentDidMount: function () {
-
-        try {
-            socket = new WebSocket(notification_server);
-
-            socket.onopen = function (msg) {
-
-                socket.send(JSON.stringify({ action: "openroom", auth_cookie: getCookie("auth") }));
-            };
-            socket.onmessage = function (msg) {
-
-                data = JSON.parse(msg.data);
-
-                this.setState({ activeUser: Object.keys(swap(data.activeUsers)), channel: data.channel.default });
-                var objDiv = document.getElementById("textframe");
-                objDiv.scrollTop = objDiv.scrollHeight;
-            }.bind(this);
-            socket.onclose = function (msg) {};
-        } catch (ex) {
-
-            console.log(ex);
-        }
+    loadCommentsFromServer: function () {
+        $.ajax({
+            url: '/api/groups/' + this.props.id,
+            dataType: 'json',
+            cache: false,
+            success: function (data) {
+                this.setState({ data: data });
+            }.bind(this),
+            error: function (xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
     },
-
-    handleSubmit: function (event) {
-        event.preventDefault();
-        socket.send(JSON.stringify({ action: "chat", text: document.getElementById("chatinput").value, auth_cookie: getCookie("auth") }));
-        document.getElementById("chatinput").value = "";
-        var objDiv = document.getElementById("textframe");
-        objDiv.scrollTop = objDiv.scrollHeight;
-    },
+    handleChange: function (event) {},
 
     render: function () {
 
-        return React.createElement(
-            "div",
-            null,
-            React.createElement(
-                "div",
-                { id: "chat", className: "col-md-9 bounceIn" },
-                React.createElement(
-                    "div",
-                    { id: "textframe" },
-                    this.state.channel.map(function (chat, i) {
-                        chat = Replacehashtags(chat);
-                        return React.createElement("p", { dangerouslySetInnerHTML: { __html: chat } });
-                    })
-                ),
-                React.createElement(
-                    "form",
-                    { className: "chatForm", onSubmit: this.handleSubmit },
-                    React.createElement("input", { type: "text", autoComplete: "off", id: "chatinput" })
-                )
-            ),
-            React.createElement(
-                "div",
-                { id: "ChatUsers", className: "col-md-3" },
-                React.createElement(
-                    "ul",
-                    null,
-                    this.state.activeUser.map(function (user, i) {
-                        return React.createElement(
-                            "li",
-                            null,
-                            React.createElement("span", { dangerouslySetInnerHTML: { __html: user } })
-                        );
-                    })
-                )
-            )
-        );
+        return React.createElement('div', { className: ' ' });
     }
 });
 
@@ -1235,5 +1192,5 @@ var data = {};
 ReactDOM.render(React.createElement(InitStream, { data: data }), document.getElementsByClassName('stream')[0]);
 ReactDOM.render(React.createElement(SearchBox, { data: data }), document.getElementById("SearchBox"));
 ReactDOM.render(React.createElement(NotificationBox, { data: data }), document.getElementById("NotificationBox"));
-ReactDOM.render(React.createElement(ChatBox, { data: data }), document.getElementById("ChatBox"));
+ReactDOM.render(React.createElement(GroupBox, { data: data }), document.getElementById("GroupBox"));
 ReactDOM.render(React.createElement(ShareBox, { data: data }), document.getElementById("ShareBox"));

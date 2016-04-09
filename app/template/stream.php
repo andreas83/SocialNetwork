@@ -16,7 +16,9 @@ include("menu.php");
                     <div id="ShareBox"></div>
                     
                 <?php } ?>
-        
+                    <div id="GroupBox"></div>
+                    
+                    
         <div class="stream-row animated bounceInDown" 
              data-permalink="<?php echo (isset($permalink) ? $permalink : ""); ?>" 
              data-hash="<?php echo (isset($hash) && !empty($hash) ? $hash : ""); ?>"
