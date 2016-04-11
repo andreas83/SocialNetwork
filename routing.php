@@ -34,11 +34,11 @@ $router->map('PUT', '/api/content/[i:id]', '\SocialNetwork\app\controller\DataCo
 $router->map('POST', '/api/content/report/[i:id]', '\SocialNetwork\app\controller\DataController#report');
 
 //Group API
-$router->map('POST', '/api/group/', 'GroupController#postGroup');
-$router->map('GET', '/api/group/', 'GroupController#getGroup');
-$router->map('PUT', '/api/group/', 'GroupController#putGroup');
-$router->map('DELETE', '/api/group/', 'GroupController#deleteGroup');
-
+$router->map('POST', '/api/group/', '\SocialNetwork\app\controller\GroupController#postGroup');
+$router->map('GET', '/api/group/', '\SocialNetwork\app\controller\GroupController#getGroup');
+$router->map('PUT', '/api/group/', '\SocialNetwork\app\controller\GroupController#putGroup');
+$router->map('DELETE', '/api/group/', '\SocialNetwork\app\controller\GroupController#deleteGroup');
+$router->map('POST', '/api/group/[i:group_id]/add/[i:user_id]', '\SocialNetwork\app\controller\GroupController#addToGroup');
 
 //for autocomplete
 $router->map('GET', '/api/hashtags/[a:auto]', '\SocialNetwork\app\controller\HashController#get');

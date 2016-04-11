@@ -4,10 +4,15 @@ namespace SocialNetwork\app\model;
 use SocialNetwork\app\lib\BaseModel;
 use SocialNetwork\app\lib\ConfigureBackend;
 
+/**
+ * Class Groups
+ * @package SocialNetwork\app\model
+ */
 class Groups extends BaseModel
 {
 
     public $group_id = "";
+    public $parent_id = "";
     public $name = "";
     public $description = "";
     public $image = "";
@@ -53,37 +58,40 @@ class Groups extends BaseModel
     
     public function getGroups($user_id){
         
-        $sql="select * from Groups, User_Group "
-                . "where visibility ='PUBLIC' or "
-                . "User_Group.group_id=Groups.group_id and user_id=:user_id";
+        $sql="select Groups.* , "
+                . "(select count(user_id) from User_Group where User_Group.group_id=Groups.group_id) as cnt, "
+                . "(select count(user_id) from Content where Content.group_id=Groups.group_id) as content_cnt "
+                . "from Groups LEFT JOIN User_Group on User_Group.group_id=Groups.group_id and user_id=:user_id "
+                . "where visibility ='PUBLIC'  "
+                . " ";
+        
         $stmt = $this->dbh->prepare($sql);
 
-        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->bindValue(':user_id', $user_id, \PDO::PARAM_INT);
 
         $stmt->execute();
 
-        $obj = $stmt->fetchALL(PDO::FETCH_CLASS, 'Groups');
+        $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, 'SocialNetwork\app\model\Groups');
 
         return $obj;        
         
         
     }
     
-    public function addToGroup(int $group_id, int $user_id, $isAdmin =false){
+    public function addToGroup( $group_id,  $user_id, $isAdmin =false){
         
         $sql="insert into User_Group values (:group_id, :user_id, :admin, now(), now() )";
         $stmt = $this->dbh->prepare($sql);
 
-        $stmt->bindValue(':group_id', $group_id, PDO::PARAM_INT);
-        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
-        $stmt->bindValue(':admin', ($isAdmin ? 1: 0), PDO::PARAM_INT);
+        $stmt->bindValue(':group_id', $group_id, \PDO::PARAM_INT);
+        $stmt->bindValue(':user_id', $user_id, \PDO::PARAM_INT);
+        $stmt->bindValue(':admin', ($isAdmin ? 1: 0), \PDO::PARAM_INT);
         
         $stmt->execute();
-
+        
         
     }
     
     
     
 }
-?>

@@ -13,10 +13,11 @@ class ScoreController
 {
     
     /**
-     * get like/dislixxgddgke information for 
+     * get like/dislike information for 
      * content element
      * 
      * @todo make one query for like/dislike
+     * @todo allow other content elements too (comments)
      * @param array $request['id']
      */
     function get_score($request)

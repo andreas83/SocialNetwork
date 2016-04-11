@@ -64,6 +64,7 @@ CREATE TABLE  Notification (
 
 CREATE TABLE  Groups (
   `group_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `parent_id` int(10) unsigned,
   `name` VARCHAR(255) NOT NULL,
   `description` text COLLATE utf8_unicode_ci NOT NULL,
   `image` VARCHAR(255) NOT NULL,
@@ -73,11 +74,13 @@ CREATE TABLE  Groups (
   PRIMARY KEY (`group_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ;
 
+insert into Groups values(1,1, "Root", "nope", "img", "PUBLIC", now(), now());
+
 CREATE TABLE  User_Group (
   `group_id` int(10) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
   `isAdmin` tinyint DEFAULT 0,
   `modified` DATETIME,
   `created` DATETIME,
-  UNIQUE(`user_id`, `group_id`)
+  CONSTRAINT user_group UNIQUE(user_id, group_id)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

@@ -15,7 +15,6 @@ var gulp = require('gulp'),
     cssmin = require('gulp-cssmin'),
     del = require('del');
 
-/*    gutil = require('gulp-util'), */
 
 gulp.task('react', function() {
     return gulp.src(
@@ -93,7 +92,7 @@ gulp.task('watch', function() {
     gulp.watch('public/css/scss/*.scss', ['sass', 'compress']);
 
     // Watch .jsx files
-    gulp.watch('public/js/jsx/*.jsx', ['react', 'compressjs']);
+    gulp.watch('public/js/jsx/*.jsx', ['react']);
 });
 
 

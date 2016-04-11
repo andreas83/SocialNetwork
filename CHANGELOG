@@ -1,3 +1,13 @@
+12.4.2016
+
+added structure, model, controller, react components for new group feature
+
+08.4.2016
+
+added psr-4 autoloader from composer
+added namespaces (and a lot of hot patches) 
+
+
 28.3.2016
 
 merge request from jakob 
