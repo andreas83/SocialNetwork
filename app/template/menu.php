@@ -46,7 +46,10 @@ use SocialNetwork\app\lib\Helper;
             <button class=" col-sm-12 col-md-12 btn btn-info" id="next">(R)andom Post</button>
         </div>
         <div class="left-nav ">
-            <a href="/help/" class="col-xs-12 col-sm-12 col-md-12 btn btn-warning" >API Documentation</a>
+            <a href="/clusters/" class="col-xs-12 col-sm-12 col-md-12 btn " id="cluster" >Cluster</a>
+        </div>
+        <div class="left-nav ">
+            <a href="/help/" class="col-xs-12 col-sm-12 col-md-12 btn btn-warning" >API Documentation </a>
         </div>
         <?php if (Helper::isUser() ): ?>
         <div class="left-nav">
