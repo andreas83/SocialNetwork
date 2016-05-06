@@ -39,13 +39,22 @@ Via Download:
 
 https://github.com/andreas83/SocialNetwork/archive/andrea.zip
 
+## update submodules if you've already cloned it
+```
+cd SocialNetwork
+git submodule update --init --recursive
+```
+
+
 ## Install dependencies
 
-### Phing (u need to have phing installed on the system)
+### Phing (u need to have phing installed on the system -> apt-cache search phing or a similar call)
+
 ```
 cd SocialNetwork
 phing build
 ```
+
 it will try to do a git pull, install composer, install/update composer dependencies, install/update the node modules
 trigger gulp and bower
 
