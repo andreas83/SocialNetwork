@@ -7,11 +7,6 @@
     <import file="${phingBuildTargetPath}/node/npm.xml" />
     <import file="${phingBuildTargetPath}/node/gulp.xml" />
     <import file="${phingBuildTargetPath}/node/bower.xml" />
-    <import file="${phingBuildTargetPath}/node/gulp.xml" />
-    <import file="${phingBuildTargetPath}/php/phinx.xml" />
-    <import file="${phingBuildTargetPath}/php/behat.xml" />
-    <import file="${phingBuildTargetPath}/java/selenium.get.xml" />
-    <import file="${phingBuildTargetPath}/java/selenium.standalone.xml" />
 
     <!-- property list -->
     <property value="" name="outputValue" />
