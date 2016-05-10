@@ -18,23 +18,7 @@ class Api_Test extends PHPUnit_Framework_TestCase
         ]);
     }
     
-    
-    public function testGet_ValidInput_ContentObject()
-    {
-        $response = $this->client->get('/api/content/', [
-            'query' => [
-                'hash' => 'cat'
-            ]
-        ]);
 
-        $this->assertEquals(200, $response->getStatusCode());
-       
-        $data = json_decode($response->getBody(), true);
-        $this->assertArrayHasKey('stream', $data[0]);
-        $this->assertArrayHasKey('author', $data[0]);
-       
-    }
-     
     /*
      * we create a new content element
      */
@@ -46,16 +30,33 @@ class Api_Test extends PHPUnit_Framework_TestCase
                 'api_key' => "empty"
             ]
         ]);
-       
-        $this->assertEquals(200, $response->getStatusCode());
+
+        self::assertEquals(200, $response->getStatusCode());
         
         
         $data = json_decode($response->getBody());
-       
-        $this->assertObjectHasAttribute('id', $data);
-        $this->assertObjectHasAttribute('status', $data);
-        $this->assertAttributeGreaterThan(0, "id", $data);
+
+        self::assertObjectHasAttribute('id', $data);
+        self::assertObjectHasAttribute('status', $data);
+        self::assertAttributeGreaterThan(0, "id", $data);
     }
+
+    public function testGet_ValidInput_ContentObject()
+    {
+        $response = $this->client->get('/api/content/', [
+            'query' => [
+                'hash' => 'cat'
+            ]
+        ]);
+
+        self::assertEquals(200, $response->getStatusCode());
+
+        $data = json_decode($response->getBody(), true);
+        self::assertArrayHasKey('stream', $data[0]);
+        self::assertArrayHasKey('author', $data[0]);
+
+    }
+
     
     public function testDelete_Error()
     {
@@ -63,7 +64,7 @@ class Api_Test extends PHPUnit_Framework_TestCase
             'http_errors' => false
         ]);
 
-        $this->assertEquals(403, $response->getStatusCode());
+        self::assertEquals(403, $response->getStatusCode());
     }
     
     
@@ -73,6 +74,6 @@ class Api_Test extends PHPUnit_Framework_TestCase
             'http_errors' => false
         ]);
 
-        $this->assertEquals(404, $response->getStatusCode());
+        self::assertEquals(404, $response->getStatusCode());
     }
 }
