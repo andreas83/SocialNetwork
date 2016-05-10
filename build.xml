@@ -1,36 +1,35 @@
 <?xml version="1.0"?>
 <project name="SocialNetwork" default="build" basedir="." description="This is the automatic build file for the social network.">
+    <property name="phingBuildTargetPath" value="./phing-build/build-targets" />
     <!-- import the different tasks -->
-    <import file="phing-build/build-targets/git/pull.xml" />
-    <import file="phing-build/build-targets/php/composer.xml" />
-    <import file="phing-build/build-targets/node/npm.xml" />
-    <import file="phing-build/build-targets/node/bower.xml" />
-    <import file="phing-build/build-targets/node/gulp.xml" />
+    <import file="${phingBuildTargetPath}/git/pull.xml" />
+    <import file="${phingBuildTargetPath}/php/composer.xml" />
+    <import file="${phingBuildTargetPath}/node/npm.xml" />
+    <import file="${phingBuildTargetPath}/node/gulp.xml" />
+    <import file="${phingBuildTargetPath}/node/bower.xml" />
 
     <!-- property list -->
     <property value="" name="outputValue" />
+    <property name="httpdUser" value="www-data" />
 
     <!-- prepares the project -->
     <target name="prepare" depends="php.composer.check, node.npm.check">
         <phingcall target="git.pull" />
         <!-- check if npm exists otherwise fail -->
-        <phingcall target="node.npm.install.routine" />
         <phingcall target="php.composer.install.routine" />
+        <phingcall target="node.npm.install.routine" />
     </target>
 
-    <!-- unit tests triggered -->
-    <target name="test">
-        <phpunit haltonerror="true" haltonfailure="true">
-            <batchtest>
-                <fileset dir="test">
-                    <include name="*Test.php"/>
-                </fileset>
-            </batchtest>
-        </phpunit>
+
+    <target name="compile">
+        <phingcall target="node.bower.install.routine" />
+        <phingcall target="node.gulp.trigger">
+            <property name="gulpTarget" value="js" />
+        </phingcall>
     </target>
 
     <!-- build the package -->
-    <target name="build" depends="test,prepare">
+    <target name="build" depends="prepare">
         <phingcall target="node.bower.install.routine" />
         <phingcall target="node.gulp.trigger" />
     </target>
@@ -39,4 +38,26 @@
         <delete dir="vendor" />
         <delete dir="node_modules" />
     </target>
+
+    <target name="styles">
+        <phingcall target="node.gulp.trigger">
+            <property name="passthru" value="true" />
+            <property name="gulpTarget" value="sass" />
+        </phingcall>
+    </target>
+
+    <target name="gulp">
+        <phingcall target="node.gulp.trigger">
+            <property name="passthru" value="true" />
+            <property name="gulpTarget" value="" />
+        </phingcall>
+    </target>
+
+    <target name="gulp-watch">
+        <phingcall target="node.gulp.trigger">
+            <property name="passthru" value="true" />
+            <property name="gulpTarget" value="watch" />
+        </phingcall>
+    </target>
+
 </project>

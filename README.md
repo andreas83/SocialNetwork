@@ -33,13 +33,32 @@ PHP 5.5
 
 Via GIT: 
 ```
-git clone https://github.com/andreas83/SocialNetwork.git
+git clone https://github.com/andreas83/SocialNetwork.git --recursive
 ```
 Via Download:
 
 https://github.com/andreas83/SocialNetwork/archive/andrea.zip
 
+## update submodules if you've already cloned it
+```
+cd SocialNetwork
+git submodule update --init --recursive
+```
+
+
 ## Install dependencies
+
+### Phing (u need to have phing installed on the system -> apt-cache search phing or a similar call)
+
+```
+cd SocialNetwork
+phing build
+```
+
+it will try to do a git pull, install composer, install/update composer dependencies, install/update the node modules
+trigger gulp and bower
+
+### Manual
 
 ```
 cd SocialNetwork
@@ -65,7 +84,7 @@ db_name="dmdn"
 db_user="user"
 db_pass="pass"
 ```
-You will find the [database.sql](https://raw.githubusercontent.com/andreas83/SocialNetwork/andrea/database.sql) file in repro
+You will find the [database.sql](https://raw.githubusercontent.com/andreas83/SocialNetwork/andrea/database/00-create.sql) file in repro
 
 Also you should adopt following configuration parameter
 ```

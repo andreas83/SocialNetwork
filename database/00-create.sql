@@ -1,0 +1,103 @@
+-- initial structure
+CREATE TABLE User (
+  id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  mail VARCHAR(255) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  about TEXT NOT NULL,
+  settings TEXT NOT NULL,
+  auth_cookie VARCHAR(32) DEFAULT NULL,
+  api_key VARCHAR(32) DEFAULT NULL,
+  isAdmin TINYINT DEFAULT 0,
+  created DATETIME,
+  modified DATETIME
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX `created` USING BTREE ON `User` (`created` ASC)  COMMENT '';
+CREATE INDEX `modified` USING BTREE ON `User` (`modified` ASC)  COMMENT '';
+
+CREATE TABLE Content (
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` INT(10) UNSIGNED NOT NULL,
+  `data` TEXT COLLATE utf8_unicode_ci NOT NULL,
+  `media` TEXT COLLATE utf8_unicode_ci NOT NULL,
+  `date` INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_user_content`
+  FOREIGN KEY (`user_id`)
+  REFERENCES `User` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+CREATE INDEX `date_tree` USING BTREE ON `Content` (`date` ASC)  COMMENT '';
+
+CREATE TABLE `Comment` (
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` INT(10) UNSIGNED NOT NULL,
+  `content_id` INT(10) UNSIGNED NOT NULL,
+  `comment` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `date` INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_user_comment`
+  FOREIGN KEY (`user_id`)
+  REFERENCES `User` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE,
+  CONSTRAINT `fk_content_comment`
+  FOREIGN KEY (`content_id`)
+  REFERENCES `Content` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+CREATE INDEX `date_tree` USING BTREE ON `Comment` (`date` ASC)  COMMENT '';
+
+CREATE TABLE Score (
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` INT(10) UNSIGNED NOT NULL,
+  `content_id` INT(10) UNSIGNED NOT NULL,
+  `type` ENUM('add', 'sub') NOT NULL,
+  `date` INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`), UNIQUE(`user_id`, `content_id`, `type`),
+  CONSTRAINT `fk_user_score`
+  FOREIGN KEY (`user_id`)
+  REFERENCES `User` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE,
+  CONSTRAINT `fk_content_score`
+  FOREIGN KEY (`content_id`)
+  REFERENCES `Content` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+CREATE INDEX `date_tree` USING BTREE ON `Score` (`date` ASC)  COMMENT '';
+
+CREATE TABLE Hashtags (
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `hashtag` VARCHAR(255) NOT NULL,
+  `pop` INT(10) UNSIGNED NOT NULL,
+   modified DATETIME,
+   PRIMARY KEY (`id`),
+   UNIQUE(`hashtag`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+CREATE INDEX `modified` USING BTREE ON `Hashtags` (`modified` ASC)  COMMENT '';
+
+CREATE TABLE  Notification (
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `to_user_id` INT(10) UNSIGNED NOT NULL,
+  `from_user_id` INT(10) UNSIGNED NOT NULL,
+  `message` TEXT COLLATE utf8_unicode_ci NOT NULL,
+  `level` INT(1) UNSIGNED NOT NULL,
+  `date` INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_to_user_notification`
+  FOREIGN KEY (`to_user_id`)
+  REFERENCES `User` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE,
+  CONSTRAINT `fk_from_user_notification`
+  FOREIGN KEY (`from_user_id`)
+  REFERENCES `User` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 ;
+
+
