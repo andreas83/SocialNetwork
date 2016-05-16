@@ -45,7 +45,7 @@ CREATE TABLE  Hashtags (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `hashtag` VARCHAR(255) NOT NULL,
   `pop` int(10) unsigned NOT NULL,
-   modified DATETIME
+   modified DATETIME,
    PRIMARY KEY (`id`), UNIQUE(`hashtag`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
