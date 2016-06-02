@@ -37,7 +37,7 @@ gulp.task('react', function() {
     .pipe(gulp.dest('public/js/'))
 });
 
-gulp.task('compress', function(){
+gulp.task('compress-js', function(){
     return gulp.src(
         [
             "bower_components/highlightjs/highlight.pack.min.js",
@@ -46,11 +46,11 @@ gulp.task('compress', function(){
             "bower_components/bootstrap-css/js/bootstrap.min.js",
             "bower_components/react/react.min.js",
             "bower_components/react/react-dom.min.js",
-            "public/js/assets/main.min.js",
+            "public/js/main.js",
             "public/js/react.js"
         ]
     )
-     .pipe(uglify().on('error', gutil.log))
+     .pipe(uglify())
      .pipe(concat('app.js'))
      .pipe(gulp.dest('public/js/'))
           
@@ -63,7 +63,7 @@ gulp.task('sass', function () {
     .pipe(gulp.dest('public/css'));
 });
 
-gulp.task('compress', function(){
+gulp.task('compress-css', function(){
 
     return gulp.src(['bower_components/fontawesome/css/font-awesome.min.css',  
                      'bower_components/bootstrap-css/css/bootstrap.min.css', 
@@ -85,7 +85,7 @@ gulp.task('icons', function() { 
 
 
 gulp.task('default', function() {
-    gulp.start('react', 'sass', 'compress', 'icons');
+    gulp.start('react', 'sass', 'compress-css', 'compress-js', 'icons');
 });
 
 

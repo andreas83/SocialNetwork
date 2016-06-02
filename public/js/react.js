@@ -119,7 +119,7 @@ var AuthorText = React.createClass({
 
 
     componentDidMount: function () {
-        var domNode = this.getDOMNode();
+        var domNode = ReactDOM.findDOMNode(this);
         var nodes = domNode.querySelectorAll('code');
         if (nodes.length > 0) {
             for (var i = 0; i < nodes.length; i = i + 1) {
@@ -252,23 +252,29 @@ var CommentBox = React.createClass({
     }
 });
 
-var CommentList = React.createClass({
-    displayName: 'CommentList',
+var CommentHint = React.createClass({
+    displayName: 'CommentHint',
 
+
+    getInitialState: function () {
+        return { showComment: false };
+    },
+    handleClick: function (e) {
+        if (this.state.showComment == true) {
+            show = false;
+        } else {
+            show = true;
+        }
+
+        this.setState({ showComment: show });
+    },
     render: function () {
 
-        var commentNodes = this.props.data.map(function (comment) {
-
-            return React.createElement(
-                Comment,
-                { author: comment.author },
-                Replacehashtags(comment.text)
-            );
-        });
         return React.createElement(
             'div',
-            { className: 'commentList' },
-            commentNodes
+            { className: 'CommentBox' },
+            React.createElement('span', { onClick: this.handleClick.bind(this, this.props.id), className: 'btn fa fa-comments' }),
+            this.state.showComment ? React.createElement(CommentBox, { id: this.props.id }) : null
         );
     }
 });
@@ -279,13 +285,13 @@ var CommentForm = React.createClass({
     handleSubmit: function (e) {
         e.preventDefault();
 
-        var text = React.findDOMNode(this.refs.text).value.trim();
+        var text = ReactDOM.findDOMNode(this.refs.text).value.trim();
         if (!text) {
             return;
         }
 
         this.props.onCommentSubmit({ text: text });
-        React.findDOMNode(this.refs.text).value = '';
+        ReactDOM.findDOMNode(this.refs.text).value = '';
         return;
     },
     render: function () {
@@ -386,8 +392,12 @@ var StreamList = React.createClass({
                 React.createElement(Author, { editContent: editContent, deleteContent: deleteContent, reportContent: reportContent, id: data.author.id, author: data.author, contentID: data.stream.id, time: data.stream.date }),
                 React.createElement(AuthorText, { id: data.stream.id, data: data.stream }),
                 React.createElement(Content, { id: data.stream.id, data: data.stream }),
-                React.createElement(Likebox, { id: data.stream.id }),
-                React.createElement(CommentBox, { id: data.stream.id, data: "" })
+                React.createElement(
+                    "div",
+                    { className: "streamFooter" },
+                    React.createElement(Likebox, { id: data.stream.id }),
+                    React.createElement(CommentHint, { id: data.stream.id, data: "" })
+                )
             );
         });
 
@@ -1041,7 +1051,7 @@ var InitStream = React.createClass({
     displayName: 'InitStream',
 
     getInitialState: function () {
-
+        window.show = true;
         return { data: [], random: false };
     },
     componentDidMount: function () {
@@ -1071,7 +1081,8 @@ var InitStream = React.createClass({
 
         this.setState({
             data: [],
-            random: true,
+            show: "random",
+
             endofData: true,
             id: getRandomInt(1, parseInt($(".stream-row").attr("data-maxid")) + 1)
         });
@@ -1107,14 +1118,14 @@ var InitStream = React.createClass({
                 endofData: true
             });
         }
-        if ($(".stream-row").attr("data-hash") != "" && this.state.random != true) {
+        if ($(".stream-row").attr("data-hash") != "" && this.state.show != "random") {
             hash = $(".stream-row").attr("data-hash");
         }
-        if ($(".stream-row").attr("data-user") != "" && this.state.random != true) {
+        if ($(".stream-row").attr("data-user") != "" && this.state.show != "random") {
             user = $(".stream-row").attr("data-user");
         }
 
-        if (this.state.random) {
+        if (this.state.show == "random") {
             show = 1;
             this.setID(this.state.id);
         }
@@ -1136,7 +1147,7 @@ var InitStream = React.createClass({
 
                 data = this.state.data.concat(data);
 
-                if ($(".stream-row").attr("data-user") != "" && this.state.random != true) {
+                if ($(".stream-row").attr("data-user") != "" && this.state.show != "random") {
                     $("#custom_css").html(data[0].author.custom_css);
                 }
 
@@ -1147,7 +1158,7 @@ var InitStream = React.createClass({
                 if (user_settings == false || user_settings.mute_video == "yes") {
                     this.setMuted();
                 }
-                if (this.state.random) {
+                if (this.state.show == "random") {
                     url = "/permalink/" + data[0].stream.id;
                     var stateObj = { id: data[0].stream.id, url: url };
                     history.pushState(stateObj, "irgendwas", url);
@@ -1166,6 +1177,13 @@ var InitStream = React.createClass({
 
     render: function () {
 
+        if (this.state.show == "random") {
+            return React.createElement(
+                'div',
+                { className: 'content' },
+                React.createElement(StreamList, { data: this.state.data })
+            );
+        }
         if (user_settings.show_nsfw == "false" && $(".stream-row").attr("data-hash") == "nsfw") {
 
             return React.createElement(

@@ -55,8 +55,10 @@
                     <Author editContent={editContent} deleteContent={deleteContent} reportContent={reportContent} id={data.author.id} author={data.author} contentID={data.stream.id} time={data.stream.date}></Author>
                     <AuthorText id={data.stream.id} data={data.stream}></AuthorText>   
                     <Content id={data.stream.id} data={data.stream}></Content>
-                    <Likebox id={data.stream.id}></Likebox>
-                    <CommentBox id={data.stream.id} data=""></CommentBox>
+                    <div className="streamFooter">
+                        <Likebox id={data.stream.id}></Likebox>
+                        <CommentHint id={data.stream.id} data=""></CommentHint>
+                    </div>
                 </div>
                 );
     });

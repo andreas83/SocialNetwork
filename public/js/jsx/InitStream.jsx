@@ -2,7 +2,7 @@
     
     var InitStream  = React.createClass({
         getInitialState: function () {
-           
+           window.show=true;
            return {data:[], random:false}
             
         },
@@ -38,7 +38,8 @@
                 
                 this.setState({
                         data:[],
-                        random:true,
+                        show: "random",
+                        
                         endofData:true,
                         id:getRandomInt(1, parseInt($(".stream-row").attr("data-maxid"))+1)
                     });
@@ -80,17 +81,17 @@
                         endofData:true,
                     });
             }
-            if($(".stream-row").attr("data-hash")!="" && this.state.random!=true)
+            if($(".stream-row").attr("data-hash")!="" && this.state.show!="random")
             {
                 hash=$(".stream-row").attr("data-hash");
             }
-            if($(".stream-row").attr("data-user")!="" && this.state.random!=true )
+            if($(".stream-row").attr("data-user")!="" && this.state.show!="random" )
             {
                 user=$(".stream-row").attr("data-user");
             } 
 
 
-            if(this.state.random){
+            if(this.state.show=="random"){
                 show=1;
                 this.setID(this.state.id);
             }
@@ -114,7 +115,7 @@
                     
                     data=this.state.data.concat(data);
                     
-                    if($(".stream-row").attr("data-user")!="" && this.state.random!=true)
+                    if($(".stream-row").attr("data-user")!="" && this.state.show!="random")
                     {
                         $("#custom_css").html(data[0].author.custom_css); 
                     }
@@ -128,7 +129,7 @@
                     {
                         this.setMuted();
                     }
-                    if(this.state.random)
+                    if(this.state.show=="random")
                     {
                         url = "/permalink/"+data[0].stream.id;
                         var stateObj = { id: data[0].stream.id, url: url };
@@ -150,6 +151,12 @@
         ,
         render: function () {
 
+            if(this.state.show=="random")
+            {
+                return (<div className="content">
+                        <StreamList data={this.state.data}/>
+                    </div>);
+            }
             if(user_settings.show_nsfw=="false"  && $(".stream-row").attr("data-hash")=="nsfw")
             {
 
