@@ -784,6 +784,7 @@ var ShareBox = React.createClass({
 
         var share_area = this.refs.share_area;
         share_area.addEventListener('input', this.handleInput);
+        bindMention();
     },
 
     /*
