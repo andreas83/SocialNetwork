@@ -35,7 +35,7 @@ abstract class BaseModel
                 [
                     \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"
                 ]);
-        $this->dbh = $this->db->getConnection();
+        $this->dbh = $this->db->connect();
         
         $this->table = $this->getSource();
         $this->className = get_class($this);
