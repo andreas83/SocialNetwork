@@ -1,16 +1,13 @@
 <?php
 namespace SocialNetwork\app\lib;
-use SocialNetwork\app\lib\database\DBTrait;
+use SocialNetwork\app\lib\database\ConnectionManager;
 
 /**
  * Class BaseModel
  */
 abstract class BaseModel
 {
-    /**
-     * load database trait
-     */
-    use DBTrait;
+
 
     /**
      * @var string
@@ -23,13 +20,23 @@ abstract class BaseModel
     protected $className;
 
 
+    public $dbh;
+
+
     /**
      * BaseModel constructor.
      */
     public function __construct()
     {
-        $this->load_database_handler();
-
+        $this->db=  new ConnectionManager(
+                Config::get('db_dsn') . ";dbname=" . Config::get('db_name'),
+                Config::get('db_user'),
+                Config::get('db_pass'),
+                [
+                    \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"
+                ]);
+        $this->dbh = $this->db->getConnection();
+        
         $this->table = $this->getSource();
         $this->className = get_class($this);
     }
