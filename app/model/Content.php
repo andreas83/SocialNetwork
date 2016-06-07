@@ -95,7 +95,8 @@ class Content extends BaseModel
         }
         
         
-        $sql = "SELECT *, Content.id AS id, Content.date, User.id AS user_id "
+        $sql = "SELECT *, Content.id AS id, Content.date, User.id AS user_id, "
+                . " (select count(*) from Comment where content_id=Content.id) as comment_cnt "
                 . "FROM Content "
                 . "INNER JOIN User ON Content.user_id=User.id "
                 . "WHERE  $esql "

@@ -57,7 +57,7 @@
                     <Content id={data.stream.id} data={data.stream}></Content>
                     <div className="streamFooter">
                         <Likebox id={data.stream.id}></Likebox>
-                        <CommentHint id={data.stream.id} data=""></CommentHint>
+                        <CommentHint id={data.stream.id} commentCnt={data.stream.comment_cnt}></CommentHint>
                     </div>
                 </div>
                 );

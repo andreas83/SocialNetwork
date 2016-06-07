@@ -124,6 +124,7 @@ class DataController extends BaseController
             $std[$i]->stream->date = (int)$res->date;
             $std[$i]->stream->text = $res->data;
             $std[$i]->stream->id = (int)$res->id;
+            $std[$i]->stream->comment_cnt = (int)$res->comment_cnt;
 
             if (isset($res->settings))
             {

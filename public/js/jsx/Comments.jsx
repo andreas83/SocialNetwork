@@ -94,7 +94,7 @@
         render: function(){
             
             return (<div className="CommentBox">
-                        <span onClick={this.handleClick.bind(this, this.props.id)} className="btn fa fa-comments"></span>
+                        <span onClick={this.handleClick.bind(this, this.props.id)} className="btn fa fa-comments">  {this.props.commentCnt}</span>
                         { this.state.showComment ? <CommentBox id={this.props.id} /> : null }
                     </div>
                     
