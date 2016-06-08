@@ -27,7 +27,7 @@ http://www.dasmerkendienie.com/help/
 
 Webserver (Apache2 or Nginx)
 PHP 5.5
-
+Composer 
 
 
 # Instalation
@@ -44,15 +44,14 @@ https://github.com/andreas83/SocialNetwork/archive/andrea.zip
 
 ## Install dependencies
 
+We use [composer](https://getcomposer.org/) for our PHP dependencies.
+To install necessary dependencies like phpmailer, oauth2 libs, altorouter etc just run following cmd
+
 ```
 cd SocialNetwork
-
 composer install
-npm install
-bower install
-gulp
 ```
-  
+
 
 ## Configuration
 
@@ -62,7 +61,7 @@ db_name="dmdn"
 db_user="user"
 db_pass="pass"
 ```
-You will find the [database.sql](https://raw.githubusercontent.com/andreas83/SocialNetwork/andrea/database.sql) file in repro
+You will find the [database.sql](https://raw.githubusercontent.com/andreas83/SocialNetwork/andrea/database.sql) file in repro.
 
 Also you should adopt following configuration parameter
 ```
@@ -184,4 +183,13 @@ Also you need to change following configuration parameter in main.cfg:
 
 ```
 notification_server="ws://127.0.0.1:9000/notification";
+```
+
+
+## Optional toolchain for development
+
+```
+npm install
+bower install
+gulp
 ```
