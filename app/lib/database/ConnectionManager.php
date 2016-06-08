@@ -1,6 +1,12 @@
 <?php
 namespace SocialNetwork\app\lib\database;
 
+/*
+ * ConnectionManager
+ *
+ * credits to Andrei Serdeliuc
+ * via https://gist.github.com/extraordinaire/4135119
+ */
 
 class ConnectionManager 
 {
