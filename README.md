@@ -1,18 +1,19 @@
 # SocialNetwork
 
-works pretty similar to a well known social network, 
-but you can host it on your very own infrastructure or intranet. 
+works pretty similar to a well known social network,
+but you can host it on your very own infrastructure or intranet.
 
 ## Demo
 http://www.dasmerkendienie.com/
 
-## Donate 
+## Donate
 Bitcoins: 1GqMSGseij18JnAoB9f3LHJRozNr1QeHkh
 
-##API Documentation
+## API Documentation
+
 http://www.dasmerkendienie.com/help/
 
-##Features
+## Features
 
 * Share (Websites, Images, Videos, SourceCode)
 * Like / Dislike / Comments
@@ -20,18 +21,20 @@ http://www.dasmerkendienie.com/help/
 * @user mentions and notifications via websockets
 * REST API
 * Oauth2 (Facebook, Google+)
-* Backend with Dashboard 
+* Backend with Dashboard
 
-##Requirement
+## Requirement
 
 Webserver (Apache2 or Nginx)
-PHP 5.5 
+PHP 5.5
+
+
 
 # Instalation
 
 ## Download the Sourcecode
 
-Via GIT: 
+Via GIT:
 ```
 git clone https://github.com/andreas83/SocialNetwork.git
 ```
@@ -43,23 +46,17 @@ https://github.com/andreas83/SocialNetwork/archive/andrea.zip
 
 ```
 cd SocialNetwork
-# if composer is installed global [/usr/bin/composer]
+
 composer install
-# if composer is downloaded to the local directory as phar [https://getcomposer.org/download/] 
-php composer.phar install 
-# if you want to have the node packages installed global [they need sudo / root permissions]
-npm install -g
+npm install
 bower install
 gulp
-# if you want to have run the node packages with project specific versions [if you plan multiple node projects]
-npm install
-./node_modules/.bin/bower install
-./node_modules/.bin/gulp
 ```
+  
 
-## Configuration 
+## Configuration
 
-you can adjust the db credentials in app/config/main.cfg 
+you can adjust the db credentials in app/config/main.cfg
 ```
 db_name="dmdn"
 db_user="user"
@@ -94,7 +91,7 @@ facebook_app_id="";
 facebook_app_secret="";
 
 # Google Auth
-google_auth=true; 
+google_auth=true;
 google_app_id="";
 google_app_secret="";
 ```
@@ -107,16 +104,16 @@ public/css/scss/
 public/upload
 ```
 
-via 
+via
 ```
 sudo chown www-data:www-data public/css/scss
 sudo chown www-data:www-data public/upload
 ```
 
 
-## Webserver 
+## Webserver
 
-If you run Apache, you need also activate mod_rewirte 
+If you run Apache, you need also activate mod_rewirte
 
 ```
 a2enmod rewrite
@@ -188,5 +185,3 @@ Also you need to change following configuration parameter in main.cfg:
 ```
 notification_server="ws://127.0.0.1:9000/notification";
 ```
-
- 
