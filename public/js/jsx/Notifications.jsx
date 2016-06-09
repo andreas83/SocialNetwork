@@ -21,8 +21,10 @@
                 socket.onmessage = function (msg) {
                     
                     data = JSON.parse(msg.data);
+                    
                     if(typeof data.notificaton!="undefined")
                     {
+                       
                         //play only sound on new notifications
                         if(this.state.init===false)
                             new Audio('/public/notification.mp3').play();
@@ -33,6 +35,12 @@
                             data:data.notificaton,
                             init:false
                         });
+                    }
+                    if(typeof data.reauth!="undefined")
+                    {
+                        //looks like our auth token is invalid, lets try to reauth
+                        renew_auth_token();
+                        
                     }
                     
                 

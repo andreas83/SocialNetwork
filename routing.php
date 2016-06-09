@@ -13,6 +13,7 @@ $router->map('GET|POST', '/user/password/reset/', '\SocialNetwork\app\controller
 $router->map('GET|POST', '/user/password/reset/[a:hash]/', '\SocialNetwork\app\controller\UserController#passwordResetConfirmed');
 $router->map('GET|POST', '/user/fblogin/', '\SocialNetwork\app\controller\UserController#fbcallback');
 $router->map('GET|POST', '/user/glogin/', '\SocialNetwork\app\controller\UserController#gcallback');
+$router->map('GET|POST', '/user/renew/auth/', '\SocialNetwork\app\controller\UserController#renewAuthCookie');
 $router->map('GET|POST', '/my/settings/', '\SocialNetwork\app\controller\UserController#settings');
 
 
