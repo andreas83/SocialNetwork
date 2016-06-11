@@ -1,8 +1,9 @@
 <?php
 namespace SocialNetwork\app\controller;
-use SocialNetwork\app\lib\BaseController;
 
-use SocialNetwork\app\lib\database\DBTrait;
+use SocialNetwork\app\lib\Config;
+use SocialNetwork\app\lib\BaseController;
+use SocialNetwork\app\lib\database\ConnectionManager;
 use SocialNetwork\app\model\Content;
 use SocialNetwork\app\model\User;
 
@@ -14,10 +15,10 @@ use SocialNetwork\app\model\User;
  */
 class DashboardController extends BaseController
 {
-    use DBTrait;
+    
     
     public function __construct() {
-        $this->load_database_handler();
+        
         $this->assign("BackendModels", BackendController::getConfiguredBackendModels());
     }
 
@@ -49,9 +50,19 @@ class DashboardController extends BaseController
      * @todo refactoring
      */
     public function dashboard_json_hashtags(){
+        $this->db=  new ConnectionManager(
+                Config::get('db_dsn') . ";dbname=" . Config::get('db_name'),
+                Config::get('db_user'),
+                Config::get('db_pass'),
+                [
+                    \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"
+                ]);
+        $this->dbh = $this->db->connect();
+        
         $sql = 'SELECT data FROM Content WHERE data LIKE "%#%" ';
         //we create a array with unique hashes and a count/weight
         $id = 0;
+        $unique_hash=array();
         foreach( $this->dbh->query( $sql ) as $row )
         {
             preg_match_all('/(?<!\w)#\w+/', $row['data'], $hashes);

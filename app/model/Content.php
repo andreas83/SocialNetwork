@@ -126,7 +126,7 @@ class Content extends BaseModel
      */
     function getStats(){
         
-        $sql="SELECT MONTH(FROM_UNIXTIME(date)) AS Month, YEAR(FROM_UNIXTIME(date)) AS Year, COUNT(*) AS cnt FROM Content GROUP BY MONTH(FROM_UNIXTIME(date)), YEAR(FROM_UNIXTIME(date)) ORDER BY date";
+        $sql="SELECT MONTH(FROM_UNIXTIME(date)) AS Month, YEAR(FROM_UNIXTIME(date)) AS Year, COUNT(*) AS cnt FROM Content GROUP BY MONTH(FROM_UNIXTIME(date)), YEAR(FROM_UNIXTIME(date)) ORDER BY MONTH(FROM_UNIXTIME(date)), YEAR(FROM_UNIXTIME(date))";
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute();
 

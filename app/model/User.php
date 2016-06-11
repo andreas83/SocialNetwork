@@ -103,7 +103,7 @@ class User extends BaseModel
      */
     function getStats()
     {
-        $sql="SELECT MONTH(created) AS Month, YEAR(created) AS Year, COUNT(*) AS cnt FROM User GROUP BY month(created), YEAR(created) ORDER BY created";
+        $sql="SELECT MONTH(created) AS Month, YEAR(created) AS Year, COUNT(*) AS cnt FROM User GROUP BY month(created), YEAR(created) ORDER BY month(created), YEAR(created)";
         
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute();

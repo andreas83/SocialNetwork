@@ -20,18 +20,18 @@ class DataController extends BaseController
 {
 
     function __construct() {
-                
+
         $content= new Content();
         //get max id for rand min/max
         $res=$content->getNext(Content::maxid, 1, false, false, false, false, false);
-        
+
         $hashtags= new Hashtags;
-        
+
         $trending=$hashtags->getTrendingHashtags();
         if(count($trending)==0) {
             $trending=$hashtags->getPopularHashtags();
         }
-        
+
         $this->assign("popularhashtags", $trending);
         $this->assign("randomhashtags",   $hashtags->getRandomHashtags());
 
@@ -53,20 +53,20 @@ class DataController extends BaseController
         }
         elseif(isset($_COOKIE['auth']))
         {
-            //try reauth 
+            //try reauth
             $user = new User;
             $res=$user->find(array("auth_cookie"  => $_COOKIE['auth']));
-            
+
             if(count($res)>0)
             {
                 $_SESSION['login']=$res[0]->id;
                 $_SESSION['user_settings']=$res[0]->settings;
                 $this->stream();
-                return;    
+                return;
             }
-            
+
         }
-        
+
         $this->assign("title", "Das merken die nie");
         $this->assign("scope", "frontpage register");
         $this->render("main.php");
@@ -75,9 +75,9 @@ class DataController extends BaseController
     /**
      * this method handles all requests arround stream data
      * and returns data as json formted string
-     * 
+     *
      */
-    function content() 
+    function content()
     {
         $data = new Content;
 
@@ -85,7 +85,7 @@ class DataController extends BaseController
         $show = (isset($_REQUEST['show']) && $_REQUEST['show'] < 100 ? $_REQUEST['show'] : 10);
         $hash= (isset($_REQUEST['hash']) && $_REQUEST['hash'] != "" ? $_REQUEST['hash'] : false);
         $user= (isset($_REQUEST['user']) && $_REQUEST['user'] != "" ? $_REQUEST['user'] : false);
-        
+
         //check nsfw content
         $settings=  Helper::getUserSettings();
         //while user is not logged in
@@ -142,10 +142,10 @@ class DataController extends BaseController
         $this->asJson(isset($std) ? $std : []);
     }
 
-    
+
     /**
-     * load inital data for public stream 
-     * 
+     * load inital data for public stream
+     *
      * @param type $request
      */
     function stream($request=false)
@@ -154,9 +154,9 @@ class DataController extends BaseController
         $this->assign("title", "Social Network - free open and anonym ");
         $this->assign("keyword", "open, anyonm, funny, cat, video, gif, webm, lol, weird, free, open");
         $this->assign("description", "Our main goal is to create a free and open community available to anyone anonymously or not");
-        
+
         $this->assign("show_share", true);
-        
+
         $this->render("stream.php");
     }
 
@@ -171,17 +171,17 @@ class DataController extends BaseController
         $res=$user->find(array("name"=> str_replace(".", " ", $request['user'])));
         if(empty($res))
         {
-            
+
             $this->getResponse()
                 ->addStatusCode(404)
                 ->executeHeaders();
-            
+
             $data= new Content;
             $this->assign("stream", $data->getNext(false, 1 , "cat", false, "img", "order by rand()"));
             $this->render("404.php");
             return true;
         }
-        
+
         $this->assign("user", $request['user']);
         $this->assign("title", "Stream from ".str_replace(".", " ", $request['user'] ));
         $this->addHeader('<meta property="og:url" content="'. Config::get("address").''.$request['user'].'"/>');
@@ -189,12 +189,12 @@ class DataController extends BaseController
         $this->addHeader('<meta property="og:type" content="website" />');
         $this->render("stream.php");
     }
-    
-    
+
+
     /**
      * load inital data for /hash/
      * and saves hashtag popularity
-     * 
+     *
      * @param type $request
      */
     function get_hash($request){
@@ -209,28 +209,28 @@ class DataController extends BaseController
             $hashdb->pop=1;
             $hashdb->save();
         }
-        
+
         $this->addHeader('<meta property="og:url" content="'.Config::get("address").'hash/'.$request['hash'].'"/>');
         $this->addHeader('<meta property="og:title" content="Posts about #'.$request['hash'].'"/>');
         $this->addHeader('<meta property="og:type" content="website" />');
-        
+
         $this->assign("show_share", false);
         $this->assign("hash", $request['hash']);
         $this->assign("title", "#".$request['hash'] );
         $this->render("stream.php");
     }
-    
+
     /**
      * loads inital data for permalink
      * like meta information
-     * 
+     *
      * @param type $request
      */
     function get_permalink($request){
         $data = new Content;
         $res=$data->get($request['id']);
-        
-        
+
+
         if(empty($res))
         {
             $this->getResponse()
@@ -242,10 +242,10 @@ class DataController extends BaseController
             $this->render("404.php");
             return true;
         }
-        
+
         if(strpos($res->data, "<code")!==false)
         {
-            $res->data="";  
+            $res->data="";
         }
         else
         {
@@ -254,14 +254,14 @@ class DataController extends BaseController
 
         $pattern="/(^|\s)#(\w*[a-zA-Z0-9öäü_-]+\w*)/";
         preg_match_all($pattern, $res->data, $hashtags);
-        
+
         $user = new User;
         $user=$user->get($res->user_id);
-        
+
         $this->assign("title", $user->name." - ".$res->data);
         $this->assign("keyword", implode(",", $hashtags[2]));
         $this->assign("description", $res->data);
-        
+
         $media=json_decode($res->media);
         $this->addHeader('<link rel="canonical" href="'.Config::get("address").'permalink/'.$request['id'].'">');
         $this->addHeader('<meta property="og:url" content="'.Config::get("address").'permalink/'.$request['id'].'"/>');
@@ -276,24 +276,24 @@ class DataController extends BaseController
         $this->assign("permalink", $request['id']);
         $this->render("stream.php");
     }
-    
+
     /**
      * function handles new content
-     * 
+     *
      * @return boolean
      */
     function post_content(){
-        
-        if (isset($_POST) && !empty($_POST)) 
-        {      
+
+        if (isset($_POST) && !empty($_POST))
+        {
             //spam bot prevention
             if(isset($_POST['mail']) && !empty($_POST['mail']))
                 return false;
-            
+
             if(
-                isset($_POST['content']) && empty($_POST['content']) && 
+                isset($_POST['content']) && empty($_POST['content']) &&
                 isset($_POST['metadata']) && count(json_decode($_POST['metadata']))==0 &&
-                isset($_FILES) && empty($_FILES['img']['name'][0])    
+                isset($_FILES) && empty($_FILES['img']['name'][0])
               )
             {
                $this->redirect("/public/stream/");
@@ -310,38 +310,39 @@ class DataController extends BaseController
                 foreach($hashtags[0] as $hashtag)
                 {
                     $res=$hashdb->find(array("hashtag"=> trim(str_replace("#", "", $hashtag))));
-                    
+
                     if(count($res)==0)
                     {
                         $hashdb->hashtag=trim(str_replace("#", "", $hashtag));
+                        $hashdb->pop=1;
                         $hashdb->save();
                     }
                     else
                     {
-                      
-                    
+
+
                         $res[0]->pop++;
                         $res[0]->save();
-                         
+
                     }
-                    
+
                 }
             }
 
-            
+
             $metadata= NULL;
-                    
+
             if(isset($_POST['metadata']) && !empty($_POST['metadata']))
             {
                 $metadata = json_decode($_POST['metadata']);
                 if(is_array($metadata) && count($metadata)==0)
                     $metadata=NULL;
-                
+
             }
             if (isset($metadata->type) && $metadata->type == "img") {
                 $metadata->url = $this->download($metadata->url);
             }
-            
+
             if(isset($metadata->type) && $metadata->type == "video")
             {
                 if($metadata->dl==true)
@@ -349,25 +350,25 @@ class DataController extends BaseController
                     $filename = $this->download($metadata->url);
                     $metadata->url= Config::get("upload_address").$filename;
                     $metadata->html=$this->replaceVideo($metadata->url);
-                    
+
                 }
-                
+
             }
-            
+
             if (isset($metadata->type) && $metadata->type == "www") {
                $metadata=(object)($this->og_parser($metadata->url));
             }
-     
+
             if (isset($_FILES) && !empty($_FILES['img']['name'][0]) && is_array($_FILES)) {
                 foreach ($_FILES['img']['tmp_name'] as $i => $file) {
                     $uniq = uniqid("", true) . "_" . $_FILES['img']['name'][$i];
                     $upload_path = Config::get("dir") . Config::get("upload_path");
                     move_uploaded_file($file, $upload_path . $uniq);
-                    
+
                     $metadata= (is_null($metadata) ? new \stdClass() : $metadata);
-                    
+
                     $metadata->type = "upload";
-                    
+
                     $mime = mime_content_type($upload_path . $uniq);
                     $metadata->files[$i]=new \stdClass();
                     $metadata->files[$i]->src = $uniq;
@@ -382,12 +383,12 @@ class DataController extends BaseController
             } else {
                 $content->user_id = 1;
             }
-            
-           
+
+
             $content->date=date("U");
-            
+
             $new_id=$content->save();
-            
+
             //save notification for mentions @username
             $pattern="/(^|\s)@(\w*[a-zA-Z0-9öäü._-]+\w*)/";
             preg_match_all($pattern, $content->data, $users);
@@ -400,21 +401,21 @@ class DataController extends BaseController
                 $notification->date=date("U");
                 $notification->message='mention you in a '
                         . '<a href="/permalink/'.$new_id.'">post</a>';
-                
+
                 foreach($users[0] as $username)
                 {
                     $username = trim(str_replace(array("@", "."), " ", $username));
                     $res = $user->find(array("name" => $username));
-                    
+
                     $notification->to_user_id=$res[0]->id;
-                    
+
                     if($notification->to_user_id!=Helper::getUserID())
                         $notification->save();
-                    
-                    $client->send(json_encode(array("action"=>"update", "uid" =>$notification->to_user_id))); 
+
+                    $client->send(json_encode(array("action"=>"update", "uid" =>$notification->to_user_id)));
                 }
             }
-            
+
             if(isset($_REQUEST['api_key']) && !empty($_REQUEST['api_key']))
             {
                 $this->asJson(
@@ -437,7 +438,7 @@ class DataController extends BaseController
      */
     function delete($request)
     {
-        
+
         $content = new Content();
         $res=$content->find(array("user_id" => Helper::getUserID(), "id" =>$request['id'] ));
 
@@ -452,27 +453,27 @@ class DataController extends BaseController
         }else{
            if(!isset($_REQUEST['api_key']) || empty($_REQUEST['api_key']))
            {
-               
+
                $this->getResponse()->addStatusCode(403)->executeHeaders();
                die();
-              
+
            }
-                     
-            
+
+
         }
-        
+
     }
 
     function update($request)
     {
-        
+
         parse_str(file_get_contents("php://input"),$put_vars);
-        
-        
+
+
         if(isset($put_vars['api_key'])) {
             $_REQUEST['api_key']=$put_vars['api_key'];
         }
-        
+
         if(!Helper::isUser())
         {
             $this->getResponse()
@@ -482,10 +483,10 @@ class DataController extends BaseController
             echo "Please validate your API Key: ".$_REQUEST['api_key'];
             return;
         }
-        
+
         $content = new Content();
-        
-        
+
+
         $res=$content->find(
             [
                 "user_id" => Helper::getUserID(),
@@ -495,10 +496,10 @@ class DataController extends BaseController
 
         if(count($res)>0)
         {
-            
+
             $res[0]->data=$put_vars['content'];
             $res[0]->save();
-            
+
             $pattern="/(^|\s)#(\w*[a-zA-Z0-9öäü_-]+\w*)/";
             preg_match_all($pattern, $put_vars['content'], $hashtags);
             if(count($hashtags[0])>0)
@@ -510,14 +511,14 @@ class DataController extends BaseController
                     $hashdb->save();
                 }
             }
-            
+
             $this->asJson(
                 [
                     "status" => "done"
                 ]
             );
         }
-        
+
     }
 
 
@@ -528,7 +529,7 @@ class DataController extends BaseController
     function report($request)
     {
         $mail = new PHPMailer;
-            
+
             if(Config::get("smtp")=="true")
             {
                 $mail->isSMTP();
@@ -537,21 +538,21 @@ class DataController extends BaseController
                 $mail->Password = Config::get("smtp_pass");
                 $mail->Port = Config::get("smtp_port");
                 $mail->Host = Config::get("smtp_host");
-                
+
             }
-            
-            
+
+
             $mail->From =  Config::get("mail_from");
             $mail->FromName =  Config::get("mail_from_name");
             $mail->addAddress(Config::get("abuse_mail"), Config::get("abuse_mail"));
-            
+
             $this->assign("url", Config::get("address")."permalink/".$request['id']);
             $mail->Subject = _("Verify Content")." - ".Config::get("address");
             $mail->Body    = $this->render("email/report_content.php", true);
 
             $mail->isHTML(true);
             $mail->CharSet = 'UTF-8';
-            
+
             if (!$mail->send()) {
                 die( "Mailer Error: " . $mail->ErrorInfo );
             }
@@ -562,11 +563,11 @@ class DataController extends BaseController
                 ]
             );
     }
-    
+
 
     /**
      * download content from given $url
-     * 
+     *
      * @param string $url
      * @return string $filename
      */
@@ -589,18 +590,18 @@ class DataController extends BaseController
         if(isset($path_parts['extension'])) {
             $filename.=".".$path_parts['extension'];
         }
-        
-        
+
+
         $fullpath = Config::get("dir") . Config::get("upload_path") . $filename;
         $fp = fopen($fullpath, 'x');
         fwrite($fp, $rawdata);
         return $filename;
     }
 
-    
+
     /**
      * returns infomations about given url
-     * 
+     *
      * @todo splitt image, www, video handling into smaller functions
      * @todo better fallback for og tag parsing
      * @return void
@@ -643,16 +644,16 @@ class DataController extends BaseController
         $data=$this->og_parser($url);
         $this->asJson($data);
     }
-    
+
     /**
      * og_parser downloads a website
      * and extract information like title, description and og tags
-     * 
+     *
      * @param type $url
      * @return array
      */
     function og_parser($url){
-        
+
         //check for og tag
         $data = array("type" => "www", "url"=>$url);
         $ch = curl_init();
@@ -678,11 +679,11 @@ class DataController extends BaseController
             }
             if($tag->getAttribute('name') == 'description')
             {
-              $data['alt_description']= $tag->getAttribute('content');  
-            } 
-            
+              $data['alt_description']= $tag->getAttribute('content');
+            }
+
         }
-  
+
         //fallback (while no opengraph tags exist, we use title tag, and meta description)
         if(!isset($data['og_title'])){
              $data['og_title'] =  $dom->getElementsByTagName('title')->item(0)->textContent;
@@ -690,7 +691,7 @@ class DataController extends BaseController
         if(!isset($data['og_description']) && isset($data['alt_description']) && !empty($data['alt_description'])){
              $data['og_description'] =  $data['alt_description'];
         }
-        
+
         if(!isset($data['og_img']))
         {
             $base=$dom->getElementsByTagName('base');
@@ -698,10 +699,10 @@ class DataController extends BaseController
                 $base =  $dom->getElementsByTagName('base')->item(0)->attributes->getNamedItem("href")->value;
             else
                 $base=$url;
-            
+
             if($dom->getElementsByTagName('img')->length>0)
                 $imgSrc=$dom->getElementsByTagName('img')->item(0)->attributes->getNamedItem("src")->value;
-            
+
             if(substr($imgSrc, 0, 4)=="http")
                 $data['og_img'] = $imgSrc;
             else
