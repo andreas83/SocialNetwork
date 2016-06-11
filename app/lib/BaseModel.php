@@ -20,7 +20,7 @@ abstract class BaseModel
     protected $className;
 
 
-    public $dbh;
+    protected $dbh;
 
 
     /**
@@ -72,9 +72,11 @@ abstract class BaseModel
     {
 
         $sql = "SELECT * FROM " . $this->table;
-
+        
         $stmt = $this->dbh->query($sql);
+        
         $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, $this->className);
+        die("x");
         return $obj;
     }
 
@@ -190,7 +192,7 @@ abstract class BaseModel
 
         if (empty($this->{$primary}))
         {
-            $sql = 'INSERT INTO ' . $this->table . '
+            $sql = 'INSERT IGNORE INTO ' . $this->table . '
             (' . implode(",", array_keys($columns)) . ') VALUES
             (:' . implode(",:", array_keys($columns)) . ')';
 
