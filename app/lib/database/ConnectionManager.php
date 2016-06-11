@@ -1,6 +1,6 @@
 <?php
 namespace SocialNetwork\app\lib\database;
-
+use SocialNetwork\app\lib\Config;
 /*
  * ConnectionManager
  *
@@ -12,12 +12,22 @@ class ConnectionManager
 {
     protected $dsn, $username, $password, $pdo, $driver_options;
     
-    public function __construct($dsn, $username = "", $password = "", $driver_options = array())
+     protected static $_instance = null;
+    
+    public static function getInstance()
     {
-        $this->dsn = $dsn;
-        $this->username = $username;
-        $this->password = $password;
-        $this->driver_options = $driver_options;
+       
+        
+        if (null === self::$_instance)
+        {
+            self::$_instance = new self;
+        }
+        return self::$_instance;
+    }
+    
+    protected function __construct()
+    {
+        
     }
     public function __call($name, array $arguments)
     {
@@ -37,7 +47,13 @@ class ConnectionManager
     }
     public function connect()
     {
-        $this->pdo = new \PDO($this->dsn, $this->username, $this->password, (array) $this->driver_options); 
+        $this->pdo = new \PDO(
+                Config::get('db_dsn') . ";dbname=" . Config::get('db_name'),
+                Config::get('db_user'),
+                Config::get('db_pass'),
+                [
+                    \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"
+                ]); 
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         return $this->pdo;
     }
