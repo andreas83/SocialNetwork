@@ -148,7 +148,7 @@ server {
     deny all;
   }
   location / {
-    rewrite ^/public/css/scss.php/(.*)$ /public/css/scss.php?p=$1 last;
+
     try_files $uri /index.php?$args;
 
     location ~ .php$ {
