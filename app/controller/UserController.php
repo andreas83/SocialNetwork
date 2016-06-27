@@ -449,9 +449,16 @@ class UserController extends BaseController
     
     function renewAuthCookie(){
         $user = new User;
-        $user=$user->get($_SESSION['login']);
+        if(!isset($_SESSION['login']))
+        {
+            $this->asJson(array("auth" => "error"));
+        }
+        else
+        {
+            $user=$user->get($_SESSION['login']);
+            $this->asJson(array("auth" => $user->auth_cookie));
+        }
         
-        $this->asJson(array("auth" => $user->auth_cookie));
     }
     
     /**
