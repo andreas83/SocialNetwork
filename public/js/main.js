@@ -120,10 +120,13 @@ function renew_auth_token(){
     $.getJSON('/user/renew/auth/')
     .done(function (resp) { 
                   
-        var CookieDate = new Date;
-        CookieDate.setFullYear(CookieDate.getFullYear( ) +1);
-        document.cookie = 'auth='+resp.auth+'; expires=' + CookieDate.toGMTString( ) + ';path=/';
-        socket.send(JSON.stringify({action: "getNotifications", auth_cookie: getCookie("auth")}));        
+        if(resp.auth!="error")
+        {
+            var CookieDate = new Date;
+            CookieDate.setFullYear(CookieDate.getFullYear( ) +1);
+            document.cookie = 'auth='+resp.auth+'; expires=' + CookieDate.toGMTString( ) + ';path=/';
+            socket.send(JSON.stringify({action: "getNotifications", auth_cookie: getCookie("auth")}));        
+        }
     });
 }
 

@@ -181,6 +181,8 @@ var CommentList = React.createClass({
 
     render: function () {
         var commentNodes = this.props.data.map(function (comment) {
+
+            comment.text = Replacehashtags(comment.text);
             return React.createElement(
                 Comment,
                 { author: comment.author },
@@ -242,6 +244,18 @@ var CommentBox = React.createClass({
         var commentForm = "";
         if (user_id > 0) {
             commentForm = React.createElement(CommentForm, { onCommentSubmit: this.handleCommentSubmit });
+        } else {
+            commentForm = React.createElement(
+                'h4',
+                null,
+                'Please ',
+                React.createElement(
+                    'a',
+                    { className: 'btn btn-success', href: '/user/register/' },
+                    'login'
+                ),
+                ' to post a comment'
+            );
         }
         return React.createElement(
             'div',
@@ -273,7 +287,12 @@ var CommentHint = React.createClass({
         return React.createElement(
             'div',
             { className: 'CommentBox' },
-            React.createElement('span', { onClick: this.handleClick.bind(this, this.props.id), className: 'btn fa fa-comments' }),
+            React.createElement(
+                'span',
+                { onClick: this.handleClick.bind(this, this.props.id), className: 'btn fa fa-comments' },
+                '  ',
+                this.props.commentCnt
+            ),
             this.state.showComment ? React.createElement(CommentBox, { id: this.props.id }) : null
         );
     }
@@ -396,7 +415,7 @@ var StreamList = React.createClass({
                     "div",
                     { className: "streamFooter" },
                     React.createElement(Likebox, { id: data.stream.id }),
-                    React.createElement(CommentHint, { id: data.stream.id, data: "" })
+                    React.createElement(CommentHint, { id: data.stream.id, commentCnt: data.stream.comment_cnt })
                 )
             );
         });
@@ -985,7 +1004,9 @@ var NotificationBox = React.createClass({
             socket.onmessage = function (msg) {
 
                 data = JSON.parse(msg.data);
+
                 if (typeof data.notificaton != "undefined") {
+
                     //play only sound on new notifications
                     if (this.state.init === false) new Audio('/public/notification.mp3').play();
                     if (data.notificaton.length > 0) document.getElementById("NotificationBox").className = "";
@@ -994,6 +1015,10 @@ var NotificationBox = React.createClass({
                         data: data.notificaton,
                         init: false
                     });
+                }
+                if (typeof data.reauth != "undefined") {
+                    //looks like our auth token is invalid, lets try to reauth
+                    renew_auth_token();
                 }
             }.bind(this);
             socket.onclose = function (msg) {

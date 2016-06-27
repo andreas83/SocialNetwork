@@ -2,6 +2,8 @@
     var CommentList = React.createClass({
     render: function () {
             var commentNodes = this.props.data.map(function (comment) {
+            
+                comment.text=Replacehashtags(comment.text);
                 return (
                         <Comment author={comment.author}>
                         {comment.text}
@@ -64,6 +66,10 @@
             if(user_id > 0)
             {
                 commentForm= <CommentForm onCommentSubmit = {this.handleCommentSubmit} />;
+            }
+            else
+            {
+                commentForm=<h4>Please <a className="btn btn-success" href="/user/register/">login</a> to post a comment</h4>;
             }
             return (
                     <div className = "commentBox">
