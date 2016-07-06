@@ -6,7 +6,7 @@ CREATE TABLE User (
   about text not null,
   settings text not null,
   auth_cookie varchar(32) default NULL,
-  api_key varchar(32) default NULL,
+  api_key varchar(36) default NULL,
   isAdmin tinyint DEFAULT 0,
   created DATETIME,
   modified DATETIME
