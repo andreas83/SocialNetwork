@@ -95,7 +95,7 @@ class UserController extends BaseController
                               
                 
                 $user->settings = json_encode(UserController::defaultSettings());
-                $user->api_key = md5($request->getPost('nick')+date("Y-m-d H:i:s"));
+                $user->api_key = $this->getGUID4();
                 $user->created = date("Y-m-d H:i:s");
                 $user->id = $user->save();
                 $_SESSION['login'] = $user->id;
@@ -113,7 +113,22 @@ class UserController extends BaseController
         $this->render("main.php");
     }
 
-    
+    /*
+     * Cryptographically strong algorithm to generate pseudo-random bytes and format it as GUID v4 string
+     *
+     * thanks to pavel.volyntsev (at) gmail
+     */
+    function getGUID4()
+    {
+        if (function_exists('com_create_guid') === true)
+            return trim(com_create_guid(), '{}');
+
+        $data = openssl_random_pseudo_bytes(16);
+        $data[6] = chr(ord($data[6]) & 0x0f | 0x40); // set version to 0100
+        $data[8] = chr(ord($data[8]) & 0x3f | 0x80); // set bits 6-7 to 10
+        return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+    }
+
     function passwordResetConfirmed($request)
     {
         $user = new User();
@@ -426,7 +441,7 @@ class UserController extends BaseController
             $user->password = md5(uniqid(). Config::get("salat"));
 
             $user->settings = json_encode(UserController::defaultSettings());
-            $user->api_key = md5(uniqid().date("Y-m-d H:i:s"));
+            $user->api_key = $this->getGUID4();
             $user->created = date("Y-m-d H:i:s");
             $user->auth_cookie=md5($user->name . $user->mail. uniqid() . Config::get("salat"));
             $user->id = $user->save();
