@@ -10,13 +10,14 @@ use SocialNetwork\app\lib\Config;
 
 class ConnectionManager 
 {
-    protected $dsn, $username, $password, $pdo, $driver_options;
+    protected  $pdo, $driver_options;
     
-     protected static $_instance = null;
+    protected static $_instance = null;
+    private $connction;
     
     public static function getInstance()
     {
-       
+        
         
         if (null === self::$_instance)
         {
@@ -27,8 +28,14 @@ class ConnectionManager
     
     protected function __construct()
     {
+        $this->connction=$this->connect();
         
     }
+    public function getConnection()
+    {
+        return $this->connction;
+    }
+  
     public function __call($name, array $arguments)
     {
         try {
@@ -41,6 +48,7 @@ class ConnectionManager
         }
         return call_user_func_array(array($this->connection(), $name), $arguments);
     }
+    
     protected function connection()
     {
         return $this->pdo instanceof \PDO ? $this->pdo : $this->connect();

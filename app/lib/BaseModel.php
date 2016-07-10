@@ -29,7 +29,7 @@ abstract class BaseModel
     public function __construct()
     {
         $this->db=  ConnectionManager::getInstance();
-        $this->dbh = $this->db->connect();
+        $this->dbh = $this->db->getConnection();
         
         $this->table = $this->getSource();
         $this->className = get_class($this);
@@ -76,7 +76,7 @@ abstract class BaseModel
         $stmt = $this->dbh->query($sql);
         
         $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, $this->className);
-        die("x");
+        
         return $obj;
     }
 
