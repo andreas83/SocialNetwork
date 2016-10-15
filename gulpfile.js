@@ -1,11 +1,9 @@
 /**
  * Created by j on 14.08.15.
- * Modifed by nfo on 31.3.16
+ * Modifed by nfo on 15.10.16
  *
  */
 var gulp = require('gulp'),
-    minifycss = require('gulp-minify-css'),
-    jshint = require('gulp-jshint'),
     uglify = require('gulp-uglify'),
     rename = require('gulp-rename'),
     concat = require('gulp-concat'),
@@ -14,7 +12,9 @@ var gulp = require('gulp'),
     gutil = require('gulp-util'),
     sass = require('gulp-sass'),
     cssmin = require('gulp-cssmin'),
-    del = require('del');
+    del = require('del'),
+    gzip   = require('gulp-gzip');
+
 
 
 
@@ -52,6 +52,7 @@ gulp.task('compress-js', function(){
     )
      .pipe(uglify())
      .pipe(concat('app.js'))
+     .pipe(gzip())
      .pipe(gulp.dest('public/js/'))
           
 

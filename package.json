@@ -1,21 +1,20 @@
 {
   "name": "SocialNetwork",
   "version": "0.0.2",
+  "license": "MIT",
   "description": "",
   "dependencies": {
     "bower": "*",
+    "del": "*",
     "gulp": "*",
-    "gulp-minify-css": "*",
-    "gulp-jshint": "*",
-    "gulp-concat": "*",
-    "jshint"     : "*",
-    "gulp-uglify": "*",
+    "gulp-babel": "*",
     "gulp-cache": "*",
+    "gulp-concat": "*",
+    "gulp-clean-css": "*",
     "gulp-notify": "*",
     "gulp-rename": "*",
-    "gulp-babel": "*",
-    "del": "*",
-    "react-tools": "*"
+    "gulp-uglify": "*",
+    "clean-css": "*"
   },
   "scripts": {
     "start": ""
@@ -25,6 +24,7 @@
     "babel-preset-react": "^6.5.0",
     "gulp-babel": "^6.1.2",
     "gulp-cssmin": "^0.1.7",
+    "gulp-gzip": "^1.4.0",
     "gulp-sass": "^2.2.0",
     "gulp-util": "^3.0.7"
   }
