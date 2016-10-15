@@ -23,22 +23,26 @@ http://www.dasmerkendienie.com/help/
 * Oauth2 (Facebook, Google+)
 * Backend with Dashboard
 
+## Side Projects
+
+* [Telegram Chat Bot](https://github.com/andreas83/SocialNetwork-TelegramBot/)
+* [Google Chrome extension](https://chrome.google.com/webstore/detail/das-merken-die-nie/nkmpdbbmbddilkkjcodddbffmjjcdcna?utm_source=chrome-app-launcher-info-dialog) [Sourcecode](https://github.com/andreas83/SocialNetwork-ChromeExtension)
+
 ## Requirement
 
-Webserver (Apache2 or Nginx)
-PHP 5.5
-Composer 
+* Webserver (Apache2 or Nginx)
+* PHP
 
 
-# Instalation
+# Installation
 
-## Download the Sourcecode
+## Download Sourcecode
 
 Via GIT:
 ```
 git clone https://github.com/andreas83/SocialNetwork.git
 ```
-Via Download:
+Via direct Download:
 
 https://github.com/andreas83/SocialNetwork/archive/andrea.zip
 
