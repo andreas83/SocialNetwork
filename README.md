@@ -26,6 +26,7 @@ http://www.dasmerkendienie.com/help/
 ## Side Projects
 
 * [Telegram Chat Bot](https://github.com/andreas83/SocialNetwork-TelegramBot/)
+* [Android and IOS Hybrid APP (ionic)](https://github.com/andreas83/SocialNetwork-ionic/)
 * [Google Chrome extension](https://chrome.google.com/webstore/detail/das-merken-die-nie/nkmpdbbmbddilkkjcodddbffmjjcdcna?utm_source=chrome-app-launcher-info-dialog) [Sourcecode](https://github.com/andreas83/SocialNetwork-ChromeExtension)
 
 ## Requirement
