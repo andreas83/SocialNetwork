@@ -1,6 +1,6 @@
 <?php
 include("header.php");
-$mail=(isset($_POST['mail']) ? $_POST['mail'] : "" );
+$mail=(isset($_POST['mail']) && filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL) ? $_POST['mail'] : "" );
                 
 ?>
 <div class="container">
