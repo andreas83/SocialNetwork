@@ -1,6 +1,6 @@
 # Development Branch SocialNetwork 
 
-[![Build Status](https://travis-ci.org/andreas83/SocialNetwork.svg?branch=master)](https://travis-ci.org/andreas83/SocialNetwork)
+[![Build Status](https://travis-ci.org/andreas83/SocialNetwork.svg?branch=dev)](https://travis-ci.org/andreas83/SocialNetwork)
 
 Note:
 This is a complete rewrite of SocialNetwork 1.2.1 
