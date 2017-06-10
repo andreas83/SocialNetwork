@@ -8,6 +8,7 @@ http://www.dasmerkendienie.com/
 
 ## Donate
 Bitcoins: 1GqMSGseij18JnAoB9f3LHJRozNr1QeHkh
+
 Ethereum: 0x6788024D1D36641DDE7832ce9B0300eBbD7C4832
 
 ## API Documentation
