@@ -2,12 +2,15 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Auth\Authenticatable;
+use Laravel\Lumen\Auth\Authorizable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 
-class User extends Authenticatable
+class User extends Model implements AuthenticatableContract, AuthorizableContract
 {
-    use Notifiable;
+    use Authenticatable, Authorizable;
 
     /**
      * The attributes that are mass assignable.
@@ -15,15 +18,15 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email',
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
+     * The attributes excluded from the model's JSON form.
      *
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
     ];
 }

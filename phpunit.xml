@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit backupGlobals="false"
          backupStaticAttributes="false"
-         bootstrap="bootstrap/autoload.php"
+         bootstrap="bootstrap/app.php"
          colors="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          processIsolation="false"
-         stopOnFailure="false">
+         stopOnFailure="false"
+         syntaxCheck="false">
     <testsuites>
-        <testsuite name="Feature Tests">
-            <directory suffix="Test.php">./tests/Feature</directory>
-        </testsuite>
-
-        <testsuite name="Unit Tests">
-            <directory suffix="Test.php">./tests/Unit</directory>
+        <testsuite name="Application Test Suite">
+            <directory suffix="Test.php">./tests</directory>
         </testsuite>
     </testsuites>
     <filter>
@@ -25,7 +22,6 @@
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="CACHE_DRIVER" value="array"/>
-        <env name="SESSION_DRIVER" value="array"/>
         <env name="QUEUE_DRIVER" value="sync"/>
     </php>
 </phpunit>
