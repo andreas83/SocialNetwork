@@ -29,4 +29,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $hidden = [
         'password',
     ];
+    
+    /**
+     * Get the content from user.
+     */
+    public function contents()
+    {
+        return $this->hasMany('App\Content');
+    }
 }

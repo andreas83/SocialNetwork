@@ -22,18 +22,24 @@ class ContentController extends BaseController
     public function get(Request $request)
     {
         $content = new Content;
+        $content=$content->with("user");
+        
         if ($request->has('id')) {
             $content=$content->where("id", "<=", $request->get("id")); 
         }
         if ($request->has('show')) {
             $content=$content->limit($request->get("show"));  
         }
+        else
+        {
+            $content=$content->limit(50);  
+        }
+        
         if ($request->has('hash')) {
             
         }
         
-        
-        $content=$content->get();
+        $content=$content->orderBy("id", "desc")->get();
         
         return response($content, 200)
                   ->header('Content-Type', "application/json");

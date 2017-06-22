@@ -20,8 +20,34 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(App\Content::class, function (Faker\Generator $faker) {
+    
+    $data[]=["type" => "video",
+             "url" => $faker->url,
+             "text" => $faker->text(200),
+             "mime" => $faker->mimeType()
+            ];
+    
+    $data[]=["type" => "www",
+             "url" => $faker->url, 
+             "text" => $faker->text(200),
+             "img" => $faker->imageUrl(), 
+             "title" => $faker->text(50), 
+             "description" => $faker->text()
+            ];
+    
+    $data[]=["type" => "img",
+             "img" => $faker->imageUrl(), 
+             "text" => $faker->text(200),
+             "dimeension" => [$faker->randomDigitNotNull, $faker->randomDigitNotNull], 
+            ];
+    
+    $data[]=["type" => "generic" , 
+            "text" => $faker->text(200)
+            ];
     return [
-        'content' => $faker->name,
-        
+        'content' => json_encode($faker->randomElement($data)),
+        'user_id' => function () {
+            return factory(App\User::class)->create()->id;
+        }
     ];
 });
