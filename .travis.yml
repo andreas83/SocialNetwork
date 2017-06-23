@@ -9,6 +9,9 @@ before_script:
   - cp .env.travis .env
   - composer self-update
   - composer install --no-interaction
+  - php artisan migrate:install
+  - php artisan migrate:refresh
+  - php artisan db:seed
 
 script:
   - vendor/bin/phpunit
