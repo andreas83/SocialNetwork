@@ -12,11 +12,10 @@ before_script:
   - mysql -e 'CREATE DATABASE socialnetwork;'
   - composer self-update
   - composer install --no-interaction
-  - php artisan migrate:install
-  - php artisan migrate:refresh
-  - php artisan db:seed
 
 script:
+  - php artisan migrate --env=testing --no-interaction -vvv
+  - php artisan db:seed --env=testing --no-interaction -vvv
   - vendor/bin/phpunit
 
 cache:
