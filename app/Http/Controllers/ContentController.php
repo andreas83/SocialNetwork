@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Content;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 
 
-class ContentController extends BaseController
+class ContentController extends BaseController 
 {
+    use ValidatesRequests;
+    
     /**
      * Create a new controller instance.
      *
@@ -16,7 +19,7 @@ class ContentController extends BaseController
      */
     public function __construct()
     {
-        $this->middleware("auth", ['only' => ["delete"]]);
+        $this->middleware("auth", ['only' => ["delete", "post"]]);
     }
 
     public function get(Request $request)
@@ -47,15 +50,35 @@ class ContentController extends BaseController
     
     public function post(Request $request)
     {
-        if (!$request->has('data')) {
-            $content = array("status" => "Parameter data is missing");
-            return response($content, 500)
+        $validator = $this->validate($request->all(), [
+            'data' => 'required|unique:posts',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('api/content')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+        
+        
+        $user = $request->user();
+        
+        try {
+
+            $content = new Content;
+            $content->content = $request->get("data");
+            $content->user_id=$user->id;
+            $content->save();
+            
+        } catch (Exception $ex) {
+            return response($ex, 500)
                   ->header('Content-Type', "application/json");
         }
         
-        if ($request->has('preview')) {
-            
-        }
+        
+        
+        return response(["created" => true, "data" => $request->get("data")], 200)
+                  ->header('Content-Type', "application/json");
     }
     
     public function delete($id)

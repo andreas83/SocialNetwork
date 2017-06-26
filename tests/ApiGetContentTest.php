@@ -13,11 +13,14 @@ class ApiGetContentTest extends TestCase
     public function testGetContent()
     {
         $this->get('/api/content');
+        
+        
         $json=json_decode($this->response->getContent());
 
         $this->assertEquals(
             50, count($json)
         );
+        $this->assertResponseOk();
     }
 
     /**
@@ -40,9 +43,10 @@ class ApiGetContentTest extends TestCase
     {
         $this->get('/api/content?id=10&show=1');
         $json=json_decode($this->response->getContent());
-
+      
         $this->assertEquals(
             10, $json[0]->id
         );
+        
     }
 }

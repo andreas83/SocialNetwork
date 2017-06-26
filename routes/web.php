@@ -14,4 +14,7 @@
 $app->get('/', "WebController@index");
 
 $app->get('api/content', "ContentController@get");
+$app->post('api/content', "ContentController@post");
 $app->delete('api/content', ['middleware' => 'auth', "ContentController@delete"]);
+
+$app->get('api/content/parser', "ContentParserController@get");
