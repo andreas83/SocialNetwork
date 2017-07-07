@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Content extends Model
 {
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['data'];
+    
     
     /**
      * Get the User that owns the Content.
