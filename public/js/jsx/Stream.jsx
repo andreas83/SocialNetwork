@@ -88,8 +88,14 @@
         if(this.props.data.type=="img")
         {
             imgpath = this.props.data.url;
-            
-            return (<div className = "img"><img className="img-responsive" src={imgpath} /></div>);
+            srcset = this.props.data.thumb_url;
+            return (
+		<div className = "img">
+		<picture>
+		    <source media="(max-width: 550px)" srcSet={srcset} />
+		    <img className="img-responsive" src={imgpath} srcset={srcset} />
+		</picture>
+		</div>);
         }
         if(this.props.data.type=="upload")
         {

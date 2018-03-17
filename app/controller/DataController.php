@@ -102,12 +102,12 @@ class DataController extends BaseController
             $std[$i] = new \stdClass();
             $std[$i]->stream = new \stdClass();
             $std[$i]->stream->type = "generic";
-
             if (isset($res->media) && $res->media != 'null') {
                 $std[$i]->stream = json_decode($res->media);
                 if (isset($std[$i]->stream->type)) {
                     switch ($std[$i]->stream->type) {
                         case 'img':
+                            $std[$i]->stream->thumb_url = Config::get('address') . "resize/".$std[$i]->stream->url;
                             $std[$i]->stream->url = Config::get('upload_address') . $std[$i]->stream->url;
                             break;
                         case 'upload':

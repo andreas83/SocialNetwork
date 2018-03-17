@@ -440,11 +440,16 @@ var Content = React.createClass({
         }
         if (this.props.data.type == "img") {
             imgpath = this.props.data.url;
-
+            srcset = this.props.data.thumb_url;
             return React.createElement(
                 "div",
                 { className: "img" },
-                React.createElement("img", { className: "img-responsive", src: imgpath })
+                React.createElement(
+                    "picture",
+                    null,
+                    React.createElement("source", { media: "(max-width: 550px)", srcSet: srcset }),
+                    React.createElement("img", { className: "img-responsive", src: imgpath, srcset: srcset })
+                )
             );
         }
         if (this.props.data.type == "upload") {
@@ -468,7 +473,7 @@ var Upload = React.createClass({
             FilePath = "";
         var Img = "";
         var Files = "";
-        //
+        // 
         if (typeof this.props.upload.files != "undefined") {
 
             var Files = this.props.upload.files.map(function (data) {

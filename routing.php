@@ -57,7 +57,7 @@ $router->map('GET', '/hash/[*:hash]', '\SocialNetwork\app\controller\DataControl
 
 
 $router->map('GET|POST', '/help/', '\SocialNetwork\app\controller\WebController#help');
-
+$router->map('GET', '/resize/[*:img]', '\SocialNetwork\app\controller\WebController#resize'); 
 
 
 $router->map("POST|GET", "/backend/", '\SocialNetwork\app\controller\BackendController#init');
