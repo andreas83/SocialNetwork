@@ -136,11 +136,14 @@ label{
     
     color:#000;
     .www{
+
         img{
-            width:200px;
-            margin-right:20px;
-            float:left;
+            max-width:100%;
         }
+        h2, p {
+            margin-right:10px;
+            margin-left:10px;
+	}
     }
     .img-responsive{
         margin-left: auto;
