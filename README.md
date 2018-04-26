@@ -4,7 +4,7 @@ works pretty similar to a well known social network,
 but you can host it on your very own infrastructure or intranet.
 
 ## Demo
-http://www.dasmerkendienie.com/
+http://social.codejungle.org/
 
 ## Donate
 Bitcoins: 1GqMSGseij18JnAoB9f3LHJRozNr1QeHkh
