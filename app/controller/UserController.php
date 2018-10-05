@@ -327,7 +327,7 @@ class UserController extends BaseController
             'clientId'          => Config::get("facebook_app_id"),
             'clientSecret'      => Config::get("facebook_app_secret"),
             'redirectUri'       => Config::get("address")."user/fblogin/",
-            'graphApiVersion'   => 'v2.5',
+            'graphApiVersion'   => 'v3.1',
         ]);
 
         $authUrl = $provider->getAuthorizationUrl(['scope' => ['email']]);
@@ -345,7 +345,7 @@ class UserController extends BaseController
             'clientId'          => Config::get("facebook_app_id"),
             'clientSecret'      => Config::get("facebook_app_secret"),
             'redirectUri'       => Config::get("address")."user/fblogin/",
-            'graphApiVersion'   => 'v2.5',
+            'graphApiVersion'   => 'v3.1',
         ]);
         
         // Try to get an access token (using the authorization code grant)
