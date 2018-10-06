@@ -7,7 +7,7 @@ use SocialNetwork\app\model\Content;
 use SocialNetwork\app\model\Hashtags;
 use SocialNetwork\app\model\User;
 
-use Intervention\Image\ImageManager;
+use Imagecraft\ImageBuilder;
 
 /**
  * Class WebController
@@ -47,13 +47,30 @@ class WebController extends BaseController
 
     function resize($res){
         $file=Config::get("dir") . Config::get("upload_path").$res['img'];
+	$thumb=Config::get("dir") . Config::get("upload_path")."resized".$res['img'];
+
         if(file_exists($file))
         {
-		$manager = new ImageManager(array('driver' => 'gd'));
-		echo $manager->make($file)->widen(500, function ($constraint) {
-   			 $constraint->upsize();
-   			 $constraint->aspectRatio();
-		})->response("png", 70);
+                if(file_exists($thumb))
+                {
+                        $this->setheadercontenttype($thumb);
+                        echo file_get_contents($thumb);
+                }
+
+                $options = ['engine' => 'php_gd'];
+                $builder = new ImageBuilder($options);
+
+                $image = $builder
+                    ->addBackgroundLayer()
+                        ->filename($file)->resize(500, 1000, 'shrink')->done()
+                        ->save();
+                if ($image->isValid()) {
+                        file_put_contents($thumb, $image->getContents());
+                        $this->setheadercontenttype($thumb);
+                        echo file_get_contents($thumb);
+                } else {
+                    echo $image->getMessage().PHP_EOL;
+                }
 
         }
 
