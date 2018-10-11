@@ -380,8 +380,8 @@ class UserController extends BaseController
     public static function getGITHUBProvider()
     {
         $provider = new \League\OAuth2\Client\Provider\GenericProvider([
-        'clientId'                => Config::get("facebook_app_id"),    // The client ID assigned to you by the provider
-        'clientSecret'            => Config::get("facebook_app_secret"),   // The client password assigned to you by the provider
+        'clientId'                => Config::get("github_app_id"),    // The client ID assigned to you by the provider
+        'clientSecret'            => Config::get("github_app_secret"),   // The client password assigned to you by the provider
         'redirectUri'             => Config::get("address")."user/github/callback",
         'urlAuthorize'            => 'https://github.com/login/oauth/authorize',
         'urlAccessToken'          => 'https://github.com/login/oauth/access_token',
