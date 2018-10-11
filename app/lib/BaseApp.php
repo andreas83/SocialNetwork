@@ -1,7 +1,7 @@
 <?php
 namespace SocialNetwork\app\lib;
-use SocialNetwork\app\lib\database\DBTrait;
 
+use SocialNetwork\app\lib\database\DBTrait;
 
 /**
  * Class BaseApp
@@ -52,7 +52,6 @@ abstract class BaseApp
      */
     public function getAll()
     {
-
         $sql = "SELECT * FROM " . $this->table;
 
         $stmt = $this->dbh->query($sql);
@@ -75,7 +74,6 @@ abstract class BaseApp
         
         $obj = $stmt->execute();
         return $obj[0];
-
     }
 
     /**
@@ -135,13 +133,12 @@ abstract class BaseApp
         foreach ($columns as $key => $value) {
             if ($this->$key == "NULL") {
                 $stmt->bindValue(':' . $key, null, PDO::PARAM_NULL);
-
-            } else
-
+            } else {
                 $stmt->bindValue(':' . $key, $this->$key, PDO::PARAM_STR);
+            }
         }
         $stmt->execute();
-        //var_dump($stmt->errorInfo()); 
+        //var_dump($stmt->errorInfo());
         if (empty($this->$primary)) {
             return $this->dbh->lastInsertId();
         }
@@ -150,4 +147,3 @@ abstract class BaseApp
         return 0;
     }
 }
-

@@ -1,7 +1,7 @@
 <?php
 namespace SocialNetwork\app\lib\transformer;
-use SocialNetwork\app\lib\traits\ClassExists;
 
+use SocialNetwork\app\lib\traits\ClassExists;
 
 /**
  * Class TransformerFactory
@@ -68,5 +68,4 @@ class TransformerFactory
         }
         return $storage;
     }
-
 }

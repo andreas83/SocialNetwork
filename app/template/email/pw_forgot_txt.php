@@ -1,5 +1,6 @@
 <?php
 use SocialNetwork\app\lib\Config;
+
 ?>
 
 Hello <?php echo $name; ?>,

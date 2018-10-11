@@ -6,7 +6,6 @@ require_once('WebSocketUser.php');
 
 abstract class WebSocketServer
 {
-
     protected $userClass = 'SocialNetwork\app\lib\WebSocketUser'; // redefine this if you want a custom user class.  The custom user class should inherit from WebSocketUser.
     protected $maxBufferSize;
     protected $master;
@@ -18,7 +17,7 @@ abstract class WebSocketServer
     protected $headerSecWebSocketProtocolRequired = false;
     protected $headerSecWebSocketExtensionsRequired = false;
 
-    function __construct($addr, $port, $bufferLength = 2048)
+    public function __construct($addr, $port, $bufferLength = 2048)
     {
         $this->maxBufferSize = $bufferLength;
         $this->master = socket_create(AF_INET, SOCK_STREAM, SOL_TCP) or die("Failed: socket_create()");
@@ -27,8 +26,6 @@ abstract class WebSocketServer
         socket_listen($this->master, 20) or die("Failed: socket_listen()");
         $this->sockets['m'] = $this->master;
         $this->stdout("Server started\nListening on: $addr:$port\nMaster socket: " . $this->master);
-
-
     }
 
     abstract protected function process($user, $message); // Called immediately when the data is recieved.
@@ -129,7 +126,6 @@ abstract class WebSocketServer
 
                                 $this->stderr('Socket error: ' . socket_strerror($sockErrNo));
                         }
-
                     } elseif ($numBytes == 0) {
                         $this->disconnect($socket);
                         $this->stderr("Client disconnected. TCP connection lost: " . $socket);
@@ -210,13 +206,12 @@ abstract class WebSocketServer
         if (!isset($headers['upgrade']) || strtolower($headers['upgrade']) != 'websocket') {
             $handshakeResponse = "HTTP/1.1 400 Bad Request";
         }
-        if (!isset($headers['connection']) || strpos(strtolower($headers['connection']), 'upgrade') === FALSE) {
+        if (!isset($headers['connection']) || strpos(strtolower($headers['connection']), 'upgrade') === false) {
             $handshakeResponse = "HTTP/1.1 400 Bad Request";
         }
         if (!isset($headers['sec-websocket-key'])) {
             $handshakeResponse = "HTTP/1.1 400 Bad Request";
         } else {
-
         }
         if (!isset($headers['sec-websocket-version']) || strtolower($headers['sec-websocket-version']) != 13) {
             $handshakeResponse = "HTTP/1.1 426 Upgrade Required\r\nSec-WebSocketVersion: 13";
@@ -405,7 +400,7 @@ abstract class WebSocketServer
             //split frame from packet and process it
             $frame = substr($fullpacket, $frame_pos, $framesize);
 
-            if (($message = $this->deframe($frame, $user, $headers)) !== FALSE) {
+            if (($message = $this->deframe($frame, $user, $headers)) !== false) {
                 if ($user->hasSentClose) {
                     $this->disconnect($user->socket);
                 } else {
@@ -455,6 +450,7 @@ abstract class WebSocketServer
                 return "";
             case 9:
                 $pongReply = true;
+                // no break
             case 10:
                 break;
             default:
@@ -612,9 +608,7 @@ abstract class WebSocketServer
                 echo "\t[$key] => $value\n\n";
             } else {
                 echo "\t[$key] => " . $this->strtohex($value) . "\n";
-
             }
-
         }
         echo ")\n";
     }

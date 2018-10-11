@@ -52,7 +52,8 @@ class Config_Test extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function checkIfConfigNotReloadingIfNotUpdated() {
+    public function checkIfConfigNotReloadingIfNotUpdated()
+    {
         Config::setSubConfigHostName(self::HTTP_HOST_NAME);
         Config::loadConfig();
 
@@ -62,7 +63,8 @@ class Config_Test extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function checkIfConfigUpdateFlagIsSetIfHostNameChanges() {
+    public function checkIfConfigUpdateFlagIsSetIfHostNameChanges()
+    {
         Config::setSubConfigHostName(self::HTTP_HOST_NAME);
         Config::setSubConfigHostName(self::HTTP_HOST_NAME2);
 
@@ -72,11 +74,11 @@ class Config_Test extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function checkIfConfigIsUpdatedIfHostNameChanges() {
+    public function checkIfConfigIsUpdatedIfHostNameChanges()
+    {
         Config::setSubConfigHostName(self::HTTP_HOST_NAME);
         Config::setSubConfigHostName(self::HTTP_HOST_NAME2);
 
         $this->assertEquals('3', Config::get('testValue'));
     }
-
 }

@@ -1,7 +1,6 @@
 <?php
 namespace SocialNetwork\app\controller;
 
-
 use SocialNetwork\app\lib\BaseController;
 use SocialNetwork\app\lib\Config;
 use SocialNetwork\app\lib\Helper;
@@ -19,13 +18,13 @@ class CommentController extends BaseController
 {
 
     /**
-     * get_comment 
+     * get_comment
      * @param array $request[id]
      * @todo the foreach loop can be improved or removed at all
-     * 
+     *
      * @param type $request
      */
-    function get_comment($request)
+    public function get_comment($request)
     {
         $comment = new Comment();
         
@@ -49,9 +48,9 @@ class CommentController extends BaseController
     
     /**
      * this function handles new comments
-     * 
+     *
      */
-    function post_comment($request)
+    public function post_comment($request)
     {
         $comment = new Comment();
 
@@ -74,18 +73,16 @@ class CommentController extends BaseController
             $notification->message='wrote something about your'
                     . ' <a href="/permalink/'.$request['id'].'">post</a>';
 
-            if($notification->to_user_id!=Helper::getUserID()) {
+            if ($notification->to_user_id!=Helper::getUserID()) {
                 $notification->save();
             }
             
-            $client->send(json_encode(array("action"=>"update", "uid" =>$notification->to_user_id))); 
+            $client->send(json_encode(array("action"=>"update", "uid" =>$notification->to_user_id)));
             
             #notification for @users mention
             $pattern="/(^|\s)@(\w*[a-zA-Z0-9öäü._-]+\w*)/";
             preg_match_all($pattern, $comment->comment, $users);
-            if(count($users[0])>0)
-            {
-                
+            if (count($users[0])>0) {
                 $user = new User;
                 
                 $notification->from_user_id=Helper::getUserID();
@@ -93,21 +90,20 @@ class CommentController extends BaseController
                 $notification->message='mention you in a '
                         . '<a href="/permalink/'.$request['id'].'">comment</a>';
                 
-                foreach($users[0] as $username)
-                {
+                foreach ($users[0] as $username) {
                     $username = trim(str_replace(array("@", "."), " ", $username));
                     $res = $user->find(array("name" => $username));
                     
                     $notification->to_user_id=$res[0]->id;
                     
-                    if($notification->to_user_id!=Helper::getUserID())
+                    if ($notification->to_user_id!=Helper::getUserID()) {
                         $notification->save();
+                    }
                     
                     //we notifiy the socket server about an update
                     $client->send(json_encode(array("action"=>"update", "uid" =>$notification->to_user_id)));
                 }
             }
-            
         } elseif ($_POST && !Helper::isUser()) {
             $this->getResponse()
                 ->setHeaders('HTTP/1.0 403 Forbidden');

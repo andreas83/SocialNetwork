@@ -2,6 +2,7 @@
 include("header.php");
 include("menu.php");
 use SocialNetwork\app\lib\Config;
+
 ?>
 
 <div class="col-md-10">
@@ -90,7 +91,7 @@ use SocialNetwork\app\lib\Config;
         
             <div class="col-xs-8 col-md-8">
                 <label for="custom-css"><?php echo _("CSS for Profile page"); ?></label>
-                <textarea id="custom_css_input" name="custom_css" class="form-control" rows="10"><?php echo (isset($settings->custom_css) ? $settings->custom_css: ""); ?></textarea>
+                <textarea id="custom_css_input" name="custom_css" class="form-control" rows="10"><?php echo(isset($settings->custom_css) ? $settings->custom_css: ""); ?></textarea>
             </div>
         </div>
         

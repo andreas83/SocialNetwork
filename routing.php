@@ -57,7 +57,7 @@ $router->map('GET', '/hash/[*:hash]', '\SocialNetwork\app\controller\DataControl
 
 
 $router->map('GET|POST', '/help/', '\SocialNetwork\app\controller\WebController#help');
-$router->map('GET', '/resize/[*:img]', '\SocialNetwork\app\controller\WebController#resize'); 
+$router->map('GET', '/resize/[*:img]', '\SocialNetwork\app\controller\WebController#resize');
 
 
 $router->map("POST|GET", "/backend/", '\SocialNetwork\app\controller\BackendController#init');
@@ -85,8 +85,6 @@ if ($match) {
 
     //backend -> redirect to login
     if (!isset($_SESSION['isAdmin']) && strpos($_SERVER['REQUEST_URI'], "/backend/") === 0) {
-        
-                
         if (strpos($_SERVER['REQUEST_URI'], "/backend/login/") === false) {
             header("Location: /backend/login/");
         }
@@ -105,9 +103,7 @@ if ($match) {
         $view = new $object;
         $view->$method($match['params']);
     }
-
 } else {
-    
     $error = new BaseController();
     $error->getResponse()->addStatusCode(402)->executeHeaders();
     $error->assign("title", "404");

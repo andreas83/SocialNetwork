@@ -1,14 +1,13 @@
 <?php
 use SocialNetwork\app\lib\Config;
 
-
 class Api_Test extends PHPUnit_Framework_TestCase
 {
     protected $client;
 
     
     /**
-     * @todo use url from config 
+     * @todo use url from config
      * @todo mookup test db
      */
     protected function setUp()
@@ -32,7 +31,6 @@ class Api_Test extends PHPUnit_Framework_TestCase
         $data = json_decode($response->getBody(), true);
         $this->assertArrayHasKey('stream', $data[0]);
         $this->assertArrayHasKey('author', $data[0]);
-       
     }
      
     /*

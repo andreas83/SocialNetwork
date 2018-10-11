@@ -4,8 +4,9 @@
 
 
     <?php
-    foreach($footer as $script)
+    foreach ($footer as $script) {
         echo $script;
+    }
     ?>
 </body>
 </html>

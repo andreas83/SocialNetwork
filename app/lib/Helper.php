@@ -1,5 +1,6 @@
 <?php
 namespace SocialNetwork\app\lib;
+
 use SocialNetwork\app\model\User;
 
 class Helper
@@ -42,20 +43,18 @@ class Helper
     public static function cssScript($params)
     {
         return "<link rel=\"stylesheet\" href=\"" . Config::get('address') . "/public/css/" . $params . "\" type=\"text/css\"/>\n\t\t";
-
     }
 
     public static function isUser()
     {
-        if(isset($_REQUEST['api_key']))
-        {
-            
+        if (isset($_REQUEST['api_key'])) {
             $user=new User;
             $res=$user->getUserbyAPIKey($_REQUEST['api_key']);
-            if(count($res)>0)
+            if (count($res)>0) {
                 return true;
-            else 
+            } else {
                 return false;
+            }
         }
         return (isset($_SESSION['login']) ? true : false);
     }
@@ -64,9 +63,9 @@ class Helper
      * useally userID is stored in $_SESSION
      * but when request comes from api, there is only the api_key
      */
-    public static function getUserID(){
-        if(isset($_REQUEST['api_key']) && !empty($_REQUEST['api_key']))
-        {
+    public static function getUserID()
+    {
+        if (isset($_REQUEST['api_key']) && !empty($_REQUEST['api_key'])) {
             $user=new User;
             $res=$user->getUserbyAPIKey($_REQUEST['api_key']);
             return $res['0']->id;
@@ -77,8 +76,9 @@ class Helper
       
     public static function getUserSettings()
     {
-        if(!Helper::isUser())
+        if (!Helper::isUser()) {
             return false;
+        }
         
         $user= new User;
         $user=$user->get($_SESSION['login']);
@@ -89,7 +89,6 @@ class Helper
 
     public static function seoUrl($url)
     {
-
         $url = str_replace("&amp;", "und", $url);
         $url = str_replace("ö", "oe", $url);
         $url = str_replace("ü", "ue", $url);
@@ -98,5 +97,4 @@ class Helper
         $url = str_replace("+", "-", $url);
         return $url;
     }
-
 }

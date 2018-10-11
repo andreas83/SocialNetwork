@@ -1,5 +1,6 @@
 <?php
 namespace SocialNetwork\app\server;
+
 include_once("vendor/autoload.php");
 
 
@@ -8,8 +9,6 @@ use SocialNetwork\app\lib\Config;
 use SocialNetwork\app\lib\WebSocketServer;
 use SocialNetwork\app\model\Notification;
 use SocialNetwork\app\model\User;
-
-
 
 class notificationServer extends WebSocketServer
 {
@@ -35,7 +34,6 @@ class notificationServer extends WebSocketServer
      */
     protected function process($user, $message)
     {
-       
         $data = json_decode($message);
              
         if ($data->action == "getNotifications" && $data->auth_cookie != "") {
@@ -44,9 +42,7 @@ class notificationServer extends WebSocketServer
             
             $userObj = new User();
             $userObj = $userObj->find(array("auth_cookie" => $data->auth_cookie));
-            if(count($userObj) ==0)
-            {
-
+            if (count($userObj) ==0) {
                 $this->send($user, json_encode(array("reauth" => true)));
                 return;
             }
@@ -74,7 +70,6 @@ class notificationServer extends WebSocketServer
         }
 
         if ($data->action == "openroom" && $data->auth_cookie == "") {
-
             $this->activeUser[$user->id] = "Anonymous - " . uniqid();
 
             $this->send($user, json_encode(array("activeUsers" => $this->activeUser, "channel" => $this->channel)));
@@ -84,7 +79,7 @@ class notificationServer extends WebSocketServer
         if ($data->action == "chat") {
             $userObj = new User;
 
-            if ($data->auth_cookie == ""){
+            if ($data->auth_cookie == "") {
                 $res = $userObj->find(array("id" => 1));
             } else {
                 $res = $userObj->find(array("auth_cookie" => $data->auth_cookie));
@@ -95,7 +90,6 @@ class notificationServer extends WebSocketServer
             preg_match_all($pattern, $data->text, $users);
 
             if (count($users[0]) > 0) {
-
                 $notification = new Notification;
                 $notification->from_user_id = $res[0]->id;
                 $notification->date = date("U");
@@ -114,7 +108,6 @@ class notificationServer extends WebSocketServer
 
                 foreach ($this->users as $activeuser) {
                     if (in_array($activeuser->uid, $user_ids)) {
-
                         $notifications = new Notification;
                         $res = $notifications->getNotificationsByID($activeuser->uid);
                         $this->send($activeuser, json_encode(array("notificaton" => $res)));
@@ -139,11 +132,10 @@ class notificationServer extends WebSocketServer
                     $this->send($user, json_encode(array("notificaton" => $res)));
                 }
             }
-
         }
     }
 
-    function updateUsers()
+    public function updateUsers()
     {
         foreach ($this->users as $user) {
             $this->send($user, json_encode(array("activeUsers" => $this->activeUser, "channel" => $this->channel)));
@@ -156,7 +148,6 @@ class notificationServer extends WebSocketServer
      */
     protected function connected($user)
     {
-
         $notifications = new Notification;
         //remove some old notifications first aka garbage collection
         $notifications->cleanup();

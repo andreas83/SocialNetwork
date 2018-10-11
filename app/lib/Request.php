@@ -1,7 +1,6 @@
 <?php
 namespace SocialNetwork\app\lib;
 
-
 /**
  * a simple class to get a request or the raw data
  *
@@ -75,7 +74,7 @@ class Request
         $data = file_get_contents('php://input');
 
         if ($data && ($jsonData = json_decode($data, true))) {
-            $this->requestData = array_merge((array) $_GET,(array)  $_POST, (array) $jsonData);
+            $this->requestData = array_merge((array) $_GET, (array)  $_POST, (array) $jsonData);
         }
 
         $this->rawData = $data;

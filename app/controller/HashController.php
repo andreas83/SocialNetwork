@@ -13,7 +13,7 @@ class HashController extends BaseController
     /**
      * @param $request
      */
-    function get($request)
+    public function get($request)
     {
         $hash= new Hashtags;
         
@@ -25,7 +25,7 @@ class HashController extends BaseController
     /**
      * @param $request
      */
-    function addScore($request)
+    public function addScore($request)
     {
         $hash= new Hashtags;
         
@@ -37,4 +37,3 @@ class HashController extends BaseController
         $this->asJson($res);
     }
 }
-

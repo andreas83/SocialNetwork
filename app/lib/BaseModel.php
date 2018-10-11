@@ -1,5 +1,6 @@
 <?php
 namespace SocialNetwork\app\lib;
+
 use SocialNetwork\app\lib\database\ConnectionManager;
 
 /**
@@ -70,7 +71,6 @@ abstract class BaseModel
      */
     public function getAll()
     {
-
         $sql = "SELECT * FROM " . $this->table;
         
         $stmt = $this->dbh->query($sql);
@@ -86,12 +86,11 @@ abstract class BaseModel
      * @param int $show
      * @return mixed
      */
-    function getPages($page=false, $term=false, $show=5)
+    public function getPages($page=false, $term=false, $show=5)
     {
-        
         $searchSQL="1=1";
 
-        if($term) {
+        if ($term) {
             /**
              * @var BaseModel $model
              */
@@ -99,7 +98,7 @@ abstract class BaseModel
             $configuration=$model->getBackendConfiguration();
             
             $searchSQL=array();
-            foreach($configuration->searchable as $prop) {
+            foreach ($configuration->searchable as $prop) {
                 $searchSQL[]=  $prop." LIKE :".$prop;
             }
             $searchSQL=  implode(" OR ", $searchSQL);
@@ -114,7 +113,7 @@ abstract class BaseModel
         if ($page) {
             $page_offset = (int) ($page * $show) - $show;
             $sql.=" LIMIT $show OFFSET $page_offset";
-        } else  {
+        } else {
             $sql.=" LIMIT $show";
         }
 
@@ -122,7 +121,7 @@ abstract class BaseModel
         $stmt = $this->dbh->prepare($sql);
 
         if ($term) {
-            foreach($configuration->searchable as $prop) {
+            foreach ($configuration->searchable as $prop) {
                 $stmt->bindValue(':'.$prop, "%".$term."%", \PDO::PARAM_STR);
             }
         }
@@ -132,8 +131,6 @@ abstract class BaseModel
         $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, $this->className);
 
         return $obj;
-
-    
     }
 
     /**
@@ -151,7 +148,6 @@ abstract class BaseModel
         
         $obj = $stmt->execute();
         return $obj[0];
-
     }
 
     /**
@@ -190,8 +186,7 @@ abstract class BaseModel
         unset($tmp["dbh"], $tmp["dbobject"], $tmp[$primary], $tmp['container'], $tmp['table'], $tmp['className']);
         $columns = $tmp;
 
-        if (empty($this->{$primary}))
-        {
+        if (empty($this->{$primary})) {
             $sql = 'INSERT IGNORE INTO ' . $this->table . '
             (' . implode(",", array_keys($columns)) . ') VALUES
             (:' . implode(",:", array_keys($columns)) . ')';
@@ -228,4 +223,3 @@ abstract class BaseModel
         return 0;
     }
 }
-

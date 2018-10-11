@@ -9,7 +9,6 @@ use SocialNetwork\app\lib\BaseModel;
  */
 class Score extends BaseModel
 {
-
     public $id = "";
     public $user_id = "";
     public $content_id = "";
@@ -55,6 +54,5 @@ class Score extends BaseModel
         $obj = $stmt->fetchALL(PDO::FETCH_CLASS, get_class($this));
 
         return $obj;
-        
     }
 }

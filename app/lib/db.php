@@ -615,7 +615,7 @@ namespace vakata\database {
             }
         }
 
-        protected final function error($error = '')
+        final protected function error($error = '')
         {
             $dirnm = defined('LOGROOT') ? LOGROOT : realpath(dirname(__FILE__));
             @file_put_contents(
@@ -1080,7 +1080,7 @@ namespace vakata\database {
 
         public function nextr($result)
         {
-            return pg_fetch_array($result, NULL, PGSQL_BOTH);
+            return pg_fetch_array($result, null, PGSQL_BOTH);
         }
 
         public function seek($result, $row)

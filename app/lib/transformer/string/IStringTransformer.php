@@ -6,7 +6,8 @@ namespace SocialNetwork\app\lib\transformer\string;
  * Interface IStringTransformer
  * @package SocialNetwork\app\lib\transformer\string
  */
-interface IStringTransformer {
+interface IStringTransformer
+{
 
     /**
      * @param string $content

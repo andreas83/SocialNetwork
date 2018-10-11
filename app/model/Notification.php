@@ -6,7 +6,6 @@ use SocialNetwork\app\lib\ConfigureBackend;
 
 class Notification extends BaseModel
 {
-
     public $id = "";
     public $to_user_id = "";
     public $from_user_id = "";
@@ -49,7 +48,6 @@ class Notification extends BaseModel
         $backend->setRelation("from_user_id", "User", "id")->showFields("name");
         
         return $backend;
-        
     }
     
     public function cleanup()
@@ -87,8 +85,6 @@ class Notification extends BaseModel
         $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, "\stdClass");
 
         return $obj;
-        
-    
     }
 
     /**
@@ -97,7 +93,6 @@ class Notification extends BaseModel
      */
     public function getNotificationsByID($id)
     {
-        
         $sql = "SELECT Notification.*, "
                 . "fromUser.* FROM Notification"
                 . " INNER JOIN User ON "
@@ -115,7 +110,5 @@ class Notification extends BaseModel
         $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, "\stdClass");
 
         return $obj;
-        
-    
     }
 }

@@ -1,5 +1,6 @@
 <?php
 namespace SocialNetwork\app\model;
+
 use SocialNetwork\app\lib\BaseModel;
 use SocialNetwork\app\lib\ConfigureBackend;
 
@@ -9,7 +10,6 @@ use SocialNetwork\app\lib\ConfigureBackend;
  */
 class User extends BaseModel
 {
-
     public $id = "";
     public $name = "";
     public $mail = "";
@@ -41,7 +41,8 @@ class User extends BaseModel
     /**
      * @return ConfigureBackend
      */
-    public function getBackendConfiguration(){
+    public function getBackendConfiguration()
+    {
         $backend = new ConfigureBackend;
         $backend->setSearchable(array("id", "name", "mail", "api_key", "isAdmin"));
         $backend->setEditable(array("id", "name", "mail", "api_key", "isAdmin"));
@@ -90,10 +91,10 @@ class User extends BaseModel
         $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, get_class($this));
 
         return $obj;
-        
     }
     
-    function save() {
+    public function save()
+    {
         $this->modified=date("Y-m-d H:i:s");
         return parent::save();
     }
@@ -101,7 +102,7 @@ class User extends BaseModel
     /**
      * @return mixed
      */
-    function getStats()
+    public function getStats()
     {
         $sql="SELECT MONTH(created) AS Month, YEAR(created) AS Year, COUNT(*) AS cnt FROM User GROUP BY month(created), YEAR(created) ORDER BY month(created), YEAR(created)";
         
@@ -118,7 +119,7 @@ class User extends BaseModel
      * @param string $year
      * @return mixed
      */
-    function getActiveUsers($month, $year)
+    public function getActiveUsers($month, $year)
     {
         $sql = "SELECT name FROM User WHERE YEAR(modified)=:year AND MONTH(modified)=:month";
         
@@ -132,7 +133,5 @@ class User extends BaseModel
         $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, get_class($this));
 
         return $obj;
-                
     }
-    
 }

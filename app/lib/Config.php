@@ -27,8 +27,7 @@ class Config
         $mainCfg = parse_ini_file(self::CONFIG_PATH . "main.cfg");
 
         // override main config with url specific config
-        if (isset($_SERVER['HTTP_HOST']))
-        {
+        if (isset($_SERVER['HTTP_HOST'])) {
             $subcfg = $_SERVER['HTTP_HOST'] . self::CONFIG_SUFFIX;
 
             if (file_exists(self::CONFIG_PATH . $subcfg)) {
@@ -55,6 +54,4 @@ class Config
 
         return isset($cfg[$var]) ? $cfg[$var] : null;
     }
-
-
 }

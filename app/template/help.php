@@ -17,8 +17,9 @@ include("menu.php");
             } else {
                 ?>
                 <label for="api_key">API KEY</label>
-                <input class="form-control" id="api_key" type="text" name="api_key" value="<?php echo (isset($api_key) ? $api_key : "") ?>">
-            <?php } ?>
+                <input class="form-control" id="api_key" type="text" name="api_key" value="<?php echo(isset($api_key) ? $api_key : "") ?>">
+            <?php
+            } ?>
         </div>
     </div>
     

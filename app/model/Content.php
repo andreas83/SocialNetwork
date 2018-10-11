@@ -37,32 +37,33 @@ class Content extends BaseModel
     /**
      * @return ConfigureBackend
      */
-    public function getBackendConfiguration(){
-     $backend = new ConfigureBackend;
-     $backend->setEditable(array("id", "user_id", "data", "media", "date"));
-     $backend->setVisible(array("id", "user_id", "data",  "date"));
+    public function getBackendConfiguration()
+    {
+        $backend = new ConfigureBackend;
+        $backend->setEditable(array("id", "user_id", "data", "media", "date"));
+        $backend->setVisible(array("id", "user_id", "data",  "date"));
      
-     $backend->setRelation("user_id", "User", "id")->showFields("name");
-     $backend->addLabel("user_id", "Username");
+        $backend->setRelation("user_id", "User", "id")->showFields("name");
+        $backend->addLabel("user_id", "Username");
      
-     $backend->setSearchable(array("id", "data", "media"));
-     $backend->addTextarea("data");
+        $backend->setSearchable(array("id", "data", "media"));
+        $backend->addTextarea("data");
      
 
-     return $backend;
+        return $backend;
     }
 
     /**
      * get new Data
-     * 
+     *
      * @todo profiling, there is some room for optimisation (i.e. nsfw filter)
-     * 
+     *
      * @param int $id
      * @param int $show
      * @param string $hash
      * @param int $user
      * @param string $type img, video, www
-     * @param string $order 
+     * @param string $order
      * @return type
      */
     public function getNext($id = false, $show = 10, $hash = false, $user =false, $type=false, $order=false, $show_nsfw="false")
@@ -73,24 +74,22 @@ class Content extends BaseModel
         
         if ($hash) {
             $esql.= " (data LIKE :term OR media LIKE :term) AND";
-        } 
+        }
 
-        if($user){
+        if ($user) {
             $esql.= " User.id=(SELECT id FROM User WHERE name = :username) AND";
         }
-        if($type){
+        if ($type) {
             $esql.= " (media LIKE :type) AND";
         }
         
-        if($show_nsfw=="false")
-        {
+        if ($show_nsfw=="false") {
             $esql.="  data NOT LIKE '%nsfw%' AND";
         }
               
         $orderby="ORDER BY Content.id DESC";
         
-        if($order)
-        {
+        if ($order) {
             $orderby=$order;
         }
         
@@ -106,11 +105,13 @@ class Content extends BaseModel
         
         $stmt = $this->dbh->prepare($sql);
 
-        if($hash)
+        if ($hash) {
             $stmt->bindValue(':term', "%" . $hash . "%", \PDO::PARAM_STR);
-        if($user)
+        }
+        if ($user) {
             $stmt->bindValue(':username', str_replace(".", " ", $user), \PDO::PARAM_STR);
-        if($type){
+        }
+        if ($type) {
             $stmt->bindValue(':type', '%type":"'.$type.'"%', \PDO::PARAM_STR);
         }
         
@@ -124,8 +125,8 @@ class Content extends BaseModel
     /**
      * @return mixed
      */
-    function getStats(){
-        
+    public function getStats()
+    {
         $sql="SELECT MONTH(FROM_UNIXTIME(date)) AS Month, YEAR(FROM_UNIXTIME(date)) AS Year, COUNT(*) AS cnt FROM Content GROUP BY MONTH(FROM_UNIXTIME(date)), YEAR(FROM_UNIXTIME(date)) ORDER BY MONTH(FROM_UNIXTIME(date)), YEAR(FROM_UNIXTIME(date))";
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute();
@@ -134,5 +135,4 @@ class Content extends BaseModel
 
         return $obj;
     }
-
 }

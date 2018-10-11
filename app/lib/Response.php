@@ -45,7 +45,8 @@ class Response implements \JsonSerializable
      * @param string $key
      * @param mixed $value
      */
-    public function addContent($key, $value) {
+    public function addContent($key, $value)
+    {
         $this->content[$key] = $value;
 
         return $this;
@@ -54,7 +55,8 @@ class Response implements \JsonSerializable
     /**
      * @param string $header
      */
-    public function addHeader($header) {
+    public function addHeader($header)
+    {
         $this->headers[] = $header;
 
         return $this;
@@ -63,7 +65,8 @@ class Response implements \JsonSerializable
     /**
      * @param int $code
      */
-    public function addStatusCode($code) {
+    public function addStatusCode($code)
+    {
         $this->statuscode = $code;
 
         return $this;
@@ -72,7 +75,8 @@ class Response implements \JsonSerializable
     /**
      * @param string $header
      */
-    public function removeHeader($header) {
+    public function removeHeader($header)
+    {
         if (in_array($header, $this->headers)) {
             unset($this->headers[array_search($header, $this->headers)]);
         }
@@ -85,7 +89,8 @@ class Response implements \JsonSerializable
      *
      * @return $this
      */
-    public function executeHeaders() {
+    public function executeHeaders()
+    {
         http_response_code($this->statuscode);
         $this->headers = array_unique($this->headers);
         foreach ($this->headers as $header) {
@@ -102,7 +107,7 @@ class Response implements \JsonSerializable
      * which is a value of any type other than a resource.
      * @since 5.4.0
      */
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         $this->executeHeaders();
 

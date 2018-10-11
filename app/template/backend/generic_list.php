@@ -10,7 +10,7 @@ include("header.php");
         <form class="form-horizontal" action="/backend/<?php echo $modelName; ?>/list/"  enctype="multipart/form-data"  method="post">
         <div class="row">
             <div class="col-sm-8">
-            <input type="text"  class="form-control" placeholder="<?php echo _("Search"); ?>" value="<?php echo (isset($term) ? $term : ""); ?>" name="term">
+            <input type="text"  class="form-control" placeholder="<?php echo _("Search"); ?>" value="<?php echo(isset($term) ? $term : ""); ?>" name="term">
             </div>
             <div class="col-sm-4">
             <input type="submit" class="btn btn-success" value="<?php echo _("Search"); ?>" >
@@ -30,11 +30,9 @@ include("header.php");
         <tr>
             <?php
             
-            foreach ($configuration->visible as $propertie )
-            {
+            foreach ($configuration->visible as $propertie) {
                 $label=$propertie;
-                if(isset($configuration->properties[$propertie]['label']))
-                {
+                if (isset($configuration->properties[$propertie]['label'])) {
                     $label=$configuration->properties[$propertie]['label'];
                 }
                 echo "<th>".$label."</th>";
@@ -43,36 +41,31 @@ include("header.php");
             <th  class="text-right"><?php echo _("Action"); ?></th>
         </tr>
         </thead>
-        <?php foreach($result as $model)
-        { ?>
+        <?php foreach ($result as $model) {
+                ?>
             <tr>
                 
             <?php
-            foreach ($configuration->visible as $propertie)
-            {
-                if(isset($configuration->properties[$propertie]['relation']))
-                {
-
+            foreach ($configuration->visible as $propertie) {
+                if (isset($configuration->properties[$propertie]['relation'])) {
                     $relation = \SocialNetwork\app\lib\model\ModelFactory::make($configuration->properties[$propertie]['relation']);
                     $result=$relation->find(array($configuration->properties[$propertie]['field']=>$model->$propertie));
-                    if(count($result)==0)
+                    if (count($result)==0) {
                         echo "<td>".$model->$propertie."</td>";
-                    else
+                    } else {
                         echo "<td>".$result[0]->{$configuration->properties[$propertie]['show']}."</td>";
-                }
-                else
-                {
+                    }
+                } else {
                     echo "<td>".$model->$propertie."</td>";
                 }
-            }
-            ?>
+            } ?>
                 <td  class="text-right">
                     <a href="/backend/<?php echo $modelName; ?>/edit/<?php echo $model->{$model->getPrimary()}; ?>/" class="btn btn-success"><span class="glyphicon  glyphicon-pencil" aria-hidden="true"></span> <?php echo _("Edit"); ?></a>
                     <a href="/backend/<?php echo $modelName; ?>/delete/<?php echo $model->{$model->getPrimary()}; ?>/" class="btn btn-warning confirm"><span class="glyphicon  glyphicon-trash" aria-hidden="true"></span> <?php echo _("Delete"); ?></a>
                 </td>
             </tr>
         <?php
-        }?>
+            }?>
     </table>
 
     <nav>
@@ -83,8 +76,7 @@ include("header.php");
                 </a>
             </li>
             <?php
-            foreach(range(1, $pages) as $page)
-            {
+            foreach (range(1, $pages) as $page) {
                 echo '<li><a href="/backend/'.$modelName.'/list/page/'.$page.'/'.(isset($term) ? "?term=".$term : "").'">'.$page.'</a></li>';
             }
             ?>

@@ -12,8 +12,9 @@
     <script src="http://d3js.org/d3.v3.min.js"></script>
 
     <?php
-    foreach($header as $script)
+    foreach ($header as $script) {
         echo $script;
+    }
     ?>
     
     <script>
@@ -42,11 +43,12 @@
         <ul class="nav navbar-nav">
             
             <?php
-                foreach ($BackendModels as $BackendModel){
-            ?>
+                foreach ($BackendModels as $BackendModel) {
+                    ?>
             
             <li><a href="/backend/<?php echo $BackendModel; ?>/list/" class=""><?php echo $BackendModel; ?></a></li>
-            <?php } ?>
+            <?php
+                } ?>
             </ul>
         </div>
   </div>

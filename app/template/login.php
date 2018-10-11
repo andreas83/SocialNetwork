@@ -2,6 +2,7 @@
 use SocialNetwork\app\controller\UserController;
 use SocialNetwork\app\lib\Config;
 use SocialNetwork\app\lib\Helper;
+
 ?>
 
 
@@ -62,7 +63,10 @@ echo(isset($scope) && strpos($scope, "login") === false ? "hide" : ""); ?>"
     <?php if (!Helper::isUser() && Config::get("facebook_auth")==true): ?>
     <a href='<?php echo UserController::getFBLoginURL(); ?>' class="col-xs-12 col-sm-12 col-md-12 btn btn-lg" id="fblogin">Facebook</a>
     <?php endif; ?>
-    
+    <?php if (!Helper::isUser() && Config::get("github_auth")==true): ?>
+    <a href='<?php echo UserController::getGithubLoginURL(); ?>' class="col-xs-12 col-sm-12 col-md-12 btn btn-lg" id="githublogin">Github</a>
+    <?php endif; ?>
+	    
     
     
 </form>
@@ -70,30 +74,31 @@ echo(isset($scope) && strpos($scope, "login") === false ? "hide" : ""); ?>"
 <form id="password_reset_form" class="<?php echo(isset($scope) && strpos($scope, "password_reset_form") === false ? "hide" : ""); ?>"
       action="/user/password/reset/" method="post">
       <?php
-      if(isset($status))
-      {
-          if($status=="new_pw_send")
-            echo "<h2><label>"._("New Password was send")."</label></h2>"; 
-          if($status=="confirm")
-            echo "<h2><label>"._("Pls check your mail")."</label></h2>"; 
-      }else{
-      
-      ?>
+      if (isset($status)) {
+          if ($status=="new_pw_send") {
+              echo "<h2><label>"._("New Password was send")."</label></h2>";
+          }
+          if ($status=="confirm") {
+              echo "<h2><label>"._("Pls check your mail")."</label></h2>";
+          }
+      } else {
+          ?>
         
         <div class="form-group">
         <label for="">
             <?php
-                echo(isset($error['pw_error']) ? $error['pw_error'] : _("mail"));
-            ?>
+                echo(isset($error['pw_error']) ? $error['pw_error'] : _("mail")); ?>
         </label>
         <input type="email" value="<?php echo(isset($error['mail']) ? "" : $_POST['mail']); ?>" name="mail" class="form-control" id="" placeholder="<?php echo _("chuck@norris.com"); ?>" />
         
     </div>
     <input type="submit" class="btn-info btn btn-lg col-md-12 "value="<?php echo _("Reset Password"); ?>">
-    <?php } ?>
+    <?php
+      } ?>
 </form>
 <?php
-if(!isset($status))
-{?>
+if (!isset($status)) {
+          ?>
 <a href="#" id="passsword_reset"><?php echo _("Password Reset"); ?></a>
-<?php } ?>
+<?php
+      } ?>

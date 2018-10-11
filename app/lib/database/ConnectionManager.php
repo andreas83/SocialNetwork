@@ -1,6 +1,8 @@
 <?php
 namespace SocialNetwork\app\lib\database;
+
 use SocialNetwork\app\lib\Config;
+
 /*
  * ConnectionManager
  *
@@ -8,19 +10,17 @@ use SocialNetwork\app\lib\Config;
  * via https://gist.github.com/extraordinaire/4135119
  */
 
-class ConnectionManager 
+class ConnectionManager
 {
-    protected  $pdo, $driver_options;
+    protected $pdo;
+    protected $driver_options;
     
     protected static $_instance = null;
     private $connction;
     
     public static function getInstance()
     {
-        
-        
-        if (null === self::$_instance)
-        {
+        if (null === self::$_instance) {
             self::$_instance = new self;
         }
         return self::$_instance;
@@ -29,7 +29,6 @@ class ConnectionManager
     protected function __construct()
     {
         $this->connction=$this->connect();
-        
     }
     public function getConnection()
     {
@@ -40,8 +39,8 @@ class ConnectionManager
     {
         try {
             $this->connection()->query("SHOW STATUS;")->execute();
-        } catch(\PDOException $e) {
-            if($e->getCode() != 'HY000' || !stristr($e->getMessage(), 'server has gone away')) {
+        } catch (\PDOException $e) {
+            if ($e->getCode() != 'HY000' || !stristr($e->getMessage(), 'server has gone away')) {
                 throw $e;
             }
             $this->reconnect();
@@ -61,7 +60,8 @@ class ConnectionManager
                 Config::get('db_pass'),
                 [
                     \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"
-                ]); 
+                ]
+        );
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         return $this->pdo;
     }

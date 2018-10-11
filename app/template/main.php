@@ -10,7 +10,6 @@ include("header.php");
         <div class="col-md-12 text-center">
             
         </div>
-
         <div class="col-md-4">
             <form id="loginform" 
                   action="/user/login/" method="post">
@@ -34,12 +33,12 @@ include("header.php");
                     </div>
                     <div class="col-md-2 col-xs-1">
                     <?php if (!Helper::isUser() && Config::get("facebook_auth") == true): ?>
-                        <a href='<?php echo UserController::getFBLoginURL(); ?>' class="col-xs-12 col-sm-12 col-md-4 btn btn-lg btn-circle " id="fblogin">FB</a>
+                        <a href='<?php echo UserController::getFBLoginURL(); ?>' class="col-xs-12 col-sm-12 col-md-4 btn btn-lg " ><span class="fab fa-facebook "></span></a>
                     <?php endif; ?>
                     </div>
                     <div class="col-md-2 col-xs-1">
-                    <?php if (!Helper::isUser() && Config::get("google_auth") == true): ?>
-                        <a href='<?php echo UserController::getGLoginURL(); ?>' class="col-xs-12 col-sm-12 col-md-4 btn btn-lg btn-circle " id="glogin">G+</a>
+                    <?php if (!Helper::isUser() && Config::get("github_auth") == true): ?>
+                        <a href='<?php echo UserController::getGithubLoginURL(); ?>' class="col-xs-12 col-sm-12 col-md-4 btn btn-lg " ><span class="fab fa-github "></span></a>
                     <?php endif; ?>
                     </div>
                 </div>
@@ -47,7 +46,8 @@ include("header.php");
                 if (!isset($status)) {
                     ?>
                 <a href="/user/password/reset/" id="passsword_reset"><?php echo _("Password Reset"); ?></a>
-            <?php } ?>
+            <?php
+                } ?>
                
             </form>
             </div>
@@ -55,8 +55,8 @@ include("header.php");
             <div class="col-md-4">
                 
             <?php
-            $nick=(isset($_POST['nick']) ? $_POST['nick'] : "" );
-            $mail=(isset($_POST['mail']) && !isset($error['login']) ? $_POST['mail'] : "" );
+            $nick=(isset($_POST['nick']) ? $_POST['nick'] : "");
+            $mail=(isset($_POST['mail']) && !isset($error['login']) ? $_POST['mail'] : "");
             ?>
                 
             <form id="registerform" 

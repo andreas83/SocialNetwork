@@ -15,7 +15,7 @@ class WebSocketUser
     public $uid = false;
     public $hasSentClose = false;
 
-    function __construct($id, $socket)
+    public function __construct($id, $socket)
     {
         $this->id = $id;
         $this->socket = $socket;

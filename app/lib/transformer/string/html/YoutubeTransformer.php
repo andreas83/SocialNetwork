@@ -1,7 +1,6 @@
 <?php
 namespace SocialNetwork\app\lib\transformer\string\html;
 
-
 use SocialNetwork\app\lib\transformer\string\IStringTransformer;
 
 /**

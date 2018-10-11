@@ -1,5 +1,6 @@
 <?php
 namespace SocialNetwork\app\lib\transformer\string\html;
+
 use SocialNetwork\app\lib\transformer\string\IStringTransformer;
 
 /**
@@ -18,5 +19,4 @@ class RedtubeTransformer implements IStringTransformer
      */
     const PATTERN = "/((http|https)\:\/\/)?([w]{3}\.)?redtube.com\/(\d+)+/i";
     const REPLACE_PATTEN = '<iframe src="http://embed.redtube.com/?id=$4" width="%s" height="%s" frameborder="0" scrolling="no"></iframe>';
-
 }

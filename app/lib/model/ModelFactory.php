@@ -14,13 +14,13 @@ class ModelFactory
      * @param string $modelName
      * @return BaseModel
      */
-    public static function make($modelName) 
+    public static function make($modelName)
     {
         if (!$modelName) {
             throw new \RuntimeException('no ModelName was given');
         }
         
-        if (!self::classExistsStatic(self::MODEL_NAMESPACE, $modelName)){
+        if (!self::classExistsStatic(self::MODEL_NAMESPACE, $modelName)) {
             throw new \RuntimeException('Model does not exist');
         }
 

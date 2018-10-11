@@ -13,22 +13,22 @@ class ScoreController
 {
     
     /**
-     * get like/dislike information for 
+     * get like/dislike information for
      * content element
-     * 
+     *
      * @todo make one query for like/dislike
      * @param array $request['id']
      */
-    function get_score($request)
+    public function get_score($request)
     {
         $score = new Score();
         
         $like=$score->find(array(
-            "content_id"=>$request['id'], 
+            "content_id"=>$request['id'],
             "type" => "add"));
         
         $dislike=$score->find(array(
-            "content_id"=>$request['id'], 
+            "content_id"=>$request['id'],
             "type" => "sub"));
         
         
@@ -41,21 +41,19 @@ class ScoreController
     
     /**
      * save like/dislike
-     * 
+     *
      * @return void|bool
      */
-    function post_score($request)
+    public function post_score($request)
     {
         $score = new Score();
         if (isset($request['type']) && Helper::isUser()) {
-            
             $find=$score->find(array(
-                "content_id"=>$request['id'], 
+                "content_id"=>$request['id'],
                 "user_id" => Helper::getUserID(),
                 "type" => $request['type']));
             
-            if(count($find)>0)
-            {
+            if (count($find)>0) {
                 $find[0]->delete($find[0]->id);
 
                 $this->get_score($request);
@@ -76,10 +74,9 @@ class ScoreController
             $notification->date=date("U");
             $notification->message='scored your'
                     . ' <a href="/permalink/'.$request['id'].'">post</a>';
-            if($content->user_id!=Helper::getUserID())
+            if ($content->user_id!=Helper::getUserID()) {
                 $notification->save();
-            
-            
+            }
         } elseif ($_POST && !Helper::isUser()) {
             header('HTTP/1.0 403 Forbidden');
             return false;

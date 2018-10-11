@@ -13,7 +13,8 @@ class ConfigureBackend
      * @param $properties
      * @return $this
      */
-    public function setSearchable($properties){
+    public function setSearchable($properties)
+    {
         $this->searchable=$properties;
         return $this;
     }
@@ -22,7 +23,8 @@ class ConfigureBackend
      * @param $properties
      * @return $this
      */
-    public function setEditable($properties){
+    public function setEditable($properties)
+    {
         $this->editable=$properties;
         return $this;
     }
@@ -31,7 +33,8 @@ class ConfigureBackend
      * @param array $properties
      * @return $this
      */
-    public function setVisible($properties){
+    public function setVisible($properties)
+    {
         $this->visible=$properties;
         return $this;
     }
@@ -74,7 +77,8 @@ class ConfigureBackend
      * @param mixed $values
      * @return $this
      */
-    public function addCheckbox($property, $values){
+    public function addCheckbox($property, $values)
+    {
         $this->properties[$property]['type']="checkbox";
         $this->properties[$property]['values']=$values;
         return $this;
@@ -84,8 +88,8 @@ class ConfigureBackend
      * @param string $property
      * @return $this
      */
-    public function addTextarea($property){
-        
+    public function addTextarea($property)
+    {
         $this->properties[$property]['type']="textarea";
         return $this;
     }

@@ -129,8 +129,9 @@
         
     </style>
     <?php
-    foreach($header as $script)
+    foreach ($header as $script) {
         echo $script;
+    }
     ?>
 
 </head>
@@ -148,7 +149,7 @@
                 <input name="pass" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
                 
                 <?php
-                echo (isset($error['login']) ? $error['login'] : ""); 
+                echo(isset($error['login']) ? $error['login'] : "");
                 ?>
                 <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Login</button>
             </form><!-- /form -->

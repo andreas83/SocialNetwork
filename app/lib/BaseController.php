@@ -120,7 +120,5 @@ class BaseController
         if ($this->response) {
             $this->getResponse()->executeHeaders();
         }
-
-
     }
 }

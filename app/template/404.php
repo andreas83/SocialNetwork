@@ -15,7 +15,7 @@ include("menu.php");
             
             
             <?php
-            foreach ($stream as $data){
+            foreach ($stream as $data) {
                 $img=json_decode($data->media);
                 $img->url=Config::get("upload_address").$img->url;
                 echo "<a href=\"/permalink/".$data->id."\"><img  class=\"img-thumbnail\"  src=\"$img->url\"></a>";

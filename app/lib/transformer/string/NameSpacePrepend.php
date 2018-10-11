@@ -49,6 +49,4 @@ class NameSpacePrepend implements IStringTransformer
 
         return self::NAMESPACE_DELIMITER . $options[self::NAMESPACE_OPTION_INDEX] . $content;
     }
-
-
 }

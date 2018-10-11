@@ -10,7 +10,6 @@ use SocialNetwork\app\lib\ConfigureBackend;
  */
 class Hashtags extends BaseModel
 {
-
     public $id = "";
     public $hashtag = "";
     public $pop = "";
@@ -34,7 +33,8 @@ class Hashtags extends BaseModel
     }
 
 
-    function save() {
+    public function save()
+    {
         $this->modified=date("Y-m-d H:i:s");
         parent::save();
     }
@@ -42,13 +42,13 @@ class Hashtags extends BaseModel
     /**
      * @return ConfigureBackend
      */
-    public function getBackendConfiguration(){
+    public function getBackendConfiguration()
+    {
         $backend = new ConfigureBackend;
         $backend->setEditable(array("id", "hashtag", "pop"));
         $backend->setVisible(array("id", "hashtag", "pop"));
         $backend->setSearchable(array("id", "hashtag", "pop"));
         return $backend;
-        
     }
 
     /**
@@ -74,7 +74,7 @@ class Hashtags extends BaseModel
      * @param int $limit
      * @return mixed
      */
-    function getPopularHashtags($limit =5)
+    public function getPopularHashtags($limit =5)
     {
         $sql = "SELECT * FROM Hashtags ORDER BY pop DESC LIMIT ". (int) $limit;
         
@@ -86,14 +86,14 @@ class Hashtags extends BaseModel
 
         $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, get_class($this));
 
-        return $obj;        
+        return $obj;
     }
 
     /**
      * @param int $limit
      * @return mixed
      */
-    function getTrendingHashtags($limit =5)
+    public function getTrendingHashtags($limit =5)
     {
         $sql = "SELECT * FROM Hashtags  WHERE WEEK(modified) = WEEK(now()) ORDER BY pop DESC limit ". (int) $limit;
         
@@ -105,14 +105,14 @@ class Hashtags extends BaseModel
 
         $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, get_class($this));
 
-        return $obj;        
+        return $obj;
     }
 
     /**
      * @param int $limit
      * @return mixed
      */
-    function getRandomHashtags($limit =5)
+    public function getRandomHashtags($limit =5)
     {
         $sql = "SELECT * FROM Hashtags ORDER BY RAND() LIMIT ". (int) $limit;
         
@@ -124,7 +124,6 @@ class Hashtags extends BaseModel
 
         $obj = $stmt->fetchALL(\PDO::FETCH_CLASS, get_class($this));
 
-        return $obj;        
+        return $obj;
     }
 }
-
