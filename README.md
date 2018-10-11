@@ -13,7 +13,7 @@ Ethereum: 0x6788024D1D36641DDE7832ce9B0300eBbD7C4832
 
 ## API Documentation
 
-http://www.dasmerkendienie.com/help/
+https://social.codejungle.org/help/
 
 ## Features
 
@@ -22,7 +22,7 @@ http://www.dasmerkendienie.com/help/
 * #hash tag search (orderd by popularity)
 * @user mentions and notifications via websockets
 * REST API
-* Oauth2 (Facebook, Google+)
+* Oauth2 (Facebook, Github)
 * Backend with Dashboard
 
 ## Side Projects
