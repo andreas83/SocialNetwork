@@ -279,7 +279,7 @@ class UserController extends BaseController
             if (count($res) > 0 && $_POST['nick'] != $user->name) {
                 $error['user'] = "A User with this Nickname already exist.";
             } else {
-                $user->name = $_POST['nick'];
+                $user->name = strip_tags($_POST['nick']);
             }
             
             if ($user->password==md5($_POST['pass1']. Config::get("salat"))) {
