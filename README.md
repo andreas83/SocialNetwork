@@ -6,6 +6,10 @@ but you can host it on your very own infrastructure or intranet.
 ## Demo
 http://social.codejungle.org/
 
+## Development 
+I will rewrite the hole project in laravel and vue (please see dev branch for current development) 
+If you need to use this project right now, please bare in mind that the master branch will be orphaned in the near future. 
+
 ## Donate
 Bitcoins: 1GqMSGseij18JnAoB9f3LHJRozNr1QeHkh
 
