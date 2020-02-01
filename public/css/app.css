@@ -1,2 +1,29 @@
+.card {
+  background-color: #534b52;
+  padding-top: 1em;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+.card header {
+  font-size: 2em;
+  color: #e0ddcf;
+}
+
+.card author {
+  color: #e0ddcf;
+}
+
+.card picture img {
+  border-radius: 25px;
+}
+
+.card .commentEditor {
+  color: #840032;
+  padding: 0.5em;
+  background-color: #e0ddcf;
+  width: 100%;
+  height: 3em;
+}
+
 
 /*# sourceMappingURL=app.css.map*/

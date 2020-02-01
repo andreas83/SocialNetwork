@@ -377,5 +377,127 @@
   }
 }
 
+body {
+  font-family: "Raleway", sans-serif;
+  font-size: 22px;
+  background-color: #231f20;
+  color: #e59500;
+  margin: 0px;
+}
+
+.container {
+  padding-top: 50px;
+}
+
+h6 {
+  color: #e0ddcf;
+  font-size: 0.5666666667em;
+  font-family: "Questrial", sans-serif;
+}
+
+h5 {
+  color: #e0ddcf;
+  font-size: 1.1333333333em;
+  font-family: "Questrial", sans-serif;
+}
+
+h4 {
+  color: #e0ddcf;
+  font-size: 1.7em;
+  font-family: "Questrial", sans-serif;
+}
+
+h3 {
+  color: #e0ddcf;
+  font-size: 2.2666666667em;
+  font-family: "Questrial", sans-serif;
+}
+
+h2 {
+  color: #e0ddcf;
+  font-size: 2.8333333333em;
+  font-family: "Questrial", sans-serif;
+}
+
+h1 {
+  color: #e0ddcf;
+  font-size: 3.4em;
+  font-family: "Questrial", sans-serif;
+}
+
+nav {
+  position: fixed;
+  background-color: #e59500;
+  width: 100%;
+  height: 55px;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+nav h1 {
+  margin-top: 10px;
+  margin-left: 5px;
+  font-size: 1.5em;
+  color: #231f20;
+}
+
+.language-select ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.language-select ul li {
+  position: relative;
+}
+
+a {
+  color: #e0ddcf;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+}
+
+small {
+  color: #534b52;
+}
+
+.form-field {
+  padding-top: 1em;
+}
+
+.form-field label {
+  width: 100%;
+  display: block;
+  color: #e0ddcf;
+}
+
+.form-field input {
+  width: 100%;
+  padding: 0.8em;
+  font-size: 1em;
+}
+
+button {
+  padding: 10px;
+  border: 0px;
+  font-size: 1.2em;
+}
+
+button:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+button.default {
+  background-color: #e59500;
+}
+
+button.abort {
+  color: #840032;
+  background-color: #e0ddcf;
+}
+
 
 /*# sourceMappingURL=critical.css.map*/
