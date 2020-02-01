@@ -1,7 +1,10 @@
 //Vue Routing
 import VueRouter from 'vue-router'
+import Welcome from './components/Welcome'
+import Template from './components/Template'
+import Register from './components/user/register'
 
-import Layout from './components/Layout'
+
 
 export const router = new VueRouter({
       mode: 'history',
@@ -9,6 +12,16 @@ export const router = new VueRouter({
         {
           path: "/",
           name: "Home",
-          component: Layout
-        }]
+          component: Welcome
+        },
+        {
+          path: "/template",
+          name: "Template",
+          component: Template
+        },
+        {
+          path: "/register",
+          name: "register",
+          component: Register
+        },]
 });

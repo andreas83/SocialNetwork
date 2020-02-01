@@ -1,1 +1,19 @@
-{}
+{
+  "welcome": "Willkommen",
+  "form": {
+    "name" :  "User",
+    "email" :  "Mail",
+    "password" :  "Password",
+
+    "error" :
+    {
+      "name" : {"exists": "Username existiert"},
+      "mail" : {"exists": "Mail exists"}
+    },
+    "login" : "login",
+    "register" : "register",
+    "abort" : "abort"
+
+  }
+
+}

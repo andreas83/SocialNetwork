@@ -13,7 +13,10 @@
     </head>
     <body>
         <div id="app">
+
           <Layout></Layout>
+
+
         </div>
         <script type="text/javascript" src="{{ mix('/js/app.js') }}"></script>
         <link href="/css/app.css" rel="stylesheet">

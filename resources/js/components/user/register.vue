@@ -1,0 +1,76 @@
+<template>
+  <div>
+    <form>
+      <div class="form-field">
+        <label for="name">{{$t('form.name')}}</label>
+        <input id="name" autocomplete="nickname" type="text" placeholder=" " v-model="name" />
+
+        <p class="error"  v-for="error in this.error.name"> {{error}}</p>
+
+      </div>
+      <div class="form-field">
+        <label for="test">{{$t('form.password')}}</label>
+        <input id="test" autocomplete="new-password" type="password" placeholder="" v-model="password"  />
+        <p class="error"  v-for="error in this.error.password"> {{error}}</p>
+      </div>
+      <div class="form-field">
+        <label for="mail">{{$t('form.email')}}</label>
+        <input id="mail" autocomplete="email" type="email" name="test" placeholder="email " v-model="email"/>
+        <p class="error"  v-for="error in this.error.email"> {{error}}</p>
+      </div>
+      <div class="form-field">
+        <button class="btn default" v-on:click="register" value="default">{{$t('form.register')}}</button>
+        <button class="btn abort" name="dosomthing" value="abort">{{$t('form.login')}}</button>
+      </div>
+    </form>
+
+  </div>
+
+</template>
+<script>
+
+
+    export default {
+    name:"Register",
+    data() {
+
+        return {
+
+            error:"",
+            name: '',
+            email: '',
+            password: '',
+            message:'',
+            show:false,
+        };
+    },
+
+    methods: {
+
+
+
+        back() {
+          this.$router.push('/Login');
+        },
+        register(e) {
+          e.preventDefault();
+            let data = {
+                name: this.name,
+                email: this.email,
+                password: this.password
+            };
+
+            axios.post('/api/register', data)
+                .then(({data}) => {
+
+                    this.$router.push('/');
+                })
+                .catch(({response}) => {
+                  this.show=true;
+                  this.error=response.data.errors;
+                });
+        },
+
+    }
+}
+</script>

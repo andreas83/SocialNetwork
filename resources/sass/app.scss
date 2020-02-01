@@ -1,4 +1,5 @@
 @import 'color';
+@import 'fonts';
 .card{
   background-color: $color5;
   padding-top: 1em;
@@ -17,13 +18,49 @@
       border-radius: 25px;
     }
   }
+}
+.action{
 
-  .commentEditor{
+  button{
+    background-color: inherit;
+    margin-bottom:  2em;
+    transition: all .2s ease-in-out;
+    &:hover{
+      text-decoration: none;
+      transform: scale(1.1);
+
+    }
+    &:active{
+      color:$color2;
+      border: none;
+      outline: none;
+    }
+
+  }
+}
+
+
+.editor{
+  width:100%;
+  height:5em;
+  background-color: $color2;
+
+  &.comment{
     color:$color3;
     padding: 0.5em;
     background-color: $color2;
     width:100%;
     height:3em;
-
   }
+}
+
+  comment{
+    display: block;
+    border:1px solid #ccc;
+    padding-top: 1em;
+  }
+
+
+iframe{
+  width:100%;
 }
