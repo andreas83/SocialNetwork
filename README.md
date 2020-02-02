@@ -4,7 +4,9 @@ works pretty similar to a well known social network,
 but you can host it on your very own infrastructure or intranet.
 
 ## Demo
-http://social.codejungle.org/
+http://social.codejungle.org/   //master branch (not recommended anymore -> react/own php framework)
+http://dev.codejungle.org/   //dev branch (current development -> vue/laravel)
+
 
 ## Development 
 I will rewrite the hole project in laravel and vue (please see dev branch for current development) 
