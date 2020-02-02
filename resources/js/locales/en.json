@@ -14,6 +14,7 @@
     "register" : "register",
     "abort" : "abort"
 
-  }
-
+  },
+  "Share" : "Share",
+  "Comment" : "Comment"
 }

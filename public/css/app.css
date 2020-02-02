@@ -166,6 +166,10 @@
   outline: none;
 }
 
+.editor-container {
+  padding: 2em;
+}
+
 .editor {
   width: 100%;
   background-color: #231f20;
@@ -177,10 +181,28 @@
   background-color: #840032;
 }
 
-comment {
-  display: block;
+.menubar button {
+  font-size: 0.5em;
+}
+
+.comment-container .editor-container {
+  padding: 0em;
+  padding-bottom: 2em;
+}
+
+.comment-list {
   border: 1px solid #ccc;
+}
+
+.comment {
+  width: 100%;
+  display: block;
   padding-top: 1em;
+  margin: 1em;
+}
+
+.comment .action {
+  font-size: 0.8em;
 }
 
 iframe {

@@ -1,6 +1,6 @@
 <template>
 
-  <div class="row-0">
+  <div class="row-0 editor-container">
       <editor-menu-bar class="btn default" :editor="editor" v-slot="{ commands, isActive }">
         <div class="menubar">
 
@@ -131,7 +131,7 @@
 
 
       <button class="btn default" v-if="!isComment" v-on:click="save"> <i class="icon-heart" /> {{$t('Share')}}</button>
-      <button class="btn default" v-if="isComment"> {{$t('Comment')}}</button>
+      <button class="btn default" v-if="isComment" v-on:click="save"> {{$t('Comment')}}</button>
 
 
 
@@ -147,7 +147,14 @@ export default {
         EditorMenuBar,
         EditorContent,
       },
-    props: ['isComment'],
+    props: {
+      isComment:{
+        default: false
+      },
+      parrent_id:{
+        default : 0
+      }
+    },
     data() {
         return{
 
@@ -186,6 +193,9 @@ export default {
           let data = {
               html_content: this.editor.getHTML(),
               json_content: this.editor.getJSON(),
+              has_comment: false,
+              is_comment:this.isComment,
+              parrent_id: this.parrent_id,
               anonymous: true,
               visibility: 'friends'
           };

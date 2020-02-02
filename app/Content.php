@@ -12,7 +12,8 @@ class Content extends Model
    * @var array
    */
   protected $fillable = [
-      'user_id', 'html_content', 'json_content', 'anonymous'
+      'user_id', 'html_content', 'json_content', 'anonymous',
+      'has_comment', 'is_comment', 'parrent_id'
   ];
 
   /**

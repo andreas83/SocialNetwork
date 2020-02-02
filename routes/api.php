@@ -16,6 +16,11 @@ Route::group(['middleware' => ['api']], function () {
     Auth::routes();
 });
 
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::resource('content', 'ContentController');
+    Route::get("content/comments/{id}", 'ContentController@comments');
+});
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

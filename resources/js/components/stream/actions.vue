@@ -1,7 +1,7 @@
 <template>
   <div class="action">
-    <button class="icon-comment" v-on:click="toggleComment"/>
-    <button class="icon-comment-empty"/>
+    <button v-if="content.has_comment=='true' && content.is_comment=='false'" class="icon-comment" v-on:click="toggleComment"></button>
+    <button v-if="content.has_comment=='false' && content.is_comment=='false'" class="icon-comment-empty" v-on:click="toggleComment"/>
 
     <button class="icon-heart"> 3 </button>
     <button class="icon-happy"/>
@@ -19,7 +19,9 @@
 
 export default {
     name: "Actions",
-
+    props:{
+      content:false
+    },
     data() {
         return{
 
@@ -32,7 +34,7 @@ export default {
       methods:{
         toggleComment(){
 
-            this.$emit('toggleComment', 'true');
+            this.$emit('toggleComment', this.content.id);
 
         }
       },

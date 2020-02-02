@@ -1,44 +1,54 @@
 <template>
 
-  <div class="row">
-    <share-dialog is-comment=true></share-dialog>
+  <div class="row-0 comment-container">
+    <share-dialog :parrent_id=parrent_content.id is-comment=true></share-dialog>
+    <div class="comment-list row-0">
+      <div class="comment col-lg-12"  v-for="data in content">
+        <author>
+          {{data.name}}
+        </author>
+        <date>{{data.created_at}}</date>
+        <content v-html="data.html_content"></content>
+        <actions :content=data  v-on:toggleComment="toggleComment"></actions>
+      </div>
+    </div>
 
-    <comment>
-      <author>
-        Andreas B.
-      </author>
-      <date>2 min ago</date>
-      <content>
-          <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et </p>
-      </content>
-    </comment>
-    <comment>
-      <author>
-        Andreas B.
-      </author>
-      <date>2 min ago</date>
-      <content>
-          <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et </p>
-      </content>
-    </comment>
   </div>
 </template>
 <script>
 
 export default {
     name: "Comments",
-
+    props:{
+      parrent_content:
+      {
+        default:false
+      }
+    },
     data() {
         return{
-
+          content:[],
           error:""
         }
       },
       mounted(){
-
+        this.getComments();
       },
       methods:{
+        getComments(){
 
+          axios.get('/api/content/comments/'+this.parrent_content.id)
+              .then(({data}) => {
+                this.content=data.content.data;
+
+              })
+              .catch(({response}) => {
+
+              });
+        },
+        toggleComment(id){
+          console.log(this.$refs.id);
+        }
       },
       computed:{
         isAuth(){

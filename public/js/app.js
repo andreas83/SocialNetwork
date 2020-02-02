@@ -2282,6 +2282,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Actions",
+  props: {
+    content: false
+  },
   data: function data() {
     return {
       error: ""
@@ -2290,7 +2293,7 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {},
   methods: {
     toggleComment: function toggleComment() {
-      this.$emit('toggleComment', 'true');
+      this.$emit('toggleComment', this.content.id);
     }
   },
   computed: {
@@ -2328,23 +2331,37 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Comments",
+  props: {
+    parrent_content: {
+      "default": false
+    }
+  },
   data: function data() {
     return {
+      content: [],
       error: ""
     };
   },
-  mounted: function mounted() {},
-  methods: {},
+  mounted: function mounted() {
+    this.getComments();
+  },
+  methods: {
+    getComments: function getComments() {
+      var _this = this;
+
+      axios.get('/api/content/comments/' + this.parrent_content.id).then(function (_ref) {
+        var data = _ref.data;
+        _this.content = data.content.data;
+      })["catch"](function (_ref2) {
+        var response = _ref2.response;
+      });
+    },
+    toggleComment: function toggleComment(id) {
+      console.log(this.$refs.id);
+    }
+  },
   computed: {
     isAuth: function isAuth() {
       return this.$store.getters["user/isAuth"];
@@ -2504,12 +2521,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2518,7 +2529,14 @@ __webpack_require__.r(__webpack_exports__);
     EditorMenuBar: tiptap__WEBPACK_IMPORTED_MODULE_0__["EditorMenuBar"],
     EditorContent: tiptap__WEBPACK_IMPORTED_MODULE_0__["EditorContent"]
   },
-  props: ['isComment'],
+  props: {
+    isComment: {
+      "default": false
+    },
+    parrent_id: {
+      "default": 0
+    }
+  },
   data: function data() {
     return {
       editor: new tiptap__WEBPACK_IMPORTED_MODULE_0__["Editor"]({
@@ -2533,7 +2551,31 @@ __webpack_require__.r(__webpack_exports__);
     this.editor.destroy();
   },
   mounted: function mounted() {},
-  methods: {},
+  methods: {
+    save: function save(e) {
+      var _this = this;
+
+      e.preventDefault();
+      var data = {
+        html_content: this.editor.getHTML(),
+        json_content: this.editor.getJSON(),
+        has_comment: false,
+        is_comment: this.isComment,
+        parrent_id: this.parrent_id,
+        anonymous: true,
+        visibility: 'friends'
+      };
+      axios.post('/api/content', data).then(function (_ref) {
+        var data = _ref.data;
+
+        _this.$router.push('/');
+      })["catch"](function (_ref2) {
+        var response = _ref2.response;
+        _this.show = true;
+        _this.error = response.data.errors;
+      });
+    }
+  },
   computed: {
     isAuth: function isAuth() {
       return this.$store.getters["user/isAuth"];
@@ -2585,22 +2627,46 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "Strean",
+  name: "Stream",
   data: function data() {
     return {
+      content: [],
       showComment: false,
       error: ""
     };
   },
-  mounted: function mounted() {},
+  mounted: function mounted() {
+    this.getContent();
+  },
   methods: {
-    toggleComment: function toggleComment() {
-      if (this.showComment) {
-        this.showComment = false;
-      } else {
-        this.showComment = true;
+    getContent: function getContent() {
+      var _this = this;
+
+      axios.get('/api/content').then(function (_ref) {
+        var data = _ref.data;
+        console.log(data.content.data.length);
+
+        for (var i = 0, length = data.content.data.length; i < length; i++) {
+          data.content.data[i].show_comment = false;
+        }
+
+        _this.content = data.content.data;
+
+        _this.$store.commit('content/setContent', data.content.data);
+      })["catch"](function (_ref2) {
+        var response = _ref2.response;
+      });
+    },
+    toggleComment: function toggleComment(id) {
+      for (var i = 0, length = this.content.length; i < length; i++) {
+        if (id == this.content[i].id) {
+          if (this.content[i].show_comment) {
+            this.content[i].show_comment = false;
+          } else {
+            this.content[i].show_comment = true;
+          }
+        }
       }
     }
   },
@@ -59635,12 +59701,19 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "action" }, [
-    _c("button", {
-      staticClass: "icon-comment",
-      on: { click: _vm.toggleComment }
-    }),
+    _vm.content.has_comment == "true" && _vm.content.is_comment == "false"
+      ? _c("button", {
+          staticClass: "icon-comment",
+          on: { click: _vm.toggleComment }
+        })
+      : _vm._e(),
     _vm._v(" "),
-    _c("button", { staticClass: "icon-comment-empty" }),
+    _vm.content.has_comment == "false" && _vm.content.is_comment == "false"
+      ? _c("button", {
+          staticClass: "icon-comment-empty",
+          on: { click: _vm.toggleComment }
+        })
+      : _vm._e(),
     _vm._v(" "),
     _c("button", { staticClass: "icon-heart" }, [_vm._v(" 3 ")]),
     _vm._v(" "),
@@ -59685,44 +59758,39 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "row" },
+    { staticClass: "row-0 comment-container" },
     [
-      _c("share-dialog", { attrs: { "is-comment": "true" } }),
+      _c("share-dialog", {
+        attrs: { parrent_id: _vm.parrent_content.id, "is-comment": "true" }
+      }),
       _vm._v(" "),
       _c(
-        "comment",
-        [
-          _c("author", [_vm._v("\n      Andreas B.\n    ")]),
-          _vm._v(" "),
-          _c("date", [_vm._v("2 min ago")]),
-          _vm._v(" "),
-          _c("content", [
-            _c("p", [
-              _vm._v(
-                "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et "
-              )
-            ])
-          ])
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "comment",
-        [
-          _c("author", [_vm._v("\n      Andreas B.\n    ")]),
-          _vm._v(" "),
-          _c("date", [_vm._v("2 min ago")]),
-          _vm._v(" "),
-          _c("content", [
-            _c("p", [
-              _vm._v(
-                "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et "
-              )
-            ])
-          ])
-        ],
-        1
+        "div",
+        { staticClass: "comment-list row-0" },
+        _vm._l(_vm.content, function(data) {
+          return _c(
+            "div",
+            { staticClass: "comment col-lg-12" },
+            [
+              _c("author", [
+                _vm._v("\n        " + _vm._s(data.name) + "\n      ")
+              ]),
+              _vm._v(" "),
+              _c("date", [_vm._v(_vm._s(data.created_at))]),
+              _vm._v(" "),
+              _c("content", {
+                domProps: { innerHTML: _vm._s(data.html_content) }
+              }),
+              _vm._v(" "),
+              _c("actions", {
+                attrs: { content: data },
+                on: { toggleComment: _vm.toggleComment }
+              })
+            ],
+            1
+          )
+        }),
+        0
       )
     ],
     1
@@ -59752,7 +59820,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "row-0" },
+    { staticClass: "row-0 editor-container" },
     [
       _c("editor-menu-bar", {
         staticClass: "btn default",
@@ -59902,15 +59970,6 @@ var render = function() {
                     "button",
                     {
                       staticClass: "btn default",
-                      on: { click: commands.horizontal_rule }
-                    },
-                    [_vm._v("\n               hr\n             ")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn default",
                       on: { click: commands.undo }
                     },
                     [_vm._v("\n               undo\n             ")]
@@ -59939,16 +59998,22 @@ var render = function() {
       _c("button", { staticClass: "default icon-picture" }),
       _vm._v(" "),
       !_vm.isComment
-        ? _c("button", { staticClass: "btn default" }, [
-            _c("i", { staticClass: "icon-heart" }),
-            _vm._v(" " + _vm._s(_vm.$t("Share")))
-          ])
+        ? _c(
+            "button",
+            { staticClass: "btn default", on: { click: _vm.save } },
+            [
+              _c("i", { staticClass: "icon-heart" }),
+              _vm._v(" " + _vm._s(_vm.$t("Share")))
+            ]
+          )
         : _vm._e(),
       _vm._v(" "),
       _vm.isComment
-        ? _c("button", { staticClass: "btn default" }, [
-            _vm._v(" " + _vm._s(_vm.$t("Comment")))
-          ])
+        ? _c(
+            "button",
+            { staticClass: "btn default", on: { click: _vm.save } },
+            [_vm._v(" " + _vm._s(_vm.$t("Comment")))]
+          )
         : _vm._e()
     ],
     1
@@ -59979,30 +60044,42 @@ var render = function() {
   return _c("div", { staticClass: "row" }, [
     _c("div", { staticClass: "col-lg-12" }, [_c("share-dialog")], 1),
     _vm._v(" "),
-    _c("div", { staticClass: "col-lg-12" }, [
-      _c("div", { staticClass: "row card" }, [
-        _vm._m(0),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "col-lg-10  col-md-10" },
-          [
-            _c("header", [_vm._v("The end is near :) ")]),
-            _vm._v(" "),
-            _c("author", [_vm._v("\n          Andreas B.\n        ")]),
-            _vm._v(" "),
-            _c("date", [_vm._v("2 min ago")]),
-            _vm._v(" "),
-            _vm._m(1),
-            _vm._v(" "),
-            _c("actions", { on: { toggleComment: _vm.toggleComment } }),
-            _vm._v(" "),
-            _vm.showComment ? _c("comments") : _vm._e()
-          ],
-          1
-        )
-      ])
-    ])
+    _c(
+      "div",
+      { staticClass: "col-lg-12" },
+      _vm._l(_vm.content, function(data) {
+        return _c("div", { staticClass: "row card" }, [
+          _vm._m(0, true),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "col-lg-10  col-md-10" },
+            [
+              _c("author", [
+                _vm._v("\n          " + _vm._s(data.name) + "\n        ")
+              ]),
+              _vm._v(" "),
+              _c("date", [_vm._v(_vm._s(data.created_at))]),
+              _vm._v(" "),
+              _c("content", {
+                domProps: { innerHTML: _vm._s(data.html_content) }
+              }),
+              _vm._v(" "),
+              _c("actions", {
+                attrs: { content: data },
+                on: { toggleComment: _vm.toggleComment }
+              }),
+              _vm._v(" "),
+              data.show_comment
+                ? _c("comments", { attrs: { parrent_content: data } })
+                : _vm._e()
+            ],
+            1
+          )
+        ])
+      }),
+      0
+    )
   ])
 }
 var staticRenderFns = [
@@ -60013,18 +60090,6 @@ var staticRenderFns = [
     return _c("div", { staticClass: "col-lg-1  col-md-1" }, [
       _c("picture", [
         _c("img", { attrs: { src: "https://via.placeholder.com/50" } })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("content", [
-      _c("p", [
-        _vm._v(
-          "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et "
-        )
       ])
     ])
   }
@@ -77502,10 +77567,10 @@ webpackContext.id = "./resources/js/locales sync recursive [A-Za-z0-9-_,\\s]+\\.
 /*!**************************************!*\
   !*** ./resources/js/locales/de.json ***!
   \**************************************/
-/*! exports provided: welcome, form, default */
+/*! exports provided: welcome, form, Share, Comment, default */
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"welcome\":\"Willkommen\",\"form\":{\"name\":\"Benutzername\",\"email\":\"Mail\",\"password\":\"Passwort\",\"error\":{\"name\":{\"exists\":\"Benutzername existiert\"},\"mail\":{\"exists\":\"Mail existiert bereits\"}},\"login\":\"Anmelden\",\"register\":\"Registrieren\",\"abort\":\"Abbruch\"}}");
+module.exports = JSON.parse("{\"welcome\":\"Willkommen\",\"form\":{\"name\":\"Benutzername\",\"email\":\"Mail\",\"password\":\"Passwort\",\"error\":{\"name\":{\"exists\":\"Benutzername existiert\"},\"mail\":{\"exists\":\"Mail existiert bereits\"}},\"login\":\"Anmelden\",\"register\":\"Registrieren\",\"abort\":\"Abbruch\"},\"Share\":\"Teilen\",\"Comment\":\"Kommentieren\"}");
 
 /***/ }),
 
@@ -77513,10 +77578,10 @@ module.exports = JSON.parse("{\"welcome\":\"Willkommen\",\"form\":{\"name\":\"Be
 /*!**************************************!*\
   !*** ./resources/js/locales/en.json ***!
   \**************************************/
-/*! exports provided: welcome, form, default */
+/*! exports provided: welcome, form, Share, Comment, default */
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"welcome\":\"Willkommen\",\"form\":{\"name\":\"User\",\"email\":\"Mail\",\"password\":\"Password\",\"error\":{\"name\":{\"exists\":\"Username existiert\"},\"mail\":{\"exists\":\"Mail exists\"}},\"login\":\"login\",\"register\":\"register\",\"abort\":\"abort\"}}");
+module.exports = JSON.parse("{\"welcome\":\"Willkommen\",\"form\":{\"name\":\"User\",\"email\":\"Mail\",\"password\":\"Password\",\"error\":{\"name\":{\"exists\":\"Username existiert\"},\"mail\":{\"exists\":\"Mail exists\"}},\"login\":\"login\",\"register\":\"register\",\"abort\":\"abort\"},\"Share\":\"Share\",\"Comment\":\"Comment\"}");
 
 /***/ }),
 
@@ -77554,6 +77619,40 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
     name: "register",
     component: _components_user_register__WEBPACK_IMPORTED_MODULE_3__["default"]
   }]
+});
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/content.js":
+/*!***********************************************!*\
+  !*** ./resources/js/store/modules/content.js ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  namespaced: true,
+  state: {
+    content: {}
+  },
+  action: {
+    setContent: function setContent(_ref, content) {
+      var commit = _ref.commit;
+      commit('setContent', content);
+    }
+  },
+  getters: {
+    getContent: function getContent(state) {
+      return state.content;
+    }
+  },
+  mutations: {
+    setContent: function setContent(state, content) {
+      state.content = content;
+    }
+  }
 });
 
 /***/ }),
@@ -77617,13 +77716,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _modules_user__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/user */ "./resources/js/store/modules/user.js");
+/* harmony import */ var _modules_content__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/content */ "./resources/js/store/modules/content.js");
+
 
 
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
 var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   modules: {
-    user: _modules_user__WEBPACK_IMPORTED_MODULE_2__["default"]
+    user: _modules_user__WEBPACK_IMPORTED_MODULE_2__["default"],
+    content: _modules_content__WEBPACK_IMPORTED_MODULE_3__["default"]
   }
 });
 

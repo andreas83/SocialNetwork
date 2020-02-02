@@ -1,7 +1,9 @@
 @import 'color';
 @import 'fonts';
 .card{
-  background-color: $color5;
+
+    background-color: $color5;
+  
   padding-top: 1em;
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
   header{
@@ -39,6 +41,9 @@
   }
 }
 
+.editor-container{
+  padding: 2em;
+}
 .editor{
   width: 100%;
   background-color: $color1;
@@ -48,13 +53,30 @@
    background-color:   $color3;
   }
 }
-
-
-  comment{
-    display: block;
-    border:1px solid #ccc;
-    padding-top: 1em;
+.menubar{
+  button{
+    font-size: 0.5em;
   }
+}
+.comment-container{
+  .editor-container{
+    padding: 0em;
+    padding-bottom: 2em;
+  }
+}
+.comment-list{
+
+  border:1px solid #ccc;
+}
+.comment{
+  width:100%;
+  display: block;
+  padding-top: 1em;
+  margin:1em;
+  .action{
+    font-size: 0.8em;
+  }
+}
 
 
 iframe{
