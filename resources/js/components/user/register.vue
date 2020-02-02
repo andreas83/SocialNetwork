@@ -20,7 +20,7 @@
       </div>
       <div class="form-field">
         <button class="btn default" v-on:click="register" value="default">{{$t('form.register')}}</button>
-        <button class="btn abort" name="dosomthing" value="abort">{{$t('form.login')}}</button>
+
       </div>
     </form>
 
@@ -62,8 +62,20 @@
 
             axios.post('/api/register', data)
                 .then(({data}) => {
+                  console.log(data);
+                  this.$store.commit('user/setUser', data.user);
+                  this.$store.commit('user/setAuth', true);
+                  localStorage.setItem('token', data.user.api_token);
+                  axios.interceptors.request.use(
+                    (config) => {
+                      config.headers['Authorization'] = "Bearer "+data.user.api_token;
+                      return config;
+                    },
 
-                    this.$router.push('/');
+                    (error) => {
+                      return Promise.reject(error);
+                    }
+                  );
                 })
                 .catch(({response}) => {
                   this.show=true;

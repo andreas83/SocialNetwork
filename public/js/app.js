@@ -2746,6 +2746,8 @@ __webpack_require__.r(__webpack_exports__);
         }, function (error) {
           return Promise.reject(error);
         });
+
+        _this.$router.push('/');
       })["catch"](function (_ref2) {
         var response = _ref2.response;
         _this.show = true;
@@ -2822,8 +2824,19 @@ __webpack_require__.r(__webpack_exports__);
       };
       axios.post('/api/register', data).then(function (_ref) {
         var data = _ref.data;
+        console.log(data);
 
-        _this.$router.push('/');
+        _this.$store.commit('user/setUser', data.user);
+
+        _this.$store.commit('user/setAuth', true);
+
+        localStorage.setItem('token', data.user.api_token);
+        axios.interceptors.request.use(function (config) {
+          config.headers['Authorization'] = "Bearer " + data.user.api_token;
+          return config;
+        }, function (error) {
+          return Promise.reject(error);
+        });
       })["catch"](function (_ref2) {
         var response = _ref2.response;
         _this.show = true;
@@ -60213,15 +60226,6 @@ var render = function() {
             on: { click: _vm.login }
           },
           [_vm._v(_vm._s(_vm.$t("form.login")))]
-        ),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "btn abort",
-            attrs: { name: "dosomthing", value: "abort" }
-          },
-          [_vm._v(_vm._s(_vm.$t("form.register")))]
         )
       ])
     ])
@@ -60390,15 +60394,6 @@ var render = function() {
             on: { click: _vm.register }
           },
           [_vm._v(_vm._s(_vm.$t("form.register")))]
-        ),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "btn abort",
-            attrs: { name: "dosomthing", value: "abort" }
-          },
-          [_vm._v(_vm._s(_vm.$t("form.login")))]
         )
       ])
     ])

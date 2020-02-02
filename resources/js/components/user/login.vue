@@ -14,7 +14,7 @@
 
       <div class="form-field">
         <button class="btn default" v-on:click="login" value="default">{{$t('form.login')}}</button>
-        <button class="btn abort" name="dosomthing" value="abort">{{$t('form.register')}}</button>
+
       </div>
     </form>
 
@@ -68,6 +68,7 @@
                         return Promise.reject(error);
                       }
                     );
+                    this.$router.push('/');
 
                 })
                 .catch(({response}) => {
