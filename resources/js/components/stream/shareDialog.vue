@@ -130,8 +130,8 @@
 
 
 
-      <button class="btn default" v-if="!isComment" v-on:click="save"> <i class="icon-heart" /> {{$t('Share')}}</button>
-      <button class="btn default" v-if="isComment" v-on:click="save"> {{$t('Comment')}}</button>
+      <button class="btn default" v-if="!isComment" @click.prevent="save"> <i class="icon-heart" /> {{$t('Share')}}</button>
+      <button class="btn default" v-if="isComment" @click.prevent="save"> {{$t('Comment')}}</button>
 
 
 
@@ -189,7 +189,7 @@ export default {
     },
     methods:{
       save(e){
-        e.preventDefault();
+
           let data = {
               html_content: this.editor.getHTML(),
               json_content: this.editor.getJSON(),
@@ -199,11 +199,13 @@ export default {
               anonymous: true,
               visibility: 'friends'
           };
-
+      
           axios.post('/api/content', data)
               .then(({data}) => {
 
-                  this.$router.push('/');
+                this.$store.commit('content/clearContent');
+                this.$store.commit('content/appendContent', data.content);
+                this.editor.setContent("<h2>Thank You</h2>");
               })
               .catch(({response}) => {
                 this.show=true;

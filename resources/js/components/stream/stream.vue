@@ -38,7 +38,7 @@ export default {
 
     data() {
         return{
-          content:[],
+        
           showComment:false,
           error:""
         }
@@ -46,6 +46,7 @@ export default {
       mounted(){
 
         this.getContent();
+
       },
       methods:{
 
@@ -59,8 +60,9 @@ export default {
 
                     data.content.data[i].show_comment=false;
                   }
-                  this.content=data.content.data;
+
                   this.$store.commit('content/setContent', data.content.data);
+
                 })
                 .catch(({response}) => {
 
@@ -86,6 +88,9 @@ export default {
         }
       },
       computed:{
+        content(){
+          return this.$store.getters["content/getContent"];
+        },
         isAuth(){
           return this.$store.getters["user/isAuth"];
         }

@@ -2555,7 +2555,6 @@ __webpack_require__.r(__webpack_exports__);
     save: function save(e) {
       var _this = this;
 
-      e.preventDefault();
       var data = {
         html_content: this.editor.getHTML(),
         json_content: this.editor.getJSON(),
@@ -2568,7 +2567,11 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/api/content', data).then(function (_ref) {
         var data = _ref.data;
 
-        _this.$router.push('/');
+        _this.$store.commit('content/clearContent');
+
+        _this.$store.commit('content/appendContent', data.content);
+
+        _this.editor.setContent("<h2>Thank You</h2>");
       })["catch"](function (_ref2) {
         var response = _ref2.response;
         _this.show = true;
@@ -2631,7 +2634,6 @@ __webpack_require__.r(__webpack_exports__);
   name: "Stream",
   data: function data() {
     return {
-      content: [],
       showComment: false,
       error: ""
     };
@@ -2651,8 +2653,6 @@ __webpack_require__.r(__webpack_exports__);
           data.content.data[i].show_comment = false;
         }
 
-        _this.content = data.content.data;
-
         _this.$store.commit('content/setContent', data.content.data);
       })["catch"](function (_ref2) {
         var response = _ref2.response;
@@ -2671,6 +2671,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   computed: {
+    content: function content() {
+      return this.$store.getters["content/getContent"];
+    },
     isAuth: function isAuth() {
       return this.$store.getters["user/isAuth"];
     }
@@ -60013,7 +60016,15 @@ var render = function() {
       !_vm.isComment
         ? _c(
             "button",
-            { staticClass: "btn default", on: { click: _vm.save } },
+            {
+              staticClass: "btn default",
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.save($event)
+                }
+              }
+            },
             [
               _c("i", { staticClass: "icon-heart" }),
               _vm._v(" " + _vm._s(_vm.$t("Share")))
@@ -60024,7 +60035,15 @@ var render = function() {
       _vm.isComment
         ? _c(
             "button",
-            { staticClass: "btn default", on: { click: _vm.save } },
+            {
+              staticClass: "btn default",
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.save($event)
+                }
+              }
+            },
             [_vm._v(" " + _vm._s(_vm.$t("Comment")))]
           )
         : _vm._e()
@@ -77630,12 +77649,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   namespaced: true,
   state: {
-    content: {}
+    content: []
   },
   action: {
     setContent: function setContent(_ref, content) {
       var commit = _ref.commit;
       commit('setContent', content);
+    },
+    clearContent: function clearContent(_ref2, content) {
+      var commit = _ref2.commit;
+      commit('clearContent', content);
+    },
+    appendContent: function appendContent(_ref3, content) {
+      var commit = _ref3.commit;
+      commit('appendContent', content);
     }
   },
   getters: {
@@ -77646,6 +77673,12 @@ __webpack_require__.r(__webpack_exports__);
   mutations: {
     setContent: function setContent(state, content) {
       state.content = content;
+    },
+    appendContent: function appendContent(state, content) {
+      state.content.push(content);
+    },
+    clearContent: function clearContent(state, content) {
+      state.content = [];
     }
   }
 });
