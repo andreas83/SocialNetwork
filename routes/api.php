@@ -17,7 +17,9 @@ Route::group(['middleware' => ['api']], function () {
 });
 
 Route::group(['middleware' => ['auth:api']], function () {
+    Route::resource('content/likes', 'ContentLikeController');
     Route::resource('content', 'ContentController');
+
     Route::get("content/comments/{id}", 'ContentController@comments');
 });
 

@@ -29,13 +29,39 @@ export default {
         }
       },
       mounted(){
-
+        this.getLikes();
       },
       methods:{
         toggleComment(){
 
             this.$emit('toggleComment', this.content.id);
 
+        },
+        saveLike(){
+          let data:{}
+          axios.post('/api/content/likes', {params:data})
+              .then(({data}) => {
+
+
+                this.$store.commit('content/setLikes', data.content.data);
+
+              })
+              .catch(({response}) => {
+
+              });
+        },
+        getLikes(){
+          let data={id:this.content.id}
+            axios.get('/api/content/likes', {params:data})
+                .then(({data}) => {
+
+
+                  this.$store.commit('content/setLikes', data.content.data);
+
+                })
+                .catch(({response}) => {
+
+                });
         }
       },
       computed:{

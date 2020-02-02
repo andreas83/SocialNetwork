@@ -38,7 +38,7 @@ export default {
 
     data() {
         return{
-        
+
           showComment:false,
           error:""
         }
@@ -54,7 +54,7 @@ export default {
 
             axios.get('/api/content')
                 .then(({data}) => {
-                  console.log(data.content.data.length);
+
                   for(var i=0, length= data.content.data.length; i < length; i++)
                   {
 

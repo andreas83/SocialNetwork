@@ -4,20 +4,29 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Content extends Model
+class ContentLike extends Model
 {
+
+
   /**
    * The attributes that are mass assignable.
    *
    * @var array
    */
   protected $fillable = [
-      'user_id', 'html_content', 'json_content', 'anonymous',
-      'has_comment', 'is_comment', 'parrent_id'
+      'user_id', 'content_id', 'key'
   ];
 
   /**
-   * Get the user that owns the content.
+   * Get the content that owns the like.
+   */
+  public function content()
+  {
+      return $this->belongsTo('App\Content');
+  }
+
+  /**
+   * Get the user that owns the like.
    */
   public function user()
   {

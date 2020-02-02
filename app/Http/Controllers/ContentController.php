@@ -37,7 +37,6 @@ class ContentController extends Controller
     }
 
     function index(Request $request){
-      $content = new Content;
       $content = DB::table('contents')->where("is_comment", "=", "false")->select('contents.*', 'users.name')->join('users', 'users.id', '=', 'contents.user_id')->orderBy("contents.id", "desc")->paginate(15);
       return response()->json([
            'content' => $content,
@@ -45,7 +44,6 @@ class ContentController extends Controller
     }
 
     function comments(Request $request, $id){
-      $content = new Content;
       $content = DB::table('contents')->
       where("is_comment", "=", "true")->
       where("parrent_id", "=", $id)->
