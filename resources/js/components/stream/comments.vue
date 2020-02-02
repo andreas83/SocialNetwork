@@ -1,8 +1,8 @@
 <template>
 
   <div class="row">
-    <Editor is-comment=true></Editor>
-  
+    <share-dialog is-comment=true></share-dialog>
+
     <comment>
       <author>
         Andreas B.

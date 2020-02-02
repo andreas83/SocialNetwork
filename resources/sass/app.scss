@@ -39,20 +39,16 @@
   }
 }
 
-
 .editor{
-  width:100%;
-  height:5em;
-  background-color: $color2;
-
-  &.comment{
-    color:$color3;
-    padding: 0.5em;
-    background-color: $color2;
-    width:100%;
-    height:3em;
+  width: 100%;
+  background-color: $color1;
+  padding: 1em;
+  border: 1px $color2 solid;
+  code{
+   background-color:   $color3;
   }
 }
+
 
   comment{
     display: block;

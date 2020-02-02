@@ -26,8 +26,10 @@ Vue.component('Register', require('./components/user/register').default);
 Vue.component('Login', require('./components/user/login').default);
 Vue.component('Strean', require('./components/stream/stream').default);
 Vue.component('Actions', require('./components/stream/actions').default);
-Vue.component('Editor', require('./components/stream/editor').default);
+Vue.component('ShareDialog', require('./components/stream/shareDialog').default);
 Vue.component('Comments', require('./components/stream/comments').default);
+
+
 
 const app = new Vue({
     el: '#app',

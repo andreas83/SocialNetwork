@@ -1,6 +1,6 @@
 <template>
   <div class="action">
-    <button class="icon-comment"/>
+    <button class="icon-comment" v-on:click="toggleComment"/>
     <button class="icon-comment-empty"/>
 
     <button class="icon-heart"> 3 </button>
@@ -30,7 +30,11 @@ export default {
 
       },
       methods:{
+        toggleComment(){
 
+            this.$emit('toggleComment', 'true');
+
+        }
       },
       computed:{
         isAuth(){

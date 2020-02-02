@@ -92,6 +92,12 @@
 
 /* '' */
 
+.icon-list:before {
+  content: "\E807";
+}
+
+/* '' */
+
 .icon-coffee:before {
   content: "\E808";
 }
@@ -162,16 +168,13 @@
 
 .editor {
   width: 100%;
-  height: 5em;
-  background-color: #e0ddcf;
+  background-color: #231f20;
+  padding: 1em;
+  border: 1px #e0ddcf solid;
 }
 
-.editor.comment {
-  color: #840032;
-  padding: 0.5em;
-  background-color: #e0ddcf;
-  width: 100%;
-  height: 3em;
+.editor code {
+  background-color: #840032;
 }
 
 comment {
