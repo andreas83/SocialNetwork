@@ -17,7 +17,7 @@
 
 @media screen and (max-width: 620px) {
   .row {
-    width: 89.6774193548%;
+    width: 100%;
   }
 }
 
@@ -324,8 +324,8 @@
   .col-sm-0 {
     box-sizing: border-box;
     width: 0%;
-    padding-left: 1.7985611511%;
-    padding-right: 1.7985611511%;
+    padding-left: 1.2096774194%;
+    padding-right: 1.2096774194%;
   }
 
   .col-sm-shift-0 {
@@ -335,8 +335,8 @@
   .col-sm-1 {
     box-sizing: border-box;
     width: 25%;
-    padding-left: 1.7985611511%;
-    padding-right: 1.7985611511%;
+    padding-left: 1.2096774194%;
+    padding-right: 1.2096774194%;
   }
 
   .col-sm-shift-1 {
@@ -346,8 +346,8 @@
   .col-sm-2 {
     box-sizing: border-box;
     width: 50%;
-    padding-left: 1.7985611511%;
-    padding-right: 1.7985611511%;
+    padding-left: 1.2096774194%;
+    padding-right: 1.2096774194%;
   }
 
   .col-sm-shift-2 {
@@ -357,8 +357,8 @@
   .col-sm-3 {
     box-sizing: border-box;
     width: 75%;
-    padding-left: 1.7985611511%;
-    padding-right: 1.7985611511%;
+    padding-left: 1.2096774194%;
+    padding-right: 1.2096774194%;
   }
 
   .col-sm-shift-3 {
@@ -368,8 +368,8 @@
   .col-sm-4 {
     box-sizing: border-box;
     width: 100%;
-    padding-left: 1.7985611511%;
-    padding-right: 1.7985611511%;
+    padding-left: 1.2096774194%;
+    padding-right: 1.2096774194%;
   }
 
   .col-sm-shift-4 {

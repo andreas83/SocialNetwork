@@ -1,5 +1,6 @@
 export default {
   namespaced: true,
+
   state:{
 
     content:[],
@@ -32,7 +33,12 @@ export default {
         return state.content.find(content => content.id === id)
     },
     getLikesById: (state) => (id) => {
-        return state.likes[id];
+
+         return state.likes.find(like => like.content_id == id);
+    },
+    getLikes: (state) =>  {
+
+         return state.likes;
     }
   },
   mutations:{
@@ -46,9 +52,16 @@ export default {
 
       state.content=[];
     },
-    updateLikes (state, likes) {
+    updateLikes (state, data) {
+      const index = state.likes.findIndex(item => item.content_id == data.content_id);
+      if (index !== -1)
+      {
+        state.likes.splice(index, 1, data);
+      }
+      else{
+        state.likes.push({"content_id": data.content_id, "likes": data.likes});
+      }
 
-      state.likes=likes;
     },
     setLikes (state, likes) {
       state.likes=likes;

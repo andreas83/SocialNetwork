@@ -17,7 +17,7 @@
   </div>
 </template>
 <script>
-
+import {mapGetters} from 'vuex';
 export default {
     name: "Actions",
     props:{
@@ -25,15 +25,16 @@ export default {
     },
     data() {
         return{
-
+          loaded:false,
           error:""
         }
       },
-      mounted(){
+      created(){
         this.getLikes();
-        console.log(this.getLikesByKey("beer"));
+
       },
       methods:{
+
         toggleComment(){
 
             this.$emit('toggleComment', this.content.id);
@@ -60,32 +61,41 @@ export default {
             axios.get('/api/content/likes', {params:data})
                 .then(({data}) => {
 
-
                   this.$store.commit('content/updateLikes', data.likes);
-
+                  this.loaded=true;
                 })
                 .catch(({response}) => {
 
                 });
         },
         getLikesByKey(key){
-          for(let i in  this.$store.getters["content/getLikesById"](this.content.id))
-          {
-            if(this.$store.getters["content/getLikesById"](this.content.id)[i].key==key)
+
+            if(!this.loaded)
+              return false;
+
+            var data=this.getStoredLikes;
+            var content_id=this.content.id;
+            const index = data.findIndex(item => item.content_id == content_id);
+
+            for(let i in data[index].likes)
             {
 
-              return this.$store.getters["content/getLikesById"](this.content.id)[i].total;
+                if(data[index].likes[i].key==key)
+                {
+                  return data[index].likes[i].total;
+                }
+
             }
-          }
-          return "";
+           return "";
         }
 
       },
       computed:{
-        likes: function(){
 
-          return this.$store.getters["content/getLikesById"];
-        },
+        ...mapGetters({
+          getStoredLikes: 'content/getLikes'
+        }),
+
         isAuth(){
           return this.$store.getters["user/isAuth"];
         }

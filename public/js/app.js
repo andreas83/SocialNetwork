@@ -2263,6 +2263,13 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -2281,6 +2288,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Actions",
   props: {
@@ -2288,12 +2296,12 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      loaded: false,
       error: ""
     };
   },
-  mounted: function mounted() {
+  created: function created() {
     this.getLikes();
-    console.log(this.getLikesByKey("beer"));
   },
   methods: {
     toggleComment: function toggleComment() {
@@ -2326,28 +2334,36 @@ __webpack_require__.r(__webpack_exports__);
         var data = _ref3.data;
 
         _this2.$store.commit('content/updateLikes', data.likes);
+
+        _this2.loaded = true;
       })["catch"](function (_ref4) {
         var response = _ref4.response;
       });
     },
     getLikesByKey: function getLikesByKey(key) {
-      for (var i in this.$store.getters["content/getLikesById"](this.content.id)) {
-        if (this.$store.getters["content/getLikesById"](this.content.id)[i].key == key) {
-          return this.$store.getters["content/getLikesById"](this.content.id)[i].total;
+      if (!this.loaded) return false;
+      var data = this.getStoredLikes;
+      var content_id = this.content.id;
+      var index = data.findIndex(function (item) {
+        return item.content_id == content_id;
+      });
+
+      for (var i in data[index].likes) {
+        if (data[index].likes[i].key == key) {
+          return data[index].likes[i].total;
         }
       }
 
       return "";
     }
   },
-  computed: {
-    likes: function likes() {
-      return this.$store.getters["content/getLikesById"];
-    },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])({
+    getStoredLikes: 'content/getLikes'
+  }), {
     isAuth: function isAuth() {
       return this.$store.getters["user/isAuth"];
     }
-  }
+  })
 });
 
 /***/ }),
@@ -77832,8 +77848,13 @@ __webpack_require__.r(__webpack_exports__);
     },
     getLikesById: function getLikesById(state) {
       return function (id) {
-        return state.likes[id];
+        return state.likes.find(function (like) {
+          return like.content_id == id;
+        });
       };
+    },
+    getLikes: function getLikes(state) {
+      return state.likes;
     }
   },
   mutations: {
@@ -77846,8 +77867,19 @@ __webpack_require__.r(__webpack_exports__);
     clearContent: function clearContent(state, content) {
       state.content = [];
     },
-    updateLikes: function updateLikes(state, likes) {
-      state.likes = likes;
+    updateLikes: function updateLikes(state, data) {
+      var index = state.likes.findIndex(function (item) {
+        return item.content_id == data.content_id;
+      });
+
+      if (index !== -1) {
+        state.likes.splice(index, 1, data);
+      } else {
+        state.likes.push({
+          "content_id": data.content_id,
+          "likes": data.likes
+        });
+      }
     },
     setLikes: function setLikes(state, likes) {
       state.likes = likes;

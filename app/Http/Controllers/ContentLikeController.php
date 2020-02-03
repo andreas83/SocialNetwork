@@ -24,7 +24,7 @@ class ContentLikeController extends Controller
       $likes = DB::table('content_likes')->select('key', DB::raw('count(*) as total'))->
       where("content_id", "=", $request->content_id)->groupBy("content_id")->groupBy("key")->get();
       return response()->json([
-           'likes' => [$request->content_id => $likes],
+           'likes' => ["content_id"=> $request->content_id , "likes"=> $likes],
        ]);
     }
 }
