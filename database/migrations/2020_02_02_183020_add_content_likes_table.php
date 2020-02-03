@@ -14,7 +14,7 @@ class AddContentLikesTable extends Migration
     public function up()
     {
       Schema::create('content_likes', function (Blueprint $table) {
-            $table->unsignedBigInteger('id');
+            $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('content_id');
             $table->foreign('user_id')->references('id')->on('users');

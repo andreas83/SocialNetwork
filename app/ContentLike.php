@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ContentLike extends Model
 {
-
+  public $timestamps = false;
 
   /**
    * The attributes that are mass assignable.

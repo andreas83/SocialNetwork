@@ -2259,9 +2259,96 @@ __webpack_require__.r(__webpack_exports__);
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/stream/actions.vue?vue&type=script&lang=js& ***!
   \*************************************************************************************************************************************************************************/
 /*! exports provided: default */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: /home/andreas/dev/SocialNetwork2/resources/js/components/stream/actions.vue: Unexpected token, expected \";\" (41:18)\n\n\u001b[0m \u001b[90m 39 | \u001b[39m        }\u001b[33m,\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 40 | \u001b[39m        saveLike(){\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 41 | \u001b[39m          let data\u001b[33m:\u001b[39m{}\u001b[0m\n\u001b[0m \u001b[90m    | \u001b[39m                  \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 42 | \u001b[39m          axios\u001b[33m.\u001b[39mpost(\u001b[32m'/api/content/likes'\u001b[39m\u001b[33m,\u001b[39m {params\u001b[33m:\u001b[39mdata})\u001b[0m\n\u001b[0m \u001b[90m 43 | \u001b[39m              \u001b[33m.\u001b[39mthen(({data}) \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[0m \u001b[90m 44 | \u001b[39m\u001b[0m\n    at Parser.raise (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:7017:17)\n    at Parser.unexpected (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:8395:16)\n    at Parser.semicolon (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:8377:40)\n    at Parser.parseVarStatement (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:11159:10)\n    at Parser.parseStatementContent (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:10757:21)\n    at Parser.parseStatement (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:10690:17)\n    at Parser.parseBlockOrModuleBlockBody (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:11264:25)\n    at Parser.parseBlockBody (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:11251:10)\n    at Parser.parseBlock (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:11235:10)\n    at Parser.parseFunctionBody (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:10252:24)\n    at Parser.parseFunctionBodyAndFinish (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:10222:10)\n    at Parser.parseMethod (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:10187:10)\n    at Parser.parseObjectMethod (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:10104:19)\n    at Parser.parseObjPropValue (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:10146:23)\n    at Parser.parseObjectMember (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:10070:10)\n    at Parser.parseObj (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:9991:25)\n    at Parser.parseExprAtom (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:9616:28)\n    at Parser.parseExprSubscripts (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:9259:23)\n    at Parser.parseMaybeUnary (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:9239:21)\n    at Parser.parseExprOps (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:9109:23)\n    at Parser.parseMaybeConditional (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:9082:23)\n    at Parser.parseMaybeAssign (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:9037:21)\n    at Parser.parseObjectProperty (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:10121:101)\n    at Parser.parseObjPropValue (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:10146:101)\n    at Parser.parseObjectMember (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:10070:10)\n    at Parser.parseObj (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:9991:25)\n    at Parser.parseExprAtom (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:9616:28)\n    at Parser.parseExprSubscripts (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:9259:23)\n    at Parser.parseMaybeUnary (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:9239:21)\n    at Parser.parseExprOps (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:9109:23)\n    at Parser.parseMaybeConditional (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:9082:23)\n    at Parser.parseMaybeAssign (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:9037:21)\n    at Parser.parseExportDefaultExpression (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:11866:24)\n    at Parser.parseExport (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:11768:31)\n    at Parser.parseStatementContent (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:10794:27)\n    at Parser.parseStatement (/home/andreas/dev/SocialNetwork2/node_modules/@babel/parser/lib/index.js:10690:17)");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "Actions",
+  props: {
+    content: false
+  },
+  data: function data() {
+    return {
+      error: ""
+    };
+  },
+  mounted: function mounted() {
+    this.getLikes();
+    console.log(this.getLikesByKey("beer"));
+  },
+  methods: {
+    toggleComment: function toggleComment() {
+      this.$emit('toggleComment', this.content.id);
+    },
+    saveLike: function saveLike(key) {
+      var _this = this;
+
+      var data = {
+        key: key,
+        content_id: this.content.id
+      };
+      axios.post('/api/content/likes', data).then(function (_ref) {
+        var data = _ref.data;
+
+        _this.$store.commit('content/updateLikes', data.likes);
+      })["catch"](function (_ref2) {
+        var response = _ref2.response;
+      });
+    },
+    getLikes: function getLikes() {
+      var _this2 = this;
+
+      var data = {
+        content_id: this.content.id
+      };
+      axios.get('/api/content/likes', {
+        params: data
+      }).then(function (_ref3) {
+        var data = _ref3.data;
+
+        _this2.$store.commit('content/updateLikes', data.likes);
+      })["catch"](function (_ref4) {
+        var response = _ref4.response;
+      });
+    },
+    getLikesByKey: function getLikesByKey(key) {
+      for (var i in this.$store.getters["content/getLikesById"](this.content.id)) {
+        if (this.$store.getters["content/getLikesById"](this.content.id)[i].key == key) {
+          return this.$store.getters["content/getLikesById"](this.content.id)[i].total;
+        }
+      }
+
+      return "";
+    }
+  },
+  computed: {
+    likes: function likes() {
+      return this.$store.getters["content/getLikesById"];
+    },
+    isAuth: function isAuth() {
+      return this.$store.getters["user/isAuth"];
+    }
+  }
+});
 
 /***/ }),
 
@@ -59690,23 +59777,122 @@ var render = function() {
         })
       : _vm._e(),
     _vm._v(" "),
-    _c("button", { staticClass: "icon-heart" }, [_vm._v(" 3 ")]),
+    _c(
+      "button",
+      {
+        staticClass: "icon-heart",
+        on: {
+          click: function($event) {
+            return _vm.saveLike("heart")
+          }
+        }
+      },
+      [_vm._v(_vm._s(_vm.getLikesByKey("heart")))]
+    ),
     _vm._v(" "),
-    _c("button", { staticClass: "icon-happy" }),
+    _c(
+      "button",
+      {
+        staticClass: "icon-happy",
+        on: {
+          click: function($event) {
+            return _vm.saveLike("happy")
+          }
+        }
+      },
+      [_vm._v(_vm._s(_vm.getLikesByKey("happy")))]
+    ),
     _vm._v(" "),
-    _c("button", { staticClass: "icon-wink" }),
+    _c(
+      "button",
+      {
+        staticClass: "icon-wink",
+        on: {
+          click: function($event) {
+            return _vm.saveLike("wink")
+          }
+        }
+      },
+      [_vm._v(_vm._s(_vm.getLikesByKey("wink")))]
+    ),
     _vm._v(" "),
-    _c("button", { staticClass: "icon-like" }),
+    _c(
+      "button",
+      {
+        staticClass: "icon-like",
+        on: {
+          click: function($event) {
+            return _vm.saveLike("like")
+          }
+        }
+      },
+      [_vm._v(_vm._s(_vm.getLikesByKey("like")))]
+    ),
     _vm._v(" "),
-    _c("button", { staticClass: "icon-devil" }),
+    _c(
+      "button",
+      {
+        staticClass: "icon-devil",
+        on: {
+          click: function($event) {
+            return _vm.saveLike("devil")
+          }
+        }
+      },
+      [_vm._v(_vm._s(_vm.getLikesByKey("devil")))]
+    ),
     _vm._v(" "),
-    _c("button", { staticClass: "icon-coffee" }),
+    _c(
+      "button",
+      {
+        staticClass: "icon-coffee",
+        on: {
+          click: function($event) {
+            return _vm.saveLike("coffee")
+          }
+        }
+      },
+      [_vm._v(_vm._s(_vm.getLikesByKey("coffee")))]
+    ),
     _vm._v(" "),
-    _c("button", { staticClass: "icon-sunglasses" }),
+    _c(
+      "button",
+      {
+        staticClass: "icon-sunglasses",
+        on: {
+          click: function($event) {
+            return _vm.saveLike("sunglasses")
+          }
+        }
+      },
+      [_vm._v(_vm._s(_vm.getLikesByKey("sunglasses")))]
+    ),
     _vm._v(" "),
-    _c("button", { staticClass: "icon-displeased" }),
+    _c(
+      "button",
+      {
+        staticClass: "icon-displeased",
+        on: {
+          click: function($event) {
+            return _vm.saveLike("displeased")
+          }
+        }
+      },
+      [_vm._v(_vm._s(_vm.getLikesByKey("displeased")))]
+    ),
     _vm._v(" "),
-    _c("button", { staticClass: "icon-beer" })
+    _c(
+      "button",
+      {
+        staticClass: "icon-beer",
+        on: {
+          click: function($event) {
+            return _vm.saveLike("beer")
+          }
+        }
+      },
+      [_vm._v(_vm._s(_vm.getLikesByKey("beer")))]
+    )
   ])
 }
 var staticRenderFns = []
@@ -77624,8 +77810,12 @@ __webpack_require__.r(__webpack_exports__);
       var commit = _ref3.commit;
       commit('appendContent', content);
     },
-    setLikes: function setLikes(_ref4, likes) {
+    updateLikes: function updateLikes(_ref4, likes) {
       var commit = _ref4.commit;
+      commit('updateLikes', likes);
+    },
+    setLikes: function setLikes(_ref5, likes) {
+      var commit = _ref5.commit;
       commit('setLikes', likes);
     }
   },
@@ -77639,6 +77829,11 @@ __webpack_require__.r(__webpack_exports__);
           return content.id === id;
         });
       };
+    },
+    getLikesById: function getLikesById(state) {
+      return function (id) {
+        return state.likes[id];
+      };
     }
   },
   mutations: {
@@ -77650,6 +77845,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     clearContent: function clearContent(state, content) {
       state.content = [];
+    },
+    updateLikes: function updateLikes(state, likes) {
+      state.likes = likes;
     },
     setLikes: function setLikes(state, likes) {
       state.likes = likes;

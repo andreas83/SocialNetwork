@@ -17,6 +17,9 @@ export default {
       commit('appendContent', content);
 
     },
+    updateLikes ({commit}, likes) {
+      commit('updateLikes', likes);
+    },
     setLikes ({commit}, likes) {
       commit('setLikes', likes);
     }
@@ -27,6 +30,9 @@ export default {
     getContent: state => state.content,
     getContentById: (state) => (id) => {
         return state.content.find(content => content.id === id)
+    },
+    getLikesById: (state) => (id) => {
+        return state.likes[id];
     }
   },
   mutations:{
@@ -40,7 +46,10 @@ export default {
 
       state.content=[];
     },
+    updateLikes (state, likes) {
 
+      state.likes=likes;
+    },
     setLikes (state, likes) {
       state.likes=likes;
     }
