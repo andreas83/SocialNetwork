@@ -121,6 +121,11 @@ button {
     cursor: pointer;
     text-decoration: underline;
   }
+
+  &.small{
+    font-size: 0.5em;
+  }
+
   &.default{
     background-color: $color4;
   }

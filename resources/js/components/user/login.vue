@@ -43,7 +43,6 @@
 
         login(e) {
           e.preventDefault();
-            let token = document.head.querySelector('meta[name="csrf-token"]');
             let data = {
 
                 email: this.email,

@@ -12,7 +12,9 @@
     },
     "login" : "login",
     "register" : "register",
-    "abort" : "abort"
+    "abort" : "abort",
+    "delete" : "delete",
+    "edit" : "edit"
 
   },
   "Share" : "Share",

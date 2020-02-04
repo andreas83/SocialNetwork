@@ -8,6 +8,8 @@
           {{data.name}}
         </author>
         <date>{{data.created_at}}</date>
+        <button class="btn default small" @click="deleteContent(data.id)">{{$t("form.delete")}}</button>
+        <button class="btn default small" @click="editContent(data.id)">{{$t("form.edit")}}</button>
         <content v-html="data.html_content"></content>
         <actions :content=data  v-on:toggleComment="toggleComment"></actions>
       </div>
@@ -35,6 +37,12 @@ export default {
         this.getComments();
       },
       methods:{
+         deleteContent(id){
+          axios.delete('/api/content/'+id).then(({data}) => {
+              this.$store.commit('content/deleteContent', id);
+          })
+
+        },
         getComments(){
 
           axios.get('/api/content/comments/'+this.parrent_content.id)

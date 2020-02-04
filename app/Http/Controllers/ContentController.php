@@ -43,6 +43,15 @@ class ContentController extends Controller
        ]);
     }
 
+    function destroy(Request $request, $id){
+      $content=  Content::find($id);
+      if($content->user_id==Auth::user()->id)
+      {
+        
+        $content->destroy($id);
+      }
+    }
+
     function comments(Request $request, $id){
       $content = DB::table('contents')->
       where("is_comment", "=", "true")->

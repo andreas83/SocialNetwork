@@ -18,7 +18,7 @@ class AddContentLikesTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('content_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('content_id')->references('id')->on('contents');
+            $table->foreign('content_id')->references('id')->on('contents')->onDelete('cascade');
             $table->char("key");
         });
     }

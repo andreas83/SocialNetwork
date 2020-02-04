@@ -14,6 +14,10 @@ export default {
       commit('clearContent', content);
 
     },
+    deelteContent({commit},  content_id){
+      commit('deelteContent', content_id);
+
+    },
     appendContent({commit},  content){
       commit('appendContent', content);
 
@@ -51,6 +55,10 @@ export default {
     clearContent(state, content){
 
       state.content=[];
+    },
+    deleteContent(state, content_id){
+      const index = state.content.findIndex(item => item.id == content_id);
+      state.content.splice(index, 1);
     },
     updateLikes (state, data) {
       const index = state.likes.findIndex(item => item.content_id == data.content_id);

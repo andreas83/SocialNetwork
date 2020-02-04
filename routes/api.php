@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
-
+use App\User;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -22,7 +22,13 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     Route::get("content/comments/{id}", 'ContentController@comments');
 });
+Route::middleware('auth:api')->get('/user/{name}', function (Request $request) {
+      return User::where("name" , '=', $request->name)->select("id", "name", "created_at")->first();
 
+
+});
 Route::middleware('auth:api')->get('/user', function (Request $request) {
+
+
     return $request->user();
 });

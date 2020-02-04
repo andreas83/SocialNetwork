@@ -24,7 +24,7 @@ Vue.config.ignoredElements = ['comment', 'date', 'author', 'comments', 'actions'
 
 Vue.component('Register', require('./components/user/register').default);
 Vue.component('Login', require('./components/user/login').default);
-Vue.component('Strean', require('./components/stream/stream').default);
+Vue.component('Stream', require('./components/stream/stream').default);
 Vue.component('Actions', require('./components/stream/actions').default);
 Vue.component('ShareDialog', require('./components/stream/shareDialog').default);
 Vue.component('Comments', require('./components/stream/comments').default);
@@ -40,7 +40,8 @@ const app = new Vue({
     data() {
       return {}
     },
-    mounted(){
+    beforeCreate()
+    {
       axios.interceptors.request.use(
         (config) => {
           config.headers['Authorization'] = "Bearer "+localStorage.getItem('token');
@@ -51,7 +52,10 @@ const app = new Vue({
           return Promise.reject(error);
         }
       );
-      axios.get('/api/user', )
+    },
+    mounted(){
+
+      axios.get('/api/user' )
           .then(({data}) => {
             this.$store.commit('user/setUser', data);
             this.$store.commit('user/setAuth', true);

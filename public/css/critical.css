@@ -531,6 +531,10 @@ button:hover {
   text-decoration: underline;
 }
 
+button.small {
+  font-size: 0.5em;
+}
+
 button.default {
   background-color: #e59500;
 }

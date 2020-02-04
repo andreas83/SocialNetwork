@@ -13,10 +13,16 @@
         </picture>
         </div>
         <div class="col-lg-10  col-md-10">
-          <author>
+          <router-link :to="{ name: 'user', params: {name:data.name, user_id:data.user_id} }">
+          <author >
             {{data.name}}
+
           </author>
+          </router-link>
           <date>{{data.created_at}}</date>
+          <button class="btn default small" v-if="data.user_id==user.id" @click="deleteContent(data.id)">{{$t("form.delete")}}</button>
+          <button class="btn default small" v-if="data.user_id==user.id" @click="editContent(data.id)">{{$t("form.edit")}}</button>
+
           <content v-html="data.html_content">
 
           </content>
@@ -39,7 +45,7 @@ export default {
     data() {
         return{
 
-          showComment:false,
+
           error:""
         }
       },
@@ -50,6 +56,15 @@ export default {
       },
       methods:{
 
+        deleteContent(id){
+          axios.delete('/api/content/'+id).then(({data}) => {
+            this.$store.commit('content/deleteContent', id);
+          })
+
+        },
+        editContent(){
+
+        },
         getContent(){
 
             axios.get('/api/content')
@@ -90,6 +105,9 @@ export default {
       computed:{
         content(){
           return this.$store.getters["content/getContent"];
+        },
+        user(){
+          return this.$store.getters["user/getUser"];
         },
         isAuth(){
           return this.$store.getters["user/isAuth"];

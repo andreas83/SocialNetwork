@@ -3,7 +3,7 @@
   <div class="row">
 
     <div v-if="isAuth" class="col-lg-12" >
-      <strean></strean>
+      <stream></stream>
     </div>
 
     <div v-if="isAuth==false" class="col-lg-6">

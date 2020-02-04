@@ -12,7 +12,9 @@
     },
     "login" : "Anmelden",
     "register" : "Registrieren",
-    "abort" : "Abbruch"
+    "abort" : "Abbruch",
+    "delete" : "Löschen",
+    "edit" : "Bearbeiten"
 
   },
   "Share" : "Teilen",

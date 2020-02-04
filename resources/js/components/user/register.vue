@@ -31,7 +31,7 @@
 
 
     export default {
-    name:"Register",
+    name:"register",
     data() {
 
         return {
