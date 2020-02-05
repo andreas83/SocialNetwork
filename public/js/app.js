@@ -2594,7 +2594,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2606,6 +2605,12 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     isComment: {
       "default": false
+    },
+    edit: {
+      dafault: false
+    },
+    content_id: {
+      dafault: 0
     },
     parrent_id: {
       "default": 0
@@ -2629,31 +2634,64 @@ __webpack_require__.r(__webpack_exports__);
     save: function save(e) {
       var _this = this;
 
-      var data = {
-        html_content: this.editor.getHTML(),
-        json_content: this.editor.getJSON(),
-        has_comment: false,
-        is_comment: this.isComment,
-        parrent_id: this.parrent_id,
-        anonymous: true,
-        visibility: 'friends'
-      };
-      axios.post('/api/content', data).then(function (_ref) {
-        var data = _ref.data;
+      if (this.edit == true) {
+        var data = {
+          html_content: this.editor.getHTML(),
+          json_content: this.editor.getJSON(),
+          has_comment: this.content.has_comment,
+          is_comment: this.content.is_comment,
+          parrent_id: this.content.parrent_id,
+          anonymous: true,
+          visibility: 'friends'
+        };
+        axios.put('/api/content/' + this.content.id, data).then(function (_ref) {
+          var data = _ref.data;
 
-        _this.$store.commit('content/clearContent');
+          _this.$store.commit('content/updateContent', data);
 
-        _this.$store.commit('content/appendContent', data.content);
+          _this.editor.setContent("<h2>Updated</h2>");
+        })["catch"](function (_ref2) {
+          var response = _ref2.response;
+          _this.show = true;
+          _this.error = response.data.errors;
+        });
+        return true;
+      } else {
+        var _data = {
+          html_content: this.editor.getHTML(),
+          json_content: this.editor.getJSON(),
+          has_comment: false,
+          is_comment: this.isComment,
+          parrent_id: this.parrent_id,
+          anonymous: true,
+          visibility: 'friends'
+        };
+        axios.post('/api/content', _data).then(function (_ref3) {
+          var data = _ref3.data;
 
-        _this.editor.setContent("<h2>Thank You</h2>");
-      })["catch"](function (_ref2) {
-        var response = _ref2.response;
-        _this.show = true;
-        _this.error = response.data.errors;
-      });
+          _this.$store.commit('content/clearContent');
+
+          _this.$store.commit('content/appendContent', data.content);
+
+          _this.editor.setContent("<h2>Thank You</h2>");
+        })["catch"](function (_ref4) {
+          var response = _ref4.response;
+          _this.show = true;
+          _this.error = response.data.errors;
+        });
+      }
+    }
+  },
+  watch: {
+    edit: function edit() {
+      console.log("trigger");
+      this.editor.setContent(this.content.html_content);
     }
   },
   computed: {
+    content: function content() {
+      return this.$store.getters["content/getContentById"](this.content_id);
+    },
     isAuth: function isAuth() {
       return this.$store.getters["user/isAuth"];
     }
@@ -2714,6 +2752,8 @@ __webpack_require__.r(__webpack_exports__);
   name: "Stream",
   data: function data() {
     return {
+      isEdit: false,
+      content_id: 0,
       error: ""
     };
   },
@@ -2730,7 +2770,10 @@ __webpack_require__.r(__webpack_exports__);
         _this.$store.commit('content/deleteContent', id);
       });
     },
-    editContent: function editContent() {},
+    editContent: function editContent(id) {
+      this.isEdit = true;
+      this.content_id = id;
+    },
     getContent: function getContent() {
       var _this2 = this;
 
@@ -60404,7 +60447,16 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row" }, [
-    _c("div", { staticClass: "col-lg-12" }, [_c("share-dialog")], 1),
+    _c(
+      "div",
+      { staticClass: "col-lg-12" },
+      [
+        _c("share-dialog", {
+          attrs: { edit: _vm.isEdit, content_id: _vm.content_id }
+        })
+      ],
+      1
+    ),
     _vm._v(" "),
     _c(
       "div",
@@ -78345,20 +78397,24 @@ __webpack_require__.r(__webpack_exports__);
       var commit = _ref2.commit;
       commit('clearContent', content);
     },
-    deelteContent: function deelteContent(_ref3, content_id) {
+    updateContent: function updateContent(_ref3, content) {
       var commit = _ref3.commit;
-      commit('deelteContent', content_id);
+      commit('updateContent', content);
     },
-    appendContent: function appendContent(_ref4, content) {
+    delteContent: function delteContent(_ref4, content_id) {
       var commit = _ref4.commit;
+      commit('delteContent', content_id);
+    },
+    appendContent: function appendContent(_ref5, content) {
+      var commit = _ref5.commit;
       commit('appendContent', content);
     },
-    updateLikes: function updateLikes(_ref5, likes) {
-      var commit = _ref5.commit;
+    updateLikes: function updateLikes(_ref6, likes) {
+      var commit = _ref6.commit;
       commit('updateLikes', likes);
     },
-    setLikes: function setLikes(_ref6, likes) {
-      var commit = _ref6.commit;
+    setLikes: function setLikes(_ref7, likes) {
+      var commit = _ref7.commit;
       commit('setLikes', likes);
     }
   },
@@ -78390,6 +78446,17 @@ __webpack_require__.r(__webpack_exports__);
     },
     appendContent: function appendContent(state, content) {
       state.content.push(content);
+    },
+    updateContent: function updateContent(state, data) {
+      var index = state.content.findIndex(function (item) {
+        return item.id == data.content.id;
+      });
+
+      if (index !== -1) {
+        state.content.splice(index, 1, data.content);
+      } else {
+        state.content.push(data);
+      }
     },
     clearContent: function clearContent(state, content) {
       state.content = [];

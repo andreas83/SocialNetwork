@@ -2,7 +2,7 @@
 
   <div class="row">
     <div class="col-lg-12">
-      <share-dialog ></share-dialog>
+      <share-dialog :edit="isEdit" :content_id="content_id"></share-dialog>
     </div>
     <div class="col-lg-12">
 
@@ -44,8 +44,8 @@ export default {
 
     data() {
         return{
-
-
+          isEdit:false,
+          content_id:0,
           error:""
         }
       },
@@ -62,8 +62,9 @@ export default {
           })
 
         },
-        editContent(){
-
+        editContent(id){
+          this.isEdit=true;
+          this.content_id=id;
         },
         getContent(){
 

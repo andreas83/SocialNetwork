@@ -36,6 +36,28 @@ class ContentController extends Controller
        ]);
     }
 
+    function update(Request $request, $id)
+    {
+
+      $content = Content::find($id);
+      $content->json_content=json_encode($request->json_content);
+      $content->html_content=$request->html_content;
+
+
+
+
+      if($content->user_id == Auth::user()->id)
+      {
+          $content->save();
+      }
+
+
+
+      return response()->json([
+           'content' => $content,
+       ]);
+    }
+
     function index(Request $request){
       $content = DB::table('contents')->where("is_comment", "=", "false")->select('contents.*', 'users.name')->join('users', 'users.id', '=', 'contents.user_id')->orderBy("contents.id", "desc")->paginate(15);
       return response()->json([
@@ -47,7 +69,7 @@ class ContentController extends Controller
       $content=  Content::find($id);
       if($content->user_id==Auth::user()->id)
       {
-        
+
         $content->destroy($id);
       }
     }

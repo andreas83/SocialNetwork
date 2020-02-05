@@ -14,8 +14,11 @@ export default {
       commit('clearContent', content);
 
     },
-    deelteContent({commit},  content_id){
-      commit('deelteContent', content_id);
+    updateContent ({commit}, content) {
+      commit('updateContent', content);
+    },
+    delteContent({commit},  content_id){
+      commit('delteContent', content_id);
 
     },
     appendContent({commit},  content){
@@ -51,6 +54,16 @@ export default {
     },
     appendContent(state, content){
       state.content.push(content);
+    },
+    updateContent (state, data) {
+      const index = state.content.findIndex(item => item.id == data.content.id);
+      if (index !== -1)
+      {
+        state.content.splice(index, 1, data.content);
+      }
+      else{
+        state.content.push(data);
+      }
     },
     clearContent(state, content){
 

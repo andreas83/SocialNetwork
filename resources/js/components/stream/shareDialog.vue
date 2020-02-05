@@ -134,7 +134,6 @@
       <button class="btn default" v-if="isComment" @click.prevent="save"> {{$t('Comment')}}</button>
 
 
-
   </div>
 </template>
 <script>
@@ -150,6 +149,12 @@ export default {
     props: {
       isComment:{
         default: false
+      },
+      edit:{
+        dafault:false
+      },
+      content_id:{
+        dafault : 0
       },
       parrent_id:{
         default : 0
@@ -190,31 +195,67 @@ export default {
     methods:{
       save(e){
 
-          let data = {
-              html_content: this.editor.getHTML(),
-              json_content: this.editor.getJSON(),
-              has_comment: false,
-              is_comment:this.isComment,
-              parrent_id: this.parrent_id,
-              anonymous: true,
-              visibility: 'friends'
-          };
-      
-          axios.post('/api/content', data)
-              .then(({data}) => {
 
-                this.$store.commit('content/clearContent');
-                this.$store.commit('content/appendContent', data.content);
-                this.editor.setContent("<h2>Thank You</h2>");
-              })
-              .catch(({response}) => {
-                this.show=true;
-                this.error=response.data.errors;
-              });
+          if(this.edit==true)
+          {
+            let data = {
+                html_content: this.editor.getHTML(),
+                json_content: this.editor.getJSON(),
+                has_comment: this.content.has_comment,
+                is_comment:this.content.is_comment,
+                parrent_id: this.content.parrent_id,
+                anonymous: true,
+                visibility: 'friends'
+            };
+            axios.put('/api/content/'+this.content.id, data)
+                .then(({data}) => {
+
+                  this.$store.commit('content/updateContent', data);
+
+                  this.editor.setContent("<h2>Updated</h2>");
+                
+                })
+                .catch(({response}) => {
+                  this.show=true;
+                  this.error=response.data.errors;
+                });
+            return true;
+          }else {
+            let data = {
+                html_content: this.editor.getHTML(),
+                json_content: this.editor.getJSON(),
+                has_comment: false,
+                is_comment:this.isComment,
+                parrent_id: this.parrent_id,
+                anonymous: true,
+                visibility: 'friends'
+            };
+            axios.post('/api/content', data)
+                .then(({data}) => {
+
+                  this.$store.commit('content/clearContent');
+                  this.$store.commit('content/appendContent', data.content);
+                  this.editor.setContent("<h2>Thank You</h2>");
+                })
+                .catch(({response}) => {
+                  this.show=true;
+                  this.error=response.data.errors;
+                });
+          }
+
       }
 
     },
+    watch:{
+      edit(){
+        console.log("trigger");
+        this.editor.setContent(this.content.html_content);
+      }
+    },
     computed:{
+      content(){
+        return this.$store.getters["content/getContentById"](this.content_id);
+      },
       isAuth(){
         return this.$store.getters["user/isAuth"];
       }
