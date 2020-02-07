@@ -2593,7 +2593,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2622,7 +2622,7 @@ __webpack_require__.r(__webpack_exports__);
         content: '<h1>Yay Headlines!</h1>         <p>All these <strong>cool tags</strong> are working now.</p>',
         extensions: [new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Blockquote"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["CodeBlock"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["HardBreak"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Heading"]({
           levels: [1, 2, 3]
-        }), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["BulletList"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["OrderedList"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["ListItem"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["TodoItem"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["TodoList"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Bold"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Code"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Italic"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Link"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Strike"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Underline"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["History"]()]
+        }), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["BulletList"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["OrderedList"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["ListItem"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["TodoItem"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["TodoList"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Bold"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Code"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Italic"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Link"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Strike"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Underline"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["History"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Image"]()]
       })
     };
   },
@@ -2631,6 +2631,45 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {},
   methods: {
+    openFileDialog: function openFileDialog(command) {
+      var element = document.createElement('div');
+      element.innerHTML = '<input multiple="multiple" type="file">';
+      var fileInput = element.firstChild;
+      var vm = this;
+      var token = this.user.api_token;
+      fileInput.addEventListener('change', function () {
+        var formData = new FormData();
+
+        for (var i = 0; i < fileInput.files.length; i++) {
+          var file = fileInput.files[i];
+          formData.append('upload[]', file, file.name);
+        }
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'api/content/upload', true);
+        xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+
+        xhr.onload = function () {
+          if (xhr.status === 200) {
+            // Dateien wurden hochgeladen
+            ;
+            var result = JSON.parse(xhr.responseText);
+
+            for (var index in result) {
+              var src = result[index];
+              command({
+                src: src
+              });
+            }
+          } else {
+            vm.error = xhr.responseText;
+          }
+        };
+
+        xhr.send(formData);
+      });
+      fileInput.click();
+    },
     save: function save(e) {
       var _this = this;
 
@@ -2684,7 +2723,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     edit: function edit() {
-      console.log("trigger");
       this.editor.setContent(this.content.html_content);
     }
   },
@@ -2694,6 +2732,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     isAuth: function isAuth() {
       return this.$store.getters["user/isAuth"];
+    },
+    user: function user() {
+      return this.$store.getters["user/getUser"];
     }
   }
 });
@@ -60384,7 +60425,29 @@ var render = function() {
         attrs: { editor: _vm.editor }
       }),
       _vm._v(" "),
-      _c("button", { staticClass: "default icon-picture" }),
+      _c("editor-menu-bar", {
+        staticClass: "btn default",
+        attrs: { editor: _vm.editor },
+        scopedSlots: _vm._u([
+          {
+            key: "default",
+            fn: function(ref) {
+              var commands = ref.commands
+              var isActive = ref.isActive
+              return [
+                _c("button", {
+                  staticClass: "default icon-picture",
+                  on: {
+                    click: function($event) {
+                      return _vm.openFileDialog(commands.image)
+                    }
+                  }
+                })
+              ]
+            }
+          }
+        ])
+      }),
       _vm._v(" "),
       !_vm.isComment
         ? _c(

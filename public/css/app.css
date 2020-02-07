@@ -1,5 +1,7 @@
 @charset "UTF-8";
 
+/* FEMI */
+
 @font-face {
   font-family: "fontello";
   src: url("/fonts/fontello.eot?61047590");
@@ -129,18 +131,18 @@
 /* '' */
 
 .card {
-  background-color: #534b52;
+  background-color: #95a3b3;
   padding-top: 1em;
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
 }
 
 .card header {
   font-size: 2em;
-  color: #e0ddcf;
+  color: white;
 }
 
 .card author {
-  color: #e0ddcf;
+  color: white;
 }
 
 .card picture img {
@@ -161,7 +163,7 @@
 }
 
 .action button:active {
-  color: #e0ddcf;
+  color: white;
   border: none;
   outline: none;
 }
@@ -172,13 +174,13 @@
 
 .editor {
   width: 100%;
-  background-color: #231f20;
+  background-color: #222222;
   padding: 1em;
-  border: 1px #e0ddcf solid;
+  border: 1px white solid;
 }
 
 .editor code {
-  background-color: #840032;
+  background-color: #4b4e6d;
 }
 
 .menubar button {

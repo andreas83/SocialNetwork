@@ -116,7 +116,6 @@
                >
                 redo
                </button>
-
              </div>
       </editor-menu-bar>
 
@@ -124,9 +123,9 @@
 
       <editor-content class="editor" :editor="editor" />
 
-
-      <button class="default icon-picture"/>
-
+      <editor-menu-bar class="btn default" :editor="editor" v-slot="{ commands, isActive }">
+        <button class="default icon-picture" @click="openFileDialog(commands.image)"/>
+      </editor-menu-bar>
 
 
 
@@ -138,7 +137,8 @@
 </template>
 <script>
 import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
-import {  Blockquote,  CodeBlock,  HardBreak,  Heading,  OrderedList,  BulletList,  ListItem,  TodoItem,  TodoList,  Bold,  Code,  Italic,  Link,  Strike,  Underline,  History} from 'tiptap-extensions'
+import {  Blockquote,  CodeBlock,  HardBreak,  Heading,  OrderedList,  BulletList,  ListItem,  TodoItem,  TodoList,  Bold,  Code,  Italic,  Link,  Strike,  Underline,  History, Image} from 'tiptap-extensions'
+import { Node } from 'tiptap'
 
 export default {
     name: "shareDialog",
@@ -182,6 +182,7 @@ export default {
              new Strike(),
              new Underline(),
              new History(),
+             new Image()
            ],
         })
       }
@@ -193,6 +194,50 @@ export default {
 
     },
     methods:{
+
+      openFileDialog(command){
+        var element = document.createElement('div');
+        element.innerHTML = '<input multiple="multiple" type="file">';
+        let fileInput = element.firstChild;
+        let vm=this;
+        let token=this.user.api_token;
+        fileInput.addEventListener('change', function() {
+          let formData = new FormData();
+
+          for (let i = 0; i < fileInput.files.length; i++) {
+              let file = fileInput.files[i];
+              formData.append('upload[]', file, file.name);
+          }
+          var xhr = new XMLHttpRequest();
+
+
+
+          xhr.open('POST', 'api/content/upload', true);
+          xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+          xhr.onload = function () {
+              if (xhr.status === 200) {
+              // Dateien wurden hochgeladen
+              ;
+                const result = JSON.parse(xhr.responseText);
+                for(let index in result)
+                {
+                  const src= result[index];
+                  command({src})
+                }
+
+
+              } else {
+                  vm.error = xhr.responseText;
+              }
+          };
+          xhr.send(formData);
+
+
+        });
+
+        fileInput.click();
+      },
+
       save(e){
 
 
@@ -213,7 +258,7 @@ export default {
                   this.$store.commit('content/updateContent', data);
 
                   this.editor.setContent("<h2>Updated</h2>");
-                
+
                 })
                 .catch(({response}) => {
                   this.show=true;
@@ -248,7 +293,7 @@ export default {
     },
     watch:{
       edit(){
-        console.log("trigger");
+
         this.editor.setContent(this.content.html_content);
       }
     },
@@ -258,6 +303,9 @@ export default {
       },
       isAuth(){
         return this.$store.getters["user/isAuth"];
+      },
+      user(){
+        return this.$store.getters["user/getUser"];
       }
     }
   }

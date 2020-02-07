@@ -21,14 +21,12 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::resource('content', 'ContentController');
 
     Route::get("content/comments/{id}", 'ContentController@comments');
+    Route::post("content/upload", 'ContentController@upload');
 });
 Route::middleware('auth:api')->get('/user/{name}', function (Request $request) {
       return User::where("name" , '=', $request->name)->select("id", "name", "created_at")->first();
 
-
 });
 Route::middleware('auth:api')->get('/user', function (Request $request) {
-
-
     return $request->user();
 });

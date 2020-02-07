@@ -377,11 +377,13 @@
   }
 }
 
+/* FEMI */
+
 body {
   font-family: "Raleway", sans-serif;
   font-size: 22px;
-  background-color: #231f20;
-  color: #e59500;
+  background-color: #222222;
+  color: #84dcc6;
   margin: 0px;
 }
 
@@ -396,44 +398,44 @@ body {
 }
 
 h6 {
-  color: #e0ddcf;
+  color: white;
   font-size: 0.5666666667em;
   font-family: "Questrial", sans-serif;
 }
 
 h5 {
-  color: #e0ddcf;
+  color: white;
   font-size: 1.1333333333em;
   font-family: "Questrial", sans-serif;
 }
 
 h4 {
-  color: #e0ddcf;
+  color: white;
   font-size: 1.7em;
   font-family: "Questrial", sans-serif;
 }
 
 h3 {
-  color: #e0ddcf;
+  color: white;
   font-size: 2.2666666667em;
   font-family: "Questrial", sans-serif;
 }
 
 h2 {
-  color: #e0ddcf;
+  color: white;
   font-size: 2.8333333333em;
   font-family: "Questrial", sans-serif;
 }
 
 h1 {
-  color: #e0ddcf;
+  color: white;
   font-size: 3.4em;
   font-family: "Questrial", sans-serif;
 }
 
 nav {
   position: fixed;
-  background-color: #e59500;
+  background-color: #84dcc6;
   width: 100%;
   height: 55px;
   display: -webkit-box;
@@ -445,14 +447,14 @@ nav h1 {
   margin-top: 0.5em;
   margin-left: 10px;
   font-size: 1.3em;
-  color: #231f20;
+  color: #222222;
   -webkit-box-flex: 3;
           flex-grow: 3;
   flex-basis: auto;
 }
 
 .language-select {
-  color: #e0ddcf;
+  color: white;
   flex-shrink: 1;
   width: 5em;
   padding: 0.5em;
@@ -463,7 +465,7 @@ nav h1 {
 }
 
 .language-select ul {
-  color: #231f20;
+  color: #222222;
   font-weight: bold;
   list-style: none;
   margin: 0;
@@ -479,14 +481,14 @@ nav h1 {
 }
 
 .language-select ul ul li {
-  color: #e0ddcf;
+  color: white;
   padding: 0.5em;
   width: 5em;
-  background-color: #534b52;
+  background-color: #95a3b3;
 }
 
 a {
-  color: #e0ddcf;
+  color: white;
   text-decoration: none;
 }
 
@@ -495,7 +497,7 @@ img {
 }
 
 small {
-  color: #534b52;
+  color: #95a3b3;
 }
 
 .form-field {
@@ -505,7 +507,7 @@ small {
 .form-field label {
   width: 100%;
   display: inline-block;
-  color: #e0ddcf;
+  color: white;
 }
 
 .form-field input {
@@ -515,8 +517,8 @@ small {
 }
 
 .form-field .error {
-  color: #840032;
-  background-color: #e0ddcf;
+  color: #4b4e6d;
+  background-color: white;
   padding: 0.3em;
 }
 
@@ -536,12 +538,12 @@ button.small {
 }
 
 button.default {
-  background-color: #e59500;
+  background-color: #84dcc6;
 }
 
 button.abort {
-  color: #840032;
-  background-color: #e0ddcf;
+  color: #4b4e6d;
+  background-color: white;
 }
 
 

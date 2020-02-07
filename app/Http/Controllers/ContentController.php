@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Content;
 use Auth;
 use DB;
+use Illuminate\Support\Facades\Storage;
+
 class ContentController extends Controller
 {
     function store(Request $request)
@@ -43,15 +45,10 @@ class ContentController extends Controller
       $content->json_content=json_encode($request->json_content);
       $content->html_content=$request->html_content;
 
-
-
-
       if($content->user_id == Auth::user()->id)
       {
           $content->save();
       }
-
-
 
       return response()->json([
            'content' => $content,
@@ -72,6 +69,23 @@ class ContentController extends Controller
 
         $content->destroy($id);
       }
+    }
+
+    function upload(Request $request){
+      $i=0;
+      foreach ($request->upload as $upload) {
+
+          $filename[$i] = $upload->store('public');
+          $path[$i]=Storage::url($filename[$i]);
+          $i++;
+       }
+       return response()->json([
+          
+            'path' => $path,
+        ]);
+
+
+
     }
 
     function comments(Request $request, $id){
