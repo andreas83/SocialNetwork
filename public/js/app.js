@@ -2405,6 +2405,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      isEdit: false,
+      content_id: 0,
       content: [],
       error: ""
     };
@@ -2421,6 +2423,10 @@ __webpack_require__.r(__webpack_exports__);
 
         _this.$store.commit('content/deleteContent', id);
       });
+    },
+    editContent: function editContent(id) {
+      this.isEdit = true;
+      this.content_id = id;
     },
     getComments: function getComments() {
       var _this2 = this;
@@ -2456,6 +2462,8 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tiptap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tiptap */ "./node_modules/tiptap/dist/tiptap.esm.js");
 /* harmony import */ var tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! tiptap-extensions */ "./node_modules/tiptap-extensions/dist/extensions.esm.js");
+//
+//
 //
 //
 //
@@ -2629,7 +2637,11 @@ __webpack_require__.r(__webpack_exports__);
   beforeDestroy: function beforeDestroy() {
     this.editor.destroy();
   },
-  mounted: function mounted() {},
+  mounted: function mounted() {
+    if (this.isComment) {
+      this.editor.setContent("<h3>Comment</h3>");
+    }
+  },
   methods: {
     openFileDialog: function openFileDialog(command) {
       var element = document.createElement('div');
@@ -2707,10 +2719,9 @@ __webpack_require__.r(__webpack_exports__);
         };
         axios.post('/api/content', _data).then(function (_ref3) {
           var data = _ref3.data;
+          data.content.show_comment = false; //updateLikes
 
-          _this.$store.commit('content/clearContent');
-
-          _this.$store.commit('content/appendContent', data.content);
+          _this.$store.commit('content/prependContent', data.content);
 
           _this.editor.setContent("<h2>Thank You</h2>");
         })["catch"](function (_ref4) {
@@ -59346,7 +59357,7 @@ var render = function() {
         "h1",
         [
           _c("router-link", { attrs: { to: { name: "home" } } }, [
-            _vm._v("SocialNetwort - "),
+            _vm._v("SocialNetwork - "),
             _c("small", [_vm._v("bold statement")])
           ])
         ],
@@ -60165,7 +60176,12 @@ var render = function() {
     { staticClass: "row-0 comment-container" },
     [
       _c("share-dialog", {
-        attrs: { parrent_id: _vm.parrent_content.id, "is-comment": "true" }
+        attrs: {
+          edit: _vm.isEdit,
+          content_id: _vm.content_id,
+          parrent_id: _vm.parrent_content.id,
+          "is-comment": "true"
+        }
       }),
       _vm._v(" "),
       _c(
@@ -60181,32 +60197,6 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("date", [_vm._v(_vm._s(data.created_at))]),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn default small",
-                  on: {
-                    click: function($event) {
-                      return _vm.deleteContent(data.id)
-                    }
-                  }
-                },
-                [_vm._v(_vm._s(_vm.$t("form.delete")))]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn default small",
-                  on: {
-                    click: function($event) {
-                      return _vm.editContent(data.id)
-                    }
-                  }
-                },
-                [_vm._v(_vm._s(_vm.$t("form.edit")))]
-              ),
               _vm._v(" "),
               _c("content", {
                 domProps: { innerHTML: _vm._s(data.html_content) }
@@ -60294,35 +60284,29 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn default",
-                      class: { "is-active": isActive.underline() },
-                      on: { click: commands.underline }
-                    },
-                    [_vm._v("\n               _\n             ")]
-                  ),
+                  !_vm.isComment
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn default",
+                          class: { "is-active": isActive.underline() },
+                          on: { click: commands.underline }
+                        },
+                        [_vm._v("\n               _\n             ")]
+                      )
+                    : _vm._e(),
                   _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn default",
-                      class: { "is-active": isActive.code() },
-                      on: { click: commands.code }
-                    },
-                    [_vm._v("\n               Code\n             ")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn default",
-                      class: { "is-active": isActive.paragraph() },
-                      on: { click: commands.paragraph }
-                    },
-                    [_vm._v("\n               P\n             ")]
-                  ),
+                  !_vm.isComment
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn default",
+                          class: { "is-active": isActive.code() },
+                          on: { click: commands.code }
+                        },
+                        [_vm._v("\n               Code\n             ")]
+                      )
+                    : _vm._e(),
                   _vm._v(" "),
                   _c(
                     "button",
@@ -60376,15 +60360,17 @@ var render = function() {
                     [_c("i", { staticClass: "icon-list" })]
                   ),
                   _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn default",
-                      class: { "is-active": isActive.blockquote() },
-                      on: { click: commands.blockquote }
-                    },
-                    [_vm._v('\n               ""\n             ')]
-                  ),
+                  !_vm.isComment
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn default",
+                          class: { "is-active": isActive.blockquote() },
+                          on: { click: commands.blockquote }
+                        },
+                        [_vm._v('\n               ""\n             ')]
+                      )
+                    : _vm._e(),
                   _vm._v(" "),
                   _c(
                     "button",
@@ -60396,23 +60382,27 @@ var render = function() {
                     [_vm._v("\n               CODE\n             ")]
                   ),
                   _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn default",
-                      on: { click: commands.undo }
-                    },
-                    [_vm._v("\n               undo\n             ")]
-                  ),
+                  !_vm.isComment
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn default",
+                          on: { click: commands.undo }
+                        },
+                        [_vm._v("\n               undo\n             ")]
+                      )
+                    : _vm._e(),
                   _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn default",
-                      on: { click: commands.redo }
-                    },
-                    [_vm._v("\n              redo\n             ")]
-                  )
+                  !_vm.isComment
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn default",
+                          on: { click: commands.redo }
+                        },
+                        [_vm._v("\n              redo\n             ")]
+                      )
+                    : _vm._e()
                 ])
               ]
             }
@@ -78472,12 +78462,16 @@ __webpack_require__.r(__webpack_exports__);
       var commit = _ref5.commit;
       commit('appendContent', content);
     },
-    updateLikes: function updateLikes(_ref6, likes) {
+    prependContent: function prependContent(_ref6, content) {
       var commit = _ref6.commit;
+      commit('prependContent', content);
+    },
+    updateLikes: function updateLikes(_ref7, likes) {
+      var commit = _ref7.commit;
       commit('updateLikes', likes);
     },
-    setLikes: function setLikes(_ref7, likes) {
-      var commit = _ref7.commit;
+    setLikes: function setLikes(_ref8, likes) {
+      var commit = _ref8.commit;
       commit('setLikes', likes);
     }
   },
@@ -78506,6 +78500,9 @@ __webpack_require__.r(__webpack_exports__);
   mutations: {
     setContent: function setContent(state, content) {
       state.content = content;
+    },
+    prependContent: function prependContent(state, content) {
+      state.content.splice(0, 0, content);
     },
     appendContent: function appendContent(state, content) {
       state.content.push(content);

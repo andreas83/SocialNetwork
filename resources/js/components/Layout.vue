@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav>
-      <h1><router-link :to="{ name: 'home'}">SocialNetwort - <small>bold statement</small></router-link></h1>
+      <h1><router-link :to="{ name: 'home'}">SocialNetwork - <small>bold statement</small></router-link></h1>
       <div v-on:click="toggleLanguageDropdown" class="language-select">
         <ul>
           <li>Lang</li>

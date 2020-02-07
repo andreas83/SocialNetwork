@@ -5,6 +5,7 @@
         <div class="menubar">
 
                <button
+
                  class="btn default"
                  :class="{ 'is-active': isActive.bold() }"
                  @click="commands.bold"
@@ -13,6 +14,7 @@
                </button>
 
                <button
+
                  class="btn default"
                  :class="{ 'is-active': isActive.italic() }"
                  @click="commands.italic"
@@ -21,6 +23,7 @@
                </button>
 
                <button
+
                  class="btn default"
                  :class="{ 'is-active': isActive.strike() }"
                  @click="commands.strike"
@@ -29,6 +32,7 @@
                </button>
 
                <button
+               v-if="!isComment"
                  class="btn default"
                  :class="{ 'is-active': isActive.underline() }"
                  @click="commands.underline"
@@ -37,6 +41,7 @@
                </button>
 
                <button
+               v-if="!isComment"
                  class="btn default"
                  :class="{ 'is-active': isActive.code() }"
                  @click="commands.code"
@@ -44,13 +49,7 @@
                  Code
                </button>
 
-               <button
-                 class="btn default"
-                 :class="{ 'is-active': isActive.paragraph() }"
-                 @click="commands.paragraph"
-               >
-                 P
-               </button>
+
 
                <button
                  class="btn default"
@@ -87,6 +86,7 @@
 
 
                <button
+               v-if="!isComment"
                  class="btn default"
                  :class="{ 'is-active': isActive.blockquote() }"
                  @click="commands.blockquote"
@@ -104,6 +104,7 @@
 
 
                <button
+               v-if="!isComment"
                  class="btn default"
                  @click="commands.undo"
                >
@@ -111,6 +112,7 @@
                </button>
 
                <button
+               v-if="!isComment"
                  class="btn default"
                  @click="commands.redo"
                >
@@ -191,7 +193,9 @@ export default {
       this.editor.destroy()
     },
     mounted(){
-
+      if(this.isComment){
+        this.editor.setContent("<h3>Comment</h3>");
+      }
     },
     methods:{
 
@@ -278,8 +282,11 @@ export default {
             axios.post('/api/content', data)
                 .then(({data}) => {
 
-                  this.$store.commit('content/clearContent');
-                  this.$store.commit('content/appendContent', data.content);
+                  data.content.show_comment=false;
+
+                  //updateLikes
+
+                  this.$store.commit('content/prependContent', data.content);
                   this.editor.setContent("<h2>Thank You</h2>");
                 })
                 .catch(({response}) => {
@@ -292,6 +299,7 @@ export default {
 
     },
     watch:{
+
       edit(){
 
         this.editor.setContent(this.content.html_content);

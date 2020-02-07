@@ -23,7 +23,9 @@ export default {
     },
     appendContent({commit},  content){
       commit('appendContent', content);
-
+    },
+    prependContent({commit},  content){
+      commit('prependContent', content);
     },
     updateLikes ({commit}, likes) {
       commit('updateLikes', likes);
@@ -52,7 +54,12 @@ export default {
     setContent(state, content){
       state.content=content;
     },
+    prependContent(state, content){
+      state.content.splice(0, 0, content);
+
+    },
     appendContent(state, content){
+
       state.content.push(content);
     },
     updateContent (state, data) {
