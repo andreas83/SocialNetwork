@@ -56,7 +56,7 @@ class ContentController extends Controller
     }
 
     function index(Request $request){
-      $content = DB::table('contents')->where("is_comment", "=", "false")->select('contents.*', 'users.name')->join('users', 'users.id', '=', 'contents.user_id')->orderBy("contents.id", "desc")->paginate(15);
+      $content = DB::table('contents')->where("is_comment", "=", "false")->select('contents.*', 'users.name', 'users.avatar')->join('users', 'users.id', '=', 'contents.user_id')->orderBy("contents.id", "desc")->paginate(15);
       return response()->json([
            'content' => $content,
        ]);
@@ -80,7 +80,7 @@ class ContentController extends Controller
           $i++;
        }
        return response()->json([
-          
+
             'path' => $path,
         ]);
 

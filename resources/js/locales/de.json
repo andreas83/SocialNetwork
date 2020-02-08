@@ -14,7 +14,11 @@
     "register" : "Registrieren",
     "abort" : "Abbruch",
     "delete" : "Löschen",
-    "edit" : "Bearbeiten"
+    "edit" : "Bearbeiten",
+    "save" : "Speichern",
+    "avatar":{
+      "upload" : "Pick profile Picture"
+    }
 
   },
   "Share" : "Teilen",

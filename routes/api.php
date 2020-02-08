@@ -17,8 +17,14 @@ Route::group(['middleware' => ['api']], function () {
 });
 
 Route::group(['middleware' => ['auth:api']], function () {
-    Route::resource('content/likes', 'ContentLikeController');
+    Route::resource('content/likes', 'ContentLikeController')->only([
+      'store','index'
+    ]);
     Route::resource('content', 'ContentController');
+
+    Route::resource('user', 'UserController')->only([
+      'update'
+    ]);
 
     Route::get("content/comments/{id}", 'ContentController@comments');
     Route::post("content/upload", 'ContentController@upload');

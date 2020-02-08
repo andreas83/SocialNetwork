@@ -3139,15 +3139,108 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "UserProfile",
   data: function data() {
-    return {};
+    return {
+      avatar: "",
+      password: ""
+    };
   },
-  mounted: function mounted() {
-    this.$route.params.username;
+  mounted: function mounted() {},
+  methods: {
+    openFileDialog: function openFileDialog() {
+      var element = document.createElement('div');
+      element.innerHTML = '<input  type="file">';
+      var fileInput = element.firstChild;
+      var vm = this;
+      var token = this.user.api_token;
+      fileInput.addEventListener('change', function () {
+        var formData = new FormData();
+
+        for (var i = 0; i < fileInput.files.length; i++) {
+          var file = fileInput.files[i];
+          formData.append('upload[]', file, file.name);
+        }
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/api/content/upload', true);
+        xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+
+        xhr.onload = function () {
+          if (xhr.status === 200) {
+            var result = JSON.parse(xhr.responseText); //vm.avatar=result.path[0];
+
+            vm.user.avatar = result.path[0];
+            vm.$store.commit('user/setUser', vm.user);
+            var data = {
+              avatar: vm.user.avatar
+            };
+            axios.put('/api/user/' + vm.user.id, data).then(function (_ref) {
+              var data = _ref.data;
+              vm.$store.commit('user/setUser', data.user);
+            })["catch"](function (_ref2) {
+              var response = _ref2.response;
+              vm.show = true;
+              vm.error = response.data.errors;
+            });
+          } else {
+            vm.error = xhr.responseText;
+          }
+        };
+
+        xhr.send(formData);
+      });
+      fileInput.click();
+    },
+    save: function save() {
+      var _this = this;
+
+      var data = {
+        email: this.user.email,
+        avatar: this.user.avatar,
+        password: this.password,
+        bio: this.user.bio
+      };
+      axios.put('/api/user/' + this.user.id, data).then(function (_ref3) {
+        var data = _ref3.data;
+
+        _this.$store.commit('user/setUser', data.user);
+      })["catch"](function (_ref4) {
+        var response = _ref4.response;
+        _this.show = true;
+        _this.error = response.data.errors;
+      });
+    }
   },
-  methods: {}
+  computed: {
+    user: function user() {
+      return this.$store.getters["user/getUser"];
+    },
+    isAuth: function isAuth() {
+      return this.$store.getters["user/isAuth"];
+    }
+  }
 });
 
 /***/ }),
@@ -60516,7 +60609,9 @@ var render = function() {
       { staticClass: "col-lg-12" },
       _vm._l(_vm.content, function(data) {
         return _c("div", { staticClass: "row card" }, [
-          _vm._m(0, true),
+          _c("div", { staticClass: "col-lg-1  col-md-1" }, [
+            _c("picture", [_c("img", { attrs: { src: data.avatar } })])
+          ]),
           _vm._v(" "),
           _c(
             "div",
@@ -60593,18 +60688,7 @@ var render = function() {
     )
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-lg-1  col-md-1" }, [
-      _c("picture", [
-        _c("img", { attrs: { src: "https://via.placeholder.com/50" } })
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -60975,7 +61059,115 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("\n  user\n\n")])
+  return _c("div", { staticClass: "row" }, [
+    _c("div", { staticClass: "col-lg-12  col-md-12 card" }, [
+      _c("picture", [
+        _c("img", { attrs: { src: _vm.user.avatar } }),
+        _c(
+          "button",
+          {
+            staticClass: "btn default",
+            attrs: { value: "default" },
+            on: { click: _vm.openFileDialog }
+          },
+          [_vm._v(_vm._s(_vm.$t("form.avatar.upload")))]
+        )
+      ]),
+      _vm._v(" "),
+      _c("h2", [_vm._v(_vm._s(_vm.user.name))]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-field" }, [
+        _c("label", { attrs: { for: "password" } }, [_vm._v("New Password")]),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.password,
+              expression: "password"
+            }
+          ],
+          attrs: {
+            id: "password",
+            type: "password",
+            autocomplete: "new-password"
+          },
+          domProps: { value: _vm.password },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.password = $event.target.value
+            }
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-field" }, [
+        _c("label", { attrs: { for: "mail" } }, [_vm._v("EMail")]),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.user.email,
+              expression: "user.email"
+            }
+          ],
+          attrs: { id: "mail", type: "email", placeholder: "email " },
+          domProps: { value: _vm.user.email },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.user, "email", $event.target.value)
+            }
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-field" }, [
+        _c("label", { attrs: { for: "bio" } }, [_vm._v("Bio")]),
+        _vm._v(" "),
+        _c("textarea", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.user.bio,
+              expression: "user.bio"
+            }
+          ],
+          attrs: { id: "bio" },
+          domProps: { value: _vm.user.bio },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.user, "bio", $event.target.value)
+            }
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-field" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn default",
+            attrs: { value: "default" },
+            on: { click: _vm.save }
+          },
+          [_vm._v(_vm._s(_vm.$t("form.save")))]
+        )
+      ])
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -78352,7 +78544,7 @@ webpackContext.id = "./resources/js/locales sync recursive [A-Za-z0-9-_,\\s]+\\.
 /*! exports provided: welcome, form, Share, Comment, default */
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"welcome\":\"Willkommen\",\"form\":{\"name\":\"Benutzername\",\"email\":\"Mail\",\"password\":\"Passwort\",\"error\":{\"name\":{\"exists\":\"Benutzername existiert\"},\"mail\":{\"exists\":\"Mail existiert bereits\"}},\"login\":\"Anmelden\",\"register\":\"Registrieren\",\"abort\":\"Abbruch\",\"delete\":\"Löschen\",\"edit\":\"Bearbeiten\"},\"Share\":\"Teilen\",\"Comment\":\"Kommentieren\"}");
+module.exports = JSON.parse("{\"welcome\":\"Willkommen\",\"form\":{\"name\":\"Benutzername\",\"email\":\"Mail\",\"password\":\"Passwort\",\"error\":{\"name\":{\"exists\":\"Benutzername existiert\"},\"mail\":{\"exists\":\"Mail existiert bereits\"}},\"login\":\"Anmelden\",\"register\":\"Registrieren\",\"abort\":\"Abbruch\",\"delete\":\"Löschen\",\"edit\":\"Bearbeiten\",\"save\":\"Speichern\",\"avatar\":{\"upload\":\"Pick profile Picture\"}},\"Share\":\"Teilen\",\"Comment\":\"Kommentieren\"}");
 
 /***/ }),
 
@@ -78363,7 +78555,7 @@ module.exports = JSON.parse("{\"welcome\":\"Willkommen\",\"form\":{\"name\":\"Be
 /*! exports provided: welcome, form, Share, Comment, default */
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"welcome\":\"Willkommen\",\"form\":{\"name\":\"User\",\"email\":\"Mail\",\"password\":\"Password\",\"error\":{\"name\":{\"exists\":\"Username existiert\"},\"mail\":{\"exists\":\"Mail exists\"}},\"login\":\"login\",\"register\":\"register\",\"abort\":\"abort\",\"delete\":\"delete\",\"edit\":\"edit\"},\"Share\":\"Share\",\"Comment\":\"Comment\"}");
+module.exports = JSON.parse("{\"welcome\":\"Willkommen\",\"form\":{\"name\":\"User\",\"email\":\"Mail\",\"password\":\"Password\",\"error\":{\"name\":{\"exists\":\"Username existiert\"},\"mail\":{\"exists\":\"Mail exists\"}},\"login\":\"login\",\"register\":\"register\",\"abort\":\"abort\",\"delete\":\"delete\",\"edit\":\"edit\",\"save\":\"save\",\"avatar\":{\"upload\":\"Pick profile Picture\"}},\"Share\":\"Share\",\"Comment\":\"Comment\"}");
 
 /***/ }),
 
@@ -78407,15 +78599,14 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
     name: "register",
     component: _components_user_register__WEBPACK_IMPORTED_MODULE_3__["default"]
   }, {
-    path: '/:name/',
+    path: '/user/profile',
+    name: "userProfile",
+    component: _components_user_userProfile__WEBPACK_IMPORTED_MODULE_5__["default"]
+  }, {
+    path: '/:name',
     component: _components_user_user__WEBPACK_IMPORTED_MODULE_4__["default"],
     name: "user",
     children: [{
-      // UserProfile will be rendered inside User's <router-view>
-      // when /user/:id/profile is matched
-      path: 'profile',
-      component: _components_user_userProfile__WEBPACK_IMPORTED_MODULE_5__["default"]
-    }, {
       // UserPosts will be rendered inside User's <router-view>
       // when /user/:id/posts is matched
       path: 'posts',

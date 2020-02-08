@@ -1,8 +1,28 @@
 <template>
-  <div>
-    user
+  <div class="row">
+  <div class="col-lg-12  col-md-12 card">
 
+    <picture>
+      <img :src="user.avatar"/><button class="btn default" v-on:click="openFileDialog" value="default">{{$t('form.avatar.upload')}}</button>
+    </picture>
+    <h2>{{user.name}}</h2>
+    <div class="form-field">
+      <label for="password">New Password</label>
+      <input id="password" type="password" autocomplete="new-password"  v-model="password" />
+    </div>
+    <div class="form-field">
+      <label for="mail">EMail</label>
+      <input id="mail" type="email"  placeholder="email " v-model="user.email"/>
+    </div>
+    <div class="form-field">
+      <label for="bio">Bio</label>
+      <textarea id="bio" v-model="user.bio"></textarea>
+    </div>
+    <div class="form-field">
+        <button class="btn default" v-on:click="save" value="default">{{$t('form.save')}}</button>
+    </div>
   </div>
+</div>
 
 </template>
 <script>
@@ -13,18 +33,101 @@
     data() {
 
         return {
+          avatar:"",
 
+
+          password:"",
 
         };
     },
     mounted(){
-      this.$route.params.username
+
     },
 
     methods: {
+      openFileDialog(){
+
+        var element = document.createElement('div');
+        element.innerHTML = '<input  type="file">';
+        let fileInput = element.firstChild;
+        let vm=this;
+        let token=this.user.api_token;
+        fileInput.addEventListener('change', function() {
+          let formData = new FormData();
+
+          for (let i = 0; i < fileInput.files.length; i++) {
+              let file = fileInput.files[i];
+              formData.append('upload[]', file, file.name);
+          }
+          var xhr = new XMLHttpRequest();
 
 
 
-    }
+          xhr.open('POST', '/api/content/upload', true);
+          xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+          xhr.onload = function () {
+              if (xhr.status === 200) {
+
+                const result = JSON.parse(xhr.responseText);
+                //vm.avatar=result.path[0];
+                vm.user.avatar=result.path[0];
+                vm.$store.commit('user/setUser', vm.user);
+                let data = {
+
+                    avatar: vm.user.avatar,
+
+
+
+                };
+                axios.put('/api/user/'+vm.user.id, data)
+                    .then(({data}) => {
+
+                      vm.$store.commit('user/setUser', data.user);
+                    })
+                    .catch(({response}) => {
+                      vm.show=true;
+                      vm.error=response.data.errors;
+                    });
+
+              } else {
+                  vm.error = xhr.responseText;
+              }
+          };
+          xhr.send(formData);
+
+
+        });
+
+        fileInput.click();
+      },
+      save(){
+
+          let data = {
+              email: this.user.email,
+              avatar: this.user.avatar,
+              password: this.password,
+              bio:this.user.bio,
+
+          };
+          axios.put('/api/user/'+this.user.id, data)
+              .then(({data}) => {
+
+                this.$store.commit('user/setUser', data.user);
+              })
+              .catch(({response}) => {
+                this.show=true;
+                this.error=response.data.errors;
+              });
+
+      }
+    },
+    computed:{
+            user(){
+              return this.$store.getters["user/getUser"];
+            },
+            isAuth(){
+              return this.$store.getters["user/isAuth"];
+            }
+      }
 }
 </script>

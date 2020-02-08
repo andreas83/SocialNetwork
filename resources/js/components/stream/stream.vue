@@ -9,7 +9,7 @@
       <div class="row card" v-for="data in content">
         <div class="col-lg-1  col-md-1">
         <picture>
-          <img src="https://via.placeholder.com/50" />
+          <img :src="data.avatar" />
         </picture>
         </div>
         <div class="col-lg-10  col-md-10">

@@ -26,18 +26,16 @@ export const router = new VueRouter({
           name: "register",
           component: Register
         },
-
         {
-          path: '/:name/',
+          path: '/user/profile',
+          name: "userProfile",
+          component: UserProfile
+        },
+        {
+          path: '/:name',
           component: User,
           name:"user",
           children: [
-            {
-              // UserProfile will be rendered inside User's <router-view>
-              // when /user/:id/profile is matched
-              path: 'profile',
-              component: UserProfile
-            },
             {
               // UserPosts will be rendered inside User's <router-view>
               // when /user/:id/posts is matched

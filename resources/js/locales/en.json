@@ -14,7 +14,11 @@
     "register" : "register",
     "abort" : "abort",
     "delete" : "delete",
-    "edit" : "edit"
+    "edit" : "edit",
+    "save" : "save",
+    "avatar":{
+      "upload" : "Pick profile Picture"
+    }
 
   },
   "Share" : "Share",
