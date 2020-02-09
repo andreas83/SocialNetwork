@@ -6,7 +6,7 @@
     </div>
     <div class="col-lg-12">
 
-      <div class="row card" v-for="data in content">
+      <div class="row card" v-for="data in content" v-if="user_id==false || user_id==data.user_id">
         <div class="col-lg-1  col-md-1">
         <picture>
           <img :src="data.avatar" />
@@ -40,8 +40,12 @@
 <script>
 
 export default {
-    name: "Stream",
-
+  name: "Stream",
+    props:{
+      user_id:{
+        default:false
+      }
+    },
     data() {
         return{
           isEdit:false,
@@ -67,8 +71,13 @@ export default {
           this.content_id=id;
         },
         getContent(){
+            let data={};
 
-            axios.get('/api/content')
+            if(this.user_id>0)
+            {
+                data.user_id=this.user_id;
+            }
+            axios.get('/api/content', {"params":data})
                 .then(({data}) => {
 
                   for(var i=0, length= data.content.data.length; i < length; i++)
@@ -113,7 +122,14 @@ export default {
         isAuth(){
           return this.$store.getters["user/isAuth"];
         }
-      }
+      },
+      watch:{
+
+        user_id(){
+
+           this.getContent();
+        }
+      },
     }
 </script>
 <style>

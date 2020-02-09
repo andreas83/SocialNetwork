@@ -2802,6 +2802,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Stream",
+  props: {
+    user_id: {
+      "default": false
+    }
+  },
   data: function data() {
     return {
       isEdit: false,
@@ -2829,7 +2834,15 @@ __webpack_require__.r(__webpack_exports__);
     getContent: function getContent() {
       var _this2 = this;
 
-      axios.get('/api/content').then(function (_ref2) {
+      var data = {};
+
+      if (this.user_id > 0) {
+        data.user_id = this.user_id;
+      }
+
+      axios.get('/api/content', {
+        "params": data
+      }).then(function (_ref2) {
         var data = _ref2.data;
 
         for (var i = 0, length = data.content.data.length; i < length; i++) {
@@ -2862,6 +2875,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     isAuth: function isAuth() {
       return this.$store.getters["user/isAuth"];
+    }
+  },
+  watch: {
+    user_id: function user_id() {
+      this.getContent();
     }
   }
 });
@@ -3045,6 +3063,14 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -60608,81 +60634,85 @@ var render = function() {
       "div",
       { staticClass: "col-lg-12" },
       _vm._l(_vm.content, function(data) {
-        return _c("div", { staticClass: "row card" }, [
-          _c("div", { staticClass: "col-lg-1  col-md-1" }, [
-            _c("picture", [_c("img", { attrs: { src: data.avatar } })])
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "col-lg-10  col-md-10" },
-            [
+        return _vm.user_id == false || _vm.user_id == data.user_id
+          ? _c("div", { staticClass: "row card" }, [
+              _c("div", { staticClass: "col-lg-1  col-md-1" }, [
+                _c("picture", [_c("img", { attrs: { src: data.avatar } })])
+              ]),
+              _vm._v(" "),
               _c(
-                "router-link",
-                {
-                  attrs: {
-                    to: {
-                      name: "user",
-                      params: { name: data.name, user_id: data.user_id }
-                    }
-                  }
-                },
+                "div",
+                { staticClass: "col-lg-10  col-md-10" },
                 [
-                  _c("author", [
-                    _vm._v("\n          " + _vm._s(data.name) + "\n\n        ")
-                  ])
+                  _c(
+                    "router-link",
+                    {
+                      attrs: {
+                        to: {
+                          name: "user",
+                          params: { name: data.name, user_id: data.user_id }
+                        }
+                      }
+                    },
+                    [
+                      _c("author", [
+                        _vm._v(
+                          "\n          " + _vm._s(data.name) + "\n\n        "
+                        )
+                      ])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("date", [_vm._v(_vm._s(data.created_at))]),
+                  _vm._v(" "),
+                  data.user_id == _vm.user.id
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn default small",
+                          on: {
+                            click: function($event) {
+                              return _vm.deleteContent(data.id)
+                            }
+                          }
+                        },
+                        [_vm._v(_vm._s(_vm.$t("form.delete")))]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  data.user_id == _vm.user.id
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn default small",
+                          on: {
+                            click: function($event) {
+                              return _vm.editContent(data.id)
+                            }
+                          }
+                        },
+                        [_vm._v(_vm._s(_vm.$t("form.edit")))]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("content", {
+                    domProps: { innerHTML: _vm._s(data.html_content) }
+                  }),
+                  _vm._v(" "),
+                  _c("actions", {
+                    attrs: { content: data },
+                    on: { toggleComment: _vm.toggleComment }
+                  }),
+                  _vm._v(" "),
+                  data.show_comment
+                    ? _c("comments", { attrs: { parrent_content: data } })
+                    : _vm._e()
                 ],
                 1
-              ),
-              _vm._v(" "),
-              _c("date", [_vm._v(_vm._s(data.created_at))]),
-              _vm._v(" "),
-              data.user_id == _vm.user.id
-                ? _c(
-                    "button",
-                    {
-                      staticClass: "btn default small",
-                      on: {
-                        click: function($event) {
-                          return _vm.deleteContent(data.id)
-                        }
-                      }
-                    },
-                    [_vm._v(_vm._s(_vm.$t("form.delete")))]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              data.user_id == _vm.user.id
-                ? _c(
-                    "button",
-                    {
-                      staticClass: "btn default small",
-                      on: {
-                        click: function($event) {
-                          return _vm.editContent(data.id)
-                        }
-                      }
-                    },
-                    [_vm._v(_vm._s(_vm.$t("form.edit")))]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _c("content", {
-                domProps: { innerHTML: _vm._s(data.html_content) }
-              }),
-              _vm._v(" "),
-              _c("actions", {
-                attrs: { content: data },
-                on: { toggleComment: _vm.toggleComment }
-              }),
-              _vm._v(" "),
-              data.show_comment
-                ? _c("comments", { attrs: { parrent_content: data } })
-                : _vm._e()
-            ],
-            1
-          )
-        ])
+              )
+            ])
+          : _vm._e()
       }),
       0
     )
@@ -61003,15 +61033,25 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row" }, [
-    _vm._v(
-      "\n\n  " +
-        _vm._s(this.$route.params.name) +
-        "\n  " +
-        _vm._s(_vm.user.created_at) +
-        "\n\n\n"
-    )
-  ])
+  return _c(
+    "div",
+    [
+      _c("div", { staticClass: "row card" }, [
+        _c("div", { staticClass: "col-lg-2  col-md-2" }, [
+          _c("picture", [_c("img", { attrs: { src: _vm.user.avatar } })])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-lg-8  col-md-8" }, [
+          _c("h2", [_vm._v("  " + _vm._s(this.$route.params.name))]),
+          _vm._v(" "),
+          _c("p", [_vm._v(_vm._s(_vm.user.bio))])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("stream", { attrs: { user_id: _vm.user.id } })
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -61077,7 +61117,9 @@ var render = function() {
       _c("h2", [_vm._v(_vm._s(_vm.user.name))]),
       _vm._v(" "),
       _c("div", { staticClass: "form-field" }, [
-        _c("label", { attrs: { for: "password" } }, [_vm._v("New Password")]),
+        _c("label", { attrs: { for: "password" } }, [
+          _vm._v("New " + _vm._s(_vm.$t("form.password")))
+        ]),
         _vm._v(" "),
         _c("input", {
           directives: [
@@ -61106,7 +61148,9 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "form-field" }, [
-        _c("label", { attrs: { for: "mail" } }, [_vm._v("EMail")]),
+        _c("label", { attrs: { for: "mail" } }, [
+          _vm._v(_vm._s(_vm.$t("form.email")))
+        ]),
         _vm._v(" "),
         _c("input", {
           directives: [
@@ -61131,7 +61175,9 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "form-field" }, [
-        _c("label", { attrs: { for: "bio" } }, [_vm._v("Bio")]),
+        _c("label", { attrs: { for: "bio" } }, [
+          _vm._v(_vm._s(_vm.$t("form.bio")))
+        ]),
         _vm._v(" "),
         _c("textarea", {
           directives: [

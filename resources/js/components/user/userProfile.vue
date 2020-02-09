@@ -7,15 +7,15 @@
     </picture>
     <h2>{{user.name}}</h2>
     <div class="form-field">
-      <label for="password">New Password</label>
+      <label for="password">New {{$t('form.password')}}</label>
       <input id="password" type="password" autocomplete="new-password"  v-model="password" />
     </div>
     <div class="form-field">
-      <label for="mail">EMail</label>
+      <label for="mail">{{$t('form.email')}}</label>
       <input id="mail" type="email"  placeholder="email " v-model="user.email"/>
     </div>
     <div class="form-field">
-      <label for="bio">Bio</label>
+      <label for="bio">{{$t('form.bio')}}</label>
       <textarea id="bio" v-model="user.bio"></textarea>
     </div>
     <div class="form-field">

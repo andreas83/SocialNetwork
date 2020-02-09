@@ -1,12 +1,20 @@
 <template>
-  <div class="row">
+  <div>
+    <div class="row card">
+            <div class="col-lg-2  col-md-2">
+              <picture>
+                <img :src="user.avatar" />
+              </picture>
+            </div>
+            <div class="col-lg-8  col-md-8">
+              <h2>  {{this.$route.params.name}}</h2>
+              <p>{{user.bio}}</p>
+            </div>
 
-    {{this.$route.params.name}}
-    {{user.created_at}}
-
-
+    </div>
+  
+    <stream :user_id="user.id"></stream>
   </div>
-
 </template>
 <script>
 

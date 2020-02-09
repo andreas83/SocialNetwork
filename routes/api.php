@@ -30,7 +30,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post("content/upload", 'ContentController@upload');
 });
 Route::middleware('auth:api')->get('/user/{name}', function (Request $request) {
-      return User::where("name" , '=', $request->name)->select("id", "name", "created_at")->first();
+      return User::where("name" , '=', $request->name)->select("id", "name", "bio", "avatar", "created_at")->first();
 
 });
 Route::middleware('auth:api')->get('/user', function (Request $request) {
