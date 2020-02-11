@@ -1,9 +1,10 @@
 @import 'color';
 @import 'fonts';
+@import 'grid';
 .card{
 
     background-color: $color5;
-  
+
   padding-top: 1em;
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
   header{
@@ -16,8 +17,9 @@
   picture{
 
     img{
-
-      border-radius: 25px;
+      width:40px;
+      height:40px;
+      border-radius: 50px;
     }
   }
 }
@@ -25,7 +27,7 @@
 
   button{
     background-color: inherit;
-    margin-bottom:  2em;
+    margin-bottom:  1em;
     transition: all .2s ease-in-out;
     &:hover{
       text-decoration: none;
@@ -37,20 +39,38 @@
       border: none;
       outline: none;
     }
-
+    @media screen and (max-width: $grid-mobile-breakpoint) {
+      margin-bottom:  0.5em;
+    }
   }
+
 }
 
 .editor-container{
   padding: 2em;
+  @media screen and (max-width: $grid-mobile-breakpoint) {
+    padding:  0em;
+    padding-top:1em;
+    padding-bottom:1em;
+  }
 }
 .editor{
   width: 100%;
   background-color: $color1;
   padding: 1em;
+  @media screen and (max-width: $grid-mobile-breakpoint) {
+    height:150px;
+    padding: 0em;
+    margin:0em;
+  }
   border: 1px $color2 solid;
   code{
    background-color:   $color3;
+  }
+  div{
+    margin-top:0em;
+    padding-top:0em;
+    min-height:110px;
   }
 }
 .menubar{
@@ -62,6 +82,10 @@
   .editor-container{
     padding: 0em;
     padding-bottom: 2em;
+    @media screen and (max-width: $grid-mobile-breakpoint) {
+      padding:  0em;
+
+    }
   }
 }
 .comment-list{

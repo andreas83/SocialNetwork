@@ -7,17 +7,16 @@
     <div class="col-lg-12">
 
       <div class="row card" v-for="data in content" v-if="user_id==false || user_id==data.user_id">
-        <div class="col-lg-1  col-md-1">
-        <picture>
-          <img :src="data.avatar" />
-        </picture>
-        </div>
-        <div class="col-lg-10  col-md-10">
+        
+        <div class="col-lg-12  col-md-12">
           <router-link :to="{ name: 'user', params: {name:data.name, user_id:data.user_id} }">
-          <author >
-            {{data.name}}
+            <picture>
+              <img :src="data.avatar" />
+            </picture>
+            <author >
+              {{data.name}}
 
-          </author>
+            </author>
           </router-link>
           <date>{{data.created_at}}</date>
           <button class="btn default small" v-if="data.user_id==user.id" @click="deleteContent(data.id)">{{$t("form.delete")}}</button>

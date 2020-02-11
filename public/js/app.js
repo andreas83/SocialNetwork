@@ -2600,7 +2600,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 
@@ -2820,7 +2819,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
 //
 //
 //
@@ -60650,25 +60648,7 @@ var render = function() {
             },
             [_vm._v(" " + _vm._s(_vm.$t("Comment")))]
           )
-        : _vm._e(),
-      _vm._v(" "),
-      !_vm.isComment
-        ? _c(
-            "button",
-            {
-              staticClass: "btn default",
-              on: {
-                click: function($event) {
-                  $event.preventDefault()
-                  return _vm.json($event)
-                }
-              }
-            },
-            [_c("i", { staticClass: "icon-heart" }), _vm._v(" json")]
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _c("pre", [_vm._v(_vm._s(_vm.rawjson))])
+        : _vm._e()
     ],
     1
   )
@@ -60713,13 +60693,9 @@ var render = function() {
       _vm._l(_vm.content, function(data) {
         return _vm.user_id == false || _vm.user_id == data.user_id
           ? _c("div", { staticClass: "row card" }, [
-              _c("div", { staticClass: "col-lg-1  col-md-1" }, [
-                _c("picture", [_c("img", { attrs: { src: data.avatar } })])
-              ]),
-              _vm._v(" "),
               _c(
                 "div",
-                { staticClass: "col-lg-10  col-md-10" },
+                { staticClass: "col-lg-12  col-md-12" },
                 [
                   _c(
                     "router-link",
@@ -60732,9 +60708,15 @@ var render = function() {
                       }
                     },
                     [
+                      _c("picture", [
+                        _c("img", { attrs: { src: data.avatar } })
+                      ]),
+                      _vm._v(" "),
                       _c("author", [
                         _vm._v(
-                          "\n          " + _vm._s(data.name) + "\n\n        "
+                          "\n            " +
+                            _vm._s(data.name) +
+                            "\n\n          "
                         )
                       ])
                     ],

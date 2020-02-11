@@ -382,8 +382,8 @@
 body {
   font-family: "Raleway", sans-serif;
   font-size: 22px;
-  background-color: #222222;
-  color: #84dcc6;
+  background-color: #f4f4f4;
+  color: #ff7909;
   margin: 0px;
 }
 
@@ -398,44 +398,44 @@ body {
 }
 
 h6 {
-  color: white;
-  font-size: 0.5666666667em;
+  color: #222;
+  font-size: 0.4em;
   font-family: "Questrial", sans-serif;
 }
 
 h5 {
-  color: white;
-  font-size: 1.1333333333em;
+  color: #222;
+  font-size: 0.8em;
   font-family: "Questrial", sans-serif;
 }
 
 h4 {
-  color: white;
-  font-size: 1.7em;
+  color: #222;
+  font-size: 1.2em;
   font-family: "Questrial", sans-serif;
 }
 
 h3 {
-  color: white;
-  font-size: 2.2666666667em;
+  color: #222;
+  font-size: 1.6em;
   font-family: "Questrial", sans-serif;
 }
 
 h2 {
-  color: white;
-  font-size: 2.8333333333em;
+  color: #222;
+  font-size: 2em;
   font-family: "Questrial", sans-serif;
 }
 
 h1 {
-  color: white;
-  font-size: 3.4em;
+  color: #222;
+  font-size: 2.4em;
   font-family: "Questrial", sans-serif;
 }
 
 nav {
   position: fixed;
-  background-color: #84dcc6;
+  background-color: #ff7909;
   width: 100%;
   height: 55px;
   display: -webkit-box;
@@ -447,14 +447,14 @@ nav h1 {
   margin-top: 0.5em;
   margin-left: 10px;
   font-size: 1.3em;
-  color: #222222;
+  color: #f4f4f4;
   -webkit-box-flex: 3;
           flex-grow: 3;
   flex-basis: auto;
 }
 
 .language-select {
-  color: white;
+  color: #222;
   flex-shrink: 1;
   width: 5em;
   padding: 0.5em;
@@ -465,7 +465,7 @@ nav h1 {
 }
 
 .language-select ul {
-  color: #222222;
+  color: #f4f4f4;
   font-weight: bold;
   list-style: none;
   margin: 0;
@@ -481,14 +481,14 @@ nav h1 {
 }
 
 .language-select ul ul li {
-  color: white;
+  color: #222;
   padding: 0.5em;
   width: 5em;
-  background-color: #95a3b3;
+  background-color: #7c93ad;
 }
 
 a {
-  color: white;
+  color: #222;
   text-decoration: none;
 }
 
@@ -497,7 +497,7 @@ img {
 }
 
 small {
-  color: #95a3b3;
+  color: #7c93ad;
 }
 
 .form-field {
@@ -507,7 +507,7 @@ small {
 .form-field label {
   width: 100%;
   display: inline-block;
-  color: white;
+  color: #222;
 }
 
 .form-field input {
@@ -517,8 +517,8 @@ small {
 }
 
 .form-field .error {
-  color: #4b4e6d;
-  background-color: white;
+  color: #222;
+  background-color: #222;
   padding: 0.3em;
 }
 
@@ -538,12 +538,12 @@ button.small {
 }
 
 button.default {
-  background-color: #84dcc6;
+  background-color: #ff7909;
 }
 
 button.abort {
-  color: #4b4e6d;
-  background-color: white;
+  color: #222;
+  background-color: #222;
 }
 
 

@@ -102,7 +102,7 @@ class ContentController extends Controller
 
 
       $page=RemoteContent::fetch($request->url);
-
+      
       return response()->json([
          'ogtags' => [
            "description" => $page->description,

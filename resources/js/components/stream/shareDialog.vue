@@ -133,8 +133,7 @@
 
       <button class="btn default" v-if="!isComment" @click.prevent="save"> <i class="icon-heart" /> {{$t('Share')}}</button>
       <button class="btn default" v-if="isComment" @click.prevent="save"> {{$t('Comment')}}</button>
-        <button class="btn default" v-if="!isComment" @click.prevent="json"> <i class="icon-heart" /> json</button>
-      <pre>{{rawjson}}</pre>
+
   </div>
 </template>
 <script>

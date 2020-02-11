@@ -19,7 +19,7 @@ body{
 @for $i from 1 through 6 {
     h#{7 - $i} {
         color:$color2;
-        font-size: 3.4em / 6 * $i;
+        font-size:2.4em / 6 * $i;
         font-family: 'Questrial', sans-serif;
     }
 }
