@@ -7,98 +7,111 @@ use App\Content;
 use Auth;
 use DB;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Helper\RemoteContent;
+use JonnyW\PhantomJs\Client;
 
 class ContentController extends Controller
 {
-    function store(Request $request)
+    public function store(Request $request)
     {
+        $content = new Content;
+        $content->json_content=json_encode($request->json_content);
+        $content->html_content=$request->html_content;
+        $content->anonymous=$request->anonymous;
+        $content->visibility=$request->visibility;
 
-      $content = new Content;
-      $content->json_content=json_encode($request->json_content);
-      $content->html_content=$request->html_content;
-      $content->anonymous=$request->anonymous;
-      $content->visibility=$request->visibility;
+        $content->has_comment=($request->has_comment ? "true" : "false");
+        $content->is_comment=($request->is_comment ? "true" : "false");
+        $content->parrent_id=$request->parrent_id;
 
-      $content->has_comment=($request->has_comment ? "true" : "false");
-      $content->is_comment=($request->is_comment ? "true" : "false");
-      $content->parrent_id=$request->parrent_id;
+        $content->user_id=Auth::user()->id;
+        $content->save();
 
-      $content->user_id=Auth::user()->id;
-      $content->save();
+        if ($request->is_comment) {
+            $parrent=  Content::find($request->parrent_id);
+            $parrent->has_comment="true";
+            $parrent->save();
+        }
 
-      if($request->is_comment)
-      {
-        $parrent=  Content::find($request->parrent_id);
-        $parrent->has_comment="true";
-        $parrent->save();
-      }
-
-      return response()->json([
+        return response()->json([
            'content' => $content,
        ]);
     }
 
-    function update(Request $request, $id)
+    public function update(Request $request, $id)
     {
+        $content = Content::find($id);
+        $content->json_content=json_encode($request->json_content);
+        $content->html_content=$request->html_content;
 
-      $content = Content::find($id);
-      $content->json_content=json_encode($request->json_content);
-      $content->html_content=$request->html_content;
+        if ($content->user_id == Auth::user()->id) {
+            $content->save();
+        }
 
-      if($content->user_id == Auth::user()->id)
-      {
-          $content->save();
-      }
-
-      return response()->json([
+        return response()->json([
            'content' => $content,
        ]);
     }
 
-    function index(Request $request){
-      $content = DB::table('contents')->where("is_comment", "=", "false")->select('contents.*', 'users.name', 'users.avatar')->join('users', 'users.id', '=', 'contents.user_id')->orderBy("contents.id", "desc")->paginate(15);
-      return response()->json([
+    public function index(Request $request)
+    {
+        $content = DB::table('contents')->where("is_comment", "=", "false")->select('contents.*', 'users.name', 'users.avatar')->join('users', 'users.id', '=', 'contents.user_id')->orderBy("contents.id", "desc")->paginate(15);
+        return response()->json([
            'content' => $content,
        ]);
     }
 
-    function destroy(Request $request, $id){
-      $content=  Content::find($id);
-      if($content->user_id==Auth::user()->id)
-      {
-
-        $content->destroy($id);
-      }
+    public function destroy(Request $request, $id)
+    {
+        $content=  Content::find($id);
+        if ($content->user_id==Auth::user()->id) {
+            $content->destroy($id);
+        }
     }
 
-    function upload(Request $request){
-      $i=0;
-      foreach ($request->upload as $upload) {
-
-          $filename[$i] = $upload->store('public');
-          $path[$i]=Storage::url($filename[$i]);
-          $i++;
-       }
-       return response()->json([
+    public function upload(Request $request)
+    {
+        $i=0;
+        foreach ($request->upload as $upload) {
+            $filename[$i] = $upload->store('public');
+            $path[$i]=Storage::url($filename[$i]);
+            $i++;
+        }
+        return response()->json([
 
             'path' => $path,
         ]);
-
-
-
     }
 
-    function comments(Request $request, $id){
-      $content = DB::table('contents')->
-      where("is_comment", "=", "true")->
-      where("parrent_id", "=", $id)->
+    public function comments(Request $request, $id)
+    {
+        $content = DB::table('contents')->
+        where("is_comment", "=", "true")->
+        where("parrent_id", "=", $id)->
         select('contents.*', 'users.name')->
         join('users', 'users.id', '=', 'contents.user_id')->
         orderBy("contents.id", "desc")->
         paginate(15);
-      return response()->json([
+        return response()->json([
            'content' => $content,
        ]);
+    }
+
+    public function parseog(Request $request)
+    {
+
+
+      $page=RemoteContent::fetch($request->url);
+
+      return response()->json([
+         'ogtags' => [
+           "description" => $page->description,
+           "title" => $page->title,
+           "image" => $page->image
+         ]
+      ]);
+
+
     }
 
 

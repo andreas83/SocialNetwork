@@ -2625,12 +2625,68 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   data: function data() {
+    var _this = this;
+
     return {
+      rawjson: "",
       editor: new tiptap__WEBPACK_IMPORTED_MODULE_0__["Editor"]({
-        content: '<h1>Yay Headlines!</h1>         <p>All these <strong>cool tags</strong> are working now.</p>',
+        content: '',
         extensions: [new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Blockquote"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["CodeBlock"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["HardBreak"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Heading"]({
           levels: [1, 2, 3]
-        }), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["BulletList"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["OrderedList"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["ListItem"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["TodoItem"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["TodoList"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Bold"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Code"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Italic"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Link"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Strike"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Underline"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["History"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Image"]()]
+        }), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["BulletList"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["OrderedList"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["ListItem"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["TodoItem"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["TodoList"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Bold"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Code"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Italic"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Strike"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Underline"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["History"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Image"](), new tiptap_extensions__WEBPACK_IMPORTED_MODULE_1__["Link"]()],
+        onPaste: function onPaste(view, event, slice) {
+          var urlpattern = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-zA-Z]{2,}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g;
+
+          if (slice.content.content[0].textContent.match(urlpattern)) {
+            //found url
+            var data = {
+              url: slice.content.content[0].textContent
+            };
+            axios.post('/api/content/ogparser', data).then(function (_ref) {
+              var data = _ref.data;
+              var image = data.ogtags.image;
+              var title = data.ogtags.title;
+              var description = data.ogtags.description;
+
+              var doc = _this.editor.getJSON();
+
+              doc.content.push({
+                "type": "heading",
+                "attrs": {
+                  "level": 3
+                },
+                "content": [{
+                  "type": "text",
+                  "text": title
+                }]
+              });
+              doc.content.push({
+                "type": "paragraph",
+                "content": [{
+                  "type": "image",
+                  "attrs": {
+                    "src": [image],
+                    "alt": null,
+                    "title": null
+                  }
+                }]
+              });
+              doc.content.push({
+                "type": "paragraph",
+                "content": [{
+                  "type": "text",
+                  "text": description
+                }]
+              });
+
+              _this.editor.setContent(doc);
+            })["catch"](function (_ref2) {// this.show=true;
+              // this.error=response.data.errors;
+
+              var response = _ref2.response;
+            });
+          }
+        }
       })
     };
   },
@@ -2682,8 +2738,11 @@ __webpack_require__.r(__webpack_exports__);
       });
       fileInput.click();
     },
+    json: function json() {
+      this.rawjson = this.editor.getJSON();
+    },
     save: function save(e) {
-      var _this = this;
+      var _this2 = this;
 
       if (this.edit == true) {
         var data = {
@@ -2695,16 +2754,16 @@ __webpack_require__.r(__webpack_exports__);
           anonymous: true,
           visibility: 'friends'
         };
-        axios.put('/api/content/' + this.content.id, data).then(function (_ref) {
-          var data = _ref.data;
+        axios.put('/api/content/' + this.content.id, data).then(function (_ref3) {
+          var data = _ref3.data;
 
-          _this.$store.commit('content/updateContent', data);
+          _this2.$store.commit('content/updateContent', data);
 
-          _this.editor.setContent("<h2>Updated</h2>");
-        })["catch"](function (_ref2) {
-          var response = _ref2.response;
-          _this.show = true;
-          _this.error = response.data.errors;
+          _this2.editor.setContent("<h2>Updated</h2>");
+        })["catch"](function (_ref4) {
+          var response = _ref4.response;
+          _this2.show = true;
+          _this2.error = response.data.errors;
         });
         return true;
       } else {
@@ -2717,17 +2776,17 @@ __webpack_require__.r(__webpack_exports__);
           anonymous: true,
           visibility: 'friends'
         };
-        axios.post('/api/content', _data).then(function (_ref3) {
-          var data = _ref3.data;
+        axios.post('/api/content', _data).then(function (_ref5) {
+          var data = _ref5.data;
           data.content.show_comment = false; //updateLikes
 
-          _this.$store.commit('content/prependContent', data.content);
+          _this2.$store.commit('content/prependContent', data.content);
 
-          _this.editor.setContent("<h2>Thank You</h2>");
-        })["catch"](function (_ref4) {
-          var response = _ref4.response;
-          _this.show = true;
-          _this.error = response.data.errors;
+          _this2.editor.setContent("<h2>Thank You</h2>");
+        })["catch"](function (_ref6) {
+          var response = _ref6.response;
+          _this2.show = true;
+          _this2.error = response.data.errors;
         });
       }
     }
@@ -60591,7 +60650,25 @@ var render = function() {
             },
             [_vm._v(" " + _vm._s(_vm.$t("Comment")))]
           )
-        : _vm._e()
+        : _vm._e(),
+      _vm._v(" "),
+      !_vm.isComment
+        ? _c(
+            "button",
+            {
+              staticClass: "btn default",
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.json($event)
+                }
+              }
+            },
+            [_c("i", { staticClass: "icon-heart" }), _vm._v(" json")]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _c("pre", [_vm._v(_vm._s(_vm.rawjson))])
     ],
     1
   )

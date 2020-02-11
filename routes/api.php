@@ -16,18 +16,23 @@ Route::group(['middleware' => ['api']], function () {
     Auth::routes();
 });
 
+
 Route::group(['middleware' => ['auth:api']], function () {
     Route::resource('content/likes', 'ContentLikeController')->only([
       'store','index'
     ]);
+
     Route::resource('content', 'ContentController');
 
     Route::resource('user', 'UserController')->only([
       'update'
     ]);
 
+
+
     Route::get("content/comments/{id}", 'ContentController@comments');
     Route::post("content/upload", 'ContentController@upload');
+    Route::post("content/ogparser", 'ContentController@parseog');
 });
 Route::middleware('auth:api')->get('/user/{name}', function (Request $request) {
       return User::where("name" , '=', $request->name)->select("id", "name", "bio", "avatar", "created_at")->first();

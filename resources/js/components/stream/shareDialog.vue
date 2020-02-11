@@ -133,13 +133,16 @@
 
       <button class="btn default" v-if="!isComment" @click.prevent="save"> <i class="icon-heart" /> {{$t('Share')}}</button>
       <button class="btn default" v-if="isComment" @click.prevent="save"> {{$t('Comment')}}</button>
-
-
+        <button class="btn default" v-if="!isComment" @click.prevent="json"> <i class="icon-heart" /> json</button>
+      <pre>{{rawjson}}</pre>
   </div>
 </template>
 <script>
 import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
-import {  Blockquote,  CodeBlock,  HardBreak,  Heading,  OrderedList,  BulletList,  ListItem,  TodoItem,  TodoList,  Bold,  Code,  Italic,  Link,  Strike,  Underline,  History, Image} from 'tiptap-extensions'
+
+import {  Blockquote,  CodeBlock,  HardBreak,  Heading,  OrderedList,  BulletList,  Link, ListItem,  TodoItem,  TodoList,  Bold,  Code,  Italic,  Strike,  Underline,  History, Image} from 'tiptap-extensions'
+
+
 import { Node } from 'tiptap'
 
 export default {
@@ -164,10 +167,11 @@ export default {
     },
     data() {
         return{
-
+          rawjson:"",
           editor: new Editor({
-           content: '<h1>Yay Headlines!</h1>         <p>All these <strong>cool tags</strong> are working now.</p>',
+           content: '',
            extensions: [
+
              new Blockquote(),
              new CodeBlock(),
              new HardBreak(),
@@ -180,12 +184,81 @@ export default {
              new Bold(),
              new Code(),
              new Italic(),
-             new Link(),
+
              new Strike(),
              new Underline(),
              new History(),
-             new Image()
+             new Image(),
+             new Link()
            ],
+            onPaste: (view, event, slice) => {
+               let urlpattern=/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-zA-Z]{2,}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g
+               if(slice.content.content[0].textContent.match(urlpattern))
+               {
+
+                  //found url
+                  let data={
+                    url:slice.content.content[0].textContent
+                  }
+                  axios.post('/api/content/ogparser', data)
+                      .then(({data}) => {
+
+                         let image=data.ogtags.image;
+                         let title=data.ogtags.title;
+                         let description=data.ogtags.description;
+
+                         const doc = this.editor.getJSON()
+
+                         doc.content.push({
+                            "type": "heading",
+                            "attrs": {
+                              "level": 3
+                            },
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": title
+                              }
+                            ]
+                          });
+                          doc.content.push(
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "image",
+                                "attrs": {
+                                  "src": [
+                                    image
+                                  ],
+                                  "alt": null,
+                                  "title": null
+                                }
+                              }
+                            ]
+                          });
+                          doc.content.push(
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": description
+                              }
+                            ]
+                          });
+
+                         this.editor.setContent(doc)
+
+
+                      })
+                      .catch(({response}) => {
+                        // this.show=true;
+                        // this.error=response.data.errors;
+                      });
+               }
+
+            }
         })
       }
     },
@@ -241,7 +314,9 @@ export default {
 
         fileInput.click();
       },
-
+      json(){
+        this.rawjson=this.editor.getJSON();
+      },
       save(e){
 
 
