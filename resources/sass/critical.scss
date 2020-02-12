@@ -114,12 +114,15 @@ small{
   }
 }
 button {
+
   padding: 10px;
   border:0px;
   font-size: 1.2em;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
   &:hover{
     cursor: pointer;
     text-decoration: underline;
+
   }
 
   &.small{

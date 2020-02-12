@@ -1,6 +1,12 @@
 @import 'color';
 @import 'fonts';
 @import 'grid';
+
+.streamitem
+{
+  padding-top: 1em;
+}
+
 .card{
 
     background-color: $color5;
@@ -23,12 +29,14 @@
     }
   }
 }
+
 .action{
 
   button{
     background-color: inherit;
     margin-bottom:  1em;
     transition: all .2s ease-in-out;
+    box-shadow: none;
     &:hover{
       text-decoration: none;
       transform: scale(1.1);
@@ -58,16 +66,20 @@
   width: 100%;
   background-color: $color1;
   padding: 1em;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
   @media screen and (max-width: $grid-mobile-breakpoint) {
     min-height:150px;
     padding: 0em;
     margin:0em;
   }
-  border: 1px $color2 solid;
+  border: 1px #ccc solid;
   code{
    background-color:   $color3;
   }
   div{
+    &:focus{
+      outline: none;
+    }
     margin-top:0em;
     padding-top:0em;
     min-height:110px;
@@ -82,6 +94,7 @@
   .editor-container{
     padding: 0em;
     padding-bottom: 2em;
+
     @media screen and (max-width: $grid-mobile-breakpoint) {
       padding:  0em;
 

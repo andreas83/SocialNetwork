@@ -5,32 +5,33 @@
       <share-dialog :edit="isEdit" :content_id="content_id"></share-dialog>
     </div>
     <div class="col-lg-12">
+      <div class="row-0 streamitem " v-for="data in content" v-if="user_id==false || user_id==data.user_id">
+        <div class="row card" >
 
-      <div class="row card" v-for="data in content" v-if="user_id==false || user_id==data.user_id">
-        
-        <div class="col-lg-12  col-md-12">
-          <router-link :to="{ name: 'user', params: {name:data.name, user_id:data.user_id} }">
-            <picture>
-              <img :src="data.avatar" />
-            </picture>
-            <author >
-              {{data.name}}
+          <div class="col-lg-12  col-md-12">
+            <router-link :to="{ name: 'user', params: {name:data.name, user_id:data.user_id} }">
+              <picture>
+                <img :src="data.avatar" />
+              </picture>
+              <author >
+                {{data.name}}
 
-            </author>
-          </router-link>
-          <date>{{data.created_at}}</date>
-          <button class="btn default small" v-if="data.user_id==user.id" @click="deleteContent(data.id)">{{$t("form.delete")}}</button>
-          <button class="btn default small" v-if="data.user_id==user.id" @click="editContent(data.id)">{{$t("form.edit")}}</button>
+              </author>
+            </router-link>
+            <date>{{data.created_at}}</date>
+            <button class="btn default small" v-if="data.user_id==user.id" @click="deleteContent(data.id)">{{$t("form.delete")}}</button>
+            <button class="btn default small" v-if="data.user_id==user.id" @click="editContent(data.id)">{{$t("form.edit")}}</button>
 
-          <content v-html="data.html_content">
+            <content v-html="data.html_content">
 
-          </content>
+            </content>
 
-          <actions :content=data  v-on:toggleComment="toggleComment">
-          </actions>
+            <actions :content=data  v-on:toggleComment="toggleComment">
+            </actions>
 
-          <comments :parrent_content=data v-if="data.show_comment">
-          </comments>
+            <comments :parrent_content=data v-if="data.show_comment">
+            </comments>
+          </div>
         </div>
       </div>
     </div>

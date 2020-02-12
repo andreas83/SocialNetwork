@@ -208,7 +208,7 @@ export default {
 
                          const doc = this.editor.getJSON()
 
-                         if (title.length>0) {
+                         if (title) {
                            doc.content.push({
                               "type": "heading",
                               "attrs": {
@@ -225,7 +225,7 @@ export default {
                          }
 
                           //add image
-                          if(image.length>0)
+                          if(image)
                           {
                             doc.content.push(
                             {
@@ -245,7 +245,7 @@ export default {
                             });
                           }
                           //add description
-                          if(description.length>0)
+                          if(description)
                           {
                             doc.content.push(
                             {
