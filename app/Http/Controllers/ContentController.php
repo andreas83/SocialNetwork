@@ -119,10 +119,10 @@ class ContentController extends Controller
     public function parseog(Request $request)
     {
         $validatedData = $request->validate([
-      'url' => ['required', 'url'],
-      ]);
+        'url' => ['required', 'url'],
+        ]);
 
-        $page=RemoteContent::fetch($validatedData->url);
+        $page=RemoteContent::fetch($validatedDat['url']);
 
         return response()->json([
          'ogtags' => [
