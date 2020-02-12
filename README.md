@@ -25,7 +25,7 @@ This will create the db structure
 
 ### 1.3 Folders / Permissions
 
-Create Storage folder (symbolic link)
+Create storage folder (symbolic link)
 
     php artisan storage:link
 
@@ -35,7 +35,7 @@ Make phantomsjs executeable (needed for og tag parsing)
 
 ### 1.4 Webserver (nginx)
 
-This is just a example Configuration of our dev system
+This is just a example configuration of our dev system
 
     server {
 
@@ -91,6 +91,7 @@ Sadly no screenshoot are available anymore.
 
 
 ### Version 2.0  (est 2014)
+
 ![Screenshoot of verion 2.0](https://social.codejungle.org/upload/5e43db0e34a814.07174424_Screenshot_20200212_113721.png)
 
 
@@ -105,14 +106,16 @@ Working features:
 * Oauth2 (Facebook, Github)
 * Backend with Dashboard
 
-One side project was to visualize the related hashtags
-
-
+One side project was to visualize the related hashtags.
 
 ![Visualization of the related Hashtags](https://social.codejungle.org/upload/56f48025dc02d4.12264426_dashboard2.jpg)
 
 
-**Status** not longer maintained
+Another cool feature was the Google Chrome extension to share content with just a click.
+![Screenshoot of Google Chrome extension](https://social.codejungle.org/upload/5e43db94a6b792.10501109_Screenshot_20200212_120334.png)
+
+
+**Please keep in mind Version 2.0 is not longer maintained**
 
 ### Version 3.0 (est 2020)
 
