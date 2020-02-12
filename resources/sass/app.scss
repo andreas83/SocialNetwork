@@ -9,7 +9,7 @@
 
 .card{
 
-  background-color: $color5;
+  background-color: $color3;
   overflow: hidden;
   word-break: break-all;
 
@@ -76,7 +76,7 @@
   }
   border: 1px #ccc solid;
   code{
-   background-color:   $color3;
+   background-color:   $color2;
   }
   div{
     &:focus{
