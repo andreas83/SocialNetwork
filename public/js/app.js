@@ -2396,6 +2396,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Comments",
   props: {
@@ -2405,6 +2409,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      isComment: true,
       isEdit: false,
       content_id: 0,
       content: [],
@@ -60162,11 +60167,11 @@ var render = function() {
       : _vm._e(),
     _vm._v(" "),
     _vm.isAuth == false
-      ? _c("div", { staticClass: "col-lg-6" }, [_c("Login")], 1)
+      ? _c("div", { staticClass: "col-lg-6 col-md-12" }, [_c("Login")], 1)
       : _vm._e(),
     _vm._v(" "),
     _vm.isAuth == false
-      ? _c("div", { staticClass: "col-lg-6" }, [_c("Register")], 1)
+      ? _c("div", { staticClass: "col-lg-6 col-md-12" }, [_c("Register")], 1)
       : _vm._e()
   ])
 }
@@ -60356,7 +60361,7 @@ var render = function() {
           edit: _vm.isEdit,
           content_id: _vm.content_id,
           parrent_id: _vm.parrent_content.id,
-          "is-comment": "true"
+          "is-comment": _vm.isComment
         }
       }),
       _vm._v(" "),
@@ -60368,11 +60373,39 @@ var render = function() {
             "div",
             { staticClass: "comment col-lg-12" },
             [
+              _c("picture", [_c("img", { attrs: { src: data.avatar } })]),
+              _vm._v(" "),
               _c("author", [
                 _vm._v("\n        " + _vm._s(data.name) + "\n      ")
               ]),
               _vm._v(" "),
               _c("date", [_vm._v(_vm._s(data.created_at))]),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn default small",
+                  on: {
+                    click: function($event) {
+                      return _vm.deleteContent(data.id)
+                    }
+                  }
+                },
+                [_vm._v(_vm._s(_vm.$t("form.delete")))]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn default small",
+                  on: {
+                    click: function($event) {
+                      return _vm.editContent(data.id)
+                    }
+                  }
+                },
+                [_vm._v(_vm._s(_vm.$t("form.edit")))]
+              ),
               _vm._v(" "),
               _c("content", {
                 domProps: { innerHTML: _vm._s(data.html_content) }

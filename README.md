@@ -3,6 +3,9 @@
 works pretty similar to a well known social network, but you can host it on your very own infrastructure. No external dependencies needed. Focus of this project was security and performance.
 
 
+
+
+
 ## 0. Demo
 
 https://dev.codejungle.org

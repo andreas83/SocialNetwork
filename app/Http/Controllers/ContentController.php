@@ -7,22 +7,27 @@ use App\Content;
 use Auth;
 use DB;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\ContentStoreRequest;
+use App\Http\Requests\ContentDestroyRequest;
+
 use App\Http\Controllers\Helper\RemoteContent;
 use JonnyW\PhantomJs\Client;
 
 class ContentController extends Controller
 {
-    public function store(Request $request)
+    public function store(ContentStoreRequest $request)
     {
-        $content = new Content;
-        $content->json_content=json_encode($request->json_content);
-        $content->html_content=$request->html_content;
-        $content->anonymous=$request->anonymous;
-        $content->visibility=$request->visibility;
+        $validated = $request->validated();
 
-        $content->has_comment=($request->has_comment ? "true" : "false");
-        $content->is_comment=($request->is_comment ? "true" : "false");
-        $content->parrent_id=$request->parrent_id;
+        $content = new Content;
+        $content->json_content=json_encode($validated['json_content']);
+        $content->html_content=$validated['html_content'];
+        $content->anonymous=$validated['anonymous'];
+        $content->visibility=$validated['visibility'];
+
+        $content->has_comment=($validated['has_comment']  ? "true" : "false");
+        $content->is_comment=($validated['is_comment']  ? "true" : "false");
+        $content->parrent_id=$validated['parrent_id'];
 
         $content->user_id=Auth::user()->id;
         $content->save();
@@ -33,24 +38,38 @@ class ContentController extends Controller
             $parrent->save();
         }
 
+
+
+        return $this->getContentById($content->id);
+    }
+
+    public function getContentById($id)
+    {
+        $content = DB::table('contents')->
+          select('contents.*', 'users.name', 'users.avatar')->
+          join('users', 'users.id', '=', 'contents.user_id')->where("contents.id", "=", $id)->get();
         return response()->json([
-           'content' => $content,
-       ]);
+         'content' => $content[0],
+     ]);
     }
 
     public function update(Request $request, $id)
     {
+        $validatedData = $request->validate([
+        'html_content' => ['required'],
+        'json_content' => ['required'],
+
+        ]);
+
         $content = Content::find($id);
-        $content->json_content=json_encode($request->json_content);
+        $content->json_content=json_encode($validatedData['json_content']);
         $content->html_content=$request->html_content;
 
         if ($content->user_id == Auth::user()->id) {
             $content->save();
         }
 
-        return response()->json([
-           'content' => $content,
-       ]);
+        return $this->getContentById($content->id);
     }
 
     public function index(Request $request)
@@ -61,7 +80,7 @@ class ContentController extends Controller
        ]);
     }
 
-    public function destroy(Request $request, $id)
+    public function destroy(ContentDestroyRequest $request, $id)
     {
         $content=  Content::find($id);
         if ($content->user_id==Auth::user()->id) {
@@ -88,7 +107,7 @@ class ContentController extends Controller
         $content = DB::table('contents')->
         where("is_comment", "=", "true")->
         where("parrent_id", "=", $id)->
-        select('contents.*', 'users.name')->
+        select('contents.*', 'users.name', 'users.avatar')->
         join('users', 'users.id', '=', 'contents.user_id')->
         orderBy("contents.id", "desc")->
         paginate(15);
@@ -99,20 +118,18 @@ class ContentController extends Controller
 
     public function parseog(Request $request)
     {
+        $validatedData = $request->validate([
+      'url' => ['required', 'url'],
+      ]);
 
+        $page=RemoteContent::fetch($validatedData->url);
 
-      $page=RemoteContent::fetch($request->url);
-      
-      return response()->json([
+        return response()->json([
          'ogtags' => [
            "description" => $page->description,
            "title" => $page->title,
            "image" => $page->image
          ]
       ]);
-
-
     }
-
-
 }

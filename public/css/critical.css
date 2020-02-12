@@ -517,7 +517,7 @@ small {
 }
 
 .form-field .error {
-  color: #222;
+  color: #ff7909;
   background-color: #222;
   padding: 0.3em;
 }

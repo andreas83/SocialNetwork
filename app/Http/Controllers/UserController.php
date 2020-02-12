@@ -9,6 +9,9 @@ class UserController extends Controller
 {
   function update(Request $request, $id){
 
+
+
+
     $user = User::find(Auth::user()->id);
 
     if($request->has("password")  && !empty($request->password))

@@ -6,10 +6,10 @@
       <stream></stream>
     </div>
 
-    <div v-if="isAuth==false" class="col-lg-6">
+    <div v-if="isAuth==false" class="col-lg-6 col-md-12">
       <Login></Login>
     </div>
-    <div v-if="isAuth==false" class="col-lg-6">
+    <div v-if="isAuth==false" class="col-lg-6 col-md-12">
       <Register></Register>
     </div>
 

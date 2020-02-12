@@ -1,29 +1,36 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\ContentLike;
 use Illuminate\Http\Request;
 use DB;
 use Auth;
+
+
+use App\Http\Requests\LikeStoreRequest;
 class ContentLikeController extends Controller
 {
-    function store(Request $request){
+    public function store(LikeStoreRequest $request)
+    {
 
-      $like = new ContentLike;
-      $like->key=$request->key;
-      $like->content_id=$request->content_id;
 
-      $like->user_id=Auth::user()->id;
-      $like->save();
+        $like = new ContentLike;
+        $like->key=$request->key;
+        $like->content_id=$request->content_id;
 
-      return $this ->index($request);
+        $like->user_id=Auth::user()->id;
+        $like->save();
+
+        return $this->index($request);
     }
 
-    function index(Request $request){
+    public function index(Request $request)
+    {
 
-      $likes = DB::table('content_likes')->select('key', DB::raw('count(*) as total'))->
+        $likes = DB::table('content_likes')->select('key', DB::raw('count(*) as total'))->
       where("content_id", "=", $request->content_id)->groupBy("content_id")->groupBy("key")->get();
-      return response()->json([
+        return response()->json([
            'likes' => ["content_id"=> $request->content_id , "likes"=> $likes],
        ]);
     }
