@@ -122,7 +122,7 @@ class ContentController extends Controller
         'url' => ['required', 'url'],
         ]);
 
-        $page=RemoteContent::fetch($validatedDat['url']);
+        $page=RemoteContent::fetch($validatedData['url']);
 
         return response()->json([
          'ogtags' => [
