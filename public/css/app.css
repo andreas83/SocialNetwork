@@ -576,7 +576,7 @@
 
 @media screen and (max-width: 620px) {
   .editor {
-    height: 150px;
+    min-height: 150px;
     padding: 0em;
     margin: 0em;
   }

@@ -59,7 +59,7 @@
   background-color: $color1;
   padding: 1em;
   @media screen and (max-width: $grid-mobile-breakpoint) {
-    height:150px;
+    min-height:150px;
     padding: 0em;
     margin:0em;
   }
