@@ -208,45 +208,56 @@ export default {
 
                          const doc = this.editor.getJSON()
 
-                         doc.content.push({
-                            "type": "heading",
-                            "attrs": {
-                              "level": 3
-                            },
-                            "content": [
-                              {
-                                "type": "text",
-                                "text": title
-                              }
-                            ]
-                          });
-                          doc.content.push(
-                          {
-                            "type": "paragraph",
-                            "content": [
-                              {
-                                "type": "image",
-                                "attrs": {
-                                  "src": [
-                                    image
-                                  ],
-                                  "alt": null,
-                                  "title": null
+                         if (title.length>0) {
+                           doc.content.push({
+                              "type": "heading",
+                              "attrs": {
+                                "level": 3
+                              },
+                              "content": [
+                                {
+                                  "type": "text",
+                                  "text": title
                                 }
-                              }
-                            ]
-                          });
-                          doc.content.push(
-                          {
-                            "type": "paragraph",
-                            "content": [
-                              {
-                                "type": "text",
-                                "text": description
-                              }
-                            ]
-                          });
+                              ]
+                            });
 
+                         }
+
+                          //add image
+                          if(image.length>0)
+                          {
+                            doc.content.push(
+                            {
+                              "type": "paragraph",
+                              "content": [
+                                {
+                                  "type": "image",
+                                  "attrs": {
+                                    "src": [
+                                      image
+                                    ],
+                                    "alt": null,
+                                    "title": null
+                                  }
+                                }
+                              ]
+                            });
+                          }
+                          //add description
+                          if(description.length>0)
+                          {
+                            doc.content.push(
+                            {
+                              "type": "paragraph",
+                              "content": [
+                                {
+                                  "type": "text",
+                                  "text": description
+                                }
+                              ]
+                            });
+                          }
                          this.editor.setContent(doc)
 
 
