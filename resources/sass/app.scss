@@ -9,7 +9,9 @@
 
 .card{
 
-    background-color: $color5;
+  background-color: $color5;
+  overflow: hidden;
+  word-break: break-all;
 
   padding-top: 1em;
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
