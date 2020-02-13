@@ -2,8 +2,11 @@
 
 works pretty similar to a well known social network, but you can host it on your very own infrastructure. No external dependencies needed. Focus of this project was security and performance.
 
+##Anouncement 
 
-
+On 13.02.2020 i decided to move version 2.0 to deprecated branch 
+At moment the new master has less features than 2.0, but iam working hard to restore the most important ones. 
+Feel free to join the development process by creating tasks (feature request) or make code improvements. 
 
 
 ## 0. Demo
@@ -122,10 +125,13 @@ Another cool feature was the Google Chrome extension to share content with just 
 
 **Please keep in mind Version 2.0 is not longer maintained**
 
+Demo is still alive here: https://social.codejungle.org/
+
+
 ### Version 3.0 (est 2020)
 
 
-work in progress (see dev branch)
+
 
 
 
