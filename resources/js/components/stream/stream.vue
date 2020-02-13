@@ -3,9 +3,11 @@
   <div class="row">
     <div class="col-lg-12">
       <share-dialog :edit="isEdit" :content_id="content_id"></share-dialog>
+
     </div>
     <div class="col-lg-12">
-      <div class="row-0 streamitem " v-for="data in content" v-if="user_id==false || user_id==data.user_id">
+      <div class="row-0 streamitem " v-for="data in content" v-if="(user_id==false || user_id==data.user_id) && data.is_comment=='false'">
+
         <div class="row card" >
 
           <div class="col-lg-12  col-md-12">
@@ -19,6 +21,7 @@
               </author>
             </router-link>
             <date>{{data.created_at}}</date>
+            
             <button class="btn default small" v-if="data.user_id==user.id" @click="deleteContent(data.id)">{{$t("form.delete")}}</button>
             <button class="btn default small" v-if="data.user_id==user.id" @click="editContent(data.id)">{{$t("form.edit")}}</button>
 
@@ -26,8 +29,8 @@
 
             </content>
 
-            <actions :content=data  v-on:toggleComment="toggleComment">
-            </actions>
+            <likes :content=data  v-on:toggleComment="toggleComment">
+            </likes>
 
             <comments :parrent_content=data v-if="data.show_comment">
             </comments>
@@ -38,7 +41,7 @@
   </div>
 </template>
 <script>
-
+import {mapGetters, mapActions} from 'vuex';
 export default {
   name: "Stream",
     props:{
@@ -53,13 +56,13 @@ export default {
           error:""
         }
       },
-      mounted(){
+      async created (){
 
-        this.getContent();
+        await this.getContent();
 
       },
       methods:{
-
+        ...mapActions('content', ['getContent', 'deleteContent']),
         deleteContent(id){
           axios.delete('/api/content/'+id).then(({data}) => {
             this.$store.commit('content/deleteContent', id);
@@ -70,29 +73,7 @@ export default {
           this.isEdit=true;
           this.content_id=id;
         },
-        getContent(){
-            let data={};
 
-            if(this.user_id>0)
-            {
-                data.user_id=this.user_id;
-            }
-            axios.get('/api/content', {"params":data})
-                .then(({data}) => {
-
-                  for(var i=0, length= data.content.data.length; i < length; i++)
-                  {
-
-                    data.content.data[i].show_comment=false;
-                  }
-
-                  this.$store.commit('content/setContent', data.content.data);
-
-                })
-                .catch(({response}) => {
-
-                });
-        },
         toggleComment(id){
 
           for(var i=0, length= this.content.length; i < length; i++)

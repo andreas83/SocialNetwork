@@ -3,7 +3,7 @@
   <div class="row-0 comment-container">
     <share-dialog :edit="isEdit" :content_id="content_id" :parrent_id=parrent_content.id :is-comment="isComment"></share-dialog>
     <div class="comment-list row-0">
-      <div class="comment col-lg-12"  v-for="data in content">
+      <div class="comment col-lg-12"  v-for="data in comments">
 
         <picture>
           <img :src="data.avatar" />
@@ -22,7 +22,7 @@
   </div>
 </template>
 <script>
-
+import {mapGetters , mapActions} from 'vuex';
 export default {
     name: "Comments",
     props:{
@@ -40,10 +40,12 @@ export default {
           error:""
         }
       },
-      mounted(){
-        this.getComments();
+      async mounted(){
+        this.getComment({ content_id: this.parrent_content.id });
       },
       methods:{
+        ...mapActions('content', ['getComment']),
+
         deleteContent(id){
           axios.delete('/api/content/'+id).then(({data}) => {
             this.$store.commit('content/deleteContent', id);
@@ -55,22 +57,15 @@ export default {
           this.content_id=id;
         },
 
-        getComments(){
 
-          axios.get('/api/content/comments/'+this.parrent_content.id)
-              .then(({data}) => {
-                this.content=data.content.data;
-
-              })
-              .catch(({response}) => {
-
-              });
-        },
         toggleComment(id){
           console.log(this.$refs.id);
         }
       },
       computed:{
+        ...mapGetters({
+          comments: 'content/getComment'
+        }),
         isAuth(){
           return this.$store.getters["user/isAuth"];
         }

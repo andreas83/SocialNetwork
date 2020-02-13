@@ -137,12 +137,11 @@
   </div>
 </template>
 <script>
-import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
+import { Editor, EditorContent, EditorMenuBar, Node } from 'tiptap'
+import { Blockquote,  CodeBlock,  HardBreak,  Heading,  OrderedList,  BulletList,  Link, ListItem,  TodoItem,  TodoList,  Bold,  Code,  Italic,  Strike,  Underline,  History, Image} from 'tiptap-extensions'
+import {onPasteUrl} from "./editor/onPasteUrl";
+import {mapGetters, mapActions} from 'vuex';
 
-import {  Blockquote,  CodeBlock,  HardBreak,  Heading,  OrderedList,  BulletList,  Link, ListItem,  TodoItem,  TodoList,  Bold,  Code,  Italic,  Strike,  Underline,  History, Image} from 'tiptap-extensions'
-
-
-import { Node } from 'tiptap'
 
 export default {
     name: "shareDialog",
@@ -191,83 +190,8 @@ export default {
              new Link()
            ],
             onPaste: (view, event, slice) => {
-               let urlpattern=/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-zA-Z]{2,}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g
-               if(slice.content.content[0].textContent.match(urlpattern))
-               {
 
-                  //found url
-                  let data={
-                    url:slice.content.content[0].textContent
-                  }
-                  axios.post('/api/content/ogparser', data)
-                      .then(({data}) => {
-
-                         let image=data.ogtags.image;
-                         let title=data.ogtags.title;
-                         let description=data.ogtags.description;
-
-                         const doc = this.editor.getJSON()
-
-                         if (title) {
-                           doc.content.push({
-                              "type": "heading",
-                              "attrs": {
-                                "level": 3
-                              },
-                              "content": [
-                                {
-                                  "type": "text",
-                                  "text": title
-                                }
-                              ]
-                            });
-
-                         }
-
-                          //add image
-                          if(image)
-                          {
-                            doc.content.push(
-                            {
-                              "type": "paragraph",
-                              "content": [
-                                {
-                                  "type": "image",
-                                  "attrs": {
-                                    "src": [
-                                      image
-                                    ],
-                                    "alt": null,
-                                    "title": null
-                                  }
-                                }
-                              ]
-                            });
-                          }
-                          //add description
-                          if(description)
-                          {
-                            doc.content.push(
-                            {
-                              "type": "paragraph",
-                              "content": [
-                                {
-                                  "type": "text",
-                                  "text": description
-                                }
-                              ]
-                            });
-                          }
-                         this.editor.setContent(doc)
-
-
-                      })
-                      .catch(({response}) => {
-                        // this.show=true;
-                        // this.error=response.data.errors;
-                      });
-               }
-
+              onPasteUrl(view,event,slice, this.editor);
             }
         })
       }
@@ -281,6 +205,8 @@ export default {
       }
     },
     methods:{
+
+      ...mapActions('content', ['createContent', 'updateContent']),
 
       openFileDialog(command){
         var element = document.createElement('div');
@@ -324,15 +250,14 @@ export default {
 
         fileInput.click();
       },
-      json(){
-        this.rawjson=this.editor.getJSON();
-      },
+
       save(e){
 
 
           if(this.edit==true)
           {
             let data = {
+                id: this.content.id,
                 html_content: this.editor.getHTML(),
                 json_content: this.editor.getJSON(),
                 has_comment: this.content.has_comment,
@@ -341,19 +266,10 @@ export default {
                 anonymous: true,
                 visibility: 'friends'
             };
-            axios.put('/api/content/'+this.content.id, data)
-                .then(({data}) => {
 
-                  this.$store.commit('content/updateContent', data);
-
-                  this.editor.setContent("<h2>Updated</h2>");
-
-                })
-                .catch(({response}) => {
-                  this.show=true;
-                  this.error=response.data.errors;
-                });
-            return true;
+            this.updateContent(data);
+            this.editor.setContent("<h2>Updated</h2>");
+            
           }else {
             let data = {
                 html_content: this.editor.getHTML(),
@@ -364,20 +280,8 @@ export default {
                 anonymous: true,
                 visibility: 'friends'
             };
-            axios.post('/api/content', data)
-                .then(({data}) => {
-
-                  data.content.show_comment=false;
-
-                  //updateLikes
-
-                  this.$store.commit('content/prependContent', data.content);
-                  this.editor.setContent("<h2>Thank You</h2>");
-                })
-                .catch(({response}) => {
-                  this.show=true;
-                  this.error=response.data.errors;
-                });
+            this.createContent(data);
+            this.editor.setContent("<h2>Saved</h2>");
           }
 
       }

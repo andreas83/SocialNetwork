@@ -4,3 +4,5 @@ Homestead.json
 Homestead.yaml
 .env
 /node_modules
+public/storage
+bin/

@@ -60,12 +60,13 @@ class RemoteContent implements \Iterator
     $client->getEngine()->addOption('--ssl-protocol=any');
     $client->getEngine()->addOption('--ignore-ssl-errors=true');
     $client->getEngine()->addOption('--web-security=false');
+		$client->getEngine()->addOption('--load-images=false');
 
     /**
      * @see JonnyW\PhantomJs\Http\Request
      **/
     $request = $client->getMessageFactory()->createRequest($URI, 'GET');
-    $request->addSetting('userAgent', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36');
+    $request->addSetting('userAgent', 'Mozilla/5.0 (compatible; GroupShareX/1.0; +http://www.google.com/bot.html)');
     /**
      * @see JonnyW\PhantomJs\Http\Response
      **/
@@ -76,7 +77,7 @@ class RemoteContent implements \Iterator
     $client->send($request, $response);
 
     if($response->getStatus() === 200) {
-      
+
         return self::_parse($response->getContent());
 
     }

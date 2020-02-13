@@ -25,7 +25,7 @@ Vue.config.ignoredElements = ['comment', 'date', 'author', 'comments', 'actions'
 Vue.component('Register', require('./components/user/register').default);
 Vue.component('Login', require('./components/user/login').default);
 Vue.component('Stream', require('./components/stream/stream').default);
-Vue.component('Actions', require('./components/stream/actions').default);
+Vue.component('Likes', require('./components/stream/likes').default);
 Vue.component('ShareDialog', require('./components/stream/shareDialog').default);
 Vue.component('Comments', require('./components/stream/comments').default);
 

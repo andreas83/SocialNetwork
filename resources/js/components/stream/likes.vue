@@ -17,9 +17,9 @@
   </div>
 </template>
 <script>
-import {mapGetters} from 'vuex';
+import {mapGetters, mapActions} from 'vuex';
 export default {
-    name: "Actions",
+    name: "Likes",
     props:{
       content:false
     },
@@ -29,11 +29,14 @@ export default {
           error:""
         }
       },
-      created(){
-        this.getLikes();
+      async created(){
+
+        await this.getLikes(this.content.id)
+        this.loaded=true;
 
       },
       methods:{
+        ...mapActions('likes', ['getLikes', 'createLike']),
 
         toggleComment(){
 
@@ -42,38 +45,19 @@ export default {
         },
         saveLike(key){
           let data={
-            key:key,
-            content_id:this.content.id,
+            "key":key,
+            "content_id":this.content.id,
           };
-          axios.post('/api/content/likes', data)
-              .then(({data}) => {
-
-
-                this.$store.commit('content/updateLikes', data.likes);
-
-              })
-              .catch(({response}) => {
-
-              });
+          this.createLike(data);
         },
-        getLikes(){
-          let data={content_id:this.content.id}
-            axios.get('/api/content/likes', {params:data})
-                .then(({data}) => {
 
-                  this.$store.commit('content/updateLikes', data.likes);
-                  this.loaded=true;
-                })
-                .catch(({response}) => {
-
-                });
-        },
         getLikesByKey(key){
 
             if(!this.loaded)
               return false;
 
             var data=this.getStoredLikes;
+
             var content_id=this.content.id;
             const index = data.findIndex(item => item.content_id == content_id);
 
@@ -93,7 +77,7 @@ export default {
       computed:{
 
         ...mapGetters({
-          getStoredLikes: 'content/getLikes'
+          getStoredLikes: 'likes/getLikes'
         }),
 
         isAuth(){

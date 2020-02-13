@@ -79,10 +79,14 @@ class ContentController extends Controller
            'content' => $content,
        ]);
     }
-
-    public function destroy(ContentDestroyRequest $request, $id)
+    /**
+     * @ todo check why ContentDestroyRequest does not validates get params
+     *
+     */
+    public function destroy(Request $request, $id)
     {
-        $content=  Content::find($id);
+        $content= Content::find($id);
+      
         if ($content->user_id==Auth::user()->id) {
             $content->destroy($id);
         }
