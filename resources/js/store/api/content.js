@@ -12,7 +12,7 @@ const createContent = ( html_content,
                         json_content,
                         has_comment,
                         is_comment,
-                        parrent_id,
+                        parent_id,
                         anonymous,
                         visibility
                       )=>httpClient.post(END_POINT,
@@ -21,20 +21,20 @@ const createContent = ( html_content,
                         json_content,
                         has_comment,
                         is_comment,
-                        parrent_id,
+                        parent_id,
                         anonymous,
                         visibility
                        });
 
 function updateContent ( id, html_content, json_content, has_comment,is_comment,
-                         parrent_id, anonymous,visibility ) {
+                         parent_id, anonymous,visibility ) {
 
     return httpClient.put('/api/content/'+id, {
         html_content,
         json_content,
         has_comment,
         is_comment,
-        parrent_id,
+        parent_id,
         anonymous,
         visibility
     });

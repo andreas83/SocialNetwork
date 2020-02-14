@@ -17,7 +17,7 @@ export default {
                               data.json_content,
                               data.has_comment,
                               data.is_comment,
-                              data.parrent_id,
+                              data.parent_id,
                               data.anonymous,
                               data.visibility);
 
@@ -79,7 +79,7 @@ export default {
                               data.json_content,
                               data.has_comment,
                               data.is_comment,
-                              data.parrent_id,
+                              data.parent_id,
                               data.anonymous,
                               data.visibility);
       response.data.content.show_comment=false;
@@ -106,7 +106,7 @@ export default {
         return state.content.find(content => content.id == id)
     },
     getCommentById: (state) => (id) => {
-        return state.content.filter(data => data.parrent_id === id)
+        return state.content.filter(data => data.parent_id === id)
     }
   },
   mutations:{

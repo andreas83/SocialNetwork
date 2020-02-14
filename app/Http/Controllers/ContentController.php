@@ -27,15 +27,15 @@ class ContentController extends Controller
 
         $content->has_comment=($validated['has_comment']  ? "true" : "false");
         $content->is_comment=($validated['is_comment']  ? "true" : "false");
-        $content->parrent_id=$validated['parrent_id'];
+        $content->parent_id=$validated['parent_id'];
 
         $content->user_id=Auth::user()->id;
         $content->save();
 
         if ($request->is_comment) {
-            $parrent=  Content::find($request->parrent_id);
-            $parrent->has_comment="true";
-            $parrent->save();
+            $parent=  Content::find($request->parent_id);
+            $parent->has_comment="true";
+            $parent->save();
         }
 
 
@@ -86,7 +86,7 @@ class ContentController extends Controller
     public function destroy(Request $request, $id)
     {
         $content= Content::find($id);
-      
+
         if ($content->user_id==Auth::user()->id) {
             $content->destroy($id);
         }
@@ -110,7 +110,7 @@ class ContentController extends Controller
     {
         $content = DB::table('contents')->
         where("is_comment", "=", "true")->
-        where("parrent_id", "=", $id)->
+        where("parent_id", "=", $id)->
         select('contents.*', 'users.name', 'users.avatar')->
         join('users', 'users.id', '=', 'contents.user_id')->
         orderBy("contents.id", "desc")->

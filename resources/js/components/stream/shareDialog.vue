@@ -159,7 +159,7 @@ export default {
       content_id:{
         dafault : 0
       },
-      parrent_id:{
+      parent_id:{
         default : 0
       }
     },
@@ -261,7 +261,7 @@ export default {
                 json_content: this.editor.getJSON(),
                 has_comment: this.content.has_comment,
                 is_comment:this.content.is_comment,
-                parrent_id: this.content.parrent_id,
+                parent_id: this.content.parent_id,
                 anonymous: true,
                 visibility: 'friends'
             };
@@ -275,7 +275,7 @@ export default {
                 json_content: this.editor.getJSON(),
                 has_comment: false,
                 is_comment:this.isComment,
-                parrent_id: this.parrent_id,
+                parent_id: this.parent_id,
                 anonymous: true,
                 visibility: 'friends'
             };

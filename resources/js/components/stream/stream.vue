@@ -21,7 +21,7 @@
               </author>
             </router-link>
             <date>{{data.created_at}}</date>
-            
+
             <button class="btn default small" v-if="data.user_id==user.id" @click="deleteContent(data.id)">{{$t("form.delete")}}</button>
             <button class="btn default small" v-if="data.user_id==user.id" @click="editContent(data.id)">{{$t("form.edit")}}</button>
 
@@ -32,7 +32,7 @@
             <likes :content=data  v-on:toggleComment="toggleComment">
             </likes>
 
-            <comments :parrent_content=data v-if="data.show_comment">
+            <comments :parent_content=data v-if="data.show_comment">
             </comments>
           </div>
         </div>

@@ -1,10 +1,10 @@
 <template>
 
   <div class="row-0 comment-container">
-    <share-dialog :edit="isEdit"  @updated="onUpdated"  :content_id="content_id" :parrent_id=parrent_content.id :is-comment="isComment"></share-dialog>
+    <share-dialog :edit="isEdit"  @updated="onUpdated"  :content_id="content_id" :parent_id=parent_content.id :is-comment="isComment"></share-dialog>
     <div class="comment-list row-0">
 
-      <div class="comment col-lg-12"  v-for="data in comments" v-if="parrent_content.id==data.parrent_id ">
+      <div class="comment col-lg-12"  v-for="data in comments" v-if="parent_content.id==data.parent_id ">
 
         <picture>
           <img :src="data.avatar" />
@@ -27,7 +27,7 @@ import {mapGetters , mapActions} from 'vuex';
 export default {
     name: "Comments",
     props:{
-      parrent_content:
+      parent_content:
       {
         default:false
       }
@@ -44,7 +44,7 @@ export default {
       },
       async created(){
 
-        this.getComment( this.parrent_content.id );
+        this.getComment( this.parent_content.id );
 
       },
       methods:{
@@ -70,7 +70,7 @@ export default {
       },
       computed:{
         comments(){
-          return  this.$store.getters["content/getCommentById"](this.parrent_content.id);
+          return  this.$store.getters["content/getCommentById"](this.parent_content.id);
         },
         isAuth(){
           return this.$store.getters["user/isAuth"];

@@ -32,7 +32,7 @@ class ContentStoreRequest extends FormRequest
         'is_comment' =>  ['required', 'boolean' ],
         'anonymous' =>  ['required', 'boolean'],
         'visibility' =>  ['required', 'in:public,private,friends'],
-        'parrent_id' => ['required', 'integer']
+        'parent_id' => ['required', 'integer']
         ];
     }
 }
