@@ -2,7 +2,7 @@
 
   <div class="row">
     <div class="col-lg-12">
-      <share-dialog :edit="isEdit" :content_id="content_id"></share-dialog>
+      <share-dialog :edit="isEdit" @updated="onUpdated" :content_id="content_id"></share-dialog>
 
     </div>
     <div class="col-lg-12">
@@ -69,6 +69,9 @@ export default {
           })
 
         },
+        onUpdated (value) {
+          this.isEdit=false;
+        },        
         editContent(id){
           this.isEdit=true;
           this.content_id=id;
