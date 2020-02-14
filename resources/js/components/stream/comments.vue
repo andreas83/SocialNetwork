@@ -1,9 +1,10 @@
 <template>
 
   <div class="row-0 comment-container">
-    <share-dialog :edit="isEdit" :content_id="content_id" :parrent_id=parrent_content.id :is-comment="isComment"></share-dialog>
+    <share-dialog :edit="isEdit"  @updated="onUpdated"  :content_id="content_id" :parrent_id=parrent_content.id :is-comment="isComment"></share-dialog>
     <div class="comment-list row-0">
-      <div class="comment col-lg-12"  v-for="data in comments">
+
+      <div class="comment col-lg-12"  v-for="data in comments" v-if="parrent_content.id==data.parrent_id ">
 
         <picture>
           <img :src="data.avatar" />
@@ -33,6 +34,7 @@ export default {
     },
     data() {
         return{
+
           isComment:true,
           isEdit:false,
           content_id:0,
@@ -40,8 +42,10 @@ export default {
           error:""
         }
       },
-      async mounted(){
-        this.getComment({ content_id: this.parrent_content.id });
+      async created(){
+
+        this.getComment( this.parrent_content.id );
+
       },
       methods:{
         ...mapActions('content', ['getComment']),
@@ -51,7 +55,9 @@ export default {
             this.$store.commit('content/deleteContent', id);
           })
         },
-
+        onUpdated (value) {
+          this.isEdit=false;
+        },
         editContent(id){
           this.isEdit=true;
           this.content_id=id;
@@ -63,9 +69,9 @@ export default {
         }
       },
       computed:{
-        ...mapGetters({
-          comments: 'content/getComment'
-        }),
+        comments(){
+          return  this.$store.getters["content/getCommentById"](this.parrent_content.id);
+        },
         isAuth(){
           return this.$store.getters["user/isAuth"];
         }

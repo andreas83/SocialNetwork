@@ -1,4 +1,4 @@
-import { createContent, getContent, updateContent , deleteContent} from '../api/content';
+import { createContent, getContent, getContentById, getComment, updateContent , deleteContent} from '../api/content';
 
 export default {
   namespaced: true,
@@ -33,6 +33,34 @@ export default {
       commit('setContent', content);
     },
 
+    getComment({commit}, payload)
+    {
+      return new Promise((resolve, reject) => {
+        getComment(payload).then(function (response)
+        {
+
+          for(let i=0; i < response.data.content.data.length; i++)
+          {
+
+              commit('updateContent', response.data.content.data[i]);
+          }
+
+          resolve(response);
+        })
+
+
+      })
+
+
+    },
+
+    async getContentById({commit}, payload)
+    {
+
+      const response = await getContentById(payload);
+      commit('updateContent', response.data.content.data);
+
+    },
     async getContent({commit}, payload)
     {
 
@@ -54,7 +82,8 @@ export default {
                               data.parrent_id,
                               data.anonymous,
                               data.visibility);
-      commit('updateContent', response.data);
+      response.data.content.show_comment=false;
+      commit('updateContent', response.data.content);
 
     },
     deleteContent({commit},  content_id){
@@ -74,11 +103,10 @@ export default {
   getters:{
     getContent: state => state.content,
     getContentById: (state) => (id) => {
-        return state.content.find(content => content.id === id)
+        return state.content.find(content => content.id == id)
     },
-    getLikesById: (state) => (id) => {
-
-         return state.likes.find(like => like.content_id == id);
+    getCommentById: (state) => (id) => {
+        return state.content.filter(data => data.parrent_id === id)
     }
   },
   mutations:{
@@ -100,10 +128,10 @@ export default {
       state.content.push(content);
     },
     updateContent (state, data) {
-      const index = state.content.findIndex(item => item.id == data.content.id);
+      const index = state.content.findIndex(item => item.id == data.id);
       if (index !== -1)
       {
-        state.content.splice(index, 1, data.content);
+        state.content.splice(index, 1, data);
       }
       else{
         state.content.push(data);

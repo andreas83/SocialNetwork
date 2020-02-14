@@ -5,7 +5,8 @@ const END_POINT = '/api/content';
 
 
 
-const getContentById = (content_id) => httpClient.get(END_POINT, { content_id });
+const getContentById = (content_id) => httpClient.get(END_POINT, { params:{id:content_id} });
+const getComment = (content_id) => httpClient.get(END_POINT+"/comments/"+content_id, {  });
 
 const createContent = ( html_content,
                         json_content,
@@ -45,11 +46,12 @@ function deleteContent(id){
 
 
 
-const getContent = (content_id) => httpClient.get(END_POINT, { content_id });
+const getContent = (content_id) => httpClient.get(END_POINT, { params:{id:content_id} });
 
 export {
     getContent,
     getContentById,
+    getComment,
     createContent,
     updateContent,
     deleteContent

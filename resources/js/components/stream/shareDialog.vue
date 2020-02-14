@@ -207,7 +207,6 @@ export default {
     methods:{
 
       ...mapActions('content', ['createContent', 'updateContent']),
-
       openFileDialog(command){
         var element = document.createElement('div');
         element.innerHTML = '<input multiple="multiple" type="file">';
@@ -269,7 +268,7 @@ export default {
 
             this.updateContent(data);
             this.editor.setContent("<h2>Updated</h2>");
-            
+            this.$emit('updated', this.content.id);
           }else {
             let data = {
                 html_content: this.editor.getHTML(),
@@ -282,16 +281,23 @@ export default {
             };
             this.createContent(data);
             this.editor.setContent("<h2>Saved</h2>");
+            this.$emit('saved');
           }
+
 
       }
 
     },
     watch:{
 
-      edit(){
+      edit(val){
+        if(val===true)
+        {
+            this.editor.setContent(this.content.html_content);
+        }
 
-        this.editor.setContent(this.content.html_content);
+
+
       }
     },
     computed:{
