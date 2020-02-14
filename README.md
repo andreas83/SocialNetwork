@@ -130,8 +130,8 @@ Demo is still alive here: https://social.codejungle.org/
 
 ### Version 3.0 (est 2020)
 
-
-
+Please report feature requests and bugs. 
+Demo is here: https://dev.codejungle.org/
 
 
 
