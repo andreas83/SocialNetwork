@@ -5,13 +5,14 @@
     <div class="comment-list row-0">
 
       <div class="comment col-lg-12"  v-for="data in comments" v-if="parent_content.id==data.parent_id ">
-
+        <router-link :to="{ name: 'user', params: {name:data.name, user_id:data.user_id} }">
         <picture>
           <img :src="data.avatar" />
         </picture>
         <author>
           {{data.name}}
         </author>
+        </router-link>
         <date>{{data.created_at}}</date>
         <button class="btn default small" @click="deleteContent(data.id)">{{$t("form.delete")}}</button>
         <button class="btn default small" @click="editContent(data.id)">{{$t("form.edit")}}</button>

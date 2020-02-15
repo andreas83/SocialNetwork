@@ -1,10 +1,14 @@
 <template>
-  <div class="row">
-  <div class="col-lg-12  col-md-12 card">
+  <div class="row card profile">
+  <div class="col-lg-6  col-md-12 ">
 
     <picture>
-      <img :src="user.avatar"/><button class="btn default" v-on:click="openFileDialog" value="default">{{$t('form.avatar.upload')}}</button>
+      <img :src="user.avatar"/>
+      <br/>
+      <button class="btn default" v-on:click="openFileDialog" value="default">{{$t('form.avatar.upload')}}</button>
     </picture>
+  </div>
+    <div class="col-lg-6  col-md-12 ">
     <h2>{{user.name}}</h2>
     <div class="form-field">
       <label for="password">New {{$t('form.password')}}</label>

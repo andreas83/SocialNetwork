@@ -44,39 +44,48 @@ nav h1{
     }
 }
 
-.language-select{
-  color:$color2;
+#menu-select{
+  color:$color3;
 
   flex-shrink: 1;
-  width:5em;
+  width:4em;
   padding:0.5em;
-
+  font-size:1em;
+  text-align: center;
   &:hover{
     cursor:  pointer;
-  }
-  ul{
-    color:$color1;
-    font-weight: bold;
-    list-style: none;
-    margin:0;
-    padding:0;
-    li{
-      position: relative;
 
-      }
-      ul{
-        padding-top: 0.8em;
-        li{
-          color:$color2;
-          padding:0.5em;
-          width:5em;
-          background-color: $color5;
+  }
+
+}
+#menu{
+    z-index: 9999;
+    width: 100%;
+    height: 100%;
+    background-color:$color2;
+    position:fixed;
+    ul{
+
+      list-style: none;
+      padding-top: 0.8em;
+      height: 100%;
+      a{
+        color:$color1;
+        &:hover{
+          color:$color4;
         }
+      }
+      li{
+        margin:1em;
+        color:$color1;
+        font-size: 3em;
+        text-align: center;
+        &:hover{
+          color:$color4;
+        }
+      }
 
     }
-
-
-  }
 }
 
 a{
@@ -104,6 +113,12 @@ small{
   }
   input{
     width:100%;
+    padding: 0.8em;
+    font-size: 1em;
+  }
+  textarea{
+    width:100%;
+    height:5em;
     padding: 0.8em;
     font-size: 1em;
   }

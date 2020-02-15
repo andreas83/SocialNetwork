@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Welcome from './components/Welcome'
 import Template from './components/Template'
 import Register from './components/user/register'
+import Login from './components/user/login'
 
 import User from './components/user/user'
 import UserProfile from './components/user/userProfile'
@@ -22,9 +23,14 @@ export const router = new VueRouter({
           component: Template
         },
         {
-          path: "/register",
+          path: "/user/register",
           name: "register",
           component: Register
+        },
+        {
+          path: "/user/login",
+          name: "login",
+          component: Login
         },
         {
           path: '/user/profile',

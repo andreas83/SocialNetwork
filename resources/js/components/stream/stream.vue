@@ -24,7 +24,6 @@
 
             <button class="btn default small" v-if="data.user_id==user.id" @click="deleteContent(data.id)">{{$t("form.delete")}}</button>
             <button class="btn default small" v-if="data.user_id==user.id" @click="editContent(data.id)">{{$t("form.edit")}}</button>
-
             <content v-html="data.html_content">
 
             </content>
@@ -71,7 +70,7 @@ export default {
         },
         onUpdated (value) {
           this.isEdit=false;
-        },        
+        },
         editContent(id){
           this.isEdit=true;
           this.content_id=id;

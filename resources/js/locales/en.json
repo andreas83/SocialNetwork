@@ -4,7 +4,7 @@
     "name" :  "User",
     "email" :  "Mail",
     "password" :  "Password",
-
+    "bio" : "About you",
     "error" :
     {
       "name" : {"exists": "Username existiert"},

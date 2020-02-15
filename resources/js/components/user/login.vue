@@ -67,7 +67,7 @@
                         return Promise.reject(error);
                       }
                     );
-                    this.$router.push('/');
+                    //this.$router.push('/');
 
                 })
                 .catch(({response}) => {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="row card">
+    <div class="row card profile">
             <div class="col-lg-2  col-md-2">
               <picture>
                 <img :src="user.avatar" />
@@ -12,7 +12,7 @@
             </div>
 
     </div>
-  
+
     <stream :user_id="user.id"></stream>
   </div>
 </template>
