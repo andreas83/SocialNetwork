@@ -14,15 +14,25 @@ use App\User;
 */
 Route::group(['middleware' => ['api']], function () {
     Auth::routes();
+    Route::resource('content', 'ContentController')->only([
+      'index'
+    ]);
+    Route::get("content/comments/{id}", 'ContentController@comments');
+    Route::resource('content/likes', 'ContentLikeController')->only([
+      'index'
+    ]);
 });
+
 
 
 Route::group(['middleware' => ['auth:api']], function () {
     Route::resource('content/likes', 'ContentLikeController')->only([
-      'store','index'
+      'store'
     ]);
 
-    Route::resource('content', 'ContentController');
+    Route::resource('content', 'ContentController')->only([
+      'store','update'
+    ]);
 
     Route::resource('user', 'UserController')->only([
       'update'
@@ -30,7 +40,7 @@ Route::group(['middleware' => ['auth:api']], function () {
 
 
 
-    Route::get("content/comments/{id}", 'ContentController@comments');
+
     Route::post("content/upload", 'ContentController@upload');
     Route::post("content/ogparser", 'ContentController@parseog');
 });

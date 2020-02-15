@@ -9,6 +9,8 @@ import User from './components/user/user'
 import UserProfile from './components/user/userProfile'
 import UserPosts from './components/user/userPosts'
 
+import Permalink from './components/Permalink'
+
 export const router = new VueRouter({
       mode: 'history',
       routes: [
@@ -36,6 +38,11 @@ export const router = new VueRouter({
           path: '/user/profile',
           name: "userProfile",
           component: UserProfile
+        },
+        {
+          path: '/permalink/:id',
+          name: "permalink",
+          component: Permalink
         },
         {
           path: '/:name',

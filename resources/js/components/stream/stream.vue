@@ -1,12 +1,12 @@
 <template>
 
   <div class="row">
-    <div class="col-lg-12">
+    <div class="col-lg-12" v-if="isAuth">
       <share-dialog :edit="isEdit" @updated="onUpdated" :content_id="content_id"></share-dialog>
 
     </div>
     <div class="col-lg-12">
-      <div class="row-0 streamitem " v-for="data in content" v-if="(user_id==false || user_id==data.user_id) && data.is_comment=='false'">
+      <div class="row-0 streamitem " v-for="data in content" v-if="((user_id==false || user_id==data.user_id)  && (content_id==false || data.id==content_id)) && data.is_comment=='false'">
 
         <div class="row card" >
 
@@ -24,6 +24,8 @@
 
             <button class="btn default small" v-if="data.user_id==user.id" @click="deleteContent(data.id)">{{$t("form.delete")}}</button>
             <button class="btn default small" v-if="data.user_id==user.id" @click="editContent(data.id)">{{$t("form.edit")}}</button>
+            <button class="btn default small"  @click="permalink(data.id)" >{{$t("permalink")}}</button>
+
             <content v-html="data.html_content">
 
             </content>
@@ -46,12 +48,15 @@ export default {
     props:{
       user_id:{
         default:false
+      },
+      content_id:{
+        default:false
       }
     },
     data() {
         return{
           isEdit:false,
-          content_id:0,
+
           error:""
         }
       },
@@ -66,6 +71,10 @@ export default {
           axios.delete('/api/content/'+id).then(({data}) => {
             this.$store.commit('content/deleteContent', id);
           })
+
+        },
+        permalink(id){
+          this.$router.push({ name: 'permalink', params: { id: id } })
 
         },
         onUpdated (value) {

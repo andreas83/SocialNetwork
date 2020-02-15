@@ -1,7 +1,7 @@
 <template>
 
   <div class="row-0 comment-container">
-    <share-dialog :edit="isEdit"  @updated="onUpdated"  :content_id="content_id" :parent_id=parent_content.id :is-comment="isComment"></share-dialog>
+    <share-dialog  v-if="isAuth" :edit="isEdit"  @updated="onUpdated"  :content_id="content_id" :parent_id=parent_content.id :is-comment="isComment"></share-dialog>
     <div class="comment-list row-0">
 
       <div class="comment col-lg-12"  v-for="data in comments" v-if="parent_content.id==data.parent_id ">
@@ -14,8 +14,8 @@
         </author>
         </router-link>
         <date>{{data.created_at}}</date>
-        <button class="btn default small" @click="deleteContent(data.id)">{{$t("form.delete")}}</button>
-        <button class="btn default small" @click="editContent(data.id)">{{$t("form.edit")}}</button>
+        <button class="btn default small" v-if="isAuth && data.user_id==user.id" @click="deleteContent(data.id)">{{$t("form.delete")}}</button>
+        <button class="btn default small" v-if="isAuth && data.user_id==user.id" @click="editContent(data.id)">{{$t("form.edit")}}</button>
         <content v-html="data.html_content"></content>
         <actions :content=data  v-on:toggleComment="toggleComment"></actions>
       </div>
