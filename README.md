@@ -2,7 +2,7 @@
 
 works pretty similar to a well known social network, but you can host it on your very own infrastructure. No external dependencies needed. Focus of this project was security and performance.
 
-##Anouncement 
+## Anouncement 
 
 On 13.02.2020 i decided to move version 2.0 to deprecated branch 
 At moment the new master has less features than 2.0, but iam working hard to restore the most important ones. 
@@ -39,7 +39,7 @@ Create storage folder (symbolic link)
 
 Make phantomsjs executeable (needed for og tag parsing)
 
-    chmod +x bin/phantomsjs
+    chmod +x bin/phantomjs
 
 ### 1.4 Webserver (nginx)
 
@@ -130,8 +130,8 @@ Demo is still alive here: https://social.codejungle.org/
 
 ### Version 3.0 (est 2020)
 
-
-
+Please report feature requests and bugs. 
+Demo is here: https://dev.codejungle.org/
 
 
 
