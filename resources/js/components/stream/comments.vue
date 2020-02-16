@@ -70,6 +70,9 @@ export default {
         }
       },
       computed:{
+        user(){
+          return this.$store.getters["user/getUser"];
+        },        
         comments(){
           return  this.$store.getters["content/getCommentById"](this.parent_content.id);
         },
