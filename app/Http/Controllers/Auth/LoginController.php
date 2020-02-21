@@ -58,11 +58,16 @@ class LoginController extends Controller
         {
           //register if not exists
           $data=[
-              'name' => $socialUser->nickname,
+              'name' => $socialUser->name,
               'email' => $socialUser->email,
               'password' => Hash::make(Str::random(60)),
               'api_token' => Str::random(60)
           ];
+
+          if(!empty($socialUser->nickname))
+          {
+            $data['name'] = $socialUser->nickname;
+          }
 
           if(!empty($socialUser->avatar))
           {
