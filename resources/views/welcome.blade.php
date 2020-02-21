@@ -8,7 +8,8 @@
         <title>{{env('APP.NAME') }}</title>
 
         <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Questrial|Raleway&display=swap&subset=latin-ext" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Press+Start+2P|Questrial|Raleway&display=swap" rel="stylesheet">
+
         <link href="/css/critical.css" rel="stylesheet">
     </head>
     <body>

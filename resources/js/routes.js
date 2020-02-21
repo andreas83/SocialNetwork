@@ -35,6 +35,12 @@ export const router = new VueRouter({
           component: Login
         },
         {
+          path: '/auth/:provider/callback',
+          component: {
+            template: '<div class="auth-component"></div>'
+          }
+        },        
+        {
           path: '/user/profile',
           name: "userProfile",
           component: UserProfile

@@ -5,17 +5,32 @@ window.Vue = require('vue');
 window.Pusher = require('pusher-js');
 
 import Vue from 'vue'
+
 import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 import VueI18n from 'vue-i18n'
+import VueSocialauth from 'vue-social-auth'
 import i18n from './i18n'
 import {router} from './routes.js';
 import {store} from './store/store.js';
 
 import Layout from './components/Layout'
 
+
+
+
+Vue.use(VueSocialauth, {
+  providers: {
+    github: {
+      clientId: process.env.MIX_GITHUB_ID,
+      redirectUri: process.env.MIX_GITHUB_URL
+    }
+  }
+});
+
 Vue.use(VueI18n);
 Vue.use(Vuex);
+
 Vue.use(VueRouter);
 
 Vue.config.ignoredElements = ['comment', 'date', 'author', 'comments', 'actions',
@@ -29,12 +44,14 @@ Vue.component('Likes', require('./components/stream/likes').default);
 Vue.component('ShareDialog', require('./components/stream/shareDialog').default);
 Vue.component('Comments', require('./components/stream/comments').default);
 
+Vue.prototype.$http = axios;
 
 
 const app = new Vue({
     el: '#app',
     components: { Layout },
     store: store,
+
     router,
     i18n,
     data() {

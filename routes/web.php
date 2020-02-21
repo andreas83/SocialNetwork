@@ -10,6 +10,15 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+use App\Content;
+Route::get('/permalink/{id}', function($id){
+      $content=Content::find($id);
+      echo "<pre>";
+      var_dump(json_decode($content->json_content, true));
+
+
+      die();
+});
 
 Route::get('/{any}', function(){
         return view('welcome');

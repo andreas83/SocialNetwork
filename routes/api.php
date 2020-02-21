@@ -2,6 +2,9 @@
 
 use Illuminate\Http\Request;
 use App\User;
+
+use App\Http\Controllers\Auth\LoginController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,6 +17,7 @@ use App\User;
 */
 Route::group(['middleware' => ['api']], function () {
     Auth::routes();
+
     Route::resource('content', 'ContentController')->only([
       'index'
     ]);
@@ -23,7 +27,12 @@ Route::group(['middleware' => ['api']], function () {
     ]);
 });
 
-
+Route::post('auth/{provider}',
+  'Auth\LoginController@socialLiteLogin'
+);
+Route::get('auth/{provider}/callback', function(){
+        return view('welcome');
+})->where('provider', '.*');
 
 Route::group(['middleware' => ['auth:api']], function () {
     Route::resource('content/likes', 'ContentLikeController')->only([
@@ -31,7 +40,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     ]);
 
     Route::resource('content', 'ContentController')->only([
-      'store','update'
+      'store','update', 'destroy'
     ]);
 
     Route::resource('user', 'UserController')->only([

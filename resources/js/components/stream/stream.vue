@@ -42,6 +42,9 @@
   </div>
 </template>
 <script>
+
+
+import javascript from 'highlight.js/lib/languages/javascript'
 import {mapGetters, mapActions} from 'vuex';
 export default {
   name: "Stream",
@@ -65,6 +68,10 @@ export default {
         await this.getContent();
 
       },
+      mounted(){
+
+
+      },
       methods:{
         ...mapActions('content', ['getContent', 'deleteContent']),
         deleteContent(id){
@@ -83,6 +90,7 @@ export default {
         editContent(id){
           this.isEdit=true;
           this.content_id=id;
+
         },
 
         toggleComment(id){

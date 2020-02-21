@@ -15,9 +15,10 @@
       <div class="form-field">
         <button class="btn default" v-on:click="login" value="default">{{$t('form.login')}}</button>
 
+
       </div>
     </form>
-
+<button v-on:click="AuthProvider('github', $event)">Via Github</button>
   </div>
 
 </template>
@@ -40,7 +41,39 @@
     },
 
     methods: {
+        AuthProvider(provider, event) {
+          event.preventDefault();
+          var self = this
 
+          this.$auth.authenticate(provider).then(response =>{
+
+            self.SocialLogin(provider,response)
+            }).catch(err => {
+                console.log({err:err})
+            })
+        },
+        SocialLogin(provider,response){
+            axios.post('/api/auth/'+provider,response).then(({data}) => {
+              console.log(data);
+                this.$store.commit('user/setUser', data.user);
+                this.$store.commit('user/setAuth', true);
+                localStorage.setItem('token', data.user.api_token);
+                axios.interceptors.request.use(
+                  (config) => {
+                    config.headers['Authorization'] = "Bearer "+data.user.api_token;
+                    return config;
+                  },
+
+                  (error) => {
+                    return Promise.reject(error);
+                  }
+                );
+                //this.$router.push('/');
+
+            }).catch(err => {
+                console.log({err:err})
+            })
+        },
         login(e) {
           e.preventDefault();
             let data = {

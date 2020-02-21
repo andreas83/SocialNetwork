@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Auth;
+
 class RegisterController extends Controller
 {
     /*
@@ -74,26 +75,12 @@ class RegisterController extends Controller
         ]);
     }
 
-    /**
-     * Handle a registration request for the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function register(Request $request)
+    protected function registered(Request $request, $user)
     {
-        $validator = $this->validator($request->all());
-
-        if ($validator->fails()) {
-            $this->throwValidationException(
-                $request, $validator
-            );
-        }
-
-        Auth::login($this->create($request->all()));
-
-        return response()->json([
-             'user' => Auth::user()
-         ]);
+          Auth::login($user);
+          return response()->json([
+               'user' => Auth::user()
+           ]);
     }
+
 }

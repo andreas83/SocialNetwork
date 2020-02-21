@@ -32,11 +32,12 @@ nav{
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
 }
 nav h1{
-    margin-top:0.5em;
+    margin-top:0.9em;
     margin-left: 10px;
-    font-size: 1.3em;
+    font-size: 0.9em;
     color:$color1;
-
+    font-family: 'Press Start 2P', cursive;
+    text-decoration: underline;
     flex-grow: 3;
     flex-basis: auto;
     small{
@@ -67,6 +68,7 @@ nav h1{
     ul{
 
       list-style: none;
+      padding:0px;
       padding-top: 0.8em;
       height: 100%;
       a{
