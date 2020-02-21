@@ -14,7 +14,9 @@
         "laravel/framework": "^6.2",
         "laravel/socialite": "^4.3",
         "laravel/tinker": "^2.0",
-        "socialiteproviders/github": "dev-master"
+        "socialiteproviders/facebook": "^1.0",
+        "socialiteproviders/github": "dev-master",
+        "socialiteproviders/twitter": "^3.0"
     },
     "require-dev": {
         "facade/ignition": "^1.4",

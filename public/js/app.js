@@ -3076,6 +3076,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Login",
   data: function data() {
@@ -63240,21 +63243,36 @@ var render = function() {
             on: { click: _vm.login }
           },
           [_vm._v(_vm._s(_vm.$t("form.login")))]
-        )
-      ])
-    ]),
-    _vm._v(" "),
-    _c(
-      "button",
-      {
-        on: {
-          click: function($event) {
-            return _vm.AuthProvider("github", $event)
+        ),
+        _vm._v(" "),
+        _c("button", {
+          staticClass: "icon-github",
+          on: {
+            click: function($event) {
+              return _vm.AuthProvider("github", $event)
+            }
           }
-        }
-      },
-      [_vm._v("Via Github")]
-    )
+        }),
+        _vm._v(" "),
+        _c("button", {
+          staticClass: "icon-twitter",
+          on: {
+            click: function($event) {
+              return _vm.AuthProvider("twitter", $event)
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("button", {
+          staticClass: "icon-facebook",
+          on: {
+            click: function($event) {
+              return _vm.AuthProvider("facebook", $event)
+            }
+          }
+        })
+      ])
+    ])
   ])
 }
 var staticRenderFns = []
@@ -81357,7 +81375,15 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_social_auth__WEBPACK_IMPORTED
   providers: {
     github: {
       clientId: "Iv1.4c7a641b878b8e41",
-      redirectUri: process.env.MIX_GITHUB_URL
+      redirectUri: "http://localhost:3000/auth/github/callback"
+    },
+    twitter: {
+      clientId: process.env.MIX_TWITTER_KEY,
+      redirectUri: process.env.MIX_TWITTER_REDIRECT_URI
+    },
+    facebook: {
+      clientId: process.env.MIX_FACEBOOK_KEY,
+      redirectUri: process.env.MIX_FACEBOOK_REDIRECT_URI
     }
   }
 });

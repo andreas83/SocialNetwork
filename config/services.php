@@ -31,9 +31,19 @@ return [
     ],
 
     'github' => [
-      'client_id' => env('MIX_GITHUB_ID'),
-      'client_secret' => env('GITHUB_CLIENT_SECRET'),
-      'redirect' => env('MIX_GITHUB_URL'),
+      'client_id' => env('MIX_GITHUB_KEY'),
+      'client_secret' => env('MIX_GITHUB_SECRET'),
+      'redirect' => env('MIX_GITHUB_REDIRECT_URI'),
+    ],
+    'twitter' => [
+      'client_id' => env('MIX_TWITTER_KEY'),
+      'client_secret' => env('MIX_TWITTER_SECRET'),
+      'redirect' => env('MIX_TWITTER_REDIRECT_URI'),
+    ],
+    'facebook' => [
+      'client_id' => env('MIX_FACEBOOK_KEY'),
+      'client_secret' => env('MIX_FACEBOOK_SECRET'),
+      'redirect' => env('MIX_FACEBOOK_REDIRECT_URI'),
     ],
 
 ];

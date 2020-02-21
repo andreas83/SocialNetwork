@@ -22,9 +22,17 @@ import Layout from './components/Layout'
 Vue.use(VueSocialauth, {
   providers: {
     github: {
-      clientId: process.env.MIX_GITHUB_ID,
-      redirectUri: process.env.MIX_GITHUB_URL
-    }
+      clientId: process.env.MIX_GITHUB_KEY,
+      redirectUri: process.env.MIX_GITHUB_REDIRECT_URI
+    },
+    twitter: {
+      clientId: process.env.MIX_TWITTER_KEY,
+      redirectUri: process.env.MIX_TWITTER_REDIRECT_URI
+    },
+    facebook: {
+      clientId: process.env.MIX_FACEBOOK_KEY,
+      redirectUri: process.env.MIX_FACEBOOK_REDIRECT_URI
+    },
   }
 });
 

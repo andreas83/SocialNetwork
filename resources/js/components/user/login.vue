@@ -14,11 +14,14 @@
 
       <div class="form-field">
         <button class="btn default" v-on:click="login" value="default">{{$t('form.login')}}</button>
-
+        
+        <button class="icon-github" v-on:click="AuthProvider('github', $event)"></button>
+        <button class="icon-twitter" v-on:click="AuthProvider('twitter', $event)"></button>
+        <button class="icon-facebook" v-on:click="AuthProvider('facebook', $event)"></button>
 
       </div>
     </form>
-<button v-on:click="AuthProvider('github', $event)">Via Github</button>
+
   </div>
 
 </template>

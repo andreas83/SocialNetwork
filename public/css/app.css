@@ -124,6 +124,24 @@
 
 /* '' */
 
+.icon-twitter:before {
+  content: "\E80C";
+}
+
+/* '' */
+
+.icon-facebook:before {
+  content: "\E80D";
+}
+
+/* '' */
+
+.icon-github:before {
+  content: "\F056";
+}
+
+/* '' */
+
 .icon-comment-empty:before {
   content: "\F0E5";
 }
