@@ -11,6 +11,18 @@
         <link href="https://fonts.googleapis.com/css?family=Press+Start+2P|Questrial|Raleway&display=swap" rel="stylesheet">
 
         <link href="/css/critical.css" rel="stylesheet">
+        @if(isset($images))
+	@foreach ($images as $img)
+		<meta property="og:image" content="{{url($img)}}" />
+	@endforeach
+        @endif
+	@if(isset($title))
+	<meta property="og:title" content="{{$title ?? ''}}" />
+        @endif
+        @if(isset($desc))
+	<meta property="og:description" content="{{$desc ?? ''}}" />
+	@endif
+
     </head>
     <body>
         <div id="app">

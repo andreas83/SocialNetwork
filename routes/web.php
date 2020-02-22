@@ -11,13 +11,28 @@
 |
 */
 use App\Content;
+
+function recursiveFind(array $array, $needle) {
+  $iterator = new RecursiveArrayIterator($array);
+  $recursive = new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::SELF_FIRST);
+  $return = [];
+  foreach ($recursive as $key => $value) {
+    if ($key === $needle) {
+      $return[] = $value;
+    }
+  } 
+  return $return;
+}
+
 Route::get('/permalink/{id}', function($id){
       $content=Content::find($id);
-      echo "<pre>";
-      var_dump(json_decode($content->json_content, true));
-
-
-      die();
+      $data=json_decode($content->json_content, true);
+      $images=recursiveFind($data, "src");
+      $text=recursiveFind($data, "text");
+      $title=$text[0];
+      array_shift($text);
+      $text=implode(" ", $text);
+      return view('welcome', ["images" => $images, "title"=> $title, "desc" => $text]);
 });
 
 Route::get('/{any}', function(){
