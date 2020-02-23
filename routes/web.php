@@ -12,17 +12,17 @@
 */
 use App\Content;
 
-function recursiveFind(array $array, $needle) {
-  $iterator = new RecursiveArrayIterator($array);
-  $recursive = new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::SELF_FIRST);
-  $return = [];
-  foreach ($recursive as $key => $value) {
-    if ($key === $needle) {
-      $return[] = $value;
-    }
-  } 
-  return $return;
-}
+// function recursiveFind(array $array, $needle) {
+//   $iterator = new RecursiveArrayIterator($array);
+//   $recursive = new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::SELF_FIRST);
+//   $return = [];
+//   foreach ($recursive as $key => $value) {
+//     if ($key === $needle) {
+//       $return[] = $value;
+//     }
+//   }
+//   return $return;
+// }
 
 Route::get('/permalink/{id}', function($id){
       $content=Content::find($id);
