@@ -119,6 +119,31 @@ class ContentController extends Controller
            'content' => $content,
        ]);
     }
+    
+    public function permalink(Request $request, $id)
+    {
+      function recursiveFind(array $array, $needle) {
+        $iterator = new \RecursiveArrayIterator($array);
+        $recursive = new \RecursiveIteratorIterator($iterator, \RecursiveIteratorIterator::SELF_FIRST);
+        $return = [];
+        foreach ($recursive as $key => $value) {
+          if ($key === $needle) {
+            $return[] = $value;
+          }
+        }
+        return $return;
+      }
+
+      $content=Content::find($id);
+      $data=json_decode($content->json_content, true);
+      $images=recursiveFind($data, "src");
+      $text=recursiveFind($data, "text");
+      $title=$text[0];
+      array_shift($text);
+      $text=implode(" ", $text);
+      return view('welcome', ["images" => $images, "title"=> $title, "desc" => $text]);
+    }
+
 
     public function parseog(Request $request)
     {
