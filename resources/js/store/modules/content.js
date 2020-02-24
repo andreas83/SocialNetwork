@@ -76,7 +76,7 @@ export default {
 
       for(let i=0; i < response.data.content.length; i++)
       {
-
+          response.data.content[i].show_comment=false;
           commit('updateContent', response.data.content[i]);
       }
 
