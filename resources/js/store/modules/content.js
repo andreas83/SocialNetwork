@@ -22,8 +22,9 @@ export default {
                               data.visibility);
 
       commit('likes/updateLikes',  {content_id:response.data.content.id, likes:[]}, { root: true });
+
       response.data.content.show_comment=false;
-      commit('prependContent', response.content);
+      commit('prependContent', response.data.content);
 
 
     },
@@ -95,8 +96,8 @@ export default {
                               data.parent_id,
                               data.anonymous,
                               data.visibility);
-      response.content.show_comment=false;
-      commit('updateContent', response.content);
+      response.data.content.show_comment=false;
+      commit('updateContent', response.data.content);
 
     },
     deleteContent({commit},  content_id){
