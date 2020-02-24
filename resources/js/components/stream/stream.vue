@@ -65,15 +65,29 @@ export default {
       },
       async created (){
 
-        await this.getContent();
-
+        //await this.getContent();
+        await this.getMoreContent({next_id:false, user_id: this.user_id, content_id: this.content_id});
       },
       mounted(){
 
-
+        this.scroll();
       },
       methods:{
-        ...mapActions('content', ['getContent', 'deleteContent']),
+
+        scroll () {
+          window.onscroll = () => {
+            let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
+
+            if (bottomOfWindow) {
+
+              var next_id = Math.min.apply(Math, this.content.map(function(o){ return o.id }));
+
+              this.getMoreContent({next_id:next_id, user_id: this.user_id, content_id: this.content_id});
+            }
+          };
+        },
+
+        ...mapActions('content', ['getContent', 'getMoreContent', 'deleteContent']),
         deleteContent(id){
           axios.delete('/api/content/'+id).then(({data}) => {
             this.$store.commit('content/deleteContent', id);

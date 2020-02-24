@@ -1,4 +1,4 @@
-import { createContent, getContent, getContentById, getComment, updateContent , deleteContent} from '../api/content';
+import { createContent, getContent, getContentById, getMoreContent, getComment, updateContent , deleteContent} from '../api/content';
 
 export default {
   namespaced: true,
@@ -23,7 +23,7 @@ export default {
 
       commit('likes/updateLikes',  {content_id:response.data.content.id, likes:[]}, { root: true });
       response.data.content.show_comment=false;
-      commit('prependContent', response.data.content);
+      commit('prependContent', response.content);
 
 
     },
@@ -58,14 +58,27 @@ export default {
     {
 
       const response = await getContentById(payload);
-      commit('updateContent', response.data.content.data);
+      commit('updateContent', response.content.data);
 
     },
     async getContent({commit}, payload)
     {
 
       const response = await getContent(payload);
-      commit('setContent', response.data.content.data);
+      commit('setContent', response.data.content);
+
+    },
+
+    async getMoreContent({commit}, params)
+    {
+
+      const response = await getMoreContent(params.next_id, params.user_id, params.content_id);
+
+      for(let i=0; i < response.data.content.length; i++)
+      {
+
+          commit('updateContent', response.data.content[i]);
+      }
 
     },
 
@@ -82,8 +95,8 @@ export default {
                               data.parent_id,
                               data.anonymous,
                               data.visibility);
-      response.data.content.show_comment=false;
-      commit('updateContent', response.data.content);
+      response.content.show_comment=false;
+      commit('updateContent', response.content);
 
     },
     deleteContent({commit},  content_id){

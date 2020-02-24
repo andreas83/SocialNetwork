@@ -74,9 +74,34 @@ class ContentController extends Controller
 
     public function index(Request $request)
     {
-        $content = DB::table('contents')->where("is_comment", "=", "false")->select('contents.*', 'users.name', 'users.avatar')->join('users', 'users.id', '=', 'contents.user_id')->orderBy("contents.id", "desc")->paginate(15);
+
+        $content = DB::table('contents')
+          ->where("is_comment", "=", "false")
+          ->select('contents.*', 'users.name', 'users.avatar')
+          ->join('users', 'users.id', '=', 'contents.user_id')
+          ->orderBy("contents.id", "desc");
+
+        if($request->has("next_id") && $request->next_id>0)
+        {
+          $content->where("contents.id", "<=", $request->next_id);
+        }
+        if($request->has("content_id") && $request->content_id>0)
+        {
+          $content->where("contents.id", "=", $request->content_id);
+        }
+        if($request->has("user_id")  && $request->user_id>0)
+        {
+          $content->where("users.id", "=", $request->user_id);
+        }
+        if($request->has("limit") && $request->limit<=100 )
+        {
+          $content->limit($request->limit);
+        }
+        else {
+          $content->limit(15);
+        }
         return response()->json([
-           'content' => $content,
+           'content' => $content->get(),
        ]);
     }
     /**
@@ -119,7 +144,7 @@ class ContentController extends Controller
            'content' => $content,
        ]);
     }
-    
+
     public function permalink(Request $request, $id)
     {
       function recursiveFind(array $array, $needle) {

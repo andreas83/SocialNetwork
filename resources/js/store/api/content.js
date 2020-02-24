@@ -45,12 +45,22 @@ function deleteContent(id){
 }
 
 
+function getMoreContent ( next_id, user_id, content_id, limit  ) {
+
+    return httpClient.get(END_POINT, { params:{
+      next_id:next_id,
+      user_id:user_id,
+      content_id: content_id,
+      limit:limit
+    } });
+}
 
 const getContent = (content_id) => httpClient.get(END_POINT, { params:{id:content_id} });
 
 export {
     getContent,
     getContentById,
+    getMoreContent,
     getComment,
     createContent,
     updateContent,
