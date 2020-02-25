@@ -5,23 +5,22 @@ namespace Tests\Feature\Auth;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class RegisterControllerTest extends TestCase
 {
-  
+    use DatabaseTransactions;
 
     public function testRegisterSuccessfully()
     {
         $register = [
-            'name' => 'UserTest',
-            'email' => 'user@test.com',
-            'password' => 'testpass',
-            'password_confirmation' => 'testpass'
-        ];
+            'name' => 'Test',
+            'email' => 'test@test.com',
+            'password' => 'testpass'        ];
 
-        $this->json('POST', 'api/register', $register)
-            ->assertStatus(200)
-            ->assertJsonStructure([
+            $response=$this->json('POST', 'api/register', $register);
+            $response->assertStatus(200);
+            $response->assertJsonStructure([
 
                 'user' => [
                     'id',
@@ -32,6 +31,7 @@ class RegisterControllerTest extends TestCase
                     'api_token'
                 ]
             ]);
+
     }
 
     public function testRequireNameEmailAndPassword()

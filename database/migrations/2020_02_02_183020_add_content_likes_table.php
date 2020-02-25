@@ -30,8 +30,7 @@ class AddContentLikesTable extends Migration
      */
     public function down()
     {
-        Schema::table('content_likes', function (Blueprint $table) {
-            //
-        });
+        Schema::drop('content_likes');
+        
     }
 }
