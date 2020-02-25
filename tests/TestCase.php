@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 
 abstract class TestCase extends BaseTestCase
 {
-    use CreatesApplication, DatabaseMigrations;
+    use CreatesApplication;
 
     /**
      * @return void
@@ -17,10 +17,5 @@ abstract class TestCase extends BaseTestCase
     public function setUp() : void
     {
         parent::setUp();
-        Schema::dropAllTables();
-
-        $this->runDatabaseMigrations();
-
-
     }
 }
