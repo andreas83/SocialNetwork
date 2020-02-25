@@ -1,5 +1,5 @@
 # .travis.yml
-dist: precise
+dist: xenial
 
 language: php
 
@@ -19,7 +19,7 @@ before_script:
   - sudo mysql -e 'CREATE DATABASE testing;'
   - composer self-update
   - composer install --no-interaction
-  - php artisan migrate --no-interaction -vvv
+  - php artisan migrate --env=testing --no-interaction -vvv
 
 script:
   - bin/phpunit
