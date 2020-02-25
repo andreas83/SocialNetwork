@@ -3,7 +3,6 @@
 namespace Tests\Feature\Auth;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-
 use Tests\TestCase;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -29,7 +28,8 @@ class LoginControllerTest extends TestCase
   public function testUserLoginSuccessfully()
   {
 
-
+      $this->seed("UsersTableSeeder");
+          
       $user = ['email' => 'user@email.com', 'password' => 'userpass'];
       $this->json('POST', 'api/login', $user)
           ->assertStatus(200)

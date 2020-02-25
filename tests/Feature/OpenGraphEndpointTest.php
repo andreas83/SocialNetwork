@@ -4,10 +4,12 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 
 class OpenGraphEndpointTest extends TestCase
 {
+    use DatabaseTransactions;
     /**
      * Test if the og parser is reachable for unauthenticated users
      *
@@ -32,11 +34,17 @@ class OpenGraphEndpointTest extends TestCase
     {
         $user = factory(\App\User::class, 1)->create();
 
+
+
         $response = $this->json('POST', '/api/content/ogparser',
         ["url"=> "https://www.codejungle.org"],
         ['HTTP_Authorization' => 'Bearer ' . $user[0]->api_token]);
-      
+
         $response->assertStatus(200);
+        $response->assertJsonStructure(
+
+            ['ogtags'=>["title", "image", "description"]]
+        );
 
     }
 }
