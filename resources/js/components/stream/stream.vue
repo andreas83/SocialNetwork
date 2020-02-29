@@ -76,9 +76,8 @@ export default {
 
         scroll () {
           window.onscroll = () => {
-            let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
 
-            if (bottomOfWindow) {
+            if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
 
               var next_id = Math.min.apply(Math, this.content.map(function(o){ return o.id }));
 
