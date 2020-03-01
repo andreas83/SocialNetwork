@@ -166,9 +166,28 @@ class ContentController extends Controller
       $title=$text[0];
       array_shift($text);
       $text=implode(" ", $text);
+
+      $images=$this->array_values_recursive($images);
+
       return view('welcome', ["images" => $images, "title"=> $title, "desc" => $text]);
     }
 
+    /**
+     * @todo find another place for this helper functions
+     */
+    function array_values_recursive($array) {
+      $flat = array();
+
+      foreach($array as $value) {
+        if (is_array($value)) {
+            $flat = array_merge($flat, $this->array_values_recursive($value));
+        }
+        else {
+            $flat[] = $value;
+        }
+      }
+      return $flat;
+    }
 
     public function parseog(Request $request)
     {
