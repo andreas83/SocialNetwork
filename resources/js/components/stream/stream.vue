@@ -1,11 +1,11 @@
 <template>
 
-  <div class="row">
+  <div class="row-0">
     <div class="col-lg-12" v-if="isAuth">
       <share-dialog :edit="isEdit" @updated="onUpdated" :content_id="content_id"></share-dialog>
 
     </div>
-    <div class="col-lg-12">
+    <div v-bind:class=css_stream_size  >
       <div class="row-0 streamitem " v-for="data in content" v-if="((user_id==false || user_id==data.user_id)  && (content_id==false || data.id==content_id)) && data.is_comment=='false'">
 
         <div class="row card" >
@@ -39,16 +39,22 @@
         </div>
       </div>
     </div>
+    <div class="col-lg-3 col-md-12 ">
+      <UserBox :user_id="user_id"></UserBox>
+    </div>
   </div>
 </template>
 <script>
 
 
-import javascript from 'highlight.js/lib/languages/javascript'
+import javascript from 'highlight.js/lib/languages/javascript';
 import {mapGetters, mapActions} from 'vuex';
 export default {
   name: "Stream",
     props:{
+      css_stream_size:{
+        default:"col-lg-12"
+      },
       user_id:{
         default:false
       },
@@ -73,7 +79,13 @@ export default {
         this.scroll();
       },
       methods:{
-
+        swipeRightHandler(direction, event, el){
+            event.target.classList.toggle('slide-out-right');
+              console.log("swipeRightHandler");
+        },
+        swipeLeftHandler(direction){
+            event.target.classList.toggle('slide-out-left');
+        },
         scroll () {
           window.onscroll = () => {
             let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
@@ -89,6 +101,9 @@ export default {
 
         ...mapActions('content', ['getContent', 'getMoreContent', 'deleteContent']),
         deleteContent(id){
+
+
+
           axios.delete('/api/content/'+id).then(({data}) => {
             this.$store.commit('content/deleteContent', id);
           })
@@ -140,7 +155,7 @@ export default {
       watch:{
 
         user_id(){
-
+           this.css_stream_size="col-lg-8 col-md-12";
            this.getContent();
         }
       },
