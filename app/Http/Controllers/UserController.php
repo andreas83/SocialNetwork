@@ -26,6 +26,10 @@ class UserController extends Controller
     {
       $user->avatar=$request->avatar;
     }
+    if($request->has("background") && !empty($request->background) )
+    {
+      $user->background=$request->background;
+    }
     if($request->has("bio") && !empty($request->bio) )
     {
       $user->bio=$request->bio;
