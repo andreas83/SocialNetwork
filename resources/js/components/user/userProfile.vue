@@ -1,30 +1,37 @@
 <template>
-  <div class="row card profile">
-  <div class="col-lg-6  col-md-12 ">
-
-    <picture>
-      <img :src="user.avatar"/>
+  <div class="row card profile settings">
+    <div class="col-lg-6  col-md-12 ">
+      <div id="avatar" v-bind:style="{ 'background-image': 'url(' + user.avatar + ')' }" />
       <br/>
       <button class="btn default" v-on:click="openFileDialog" value="default">{{$t('form.avatar.upload')}}</button>
-    </picture>
-  </div>
+
+    </div>
     <div class="col-lg-6  col-md-12 ">
-    <h2>{{user.name}}</h2>
-    <div class="form-field">
-      <label for="password">New {{$t('form.password')}}</label>
-      <input id="password" type="password" autocomplete="new-password"  v-model="password" />
+      <h2>{{user.name}}</h2>
     </div>
-    <div class="form-field">
-      <label for="mail">{{$t('form.email')}}</label>
-      <input id="mail" type="email"  placeholder="email " v-model="user.email"/>
+
+    <div class="col-lg-6  col-md-12 ">
+      <div class="form-field">
+        <label for="password">New {{$t('form.password')}}</label>
+        <input id="password" type="password" autocomplete="new-password"  v-model="password" />
+      </div>
+      <div class="form-field">
+        <label for="mail">{{$t('form.email')}}</label>
+        <input id="mail" type="email"  placeholder="email " v-model="user.email"/>
+      </div>
     </div>
-    <div class="form-field">
-      <label for="bio">{{$t('form.bio')}}</label>
-      <textarea id="bio" v-model="user.bio"></textarea>
+    <div class="col-lg-6  col-md-12 ">
+      <div class="form-field">
+        <label for="bio">{{$t('form.bio')}}</label>
+        <textarea id="bio" v-model="user.bio"></textarea>
+      </div>
     </div>
-    <div class="form-field">
-        <button class="btn default" v-on:click="save" value="default">{{$t('form.save')}}</button>
+    <div class="col-lg-6  col-md-12 ">
+      <div class="form-field right">
+          <button class="btn default" v-on:click="save" value="default">{{$t('form.save')}}</button>
+      </div>
     </div>
+
   </div>
 </div>
 

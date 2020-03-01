@@ -23,7 +23,27 @@ body{
         font-family: 'Questrial', sans-serif;
     }
 }
+#userBox{
+  margin-top: 2em;
+  position: sticky;
+  top: 65px;
+  text-align: center;
+  .avatar{
+    display: inline-block;
+
+    width:150px;
+    height:150px;
+    border-radius: 150px;
+    background-position: center;
+    background-size: contain;
+  }
+  p{
+    font-size: 0.8em;
+    text-align: left;
+  }
+}
 nav{
+  z-index: 999999;
   position: fixed;
   background-color: $color4;
   width:100%;

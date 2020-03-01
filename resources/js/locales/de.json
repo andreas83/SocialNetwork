@@ -18,6 +18,9 @@
     "save" : "Speichern",
     "avatar":{
       "upload" : "Pick profile Picture"
+    },
+    "background":{
+      "upload" : "Hintergrund ändern"
     }
 
   },

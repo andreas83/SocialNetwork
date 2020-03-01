@@ -53,10 +53,14 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post("content/upload", 'ContentController@upload');
     Route::post("content/ogparser", 'ContentController@parseog');
 });
-Route::middleware('auth:api')->get('/user/{name}', function (Request $request) {
-      return User::where("name" , '=', $request->name)->select("id", "name", "bio", "avatar", "created_at")->first();
 
+Route::get('/user/public', function (Request $request) {
+  if($request->has("id"))
+      return User::where("id" , '=', $request->id)->select("id", "name", "bio", "avatar", "background", "created_at")->first();
+  if($request->has("name"))
+    return User::where("name" , '=', $request->name)->select("id", "name", "bio", "avatar", "background", "created_at")->first();
 });
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

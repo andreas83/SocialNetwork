@@ -1,7 +1,7 @@
 @import 'color';
 @import 'fonts';
 @import 'grid';
-
+@import 'animation';
 .streamitem
 {
   padding-top: 1em;
@@ -32,14 +32,26 @@
   }
 }
 .profile{
-  picture{
-
-    img{
-      width:400px;
-      height:auto;
-    
+    .center{
+      text-align: center;
     }
-  }
+    min-height:400px;
+    &.settings{
+
+      height:auto;
+
+    }
+
+    #avatar{
+      margin-top:2em;
+      display: inline-block;
+      width:100px;
+      height:100px;
+      background-position: center;
+      background-size: contain;
+      border-radius: 50px;
+    }
+
 }
 
 .action{
@@ -68,6 +80,7 @@
 
 .editor-container{
   padding: 2em;
+  z-index:9999;
   @media screen and (max-width: $grid-mobile-breakpoint) {
     padding:  0em;
     padding-top:1em;
