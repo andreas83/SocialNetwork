@@ -51,6 +51,7 @@ Vue.component('Stream', require('./components/stream/stream').default);
 Vue.component('Likes', require('./components/stream/likes').default);
 Vue.component('ShareDialog', require('./components/stream/shareDialog').default);
 Vue.component('Comments', require('./components/stream/comments').default);
+Vue.component('UserBox', require('./components/user/userBox').default);
 
 Vue.prototype.$http = axios;
 
