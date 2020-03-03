@@ -5,7 +5,7 @@
             <div class="col-lg-12  col-md-12 center">
               <div id="avatar" v-bind:style="{ 'background-image': 'url(' + user.avatar + ')' }" />
               <h2>  {{this.$route.params.name}}</h2>
-
+              
             </div>
             <button class="btn defualt" v-if="isAuth && loggedInUser.id==user.id" v-on:click="changeBackground" >{{$t('form.background.upload')}}</button>
     </div>
@@ -124,6 +124,11 @@
       isAuth(){
         return this.$store.getters["user/isAuth"];
       }
-    }
+    },
+    watch: {
+        $route(to, from) {
+          this.getUser();
+        }
   }
+}
 </script>
