@@ -1,7 +1,7 @@
 <template>
   <div class="row card profile settings">
     <div class="col-lg-6  col-md-12 ">
-      <div id="avatar" v-bind:style="{ 'background-image': 'url(' + user.avatar + ')' }" />
+      <div id="avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(user.avatar, 100,100) + ')' }" />
       <br/>
       <button class="btn default" v-on:click="openFileDialog" value="default">{{$t('form.avatar.upload')}}</button>
 
@@ -38,7 +38,7 @@
 </template>
 <script>
 
-
+    import {getThumbnail} from '../../helper/resize'
     export default {
     name:"UserProfile",
     data() {
@@ -56,6 +56,7 @@
     },
 
     methods: {
+      getThumbnail,
       openFileDialog(){
 
         var element = document.createElement('div');

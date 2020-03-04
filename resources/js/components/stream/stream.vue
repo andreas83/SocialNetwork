@@ -13,7 +13,7 @@
           <div class="col-lg-12  col-md-12">
             <router-link :to="{ name: 'user', params: {name:data.name, user_id:data.user_id} }">
               <picture>
-                <img :src="data.avatar" />
+                <img :src="getThumbnail(data.avatar, 40, 40)" />
               </picture>
               <author >
                 {{data.name}}
@@ -49,6 +49,8 @@
 
 import javascript from 'highlight.js/lib/languages/javascript';
 import {mapGetters, mapActions} from 'vuex';
+import {getThumbnail} from '../../helper/resize'
+
 export default {
   name: "Stream",
     props:{
@@ -79,6 +81,7 @@ export default {
         this.scroll();
       },
       methods:{
+        getThumbnail,
         swipeRightHandler(direction, event, el){
             event.target.classList.toggle('slide-out-right');
               console.log("swipeRightHandler");

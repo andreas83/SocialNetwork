@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="row card profile"  v-bind:style="{ 'background-image': 'url(' + user.background + ')' }">
+    <div class="row card profile"  v-bind:style="{ 'background-image': 'url(' + getThumbnail(user.background, 1400, 500) + ')' }">
 
             <div class="col-lg-12  col-md-12 center">
-              <div id="avatar" v-bind:style="{ 'background-image': 'url(' + user.avatar + ')' }" />
+              <div id="avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(user.avatar, 100, 100) + ')' }" />
               <h2>  {{this.$route.params.name}}</h2>
               
             </div>
@@ -17,7 +17,7 @@
 </template>
 <script>
 
-
+    import {getThumbnail} from '../../helper/resize'
     export default {
     name:"User",
     data() {
@@ -39,6 +39,7 @@
 
     },
     methods: {
+      getThumbnail,
       changeBackground(){
 
         var element = document.createElement('div');
