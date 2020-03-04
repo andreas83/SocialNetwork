@@ -14,16 +14,15 @@ class AddNewContentTable extends Migration
     public function up()
     {
         Schema::create('contents', function (Blueprint $table) {
-          $table->bigIncrements('id');
-          $table->unsignedBigInteger('user_id');
-          $table->text('json_content');
-          $table->text('html_content');
-          $table->enum('visibility', ['public', 'friends']);
-          $table->enum('anonymous', ['true', 'false']);
-          $table->softDeletes();
-          $table->timestamps();
-          $table->foreign('user_id')->references('id')->on('users');
-
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
+            $table->text('json_content');
+            $table->text('html_content');
+            $table->enum('visibility', ['public', 'friends']);
+            $table->enum('anonymous', ['true', 'false']);
+            $table->softDeletes();
+            $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -34,6 +33,6 @@ class AddNewContentTable extends Migration
      */
     public function down()
     {
-      Schema::drop('contents');
+        Schema::drop('contents');
     }
 }

@@ -14,10 +14,9 @@ class AddCommentsToContent extends Migration
     public function up()
     {
         Schema::table('contents', function (Blueprint $table) {
-          $table->enum('has_comment', ['true', 'false']);
-          $table->enum('is_comment', ['true', 'false']);
-          $table->unsignedBigInteger('parrent_id');
-
+            $table->enum('has_comment', ['true', 'false']);
+            $table->enum('is_comment', ['true', 'false']);
+            $table->unsignedBigInteger('parrent_id');
         });
     }
 
@@ -29,7 +28,6 @@ class AddCommentsToContent extends Migration
     public function down()
     {
         Schema::table('content', function (Blueprint $table) {
-            //
         });
     }
 }

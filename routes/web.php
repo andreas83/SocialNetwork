@@ -10,12 +10,11 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-use App\Content;
 
 Route::post('/auth/twitter', "Auth\LoginController@twitter");
 
-Route::get('/permalink/{id}', "ContentController@permalink");
+Route::get('/permalink/{id}', 'ContentController@permalink');
 
-Route::get('/{any}', function(){
-        return view('welcome');
+Route::get('/{any}', function () {
+    return view('welcome');
 })->where('any', '.*');

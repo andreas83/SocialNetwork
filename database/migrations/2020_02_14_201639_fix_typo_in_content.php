@@ -15,7 +15,7 @@ class FixTypoInContent extends Migration
     {
         Schema::table('contents', function (Blueprint $table) {
             //$table->renameColumn('parrent_id', 'parent_id');
-             DB::statement('ALTER TABLE contents CHANGE parrent_id parent_id bigint(20) unsigned');
+            DB::statement('ALTER TABLE contents CHANGE parrent_id parent_id bigint(20) unsigned');
         });
     }
 
@@ -27,7 +27,6 @@ class FixTypoInContent extends Migration
     public function down()
     {
         Schema::table('content', function (Blueprint $table) {
-            //
         });
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Third Party Services
@@ -45,5 +44,4 @@ return [
       'client_secret' => env('MIX_FACEBOOK_SECRET'),
       'redirect' => env('MIX_FACEBOOK_REDIRECT_URI'),
     ],
-
 ];

@@ -4,15 +4,13 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\User;
-use Socialite;
-use Illuminate\Http\File;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Str;
+use Socialite;
 
 class LoginController extends Controller
 {
@@ -26,7 +24,6 @@ class LoginController extends Controller
     | to conveniently provide its functionality to your applications.
     |
     */
-
 
     use AuthenticatesUsers;
 
@@ -53,55 +50,40 @@ class LoginController extends Controller
         $socialUser = Socialite::driver($provider)->stateless()->user();
 
         //check if we already have a user
-        $user=User::where("email", $socialUser->email)->first();
-        if(!$user)
-        {
-          //register if not exists
-          $data=[
+        $user = User::where('email', $socialUser->email)->first();
+        if (!$user) {
+            //register if not exists
+            $data = [
               'name' => $socialUser->name,
               'email' => $socialUser->email,
               'password' => Hash::make(Str::random(60)),
-              'api_token' => Str::random(60)
+              'api_token' => Str::random(60),
           ];
 
-          if(!empty($socialUser->nickname))
-          {
-            $data['name'] = $socialUser->nickname;
-          }
+            if (!empty($socialUser->nickname)) {
+                $data['name'] = $socialUser->nickname;
+            }
 
-          if(!empty($socialUser->avatar))
-          {
-            $avatar = file_get_contents($socialUser->avatar);
-            $filename = time().uniqid();
-            $link=Storage::disk('public')->put($filename, $avatar);
-            $url = Storage::url($filename);
-            $data['avatar']=$url;
+            if (!empty($socialUser->avatar)) {
+                $avatar = file_get_contents($socialUser->avatar);
+                $filename = time().uniqid();
+                $link = Storage::disk('public')->put($filename, $avatar);
+                $url = Storage::url($filename);
+                $data['avatar'] = $url;
+            }
 
-          }
-
-          $user=User::create($data);
+            $user = User::create($data);
         }
 
-
-
-
-
-
         return response()->json([
-             'user' => $user
+             'user' => $user,
          ]);
     }
 
     protected function authenticated(Request $request, $user)
     {
-
-
-      return response()->json([
-           'user' => $user
+        return response()->json([
+           'user' => $user,
        ]);
     }
-
-
-
-
 }

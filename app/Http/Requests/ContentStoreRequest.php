@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Auth;
 
 class ContentStoreRequest extends FormRequest
 {
@@ -14,7 +13,6 @@ class ContentStoreRequest extends FormRequest
      */
     public function authorize()
     {
-
         return true;
     }
 
@@ -28,11 +26,11 @@ class ContentStoreRequest extends FormRequest
         return [
         'html_content' => ['required'],
         'json_content' => ['required'],
-        'has_comment' =>  ['required', 'boolean'],
-        'is_comment' =>  ['required', 'boolean' ],
-        'anonymous' =>  ['required', 'boolean'],
-        'visibility' =>  ['required', 'in:public,private,friends'],
-        'parent_id' => ['required', 'integer']
+        'has_comment' => ['required', 'boolean'],
+        'is_comment' => ['required', 'boolean'],
+        'anonymous' => ['required', 'boolean'],
+        'visibility' => ['required', 'in:public,private,friends'],
+        'parent_id' => ['required', 'integer'],
         ];
     }
 }

@@ -24,7 +24,7 @@ class LikeStoreRequest extends FormRequest
     public function rules()
     {
         return [
-        'key' => ['required', "in:heart,happy,wink,like,devil,coffee,beer,sunglasses,displeased"],
+        'key' => ['required', 'in:heart,happy,wink,like,devil,coffee,beer,sunglasses,displeased'],
         'content_id' => ['required', 'integer'],
         ];
     }

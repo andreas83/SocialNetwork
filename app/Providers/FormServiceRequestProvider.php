@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\ServiceProvider;
 
 class FormServiceRequestProvider extends ServiceProvider
 {
@@ -14,7 +14,6 @@ class FormServiceRequestProvider extends ServiceProvider
      */
     public function register()
     {
-        //
     }
 
     /**
@@ -24,9 +23,9 @@ class FormServiceRequestProvider extends ServiceProvider
      */
     public function boot()
     {
-      // automatically add route params to FormRequest objects
-      $this->app->resolving(FormRequest::class, function ($request, $app) {
-          $request->merge($request->route()->parameters());
-      });
+        // automatically add route params to FormRequest objects
+        $this->app->resolving(FormRequest::class, function ($request, $app) {
+            $request->merge($request->route()->parameters());
+        });
     }
 }

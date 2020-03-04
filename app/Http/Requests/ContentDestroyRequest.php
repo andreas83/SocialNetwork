@@ -23,9 +23,8 @@ class ContentDestroyRequest extends FormRequest
      */
     public function rules()
     {
-      return [
-      'id' => ['required']
-
+        return [
+      'id' => ['required'],
       ];
     }
 }
