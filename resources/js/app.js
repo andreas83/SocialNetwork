@@ -10,6 +10,7 @@ import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 import VueI18n from 'vue-i18n'
 import VueSocialauth from 'vue-social-auth'
+import VueMoment from 'vue-moment'
 import i18n from './i18n'
 import {router} from './routes.js';
 import {store} from './store/store.js';
@@ -38,8 +39,8 @@ Vue.use(VueSocialauth, {
 
 Vue.use(VueI18n);
 Vue.use(Vuex);
-
 Vue.use(VueRouter);
+Vue.use(VueMoment);
 
 Vue.config.ignoredElements = ['comment', 'date', 'author', 'comments', 'actions',
 'description', 'authorBox']

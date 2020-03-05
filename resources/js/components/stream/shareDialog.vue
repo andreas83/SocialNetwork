@@ -161,6 +161,9 @@ export default {
       edit:{
         dafault:false
       },
+      reshare:{
+        dafault:false
+      },
       content_id:{
         dafault : 0
       },
@@ -302,15 +305,21 @@ export default {
 
     },
     watch:{
+      content_id(){
+            this.editor.setContent(this.content.html_content);
+      },
 
+      reshare(val){
+        if(val===true)
+        {
+            this.editor.setContent(this.content.html_content);
+        }
+      },
       edit(val){
         if(val===true)
         {
             this.editor.setContent(this.content.html_content);
         }
-
-
-
       }
     },
     computed:{

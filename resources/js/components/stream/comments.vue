@@ -2,6 +2,9 @@
 
   <div class="row-0 comment-container">
     <share-dialog  v-if="isAuth" :edit="isEdit"  @updated="onUpdated"  :content_id="content_id" :parent_id=parent_content.id :is-comment="isComment"></share-dialog>
+
+    <button class="btn" v-if="!isAuth" @click="this.$router.push('/')"> Login</button>
+
     <div class="comment-list row-0">
 
       <div class="comment col-lg-12"  v-for="data in comments" v-if="parent_content.id==data.parent_id ">
@@ -17,7 +20,9 @@
         <button class="btn default small" v-if="isAuth && data.user_id==user.id" @click="deleteContent(data.id)">{{$t("form.delete")}}</button>
         <button class="btn default small" v-if="isAuth && data.user_id==user.id" @click="editContent(data.id)">{{$t("form.edit")}}</button>
         <content v-html="data.html_content"></content>
-        <actions :content=data  v-on:toggleComment="toggleComment"></actions>
+
+        <likes :content=data></likes>
+
       </div>
     </div>
 
@@ -38,6 +43,7 @@ export default {
 
           isComment:true,
           isEdit:false,
+
           content_id:0,
           content:[],
           error:""
@@ -64,15 +70,11 @@ export default {
           this.content_id=id;
         },
 
-
-        toggleComment(id){
-          console.log(this.$refs.id);
-        }
       },
       computed:{
         user(){
           return this.$store.getters["user/getUser"];
-        },        
+        },
         comments(){
           return  this.$store.getters["content/getCommentById"](this.parent_content.id);
         },

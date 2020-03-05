@@ -2,7 +2,7 @@
 
   <div class="row-0">
     <div class="col-lg-12" v-if="isAuth">
-      <share-dialog :edit="isEdit" @updated="onUpdated" :content_id="id"></share-dialog>
+      <share-dialog :edit="isEdit" :reshare="isReshare" @updated="onUpdated" @saved="onSaved" :content_id="id"></share-dialog>
 
     </div>
     <div v-bind:class=css_stream_size  >
@@ -20,17 +20,22 @@
 
               </author>
             </router-link>
-            <date>{{data.created_at}}</date>
 
+
+            <date>{{  data.created_at |  moment("from", "now", true) }}</date>
+
+
+            <button class="btn default small"  @click="permalink(data.id)">#{{data.id}}</button>
             <button class="btn default small" v-if="data.user_id==user.id" @click="deleteContent(data.id)">{{$t("form.delete")}}</button>
             <button class="btn default small" v-if="data.user_id==user.id" @click="editContent(data.id)">{{$t("form.edit")}}</button>
-            <button class="btn default small"  @click="permalink(data.id)" >{{$t("permalink")}}</button>
+
+
 
             <content v-html="data.html_content">
 
             </content>
 
-            <likes :content=data  v-on:toggleComment="toggleComment">
+            <likes :content=data v-on:reshareContent="reshareContent" v-on:toggleComment="toggleComment">
             </likes>
 
             <comments :parent_content=data v-if="data.show_comment">
@@ -67,6 +72,7 @@ export default {
     data() {
         return{
           isEdit:false,
+          isReshare: false,
           id:0,
           error:""
         }
@@ -82,6 +88,7 @@ export default {
       },
       methods:{
         getThumbnail,
+
         swipeRightHandler(direction, event, el){
             event.target.classList.toggle('slide-out-right');
               console.log("swipeRightHandler");
@@ -115,6 +122,11 @@ export default {
           this.$router.push({ name: 'permalink', params: { id: id } })
 
         },
+        onSaved(value)
+        {
+          this.isReshare=false;
+        },
+
         onUpdated (value) {
           this.isEdit=false;
         },
@@ -123,7 +135,14 @@ export default {
           this.id=id;
 
         },
+        reshareContent(id)
+        {
 
+          this.isReshare=true;
+          this.id=id;
+          document.body.scrollTop = 0; // For Safari
+          document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        },
         toggleComment(id){
 
           for(var i=0, length= this.content.length; i < length; i++)

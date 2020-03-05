@@ -1,19 +1,31 @@
 <template>
   <div class="action">
-    <button v-if="content.has_comment=='true' && content.is_comment=='false'" class="icon-comment" v-on:click="toggleComment"></button>
-    <button v-if="content.has_comment=='false' && content.is_comment=='false'" class="icon-comment-empty" v-on:click="toggleComment"/>
+    <div class="row">
+      <div v-if="content.is_comment!='true'" class="col-lg-4 ">
 
-    <button @click="saveLike('heart')" class="icon-heart">{{getLikesByKey("heart")}}</button>
-    <button @click="saveLike('happy')" class="icon-happy">{{getLikesByKey("happy")}}</button>
-    <button @click="saveLike('wink')" class="icon-wink">{{getLikesByKey("wink")}}</button>
+        <button v-if="showLikes!=true && content.has_comment=='true' && content.is_comment=='false'" class="icon-comment" v-on:click="toggleComment"> {{$t('Comment')}}</button>
+        <button v-if="showLikes!=true && content.has_comment=='false' && content.is_comment=='false'" class="icon-comment-empty" v-on:click="toggleComment"> {{$t('Comment')}}</button>
+      </div>
+      <div v-bind:class=likeCssClass>
+        <button v-if="showLikes!=true " @click="showLikes=true" class="icon-heart">{{getLikesByKey("heart")}} Likes</button>
+        <div  v-if="showLikes">
+          <button @click="saveLike('heart')" class="icon-heart">{{getLikesByKey("heart")}}</button>
+          <button @click="saveLike('happy')" class="icon-happy">{{getLikesByKey("happy")}}</button>
+          <button @click="saveLike('wink')" class="icon-wink">{{getLikesByKey("wink")}}</button>
+          <button @click="saveLike('like')" class="icon-like">{{getLikesByKey("like")}}</button>
+          <button @click="saveLike('devil')"  class="icon-devil">{{getLikesByKey("devil")}}</button>
+          <button @click="saveLike('coffee')"  class="icon-coffee">{{getLikesByKey("coffee")}}</button>
+          <button @click="saveLike('sunglasses')"  class="icon-sunglasses">{{getLikesByKey("sunglasses")}}</button>
+          <button @click="saveLike('displeased')"  class="icon-displeased">{{getLikesByKey("displeased")}}</button>
+          <button @click="saveLike('beer')"  class="icon-beer">{{getLikesByKey("beer")}}</button>
+          <button class="close" @click="showLikes=false ">x Close</button>
+        </div>
+      </div>
+      <div v-bind:class=reshareCssClass>
 
-    <button @click="saveLike('like')" class="icon-like">{{getLikesByKey("like")}}</button>
-    <button @click="saveLike('devil')"  class="icon-devil">{{getLikesByKey("devil")}}</button>
-    <button @click="saveLike('coffee')"  class="icon-coffee">{{getLikesByKey("coffee")}}</button>
-    <button @click="saveLike('sunglasses')"  class="icon-sunglasses">{{getLikesByKey("sunglasses")}}</button>
-    <button @click="saveLike('displeased')"  class="icon-displeased">{{getLikesByKey("displeased")}}</button>
-    <button @click="saveLike('beer')"  class="icon-beer">{{getLikesByKey("beer")}}</button>
-
+        <button v-if="showLikes!=true " @click="reshare(content.id)"  class="icon-reply-all">Reshare</button>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -25,8 +37,11 @@ export default {
     },
     data() {
         return{
+          showLikes:false,
           loaded:false,
-          error:""
+          error:"",
+          likeCssClass:"col-lg-4",
+          reshareCssClass: "col-lg-4"
         }
       },
       async created(){
@@ -43,7 +58,17 @@ export default {
             this.$emit('toggleComment', this.content.id);
 
         },
+        reshare(id)
+        {
+          this.$emit('reshareContent', id);
+        },
         saveLike(key){
+
+          if(!this.isAuth)
+          {
+            this.$router.push('/');
+          }
+
           let data={
             "key":key,
             "content_id":this.content.id,
@@ -73,6 +98,17 @@ export default {
            return "";
         }
 
+      },
+      watch:{
+        showLikes(val){
+          if(val==true)
+          {
+            this.likeCssClass="col-lg-12";
+          }
+          else {
+            this.likeCssClass="col-lg-4";
+          }
+        }
       },
       computed:{
 
