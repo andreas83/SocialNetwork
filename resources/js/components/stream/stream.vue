@@ -2,7 +2,7 @@
 
   <div class="row-0">
     <div class="col-lg-12" v-if="isAuth">
-      <share-dialog :edit="isEdit" @updated="onUpdated" :content_id="content_id"></share-dialog>
+      <share-dialog :edit="isEdit" @updated="onUpdated" :content_id="id"></share-dialog>
 
     </div>
     <div v-bind:class=css_stream_size  >
@@ -13,7 +13,7 @@
           <div class="col-lg-12  col-md-12">
             <router-link :to="{ name: 'user', params: {name:data.name, user_id:data.user_id} }">
               <picture>
-                <img :src="getThumbnail(data.avatar, 40, 40)" />
+                <img v-if="data.avatar" :src="getThumbnail(data.avatar, 40, 40)" />
               </picture>
               <author >
                 {{data.name}}
@@ -67,7 +67,7 @@ export default {
     data() {
         return{
           isEdit:false,
-
+          id:0,
           error:""
         }
       },
@@ -120,7 +120,7 @@ export default {
         },
         editContent(id){
           this.isEdit=true;
-          this.content_id=id;
+          this.id=id;
 
         },
 

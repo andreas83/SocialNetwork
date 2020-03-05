@@ -433,7 +433,30 @@ h1 {
   font-family: "Questrial", sans-serif;
 }
 
+#userBox {
+  margin-top: 2em;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 65px;
+  text-align: center;
+}
+
+#userBox .avatar {
+  display: inline-block;
+  width: 150px;
+  height: 150px;
+  border-radius: 150px;
+  background-position: center;
+  background-size: contain;
+}
+
+#userBox p {
+  font-size: 0.8em;
+  text-align: left;
+}
+
 nav {
+  z-index: 999999;
   position: fixed;
   background-color: #ff7909;
   width: 100%;
@@ -448,7 +471,6 @@ nav h1 {
   margin-left: 10px;
   font-size: 0.9em;
   color: #f4f4f4;
-  font-family: "Press Start 2P", cursive;
   text-decoration: underline;
   -webkit-box-flex: 3;
           flex-grow: 3;

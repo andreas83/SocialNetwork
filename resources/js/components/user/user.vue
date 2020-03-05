@@ -3,9 +3,9 @@
     <div class="row card profile"  v-bind:style="{ 'background-image': 'url(' + getThumbnail(user.background, 1400, 500) + ')' }">
 
             <div class="col-lg-12  col-md-12 center">
-              <div id="avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(user.avatar, 100, 100) + ')' }" />
+              <div id="avatar" v-if="user.avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(user.avatar, 100, 100) + ')' }" />
               <h2>  {{this.$route.params.name}}</h2>
-              
+
             </div>
             <button class="btn defualt" v-if="isAuth && loggedInUser.id==user.id" v-on:click="changeBackground" >{{$t('form.background.upload')}}</button>
     </div>

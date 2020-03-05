@@ -15,6 +15,7 @@
         "laravel/framework": "^6.2",
         "laravel/socialite": "^4.3",
         "laravel/tinker": "^2.0",
+        "league/glide": "^1.5",
         "league/glide-laravel": "^1.0",
         "socialiteproviders/facebook": "^1.0",
         "socialiteproviders/github": "dev-master",

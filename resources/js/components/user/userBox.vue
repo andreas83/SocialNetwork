@@ -2,7 +2,7 @@
 
     <div id="userBox">
 
-      <div class="avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(user.avatar, 150, 150) + ')' }" />
+      <div class="avatar" v-if="user.avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(user.avatar, 150, 150) + ')' }" />
 
 
       <h3>{{user.name}}</h3>
