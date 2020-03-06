@@ -99,7 +99,7 @@ export default {
         scroll () {
           window.onscroll = () => {
 
-            if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
+            if (window.innerHeight + window.pageYOffset+200 >= document.body.offsetHeight) {
 
               var next_id = Math.min.apply(Math, this.content.map(function(o){ return o.id }));
 
