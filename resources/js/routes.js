@@ -10,6 +10,7 @@ import UserProfile from './components/user/userProfile'
 import UserPosts from './components/user/userPosts'
 
 import GroupOverview from './components/group/overview'
+import GroupCreate from './components/group/new'
 import Group from './components/group/show'
 
 import Permalink from './components/Permalink'
@@ -52,6 +53,11 @@ export const router = new VueRouter({
           path: '/group/overview',
           name: "GroupOverview",
           component: GroupOverview
+        },
+        {
+          path: '/group/create',
+          name: "GroupCreate",
+          component: GroupCreate
         },
         {
           path: '/group/:name/:id',
