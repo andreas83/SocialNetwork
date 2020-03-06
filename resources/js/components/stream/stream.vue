@@ -6,8 +6,12 @@
 
     </div>
     <div v-bind:class=css_stream_size  >
-      <div class="row-0 streamitem " v-for="data in content" v-if="((user_id==false || user_id==data.user_id)  && (content_id==false || data.id==content_id)) && data.is_comment=='false'">
-
+      <div class="row-0 streamitem " v-for="data in content" v-if="
+      ((user_id==false || user_id==data.user_id)  &&
+      (content_id==false || data.id==content_id)) &&
+      data.is_comment=='false'"
+      >
+      {{group_id}}
         <div class="row card" >
 
           <div class="col-lg-12  col-md-12">
@@ -45,7 +49,8 @@
       </div>
     </div>
     <div class="col-lg-3 col-md-12 ">
-      <UserBox :user_id="user_id"></UserBox>
+      <UserBox v-if="user_id" :user_id="user_id"></UserBox>
+      <GoupBox v-if="group_id" :group_id="group_id"></GoupBox>
     </div>
   </div>
 </template>
@@ -63,6 +68,9 @@ export default {
         default:"col-lg-12"
       },
       user_id:{
+        default:false
+      },
+      group_id:{
         default:false
       },
       content_id:{

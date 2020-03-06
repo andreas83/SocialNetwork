@@ -9,6 +9,9 @@ import User from './components/user/user'
 import UserProfile from './components/user/userProfile'
 import UserPosts from './components/user/userPosts'
 
+import GroupOverview from './components/group/overview'
+import Group from './components/group/show'
+
 import Permalink from './components/Permalink'
 
 export const router = new VueRouter({
@@ -39,12 +42,23 @@ export const router = new VueRouter({
           component: {
             template: '<div class="auth-component"></div>'
           }
-        },        
+        },
         {
           path: '/user/profile',
           name: "userProfile",
           component: UserProfile
         },
+        {
+          path: '/group/overview',
+          name: "GroupOverview",
+          component: GroupOverview
+        },
+        {
+          path: '/group/:name/:id',
+          name: "Group",
+          component: Group
+        },
+
         {
           path: '/permalink/:id',
           name: "permalink",

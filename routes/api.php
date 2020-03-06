@@ -19,11 +19,14 @@ Route::group(['middleware' => ['api']], function () {
     Route::resource('content', 'ContentController')->only([
       'index',
     ]);
+    Route::resource('group', 'GroupController')->only([
+      'index',
+    ]);
     Route::get('content/comments/{id}', 'ContentController@comments');
     Route::resource('content/likes', 'ContentLikeController')->only([
       'index',
     ]);
-    
+
     Route::get('/user/public', function (Request $request) {
         if ($request->has('id')) {
             return User::where('id', '=', $request->id)->select('id', 'name', 'bio', 'avatar', 'background', 'created_at')->first();
@@ -32,7 +35,7 @@ Route::group(['middleware' => ['api']], function () {
             return User::where('name', '=', $request->name)->select('id', 'name', 'bio', 'avatar', 'background', 'created_at')->first();
         }
     });
-    
+
 });
 
 Route::post(
@@ -44,6 +47,7 @@ Route::get('auth/{provider}/callback', function () {
 })->where('provider', '.*');
 
 Route::group(['middleware' => ['auth:api']], function () {
+    
     Route::resource('content/likes', 'ContentLikeController')->only([
       'store',
     ]);
@@ -51,7 +55,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::resource('content', 'ContentController')->only([
       'store', 'update', 'destroy',
     ]);
-    
+
     Route::resource('group', 'GroupController')->only([
       'store', 'update', 'destroy',
     ]);
@@ -62,9 +66,8 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     Route::post('content/upload', 'ContentController@upload');
     Route::post('content/ogparser', 'ContentController@parseog');
-    
+
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
 });
-
