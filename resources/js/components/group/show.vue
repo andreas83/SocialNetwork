@@ -4,12 +4,12 @@
 
     <div class="col-lg-12">
 
-        <div class="avatar" v-if="group.avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(group.avatar, 150, 150) + ')' }" />
+        <div class="group preview" v-if="group.avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(group.avatar, 150, 150) + ')' }" />
 
         <h2>{{group.name}}</h2>
-        <p>{{group.description}}</p>
+        
+        <button class="btn defualt" v-if="group.is_moderator" v-on:click="changeBackground" >{{$t('form.background.upload')}}</button>
 
-        here: {{group.is_moderator}}
     </div>
     <stream  :group_id="group.id"></stream>
   </div>

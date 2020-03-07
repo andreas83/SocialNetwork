@@ -37,7 +37,7 @@
 
 </template>
 <script>
-
+    import {upload} from '../../helper/upload'
     import {getThumbnail} from '../../helper/resize'
     export default {
     name:"UserProfile",
@@ -58,59 +58,31 @@
     methods: {
       getThumbnail,
       openFileDialog(){
+        let vm=this
 
-        var element = document.createElement('div');
-        element.innerHTML = '<input  type="file">';
-        let fileInput = element.firstChild;
-        let vm=this;
-        let token=this.user.api_token;
-        fileInput.addEventListener('change', function() {
-          let formData = new FormData();
+        upload(function(res){
+          vm.user.avatar=res;
+          vm.$store.commit('user/setUser', vm.user);
+          let data = {
 
-          for (let i = 0; i < fileInput.files.length; i++) {
-              let file = fileInput.files[i];
-              formData.append('upload[]', file, file.name);
-          }
-          var xhr = new XMLHttpRequest();
+              avatar: vm.user.avatar,
 
 
 
-          xhr.open('POST', '/api/content/upload', true);
-          xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-          xhr.onload = function () {
-              if (xhr.status === 200) {
-
-                const result = JSON.parse(xhr.responseText);
-                //vm.avatar=result.path[0];
-                vm.user.avatar=result.path[0];
-                vm.$store.commit('user/setUser', vm.user);
-                let data = {
-
-                    avatar: vm.user.avatar,
-
-
-
-                };
-                axios.put('/api/user/'+vm.user.id, data)
-                    .then(({data}) => {
-
-                      vm.$store.commit('user/setUser', data.user);
-                    })
-                    .catch(({response}) => {
-                      vm.show=true;
-                      vm.error=response.data.errors;
-                    });
-
-              } else {
-                  vm.error = xhr.responseText;
-              }
           };
-          xhr.send(formData);
+          axios.put('/api/user/'+vm.user.id, data)
+              .then(({data}) => {
 
+                vm.$store.commit('user/setUser', data.user);
+              })
+              .catch(({response}) => {
+                vm.show=true;
+                vm.error=response.data.errors;
+              });
 
         });
 
-        fileInput.click();
+
       },
       save(){
 

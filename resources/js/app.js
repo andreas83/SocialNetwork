@@ -53,6 +53,8 @@ Vue.component('Likes', require('./components/stream/likes').default);
 Vue.component('ShareDialog', require('./components/stream/shareDialog').default);
 Vue.component('Comments', require('./components/stream/comments').default);
 Vue.component('UserBox', require('./components/user/userBox').default);
+Vue.component('GroupBox', require('./components/group/groupBox').default);
+Vue.component('GroupCreate', require('./components/group/new').default);
 
 Vue.prototype.$http = axios;
 

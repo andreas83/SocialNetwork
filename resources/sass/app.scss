@@ -106,6 +106,15 @@
 
 }
 
+.group.preview{
+    height:150px;
+    width:150px;
+    background-position: center;
+    background-size: contain;
+    border-radius: 75px;
+}
+
+
 .editor-container{
   padding: 2em;
   z-index:9999;

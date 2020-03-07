@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Group;
+use App\GroupMembers;
 use DB;
 use Auth;
 class GroupController extends Controller
@@ -19,6 +21,9 @@ class GroupController extends Controller
         }
         if ($request->has('name')) {
             $groups->where('groups.name', '=', $request->name);
+        }
+        if ($request->has('search')) {
+            $groups->where('groups.name', 'like', "%".$request->search."%")->orwhere('groups.description', 'like', "%".$request->search."%");
         }
 
         if ($request->has('limit') && $request->limit <= 100) {
@@ -53,7 +58,24 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $group=new Group();
+        $group->name=$request->name;
+        $group->description=$request->description;
+        $group->avatar=$request->avatar;
+        $group->background="";
+        $group->save();
+
+
+        $members=new GroupMembers();
+        $members->user_id=Auth::user()->id;
+        $members->group_id=$group->id;
+        $members->status="confirmed";
+        $members->is_moderator=1;
+        $members->save();
+        return response()->json([
+
+           'groups' => $group,
+       ]);
     }
 
 

@@ -7,7 +7,6 @@ import Login from './components/user/login'
 
 import User from './components/user/user'
 import UserProfile from './components/user/userProfile'
-import UserPosts from './components/user/userPosts'
 
 import GroupOverview from './components/group/overview'
 import GroupCreate from './components/group/new'
@@ -74,14 +73,7 @@ export const router = new VueRouter({
           path: '/:name',
           component: User,
           name:"user",
-          children: [
-            {
-              // UserPosts will be rendered inside User's <router-view>
-              // when /user/:id/posts is matched
-              path: 'posts',
-              component: UserPosts
-            }
-          ]
+        
         }
 
       ]

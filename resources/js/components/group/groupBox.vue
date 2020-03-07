@@ -1,7 +1,7 @@
 <template>
 
     <div id="groupBox">
-
+      
       <div class="avatar" v-if="group.avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(group.avatar, 150, 150) + ')' }" />
       {{group.avatar}}
 
@@ -14,7 +14,7 @@
 
 </template>
 <script>
-
+    import {mapGetters, mapActions} from 'vuex';
     import {getThumbnail} from '../../helper/resize'
     export default {
     name:"GroupBox",
@@ -37,7 +37,7 @@
 
         };
     },
-    mounted(){
+    async mounted(){
 
         await this.getGroup({id : this.$route.params.id});
 

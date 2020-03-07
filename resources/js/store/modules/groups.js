@@ -12,16 +12,15 @@ export default {
   actions:{
     async createGroup({commit}, data)
     {
-      const response = await createGroup(data.name, data.description, data.background, data.status);
+      const response = await createGroup(data.name, data.description, data.avatar, data.visibility);
       commit('updateGroup', response.data.group);
     },
     async getGroup({commit}, payload)
     {
       try {
 
-          const response = await getGroup(payload.id, payload.name, payload.limit);
-
-
+          const response = await getGroup(payload.id, payload.name, payload.search, payload.limit);
+          
           for(let i=0; i < response.data.groups.length; i++)
           {
 
