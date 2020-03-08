@@ -47,7 +47,7 @@ Route::get('auth/{provider}/callback', function () {
 })->where('provider', '.*');
 
 Route::group(['middleware' => ['auth:api']], function () {
-    
+
     Route::resource('content/likes', 'ContentLikeController')->only([
       'store',
     ]);
@@ -68,6 +68,9 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('content/ogparser', 'ContentController@parseog');
 
     Route::get('/user', function (Request $request) {
-        return $request->user();
+
+
+
+        return ["user" => $request->user(), "groups" => $request->user()->groups()->get() ];
     });
 });

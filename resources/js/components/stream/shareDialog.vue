@@ -1,6 +1,7 @@
 <template>
 
   <div class="row-0 editor-container">
+
       <editor-menu-bar class="btn default" :editor="editor" v-slot="{ commands, isActive }">
         <div class="menubar">
 
@@ -128,12 +129,31 @@
       <editor-menu-bar class="btn default" :editor="editor" v-slot="{ commands, isActive }">
         <button class="default icon-picture" @click="openFileDialog(commands.image)"/>
       </editor-menu-bar>
-
-
-
       <button class="btn default" v-if="!isComment" @click.prevent="save"> <i class="icon-heart" /> {{$t('Share')}}</button>
       <button class="btn default" v-if="isComment" @click.prevent="save"> {{$t('Comment')}}</button>
 
+
+      <a href="#" @click="showMeta=true">Show Advanced</a>
+
+      <div class="row-0" v-if="showMeta">
+        <div class="col-lg-6">
+        <div class="form-field">
+
+          <label>Post in </label>
+          <select  v-model="selected">
+            <option value="0" selected>Public</option>
+            <option :value=item.id v-for="item in userGoup">{{item.name}}</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label>Post anonymously</label>
+        <input type="checkbox" v-model="anonymous" value="true">
+        <p v-if="anonymous">Note you can't edit nor delete afterwars.</p>
+      </div>
+
+
+      </div>
   </div>
 </template>
 <script>
@@ -169,13 +189,22 @@ export default {
       },
       parent_id:{
         default : 0
+      },
+      group_id:{
+        default : 0
       }
     },
     data() {
         return{
           rawjson:"",
+          showMeta:false,
+          anonymous:false,
+          selected:0,
           editor: new Editor({
-           content: '',
+           content: {
+
+           },
+
            extensions: [
 
              new Blockquote(),
@@ -215,7 +244,8 @@ export default {
     beforeDestroy() {
       this.editor.destroy()
     },
-    mounted(){
+    async mounted(){
+
       if(this.isComment){
         this.editor.setContent("<h3>Comment</h3>");
       }
@@ -278,6 +308,7 @@ export default {
                 has_comment: this.content.has_comment,
                 is_comment:this.content.is_comment,
                 parent_id: this.content.parent_id,
+                group_id: this.content.group_id,
                 anonymous: true,
                 visibility: 'friends'
             };
@@ -292,6 +323,7 @@ export default {
                 has_comment: false,
                 is_comment:this.isComment,
                 parent_id: this.parent_id,
+                group_id: this.selected,
                 anonymous: true,
                 visibility: 'friends'
             };
@@ -323,6 +355,10 @@ export default {
       }
     },
     computed:{
+      userGoup(){
+
+        return this.$store.getters["user/getGroup"];
+      },
       content(){
         return this.$store.getters["content/getContentById"](this.content_id);
       },

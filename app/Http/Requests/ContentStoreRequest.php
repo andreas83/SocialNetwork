@@ -31,6 +31,7 @@ class ContentStoreRequest extends FormRequest
         'anonymous' => ['required', 'boolean'],
         'visibility' => ['required', 'in:public,private,friends'],
         'parent_id' => ['required', 'integer'],
+        'group_id' => ['required', 'integer'],
         ];
     }
 }

@@ -8,10 +8,11 @@
     <div v-bind:class=css_stream_size  >
       <div class="row-0 streamitem " v-for="data in content" v-if="
       ((user_id==false || user_id==data.user_id)  &&
+      (group_id==false || group_id==data.group_id)  &&
       (content_id==false || data.id==content_id)) &&
       data.is_comment=='false'"
       >
-      {{group_id}}
+      
         <div class="row card" >
 
           <div class="col-lg-12  col-md-12">
@@ -50,7 +51,7 @@
     </div>
     <div class="col-lg-3 col-md-12 ">
       <UserBox v-if="user_id" :user_id="user_id"></UserBox>
-      <GoupBox v-if="group_id" :group_id="group_id"></GoupBox>
+      <GroupBox v-if="group_id" :group_id="group_id"></GroupBox>
     </div>
   </div>
 </template>
@@ -86,9 +87,8 @@ export default {
         }
       },
       async created (){
-
         //await this.getContent();
-        await this.getMoreContent({next_id:false, user_id: this.user_id, content_id: this.content_id});
+        await this.getMoreContent({next_id:false, user_id: this.user_id, content_id: this.content_id, group_id:this.group_id});
       },
       mounted(){
 

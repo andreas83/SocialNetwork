@@ -13,11 +13,11 @@ class AddGroupsTable extends Migration
      */
     public function up()
     {
-      
+
       Schema::table('contents', function (Blueprint $table) {
-          $table->unsignedInteger('group_id')->after('user_id');
+          $table->unsignedBigInteger('group_id')->after('user_id');
       });
-            
+
       Schema::create('groups', function (Blueprint $table) {
           $table->bigIncrements('id');
           $table->string('name');
@@ -26,16 +26,16 @@ class AddGroupsTable extends Migration
           $table->text('description');
           $table->enum('visibility', ['public', 'private']);
           $table->timestamps();
-          
+
       });
 
       Schema::create('group_members', function (Blueprint $table) {
+          $table->bigIncrements('id');
           $table->unsignedBigInteger('group_id');
           $table->unsignedBigInteger('user_id');
           $table->enum('status', ['confirmed', 'awaiting', 'blocking']);
           $table->tinyInteger('is_moderator');
-          $table->foreign('group_id')->references('id')->on('contents')->onDelete('cascade');
-          $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');          
+          $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
           $table->timestamps();
       });
     }

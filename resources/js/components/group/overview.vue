@@ -6,19 +6,21 @@
       <div class="form-field">
 
         <input id="search" type="text" name="search" placeholder="search " v-model="search" />
-        <button  @click="showCreate=true" class="btn default">+</button>
-        <GroupCreate v-if="showCreate"></GroupCreate>
+        <button  @click="$router.push('create')" class="btn default">+</button>
+
 
       </div>
     </div>
-    <div v-if="showCreate!=true" v-for="item in group" class="col-lg-3">
+    <div v-for="item in group" class="col-lg-3">
+
         <div class="group preview" v-if="item.avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(item.avatar, 150, 150) + ')' }" />
 
         <h2>{{item.name}}</h2>
+        {{item.id}}
         <p>{{item.description}}</p>
 
         <button @click="showGroup(item.id, item.name)">Show</button>
-        <button @click="joinGroup" class="btn default">Join</button>
+        <button v-if="isMember(item.id, member)" @click="joinGroup" class="btn default">Join</button>
     </div>
 
   </div>
@@ -46,6 +48,11 @@ export default {
 
       },
       methods:{
+        isMember(id, member)
+        {
+
+
+        },
         joinGroup(){
 
         },
@@ -61,7 +68,8 @@ export default {
       computed:{
 
         ...mapGetters({
-          group: 'groups/getGroup'
+          group: 'groups/getGroup',
+          member: 'user/getGroup'
         }),
         isAuth(){
           return this.$store.getters["user/isAuth"];

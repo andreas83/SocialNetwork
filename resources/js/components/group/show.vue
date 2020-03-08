@@ -1,32 +1,39 @@
 <template>
 
   <div class="row">
+    <div class="row card profile"  v-bind:style="{ 'background-image': 'url(' + getThumbnail(group.background, 1400, 500) + ')' }">
 
-    <div class="col-lg-12">
+            <div class="col-lg-12  col-md-12 center">
+              <div id="avatar" v-if="group.avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(group.avatar, 100, 100) + ')' }" />
+              <h2>{{group.name}}</h2>
 
-        <div class="group preview" v-if="group.avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(group.avatar, 150, 150) + ')' }" />
-
-        <h2>{{group.name}}</h2>
-        
-        <button class="btn defualt" v-if="group.is_moderator" v-on:click="changeBackground" >{{$t('form.background.upload')}}</button>
-
+            </div>
+            <button class="btn defualt" v-if="group.is_moderator" v-on:click="changeBackground" >{{$t('form.background.upload')}}</button>
     </div>
+
     <stream  :group_id="group.id"></stream>
   </div>
 </template>
 <script>
 import {mapGetters, mapActions} from 'vuex';
 import {getThumbnail} from '../../helper/resize'
+import {upload} from '../../helper/upload'
 export default {
     name: "Group",
 
     data() {
         return{
-
+          // group:{
+          //   id:"",
+          //   name:"",
+          //   description:"",
+          //   avatar:"",
+          //   background:"",
+          // },
           error:""
         }
       },
-      async created(){
+      async mounted(){
 
         await this.getGroup({id : this.$route.params.id});
 
@@ -39,6 +46,25 @@ export default {
 
         getThumbnail,
         ...mapActions('groups', ['getGroup']),
+
+        changeBackground(){
+          let vm=this;
+          upload(function(res){
+            vm.group.background=res;
+            vm.$store.commit('group/setGroup', vm.group);
+            let data = {
+                background: res,
+            };
+            axios.put('/api/groups/'+vm.group.id, data)
+                .then(({data}) => {
+                  vm.$store.commit('group/setGroup', data.group);
+                })
+                .catch(({response}) => {
+                  vm.show=true;
+                  vm.error=response.data.errors;
+                });
+          });
+        },
 
       },
       computed:{

@@ -2,7 +2,9 @@ export default {
   namespaced: true,
   state:{
     isAuthenticated:false,
-    user:{}
+    user:{},
+    groups:[]
+
   },
   action:{
       setUser ({commit}, user) {
@@ -16,12 +18,15 @@ export default {
     },
 
     getters:{
+
+      getGroup: state => state.groups,
       getUser: state => state.user,
       isAuth: state =>  state.isAuthenticated
     },
     mutations:{
-      setUser(state, user){
-        state.user=user;
+      setUser(state, data){
+        state.user=data.user;
+        state.groups=data.groups;
       },
       setAuth(state, isAuth){
         state.isAuthenticated=isAuth;
