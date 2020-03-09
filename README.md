@@ -2,12 +2,12 @@
 
 ## About Project
 
-works pretty similar to a well known social network, but you can host it on your very own infrastructure. No external dependencies needed. Focus of this project was security and performance.
+works pretty similar to a well known social network, but you can host it on your very own infrastructure. No external dependencies needed. Focus of this project is stability. security and performance.
 
 ## Anouncement
 
-On 13.02.2020 i decided to move version 2.0 to deprecated branch
-At moment the new master has less features than 2.0, but iam working hard to restore the most important ones.
+On 13.02.2020 i decided to mark version 2.0 as deprecated and started to rewrite everything from scratch.
+At moment the master has less features than 2.0, but iam working hard to restore the most important ones.
 Feel free to join the development process by creating tasks (feature request) or make code improvements.
 
 
@@ -135,16 +135,14 @@ Demo is still alive here: https://social.codejungle.org/
 Please report feature requests and bugs.
 Demo is here: https://dev.codejungle.org/
 
-Planed features:  
+Working features are:
 
-oauth login
-websockets (notifications)
-hashtags interpretation
-image gallery
-profile
+* Share, Commnet, Reshare, Likes
+* OpenGraph Tag parsing
+* OAuth login via Github and Facebook
 
-low prio
-syntaxhighlighting
+**Attention**
+This is a early stage beta, things can change drasticly.
 
 
 ## 4. Donate
