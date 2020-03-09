@@ -13,14 +13,14 @@ export default {
     async createGroup({commit}, data)
     {
       const response = await createGroup(data.name, data.description, data.avatar, data.visibility);
-      commit('updateGroup', response.data.group);
+      commit('updateGroup', response.data.groups);
     },
     async getGroup({commit}, payload)
     {
       try {
 
           const response = await getGroup(payload.id, payload.name, payload.search, payload.limit);
-          
+
           for(let i=0; i < response.data.groups.length; i++)
           {
 

@@ -21,11 +21,19 @@
     },
     "background":{
       "upload" : "Hintergrund ändern"
+    },
+    "group" : {
+      "changePicture" : "Avatar ändern",
+      "changeDescription" : "Beschreibung ändern",
+      "join" : "Beitretten",
+      "leave" : "Gruppe verlassen"
     }
 
   },
   "permalink": "permalink",
   "Share" : "Teilen",
-  "Comment" : "Kommentieren"
-
+  "Comment" : "Kommentieren",
+  "post.anonymously" : "Post Anonymisieren",
+  "post.in" : "In Gruppe posten",
+  "Create Group" : "Gruppe erstellen"
 }

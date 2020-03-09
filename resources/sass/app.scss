@@ -106,6 +106,22 @@
 
 }
 
+.autoCompleteGroup{
+  cursor: pointer;
+  &:hover{
+    background-color: $color2;
+
+  }
+}
+
+.avatar.small{
+  height:50px;
+  width:50px;
+  background-position: center;
+  background-size: contain;
+  border-radius: 25px;
+
+}
 .group.preview{
     height:150px;
     width:150px;

@@ -73,7 +73,7 @@ export const router = new VueRouter({
           path: '/:name',
           component: User,
           name:"user",
-        
+
         }
 
       ]

@@ -34,6 +34,7 @@
     </div>
     <div class="col-lg-12  col-md-12">
       <button @click="save" class="btn default">Save</button>
+      <button @click="cancle" class="btn default">Cancle</button>
     </div>
     </div>
 
@@ -47,7 +48,11 @@ import { debounce } from 'lodash'
 
 export default {
     name: "GroupCreate",
-
+    props:{
+      suggestion:{
+        default:false
+      }
+    },
     data() {
         return{
           autocomplete:"",
@@ -67,7 +72,7 @@ export default {
           this.setGroup([]);
       },
       mounted(){
-
+    
       },
       methods:{
 
@@ -80,6 +85,9 @@ export default {
           });
         },
         ...mapActions('groups', ['setGroup', 'getGroup', 'createGroup']),
+        cancle(){
+            this.$emit('cancled');
+        },
         save(){
           let data = {
               name: this.autocomplete,
@@ -90,7 +98,7 @@ export default {
 
           };
           this.createGroup(data);
-
+          this.$emit('saved', this.group.id);
         }
       },
       computed:{
@@ -103,6 +111,10 @@ export default {
         }
       },
       watch: {
+        suggestion:function(val){
+          this.autocomplete=val;
+        },
+
         autocomplete: debounce(function () {
           this.setGroup([]);
           if(this.autocomplete.length>1)

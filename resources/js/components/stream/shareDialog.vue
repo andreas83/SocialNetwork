@@ -137,20 +137,34 @@
 
       <div class="row-0" v-if="showMeta">
         <div class="col-lg-6">
-        <div class="form-field">
+        <div v-if="showCreateGroup!=true" class="form-field">
 
-          <label>Post in </label>
-          <select  v-model="selected">
-            <option value="0" selected>Public</option>
-            <option :value=item.id v-for="item in userGoup">{{item.name}}</option>
-          </select>
+          <label>{{$t("post.in")}}</label>
+          <input type="text"  placeholder="search " v-model="searchGroup">
+
+          <div class="row-0 autoCompleteGroup" @click="selectGroup(item)" v-for="item in autoCompleteGroup">
+              <div class="col-lg-8">
+                {{item.name}}
+              </div>
+              <div class="col-lg-4">
+                <div class="small avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(item.avatar, 50, 50) + ')' }"></div>
+              </div>
+
+          </div>
+
+          <button @click="showCreateGroup=true">{{$t("Create Group")}}</button>
+
+
+
         </div>
+        <GroupCreate :suggestion="searchGroup" v-on:cancled="groupCancled"  v-on:saved="groupSaved" v-show="showCreateGroup"></GroupCreate>
       </div>
       <div>
-        <label>Post anonymously</label>
-        <input type="checkbox" v-model="anonymous" value="true">
-        <p v-if="anonymous">Note you can't edit nor delete afterwars.</p>
+        <label for="anonymous">{{$t("post.anonymously")}}</label>
+        <input id="anonymous" type="checkbox" v-model="anonymous" value="true">
+        <p v-if="anonymous">{{$t("Note you can't edit nor delete afterwars.")}}</p>
       </div>
+
 
 
       </div>
@@ -161,7 +175,9 @@ import { Editor, EditorContent, EditorMenuBar, Node } from 'tiptap'
 import { CodeBlockHighlight, Blockquote,  CodeBlock,  HardBreak,  Heading,  OrderedList,  BulletList,  Link, ListItem,  TodoItem,  TodoList,  Bold,  Code,  Italic,  Strike,  Underline,  History, Image} from 'tiptap-extensions'
 import {onPasteUrl} from "./editor/onPasteUrl";
 import {mapGetters, mapActions} from 'vuex';
-
+import { debounce } from 'lodash'
+import {upload} from '../../helper/upload'
+import {getThumbnail} from '../../helper/resize'
 import javascript from 'highlight.js/lib/languages/javascript'
 import css from 'highlight.js/lib/languages/css'
 import python from 'highlight.js/lib/languages/python'
@@ -196,10 +212,12 @@ export default {
     },
     data() {
         return{
+          searchGroup:"",
           rawjson:"",
           showMeta:false,
+          showCreateGroup:false,
           anonymous:false,
-          selected:0,
+
           editor: new Editor({
            content: {
 
@@ -251,49 +269,36 @@ export default {
       }
     },
     methods:{
+      getThumbnail,
+      ...mapActions('content' , ['createContent', 'updateContent']),
+      ...mapActions('groups' , ['setGroup', 'getGroup']),
 
-      ...mapActions('content', ['createContent', 'updateContent']),
+
+      groupSaved(){
+        this.showCreateGroup=false;
+      },
+
+      groupCancled(){
+          this.showCreateGroup=false;
+      },
+
       openFileDialog(command){
-        var element = document.createElement('div');
-        element.innerHTML = '<input multiple="multiple" type="file">';
-        let fileInput = element.firstChild;
-        let vm=this;
-        let token=this.user.api_token;
-        fileInput.addEventListener('change', function() {
-          let formData = new FormData();
+        let vm=this
 
-          for (let i = 0; i < fileInput.files.length; i++) {
-              let file = fileInput.files[i];
-              formData.append('upload[]', file, file.name);
-          }
-          var xhr = new XMLHttpRequest();
-
-
-
-          xhr.open('POST', 'api/content/upload', true);
-          xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-          xhr.onload = function () {
-              if (xhr.status === 200) {
-              // Dateien wurden hochgeladen
-              ;
-                const result = JSON.parse(xhr.responseText);
-                for(let index in result)
-                {
-                  const src= result[index];
-                  command({src})
-                }
-
-
-              } else {
-                  vm.error = xhr.responseText;
-              }
-          };
-          xhr.send(formData);
-
-
+        upload(function(result){
+            const src= result;
+            command({src})
+            // for(let index in result)
+            // {
+            //   const src= result[index];
+            //   command({src})
+            // }
         });
+      },
+      selectGroup(item){
+        this.selected=item.id;
+        this.searchGroup=item.name;
 
-        fileInput.click();
       },
 
       save(e){
@@ -355,9 +360,9 @@ export default {
       }
     },
     computed:{
-      userGoup(){
+      autoCompleteGroup(){
 
-        return this.$store.getters["user/getGroup"];
+        return this.$store.getters["groups/getGroup"];
       },
       content(){
         return this.$store.getters["content/getContentById"](this.content_id);
@@ -368,6 +373,17 @@ export default {
       user(){
         return this.$store.getters["user/getUser"];
       }
+    },
+    watch: {
+      searchGroup: debounce(function () {
+        this.setGroup([]);
+
+
+        if(this.searchGroup.length>1)
+        {
+           this.getGroup({search:this.searchGroup});
+        }
+      }, 300)
     }
   }
 </script>

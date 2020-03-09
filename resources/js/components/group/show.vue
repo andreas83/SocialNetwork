@@ -1,6 +1,7 @@
 <template>
 
   <div class="row">
+    {{this.$route.params.id}}
     <div class="row card profile"  v-bind:style="{ 'background-image': 'url(' + getThumbnail(group.background, 1400, 500) + ')' }">
 
             <div class="col-lg-12  col-md-12 center">
