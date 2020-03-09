@@ -8,7 +8,7 @@
       <h3>{{user.name}}</h3>
       <p>{{user.bio}}</p>
 
-
+      <div></div>
     </div>
 
 

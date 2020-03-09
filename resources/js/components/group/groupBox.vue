@@ -37,6 +37,7 @@
           group:{
             id:0,
             name:"",
+            background:"",
             description:"",
             is_member:false,
             is_moderator:false
@@ -44,9 +45,9 @@
 
         };
     },
-    async mounted(){
+    mounted(){
 
-        await this.getGroup({id : this.$route.params.id});
+        this.getGroup({id : this.$route.params.id});
 
     },
     methods: {

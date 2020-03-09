@@ -1,28 +1,29 @@
 <template>
+  <div class="group overview">
+    <div class="row">
 
-  <div class="row">
+      <div class="col-lg-12  col-md-12">
+        <div class="form-field">
 
-    <div class="col-lg-12  col-md-12">
-      <div class="form-field">
+          <input id="search" type="text" name="search" placeholder="search " v-model="search" />
 
-        <input id="search" type="text" name="search" placeholder="search " v-model="search" />
-        <button  @click="$router.push('create')" class="btn default">+</button>
-
-
+        </div>
       </div>
     </div>
-    <div v-for="item in group" class="col-lg-3">
+    <div class="row">
+      <div v-for="item in group" class="col-lg-3">
 
-        <div class="group preview" v-if="item.avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(item.avatar, 150, 150) + ')' }" />
+          <div class="group preview" v-if="item.avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(item.avatar, 150, 150) + ')' }" />
 
-        <h2>{{item.name}}</h2>
-        {{item.id}}
-        <p>{{item.description}}</p>
+          <h4>{{item.name}}</h4>
 
-        <button @click="showGroup(item.id, item.name)">Show</button>
-        <button v-if="isMember(item.id, member)" @click="joinGroup" class="btn default">Join</button>
+          <p>{{item.description}}</p>
+
+          <button @click="showGroup(item.id, item.name)">Show</button>
+          <button v-if="isMember(item.id, member)" @click="joinGroup" class="btn default">Join</button>
+      </div>
+
     </div>
-
   </div>
 </template>
 <script>

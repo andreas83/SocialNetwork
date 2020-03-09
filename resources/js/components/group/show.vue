@@ -2,7 +2,7 @@
 
   <div class="row">
     {{this.$route.params.id}}
-    <div class="row card profile"  v-bind:style="{ 'background-image': 'url(' + getThumbnail(group.background, 1400, 500) + ')' }">
+    <div class="row card profile" v-bind:style="{ 'background-image': 'url(' + getThumbnail(group.background, 1400, 500) + ')' }">
 
             <div class="col-lg-12  col-md-12 center">
               <div id="avatar" v-if="group.avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(group.avatar, 100, 100) + ')' }" />
@@ -34,15 +34,13 @@ export default {
           error:""
         }
       },
-      async mounted(){
+       mounted(){
 
-        await this.getGroup({id : this.$route.params.id});
+         this.getGroup({id : this.$route.params.id});
 
-
-      },
-      mounted(){
 
       },
+
       methods:{
 
         getThumbnail,

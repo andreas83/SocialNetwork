@@ -4,18 +4,25 @@
     <div class="col-lg-6  col-md-12 ">
       <div class="group preview large" v-if="group.avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(group.avatar, 250,250) + ')' }" />
       <br/>
-      {{group.avatar}}
-      <button class="btn default" v-on:click="openFileDialog" value="default">{{$t('form.avatar.upload')}}</button>
+
+
 
     </div>
 
     <div class="col-lg-12  col-md-12">
       <div class="form-field">
-        <input  type="text" placeholder="name " v-model="autocomplete" />
-        <div v-for="item in autocompleteResult">
-          <div class="group preview" v-if="item.avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(item.avatar, 250,250) + ')' }" />
-          {{item.name}}
+        <input  type="text" placeholder="name " v-model="autocomplete" /><button class="btn default" v-on:click="openFileDialog" value="default">{{$t('form.avatar.upload')}}</button>
+
+        <div class="row-0 autoCompleteGroup" @click="selectGroup(item)" v-for="item in autocompleteResult">
+            <div class="col-lg-8">
+              {{item.name}}
+            </div>
+            <div class="col-lg-4">
+              <div class="small avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(item.avatar, 50, 50) + ')' }"></div>
+            </div>
+
         </div>
+
       </div>
     </div>
     <div class="col-lg-12  col-md-12">
@@ -72,7 +79,7 @@ export default {
           this.setGroup([]);
       },
       mounted(){
-    
+
       },
       methods:{
 

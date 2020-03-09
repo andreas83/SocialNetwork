@@ -106,14 +106,21 @@
 
 }
 
-.autoCompleteGroup{
+.autocomplete{
+  div{
+    line-height: 2em;
+  }
   cursor: pointer;
   &:hover{
     background-color: $color2;
-
   }
 }
-
+.autocomplete.selected{
+  cursor: none;
+  &:hover{
+    background-color: none;
+  }
+}
 .avatar.small{
   height:50px;
   width:50px;

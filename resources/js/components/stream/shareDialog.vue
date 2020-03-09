@@ -129,20 +129,33 @@
       <editor-menu-bar class="btn default" :editor="editor" v-slot="{ commands, isActive }">
         <button class="default icon-picture" @click="openFileDialog(commands.image)"/>
       </editor-menu-bar>
+
       <button class="btn default" v-if="!isComment" @click.prevent="save"> <i class="icon-heart" /> {{$t('Share')}}</button>
       <button class="btn default" v-if="isComment" @click.prevent="save"> {{$t('Comment')}}</button>
 
 
-      <a href="#" @click="showMeta=true">Show Advanced</a>
+      <a href="#" v-if="!isComment" @click="showMeta=true">Show Advanced</a>
 
       <div class="row-0" v-if="showMeta">
         <div class="col-lg-6">
         <div v-if="showCreateGroup!=true" class="form-field">
 
           <label>{{$t("post.in")}}</label>
-          <input type="text"  placeholder="search " v-model="searchGroup">
+          <input v-if="selectedGroupId==false"  type="text"  placeholder="search " v-model="searchGroup">
 
-          <div class="row-0 autoCompleteGroup" @click="selectGroup(item)" v-for="item in autoCompleteGroup">
+          <div v-if="selectedGroupId" class="row-0 autocomplete selected">
+            <div class="col-lg-8">
+              {{previewGroup.name}}
+            </div>
+            <div class="col-lg-2">
+              <div class="small avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(previewGroup.avatar, 50, 50) + ')' }"></div>
+            </div>
+            <div class="col-lg-2">
+              <button @click="selectedGroupId=false">x</button>
+            </div>
+          </div>
+
+          <div  v-if="selectedGroupId==false"  class="row-0 autocomplete group" @click="selectGroup(item)" v-for="item in autoCompleteGroup">
               <div class="col-lg-8">
                 {{item.name}}
               </div>
@@ -152,7 +165,7 @@
 
           </div>
 
-          <button @click="showCreateGroup=true">{{$t("Create Group")}}</button>
+          <button v-if="selectedGroupId==false"  @click="showCreateGroup=true">{{$t("Create Group")}}</button>
 
 
 
@@ -216,8 +229,13 @@ export default {
           rawjson:"",
           showMeta:false,
           showCreateGroup:false,
+          selectedGroupId:false,
           anonymous:false,
-
+          previewGroup:{
+            name:"",
+            avatar:"",
+            id:0
+          },
           editor: new Editor({
            content: {
 
@@ -296,8 +314,11 @@ export default {
         });
       },
       selectGroup(item){
-        this.selected=item.id;
-        this.searchGroup=item.name;
+        this.selectedGroupId=item.id;
+        this.previewGroup.id=item.id;
+        this.previewGroup.name=item.name;
+        this.previewGroup.avatar=item.avatar;
+
 
       },
 
@@ -328,7 +349,7 @@ export default {
                 has_comment: false,
                 is_comment:this.isComment,
                 parent_id: this.parent_id,
-                group_id: this.selected,
+                group_id: this.selectedGroupId,
                 anonymous: true,
                 visibility: 'friends'
             };
@@ -375,14 +396,32 @@ export default {
       }
     },
     watch: {
+      content_id(){
+            this.editor.setContent(this.content.html_content);
+      },
+      reshare(val){
+        if(val===true)
+        {
+            this.editor.setContent(this.content.html_content);
+        }
+      },
+      edit(val){
+        if(val===true)
+        {
+            this.editor.setContent(this.content.html_content);
+        }
+      },
       searchGroup: debounce(function () {
         this.setGroup([]);
+
+
 
 
         if(this.searchGroup.length>1)
         {
            this.getGroup({search:this.searchGroup});
         }
+
       }, 300)
     }
   }
