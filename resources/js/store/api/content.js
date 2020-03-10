@@ -28,8 +28,8 @@ const createContent = ( html_content,
                         visibility
                        });
 
-function updateContent ( id, html_content, json_content, has_comment,is_comment,
-                         parent_id, anonymous,visibility ) {
+function updateContent ( id, html_content, json_content, has_comment, is_comment,
+                         parent_id, group_id, anonymous, visibility ) {
 
     return httpClient.put('/api/content/'+id, {
         html_content,

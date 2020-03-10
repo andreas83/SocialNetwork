@@ -42,7 +42,6 @@ export default {
     },
 
   },
-
   getters:{
 
     getGroup: (state) =>  {

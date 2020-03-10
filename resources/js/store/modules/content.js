@@ -95,6 +95,7 @@ export default {
                               data.has_comment,
                               data.is_comment,
                               data.parent_id,
+                              data.group_id,
                               data.anonymous,
                               data.visibility);
       response.data.content.show_comment=false;

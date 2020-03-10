@@ -2,7 +2,7 @@
 
   <div class="row-0">
     <div class="col-lg-12" v-if="isAuth">
-      <share-dialog :edit="isEdit" :reshare="isReshare" @updated="onUpdated" @saved="onSaved" :content_id="id"></share-dialog>
+      <share-dialog :edit="isEdit" :reshare="isReshare" @updated="onUpdated" @saved="onSaved" :group_id="group_id" :content_id="id"></share-dialog>
 
     </div>
     <div v-bind:class=css_stream_size  >
@@ -185,7 +185,7 @@ export default {
         }
       },
       watch:{
-        
+
         user_id(){
            this.css_stream_size="col-lg-8 col-md-12";
            this.getContent();

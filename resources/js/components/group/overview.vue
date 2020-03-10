@@ -16,12 +16,13 @@
           <div @click="showGroup(item.id, item.name)" class="group preview" v-if="item.avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(item.avatar, 150, 150) + ')' }" />
 
           <h4>{{item.name}}</h4>
-          
+
           <p>{{item.description}}</p>
 
           <button @click="showGroup(item.id, item.name)">Show</button>
-          <button v-if="!isMember(item.id, member)" @click="joinGroup(item.id)" class="btn default">Join</button>
-          <button v-if="isMember(item.id, member)" @click="leaveGroup(item.id)" class="btn default">Leave</button>
+
+          <button v-if="!isMember(item.id)" @click="joinGroup(item.id)" class="btn default">Join</button>
+          <button v-if="isMember(item.id)" @click="leaveGroup(item.id)" class="btn default">Leave</button>
       </div>
 
     </div>
@@ -51,13 +52,14 @@ export default {
       },
       methods:{
         ...mapActions('user', ['getUser']),
+
         isMember(id)
         {
 
-          let members=this.member;
-          for (var i = 0; i < members.length; i++) {
+      
+          for (var i = 0; i < this.member.length; i++) {
 
-            if(id==members[i].id)
+            if(id==this.member[i].id)
             {
               return true;
             }
@@ -89,6 +91,7 @@ export default {
 
         ...mapGetters({
           group: 'groups/getGroup',
+
           member: 'user/getGroup'
         }),
         isAuth(){

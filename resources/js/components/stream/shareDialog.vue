@@ -290,7 +290,10 @@ export default {
       this.editor.destroy()
     },
     async mounted(){
-
+      if(this.selectedGroupId==false && this.group_id!=false)
+      {
+        this.selectedGroupId=this.group_id;
+      }
       if(this.isComment){
         this.editor.setContent("<h3>Comment</h3>");
       }
@@ -337,6 +340,7 @@ export default {
 
           if(this.edit==true)
           {
+
             let data = {
                 id: this.content.id,
                 html_content: this.editor.getHTML(),
@@ -386,6 +390,7 @@ export default {
       edit(val){
         if(val===true)
         {
+          console.log();
             this.editor.setContent(this.content.html_content);
         }
       }

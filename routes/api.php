@@ -22,6 +22,8 @@ Route::group(['middleware' => ['api']], function () {
     Route::resource('group', 'GroupController')->only([
       'index',
     ]);
+    Route::get("group/membership/{id}", "GroupController@membership");
+
     Route::get('content/comments/{id}', 'ContentController@comments');
     Route::resource('content/likes', 'ContentLikeController')->only([
       'index',
