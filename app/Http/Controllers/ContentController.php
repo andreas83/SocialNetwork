@@ -27,8 +27,8 @@ class ContentController extends Controller
         $content->is_comment = ($validated['is_comment'] ? 'true' : 'false');
         $content->parent_id = $validated['parent_id'];
 
-        $content->group_id = $validated['group_id'];
-        
+        $content->group_id = ($request->group_id>0 ? $request->group_id : 0);
+
         $content->user_id = Auth::user()->id;
         $content->save();
 

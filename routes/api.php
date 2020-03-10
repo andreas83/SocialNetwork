@@ -49,7 +49,7 @@ Route::get('auth/{provider}/callback', function () {
 Route::group(['middleware' => ['auth:api']], function () {
 
     Route::resource('content/likes', 'ContentLikeController')->only([
-      'store',
+      'store'
     ]);
 
     Route::resource('content', 'ContentController')->only([
@@ -57,8 +57,11 @@ Route::group(['middleware' => ['auth:api']], function () {
     ]);
 
     Route::resource('group', 'GroupController')->only([
-      'store', 'update', 'destroy',
+      'store', 'update', 'destroy'
     ]);
+
+    Route::delete("group/membership/{id}", "GroupController@leave");
+    Route::post("group/membership/{id}", "GroupController@join");
 
     Route::resource('user', 'UserController')->only([
       'update',

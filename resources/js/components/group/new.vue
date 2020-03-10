@@ -104,8 +104,13 @@ export default {
               background: "",
 
           };
-          this.createGroup(data);
-          this.$emit('saved', this.group.id);
+          let vm=this;
+          this.createGroup(data).then(function(res)
+          {
+
+            vm.$emit('saved', res.data.groups);
+          });
+
         }
       },
       computed:{

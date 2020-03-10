@@ -13,14 +13,15 @@
     <div class="row">
       <div v-for="item in group" class="col-lg-3">
 
-          <div class="group preview" v-if="item.avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(item.avatar, 150, 150) + ')' }" />
+          <div @click="showGroup(item.id, item.name)" class="group preview" v-if="item.avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(item.avatar, 150, 150) + ')' }" />
 
           <h4>{{item.name}}</h4>
-
+          
           <p>{{item.description}}</p>
 
           <button @click="showGroup(item.id, item.name)">Show</button>
-          <button v-if="isMember(item.id, member)" @click="joinGroup" class="btn default">Join</button>
+          <button v-if="!isMember(item.id, member)" @click="joinGroup(item.id)" class="btn default">Join</button>
+          <button v-if="isMember(item.id, member)" @click="leaveGroup(item.id)" class="btn default">Leave</button>
       </div>
 
     </div>
@@ -29,6 +30,7 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 import {getThumbnail} from '../../helper/resize'
+import {leave,join} from '../../store/api/group'
 import { debounce } from 'lodash'
 export default {
     name: "GroupOverview",
@@ -36,8 +38,7 @@ export default {
     data() {
         return{
           search:"",
-          error:"",
-          showCreate:false
+          error:""
         }
       },
       async created(){
@@ -49,15 +50,33 @@ export default {
 
       },
       methods:{
-        isMember(id, member)
+        ...mapActions('user', ['getUser']),
+        isMember(id)
         {
 
+          let members=this.member;
+          for (var i = 0; i < members.length; i++) {
+
+            if(id==members[i].id)
+            {
+              return true;
+            }
+          }
+          return false;
+
+
 
         },
-        joinGroup(){
+        async joinGroup(id){
+          join(id).then(this.getUser());
+
+
 
         },
+        async leaveGroup(id){
+          leave(id).then(this.getUser());
 
+        },
         showGroup(id, name){
           this.$router.push({ name: 'Group', params: { name: name, id: id } })
 

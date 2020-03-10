@@ -14,6 +14,7 @@ export default {
     {
       const response = await createGroup(data.name, data.description, data.avatar, data.visibility);
       commit('updateGroup', response.data.groups);
+      return response;
     },
     async getGroup({commit}, payload)
     {

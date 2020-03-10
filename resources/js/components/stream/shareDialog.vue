@@ -2,7 +2,7 @@
 
   <div class="row-0 editor-container">
 
-      <editor-menu-bar class="btn default" :editor="editor" v-slot="{ commands, isActive }">
+      <editor-menu-bar v-if="showMeta" class="btn default" :editor="editor" v-slot="{ commands, isActive }">
         <div class="menubar">
 
                <button
@@ -126,31 +126,39 @@
 
       <editor-content class="editor" :editor="editor" />
 
-      <editor-menu-bar class="btn default" :editor="editor" v-slot="{ commands, isActive }">
-        <button class="default icon-picture" @click="openFileDialog(commands.image)"/>
-      </editor-menu-bar>
 
-      <button class="btn default" v-if="!isComment" @click.prevent="save"> <i class="icon-heart" /> {{$t('Share')}}</button>
-      <button class="btn default" v-if="isComment" @click.prevent="save"> {{$t('Comment')}}</button>
+      <div class="col-lg-6 col-md-8">
+        <editor-menu-bar class="btn default" :editor="editor" v-slot="{ commands, isActive }">
+          <button class="default icon-picture" @click="openFileDialog(commands.image)"/>
+        </editor-menu-bar>
+        <button class="btn default" v-if="!isComment" @click.prevent="save"> <i class="icon-heart" /> {{$t('Share')}}</button>
+        <button class="btn default" v-if="isComment" @click.prevent="save"> {{$t('Comment')}}</button>
+      </div>
+      <div v-if="!isComment" class="col-lg-6 col-md-4">
 
-
-      <a href="#" v-if="!isComment" @click="showMeta=true">Show Advanced</a>
-
+        <a href="#"  v-if="!showMeta"  @click="showMeta=true">Show Advanced</a>
+        <a href="#" v-if="showMeta" @click="showMeta=false">Hide Advanced</a>
+      </div>
       <div class="row-0" v-if="showMeta">
-        <div class="col-lg-6">
+        <div class="col-lg-6 col-md-12">
         <div v-if="showCreateGroup!=true" class="form-field">
 
-          <label>{{$t("post.in")}}</label>
-          <input v-if="selectedGroupId==false"  type="text"  placeholder="search " v-model="searchGroup">
-
+          <div class="row-0">
+            <div class="col-lg-9 col-md-9">
+              <input v-if="selectedGroupId==false"  type="text"  placeholder="Select group " v-model="searchGroup">
+            </div>
+            <div class="col-lg-3 col-md-3">
+              <button v-if="selectedGroupId==false"  @click="showCreateGroup=true"> + </button>
+            </div>
+          </div>
           <div v-if="selectedGroupId" class="row-0 autocomplete selected">
-            <div class="col-lg-8">
+            <div class="col-lg-9">
               {{previewGroup.name}}
             </div>
             <div class="col-lg-2">
               <div class="small avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(previewGroup.avatar, 50, 50) + ')' }"></div>
             </div>
-            <div class="col-lg-2">
+            <div class="col-lg-1">
               <button @click="selectedGroupId=false">x</button>
             </div>
           </div>
@@ -165,14 +173,15 @@
 
           </div>
 
-          <button v-if="selectedGroupId==false"  @click="showCreateGroup=true">{{$t("Create Group")}}</button>
+
 
 
 
         </div>
         <GroupCreate :suggestion="searchGroup" v-on:cancled="groupCancled"  v-on:saved="groupSaved" v-show="showCreateGroup"></GroupCreate>
       </div>
-      <div>
+      <div class="col-lg-6 col-md-12">
+
         <label for="anonymous">{{$t("post.anonymously")}}</label>
         <input id="anonymous" type="checkbox" v-model="anonymous" value="true">
         <p v-if="anonymous">{{$t("Note you can't edit nor delete afterwars.")}}</p>
@@ -292,8 +301,9 @@ export default {
       ...mapActions('groups' , ['setGroup', 'getGroup']),
 
 
-      groupSaved(){
+      groupSaved(item){
         this.showCreateGroup=false;
+        this.selectGroup(item);
       },
 
       groupCancled(){

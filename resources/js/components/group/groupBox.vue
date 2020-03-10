@@ -11,8 +11,15 @@
 
       <button>{{$t("form.group.changePicture")}}</button>
       <button>{{$t("form.group.changeDescription")}}</button>
+
       <button>{{$t("form.group.join")}}</button>
       <button>{{$t("form.group.leave")}}</button>
+
+      Moderators
+
+      Members
+
+      Pending Users
 
 
 
@@ -23,6 +30,7 @@
 <script>
     import {mapGetters, mapActions} from 'vuex';
     import {getThumbnail} from '../../helper/resize'
+    import {getGroupMembers} from '../../store/api/group'
     export default {
     name:"GroupBox",
     props:{
@@ -48,7 +56,9 @@
     mounted(){
 
         this.getGroup({id : this.$route.params.id});
-
+        getGroupMembers(this.$route.params.id).then(function(res){
+          console.log(res);
+        });
     },
     methods: {
       getThumbnail,

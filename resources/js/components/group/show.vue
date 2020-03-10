@@ -11,7 +11,7 @@
             </div>
             <button class="btn defualt" v-if="group.is_moderator" v-on:click="changeBackground" >{{$t('form.background.upload')}}</button>
     </div>
-
+    
     <stream  :group_id="group.id"></stream>
   </div>
 </template>

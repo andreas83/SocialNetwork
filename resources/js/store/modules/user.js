@@ -1,3 +1,5 @@
+import { getUser } from '../api/user';
+
 export default {
   namespaced: true,
   state:{
@@ -6,11 +8,26 @@ export default {
     groups:[]
 
   },
-  action:{
+  actions:{
+
+
       setUser ({commit}, user) {
 
         commit('setUser', user);
 
+      },
+      async getUser({commit})
+      {
+        try {
+
+            const response = await getUser();
+          
+            commit('setUser', response.data);
+            return response;
+
+        } catch (error) {
+            // handle the error here
+        }
       },
       setAuth ({commit}, status) {
         commit('setAuth', status);

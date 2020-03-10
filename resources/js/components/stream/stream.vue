@@ -12,7 +12,7 @@
       (content_id==false || data.id==content_id)) &&
       data.is_comment=='false'"
       >
-      
+
         <div class="row card" >
 
           <div class="col-lg-12  col-md-12">
@@ -91,7 +91,10 @@ export default {
         await this.getMoreContent({next_id:false, user_id: this.user_id, content_id: this.content_id, group_id:this.group_id});
       },
       mounted(){
-
+        if(this.group_id!=false)
+        {
+          this.css_stream_size="col-lg-8 col-md-12";
+        }
         this.scroll();
       },
       methods:{
@@ -111,7 +114,7 @@ export default {
 
               var next_id = Math.min.apply(Math, this.content.map(function(o){ return o.id }));
 
-              this.getMoreContent({next_id:next_id, user_id: this.user_id, content_id: this.content_id});
+              this.getMoreContent({next_id:next_id, user_id: this.user_id, content_id: this.content_id, group_id: this.group_id});
             }
           };
         },
@@ -182,7 +185,7 @@ export default {
         }
       },
       watch:{
-
+        
         user_id(){
            this.css_stream_size="col-lg-8 col-md-12";
            this.getContent();

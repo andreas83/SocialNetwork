@@ -22,7 +22,22 @@ const createGroup = ( name, description, avatar, visibility
                        });
 
 
+function getGroupMembers(id){
+  return httpClient.get('/api/group/membership/'+id);
+}
+
+function leave(id){
+ return httpClient.delete('/api/group/membership/'+id);
+}
+
+const join = ( id
+)=>httpClient.post("/api/group/membership/"+id,
+                      {});
+
 export {
     getGroup,
-    createGroup
+    createGroup,
+    leave,
+    join,
+    getGroupMembers
 }

@@ -32,20 +32,10 @@ class GroupController extends Controller
             $groups->limit(15);
         }
 
-        $groups->leftJoin(
-          'group_members', function( $join)
-           {
-             $join->on( 'groups.id', '=', 'group_members.group_id');
-             if (Auth::check())
-             {
-               $join->on( 'group_members.user_id', '=', Auth::id());
-             }
 
-           }
-         );
 
         return response()->json([
-           'auth' => Auth::id(),
+
            'groups' => $groups->get(),
        ]);
     }
@@ -75,6 +65,66 @@ class GroupController extends Controller
         return response()->json([
 
            'groups' => $group,
+       ]);
+    }
+
+    public function join(Request $request, $id)
+    {
+        $membership=new GroupMembers();
+        $membership->user_id=Auth::user()->id;
+        $membership->group_id=$id;
+        $membership->status="awaiting";
+        $membership->is_moderator=0;
+        $membership->save();
+
+        return response()->json([
+
+           'membership' => $membership,
+       ]);
+    }
+
+    public function leave(Request $request, $id)
+    {
+        $membership= DB::table('group_members')->where([
+            ['group_id', '=', $id],
+            ['user_id', '=', Auth::user()->id],
+        ])->delete();
+
+        return response()->json([
+
+           'membership' => $membership,
+       ]);
+    }
+
+    public function membership(Request $request, $id)
+    {
+      $moderators= DB::table('group_members')->where([
+          ['group_id', '=', $id],
+          ['is_moderator',"=", 1]
+
+      ])->select('name', 'avatar')->
+      join('users', 'users.id', '=', 'group_members.user_id')->get();
+
+      $awaiting= DB::table('group_members')->where([
+          ['group_id', '=', $id],
+          ['status' ,"=", 'awaiting']
+
+      ])->select('name', 'avatar')->
+      join('users', 'users.id', '=', 'group_members.user_id')->get();
+
+
+      $members= DB::table('group_members')->where([
+          ['group_id', '=', $id],
+          ['status' ,"=", 'confirmed']
+
+      ])->select('name', 'avatar')->
+      join('users', 'users.id', '=', 'group_members.user_id')->get();
+
+        return response()->json([
+
+           'moderators' => $moderators,
+           'pending' => $awaiting,
+           'members' => $members
        ]);
     }
 
