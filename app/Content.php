@@ -13,7 +13,7 @@ class Content extends Model
      */
     protected $fillable = [
       'user_id', 'html_content', 'json_content', 'anonymous',
-      'has_comment', 'is_comment', 'parent_id',
+      'has_comment', 'is_comment', 'comments', 'parent_id',
   ];
 
     /**
