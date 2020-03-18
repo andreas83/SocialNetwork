@@ -12,11 +12,11 @@ class ImageController extends Controller
     {
         $path = 'public/'.$path;
 
-        if(extension_loaded('gd')){
-            $driver="gd";
+        if (extension_loaded('gd')) {
+            $driver = 'gd';
         }
-        if(extension_loaded('imagick')){
-            $driver="imagick";
+        if (extension_loaded('imagick')) {
+            $driver = 'imagick';
         }
 
         $server = ServerFactory::create([
@@ -24,7 +24,7 @@ class ImageController extends Controller
             'source' => $filesystem->getDriver(),
             'cache' => $filesystem->getDriver(),
             'cache_path_prefix' => '.cache',
-            
+
             'driver' => $driver,
         ]);
 

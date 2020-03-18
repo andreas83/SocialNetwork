@@ -3,8 +3,8 @@
     <div class="row">
       <div v-if="content.is_comment!='true'" class="col-lg-4 ">
 
-        <button v-if="showLikes!=true && content.has_comment=='true' && content.is_comment=='false'" class="icon-comment" v-on:click="toggleComment"> {{$t('Comment')}}</button>
-        <button v-if="showLikes!=true && content.has_comment=='false' && content.is_comment=='false'" class="icon-comment-empty" v-on:click="toggleComment"> {{$t('Comment')}}</button>
+        <button v-if="showLikes!=true && content.has_comment=='true' && content.is_comment=='false'" class="icon-comment" v-on:click="toggleComment"> {{$t('Comment')}} {{content.comments}}</button>
+        <button v-if="showLikes!=true && content.has_comment=='false' && content.is_comment=='false'" class="icon-comment-empty" v-on:click="toggleComment"> {{$t('Comment')}} {{content.comments}}</button>
       </div>
       <div v-bind:class=likeCssClass>
         <button v-if="showLikes!=true " @click="showLikes=true" class="icon-heart">{{getLikesByKey("heart")}} Likes</button>

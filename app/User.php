@@ -36,11 +36,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function content(){
-      return $this->hasMany("Content");
+    public function content()
+    {
+        return $this->hasMany('Content');
     }
 
-    public function groups(){
-      return $this->belongsToMany("App\Group", "group_members")->withPivot('is_moderator', 'status');;
+    public function groups()
+    {
+        return $this->belongsToMany("App\Group", 'group_members')->withPivot('is_moderator', 'status');
     }
 }

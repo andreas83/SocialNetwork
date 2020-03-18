@@ -22,7 +22,7 @@ Route::group(['middleware' => ['api']], function () {
     Route::resource('group', 'GroupController')->only([
       'index',
     ]);
-    Route::get("group/membership/{id}", "GroupController@membership");
+    Route::get('group/membership/{id}', 'GroupController@membership');
 
     Route::get('content/comments/{id}', 'ContentController@comments');
     Route::resource('content/likes', 'ContentLikeController')->only([
@@ -37,7 +37,6 @@ Route::group(['middleware' => ['api']], function () {
             return User::where('name', '=', $request->name)->select('id', 'name', 'bio', 'avatar', 'background', 'created_at')->first();
         }
     });
-
 });
 
 Route::post(
@@ -49,9 +48,8 @@ Route::get('auth/{provider}/callback', function () {
 })->where('provider', '.*');
 
 Route::group(['middleware' => ['auth:api']], function () {
-
     Route::resource('content/likes', 'ContentLikeController')->only([
-      'store'
+      'store',
     ]);
 
     Route::resource('content', 'ContentController')->only([
@@ -59,11 +57,11 @@ Route::group(['middleware' => ['auth:api']], function () {
     ]);
 
     Route::resource('group', 'GroupController')->only([
-      'store', 'update', 'destroy'
+      'store', 'update', 'destroy',
     ]);
 
-    Route::delete("group/membership/{id}", "GroupController@leave");
-    Route::post("group/membership/{id}", "GroupController@join");
+    Route::delete('group/membership/{id}', 'GroupController@leave');
+    Route::post('group/membership/{id}', 'GroupController@join');
 
     Route::resource('user', 'UserController')->only([
       'update',
@@ -73,9 +71,6 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('content/ogparser', 'ContentController@parseog');
 
     Route::get('/user', function (Request $request) {
-
-
-
-        return ["user" => $request->user(), "groups" => $request->user()->groups()->get() ];
+        return ['user' => $request->user(), 'groups' => $request->user()->groups()->get()];
     });
 });

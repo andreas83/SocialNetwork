@@ -129,6 +129,24 @@
   border-radius: 25px;
 
 }
+.group.slider{
+  display: inline-block;
+  line-height: 3em;
+  &:hover{
+    cursor: pointer;
+
+  }
+  .preview{
+
+
+    margin-left: 2em;
+    height:75px;
+    width:75px;
+    background-position: center;
+    background-size: contain;
+    border-radius: 36px;
+  }
+}
 
 .group.overview{
   .preview{

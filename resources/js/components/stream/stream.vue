@@ -5,6 +5,16 @@
       <share-dialog :edit="isEdit" :reshare="isReshare" @updated="onUpdated" @saved="onSaved" :group_id="group_id" :content_id="id"></share-dialog>
 
     </div>
+
+    <div class="row" v-if="!group_id">
+      <div class="col-lg-3 group slider" v-for="item in group">
+        <div @click="showGroup(item.id, item.name)" class="preview" v-if="item.avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(item.avatar, 75, 75) + ')' }" />
+
+          <router-link :to="{ name: 'Group', params: {name:item.name, id:item.id} }">{{item.name}}</router-link>
+
+
+      </div>
+    </div>
     <div v-bind:class=css_stream_size  >
       <div class="row-0 streamitem " v-for="data in content" v-if="
       ((user_id==false || user_id==data.user_id)  &&
@@ -95,11 +105,17 @@ export default {
         {
           this.css_stream_size="col-lg-8 col-md-12";
         }
+
+        this.getGroup({limit:4, random:true});
+
         this.scroll();
       },
       methods:{
         getThumbnail,
+        showGroup(id, name){
+          this.$router.push({ name: 'Group', params: { name: name, id: id } })
 
+        },
         swipeRightHandler(direction, event, el){
             event.target.classList.toggle('slide-out-right');
               console.log("swipeRightHandler");
@@ -120,6 +136,7 @@ export default {
         },
 
         ...mapActions('content', ['getContent', 'getMoreContent', 'deleteContent']),
+        ...mapActions('groups', ['getGroup', 'setGroup']),
         deleteContent(id){
 
 
@@ -174,6 +191,10 @@ export default {
         }
       },
       computed:{
+
+        group(){
+          return this.$store.getters["groups/getGroup"];
+        },
         content(){
           return this.$store.getters["content/getContent"];
         },
@@ -185,7 +206,10 @@ export default {
         }
       },
       watch:{
-
+        group_id(){
+          this.setGroup([]);
+          this.getGroup({limit:4, random:true});
+        },
         user_id(){
            this.css_stream_size="col-lg-8 col-md-12";
            this.getContent();

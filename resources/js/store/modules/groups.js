@@ -20,7 +20,7 @@ export default {
     {
       try {
 
-          const response = await getGroup(payload.id, payload.name, payload.search, payload.limit);
+          const response = await getGroup(payload.id, payload.name, payload.search, payload.limit, payload.random);
 
           for(let i=0; i < response.data.groups.length; i++)
           {

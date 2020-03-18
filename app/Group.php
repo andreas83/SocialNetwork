@@ -6,19 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Group extends Model
 {
-  /**
-   * The attributes that are mass assignable.
-   *
-   * @var array
-   */
-  protected $fillable = [
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
     'name', 'description', 'avatar',
-    'background', 'visibility',
+    'background', 'visibility', 'members', 'posts',
   ];
-  
-  
-  public function content()
-  {
-    return $this->belongsToMany('App\Content');
-  }
+
+    public function content()
+    {
+        return $this->belongsToMany('App\Content');
+    }
 }

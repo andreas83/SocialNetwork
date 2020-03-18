@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Content;
+use App\Group;
 use App\Http\Controllers\Helper\RemoteContent;
 use App\Http\Requests\ContentDestroyRequest;
 use App\Http\Requests\ContentStoreRequest;
@@ -25,9 +26,16 @@ class ContentController extends Controller
 
         $content->has_comment = ($validated['has_comment'] ? 'true' : 'false');
         $content->is_comment = ($validated['is_comment'] ? 'true' : 'false');
+        $content->comments = 0;
         $content->parent_id = $validated['parent_id'];
 
-        $content->group_id = ($request->group_id>0 ? $request->group_id : 0);
+        $content->group_id = ($request->group_id > 0 ? $request->group_id : 0);
+
+        if ($content->group_id > 0) {
+            $group = Group::find($content->group_id);
+            $group->posts = $group->posts + 1;
+            $group->save();
+        }
 
         $content->user_id = Auth::user()->id;
         $content->save();
@@ -35,6 +43,7 @@ class ContentController extends Controller
         if ($request->is_comment) {
             $parent = Content::find($request->parent_id);
             $parent->has_comment = 'true';
+            $parent->comments = $parent->comments + 1;
             $parent->save();
         }
 
@@ -106,6 +115,15 @@ class ContentController extends Controller
         $content = Content::find($id);
 
         if ($content->user_id == Auth::user()->id) {
+            if ('true' == $content->is_comment) {
+                $parent = Content::find($content->parent_id);
+
+                $parent->comments = $parent->comments - 1;
+                if (0 == $parent->comments) {
+                    $parent->has_comment = 'false';
+                }
+                $parent->save();
+            }
             $content->destroy($id);
         }
     }

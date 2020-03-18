@@ -6,11 +6,12 @@
 
 
       <p>{{group.description}}</p>
+      <p>Members: {{group.members}}</p>
+      <p>Posts: {{group.posts}}</p>
 
 
-
-      <button>{{$t("form.group.changePicture")}}</button>
-      <button>{{$t("form.group.changeDescription")}}</button>
+      <!-- <button>{{$t("form.group.changePicture")}}</button>
+      <button>{{$t("form.group.changeDescription")}}</button> -->
 
       <button v-if="!isMember" @click="joinGroup(group.id)" class="btn default">Join</button>
       <button v-if="isMember" @click="leaveGroup(group.id)" class="btn default">Leave</button>
