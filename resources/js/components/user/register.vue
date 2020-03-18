@@ -63,7 +63,7 @@
             axios.post('/api/register', data)
                 .then(({data}) => {
                   console.log(data);
-                  this.$store.commit('user/setUser', data.user);
+                  this.$store.commit('user/setUser', data);
                   this.$store.commit('user/setAuth', true);
                   localStorage.setItem('token', data.user.api_token);
                   axios.interceptors.request.use(
