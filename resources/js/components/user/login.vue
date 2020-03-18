@@ -14,7 +14,7 @@
 
       <div class="form-field">
         <button class="btn default" v-on:click="login" value="default">{{$t('form.login')}}</button>
-        
+
         <button class="icon-github" v-on:click="AuthProvider('github', $event)"></button>
         <button class="icon-twitter" v-on:click="AuthProvider('twitter', $event)"></button>
         <button class="icon-facebook" v-on:click="AuthProvider('facebook', $event)"></button>
@@ -58,7 +58,7 @@
         SocialLogin(provider,response){
             axios.post('/api/auth/'+provider,response).then(({data}) => {
               console.log(data);
-                this.$store.commit('user/setUser', data.user);
+                this.$store.commit('user/setUser', data);
                 this.$store.commit('user/setAuth', true);
                 localStorage.setItem('token', data.user.api_token);
                 axios.interceptors.request.use(
@@ -90,7 +90,7 @@
             axios.post('/api/login', data)
                 .then(({data}) => {
 
-                    this.$store.commit('user/setUser', data.user);
+                    this.$store.commit('user/setUser', data);
                     this.$store.commit('user/setAuth', true);
                     localStorage.setItem('token', data.user.api_token);
                     axios.interceptors.request.use(
