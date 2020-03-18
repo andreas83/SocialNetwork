@@ -12,10 +12,14 @@
       <button>{{$t("form.group.changePicture")}}</button>
       <button>{{$t("form.group.changeDescription")}}</button>
 
-      <button v-if="!isMember(group.id)" @click="joinGroup(group.id)" class="btn default">Join</button>
-      <button v-if="isMember(group.id)" @click="leaveGroup(group.id)" class="btn default">Leave</button>
+      <button v-if="!isMember" @click="joinGroup(group.id)" class="btn default">Join</button>
+      <button v-if="isMember" @click="leaveGroup(group.id)" class="btn default">Leave</button>
+      {{getMembershipStatus}}
 
-      <div class="membership">
+
+
+
+      <div v-if="membership" class="membership">
         <b v-if="membership.moderators.length > 0" >Moderators</b>
         <div class="user" v-for="user in membership.moderators" >
           <router-link :to="{ name: 'user', params: {name:user.name} }">
@@ -62,7 +66,7 @@
     data() {
 
         return {
-
+          isMember:false,
           membership: {
             moderators:[],
             members:[],
@@ -71,9 +75,11 @@
 
         };
     },
-    mounted(){
+    created(){
 
-        this.getGroup({id : this.$route.params.id});
+    },
+    mounted(){
+      console.log(this.getGroupOfUser);
         let vm=this;
         getGroupMembers(this.$route.params.id).then(function(res){
           vm.membership=res.data;
@@ -81,44 +87,41 @@
         });
     },
     methods: {
-      isMember(id){
 
-        return this.getMembership.find(group=>group.id==id);
-      },
-      refresh(){
-        this.getUser();
-        let vm=this;
-        getGroupMembers(this.$route.params.id).then(function(res){
-          vm.membership=res.data;
 
-        });
-      },
-      async joinGroup(id){
-        join(id).then(this.refresh());
+      joinGroup(id){
+        join(id).then(this.isMember=true);
 
       },
-      async leaveGroup(id){
-        leave(id).then(this.refresh());
+      leaveGroup(id){
+        leave(id).then(this.isMember=false);
 
       },
 
       getThumbnail,
         ...mapActions('groups', ['getGroup']),
-        ...mapActions('user', [ 'getUser']),
+        ...mapActions('user', [ { getUser:'getUser', getGroupOfUser:'getGroup'} ]),
     },
     computed:{
       group(){
         return this.$store.getters["groups/getGroupById"](this.$route.params.id);
       },
-      getMembership(){
-        return this.$store.getters["user/getGroup"];
+      getMembershipStatus(){
+        return this.$store.getters["user/getGroupStatusById"](this.$route.params.id);
       },
       isAuth(){
         return this.$store.getters["user/isAuth"];
       }
     },
     watch:{
+      isMember(){
+        let vm=this;
+        vm.membership=false;
+        getGroupMembers(this.$route.params.id).then(function(res){
+          vm.membership=res.data;
 
+        });
+      }
     },
   }
 </script>
