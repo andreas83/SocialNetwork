@@ -15,7 +15,7 @@
 
       <button v-if="!isMember" @click="joinGroup(group.id)" class="btn default">Join</button>
       <button v-if="isMember" @click="leaveGroup(group.id)" class="btn default">Leave</button>
-      {{getMembershipStatus}}
+    
 
 
 
@@ -107,9 +107,7 @@
       group(){
         return this.$store.getters["groups/getGroupById"](this.$route.params.id);
       },
-      getMembershipStatus(){
-        return this.$store.getters["user/getGroupStatusById"](this.$route.params.id);
-      },
+
       isAuth(){
         return this.$store.getters["user/isAuth"];
       }
