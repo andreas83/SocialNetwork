@@ -45,13 +45,13 @@
         let vm=this;
         upload(function(res){
           vm.user.background=res;
-          vm.$store.commit('user/setUser', vm.user);
+
           let data = {
               background: vm.user.background,
           };
           axios.put('/api/user/'+vm.user.id, data)
               .then(({data}) => {
-                vm.$store.commit('user/setUser', data.user);
+                vm.$store.commit('user/setUser', data);
               })
               .catch(({response}) => {
                 vm.show=true;
@@ -60,19 +60,11 @@
         });
       },
       getUser(){
-        //  this.$route.params.username
+
 
           axios.get('/api/user/public/?name='+this.$route.params.name)
               .then(({data}) => {
                 this.user=data;
-                console.log(data);
-                // for(var i=0, length= data.content.data.length; i < length; i++)
-                // {
-                //
-                //   data.content.data[i].show_comment=false;
-                // }
-                //
-                // this.$store.commit('content/setContent', data.content.data);
 
               })
               .catch(({response}) => {
