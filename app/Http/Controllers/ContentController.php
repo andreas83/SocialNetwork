@@ -22,6 +22,10 @@ class ContentController extends Controller
         $content->json_content = json_encode($validated['json_content']);
         $content->html_content = $validated['html_content'];
         $content->anonymous = $validated['anonymous'];
+        if($validated['anonymous']==true)
+        {
+            $content->user_id=(getenv("anonymous") !== false ? getenv("anonymous") : 1 );
+        }
         $content->visibility = $validated['visibility'];
 
         $content->has_comment = ($validated['has_comment'] ? 'true' : 'false');

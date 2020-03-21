@@ -26,12 +26,23 @@
         <textarea id="bio" v-model="user.bio"></textarea>
       </div>
     </div>
+
+
+    <div class="col-lg-6  col-md-12 ">
+        <h3>Groups</h3>
+    </div>
+    <div class="row" v-for="item in group">
+
+      <div class="col-lg-6">{{item.name}}</div>
+      <div class="col-lg-6">{{item.pivot.status }}</div>
+
+    </div>
+
     <div class="col-lg-6  col-md-12 ">
       <div class="form-field right">
           <button class="btn default" v-on:click="save" value="default">{{$t('form.save')}}</button>
       </div>
     </div>
-
   </div>
 </div>
 
@@ -61,26 +72,25 @@
         let vm=this
 
         upload(function(res){
-          vm.user.avatar=res;
-          vm.$store.commit('user/setUser', vm.user);
+
+
+          this.user.avatar=res;
+
           let data = {
-
-              avatar: vm.user.avatar,
-
-
+              avatar: res
 
           };
-          axios.put('/api/user/'+vm.user.id, data)
+          axios.put('/api/user/'+this.user.id, data)
               .then(({data}) => {
 
-                vm.$store.commit('user/setUser', data.user);
+                vm.$store.commit('user/setUser', data);
               })
               .catch(({response}) => {
                 vm.show=true;
                 vm.error=response.data.errors;
               });
 
-        });
+        }.bind(this));
 
 
       },
@@ -96,7 +106,7 @@
           axios.put('/api/user/'+this.user.id, data)
               .then(({data}) => {
 
-                this.$store.commit('user/setUser', data.user);
+                this.$store.commit('user/setUser', data);
               })
               .catch(({response}) => {
                 this.show=true;
@@ -106,8 +116,16 @@
       }
     },
     computed:{
-            user(){
-              return this.$store.getters["user/getUser"];
+            user:{
+              get: function(){
+                return this.$store.getters["user/getUser"];
+              }
+
+            },
+            group:{
+              get: function(){
+                return this.$store.getters["user/getGroup"];
+              },
             },
             isAuth(){
               return this.$store.getters["user/isAuth"];

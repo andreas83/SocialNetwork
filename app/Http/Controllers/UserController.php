@@ -32,6 +32,7 @@ class UserController extends Controller
 
         return response()->json([
          'user' => $user,
+         'groups' => $user->groups()->get()
      ]);
     }
 }

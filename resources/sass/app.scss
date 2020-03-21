@@ -147,14 +147,20 @@
     border-radius: 36px;
   }
 }
-
+.group.preview.large{
+  height:75px;
+  width:75px;
+  background-position: center;
+  background-size: contain;
+  border-radius: 36px;
+}
 .group.overview{
   .preview{
     &:hover{
       cursor: pointer;
     }
-    margin-right: auto;
-    margin-left: auto;
+      margin-right: auto;
+      margin-left: auto;
       height:150px;
       width:150px;
       background-position: center;
