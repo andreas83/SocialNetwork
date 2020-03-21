@@ -349,7 +349,7 @@ export default {
                 is_comment:this.content.is_comment,
                 parent_id: this.content.parent_id,
                 group_id: this.content.group_id,
-                anonymous: true,
+                anonymous: this.anonymous,
                 visibility: 'friends'
             };
 
@@ -364,7 +364,7 @@ export default {
                 is_comment:this.isComment,
                 parent_id: this.parent_id,
                 group_id: this.selectedGroupId,
-                anonymous: true,
+                anonymous: this.anonymous,
                 visibility: 'friends'
             };
             this.createContent(data);

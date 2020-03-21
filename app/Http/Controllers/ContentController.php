@@ -25,6 +25,8 @@ class ContentController extends Controller
         if($validated['anonymous']==true)
         {
             $content->user_id=(getenv("anonymous") !== false ? getenv("anonymous") : 1 );
+        } else {
+          $content->user_id = Auth::user()->id;
         }
         $content->visibility = $validated['visibility'];
 
@@ -41,7 +43,7 @@ class ContentController extends Controller
             $group->save();
         }
 
-        $content->user_id = Auth::user()->id;
+
         $content->save();
 
         if ($request->is_comment) {
