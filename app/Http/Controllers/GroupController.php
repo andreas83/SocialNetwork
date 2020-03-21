@@ -137,6 +137,32 @@ class GroupController extends Controller
      */
     public function update(Request $request, $id)
     {
+      $group = Group::find($id);
+
+      if ($request->has('avatar') && !empty($request->avatar)) {
+          $group->avatar = $request->avatar;
+      }
+      if ($request->has('background') && !empty($request->background)) {
+          $group->background = $request->background;
+      }
+      if ($request->has('description') && !empty($request->description)) {
+          $group->description = $request->description;
+      }
+
+      $membership = DB::table('group_members')->where([
+          ['group_id', '=', $id],
+          ['is_moderator', '=', 1],
+          ['user_id', '=', Auth::user()->id],
+      ])->get()->count();
+
+      if($membership>0)
+      {
+          $group->save();  
+      }
+
+      return response()->json([
+       'group' => $group
+      ]);
     }
 
     /**

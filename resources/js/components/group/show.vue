@@ -9,7 +9,7 @@
               <h2>{{group.name}}</h2>
 
             </div>
-            <button class="btn defualt" v-if="group.is_moderator" v-on:click="changeBackground" >{{$t('form.background.upload')}}</button>
+            <button class="btn defualt" v-if="isModerator" v-on:click="changeBackground" >{{$t('form.background.upload')}}</button>
     </div>
 
     <stream  :group_id="group.id"></stream>
@@ -54,7 +54,7 @@ export default {
             let data = {
                 background: res,
             };
-            axios.put('/api/groups/'+vm.group.id, data)
+            axios.put('/api/group/'+vm.group.id, data)
                 .then(({data}) => {
                   vm.$store.commit('group/setGroup', data.group);
                 })
@@ -67,8 +67,20 @@ export default {
 
       },
       computed:{
+        isModerator(){
 
+          for (var i = 0; i < this.myGroups.length; i++) {
+            if(this.myGroups[i].id==this.$route.params.id && this.myGroups[i].pivot.is_moderator==1)
+            {
+                return true;
+            }
 
+          }
+          return false;
+        },
+        myGroups(){
+          return this.$store.getters["user/getGroup"];
+        },
         group(){
           return this.$store.getters["groups/getGroupById"](this.$route.params.id);
         },

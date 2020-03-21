@@ -10,12 +10,12 @@
       <p>Posts: {{group.posts}}</p>
 
 
-      <!-- <button>{{$t("form.group.changePicture")}}</button>
-      <button>{{$t("form.group.changeDescription")}}</button> -->
+      <button v-if="isModerator">{{$t("form.group.changePicture")}}</button>
+      <button v-if="isModerator">{{$t("form.group.changeDescription")}}</button> 
 
       <button v-if="!isMember" @click="joinGroup(group.id)" class="btn default">Join</button>
       <button v-if="isMember" @click="leaveGroup(group.id)" class="btn default">Leave</button>
-    
+
 
 
 
@@ -68,6 +68,7 @@
 
         return {
           isMember:false,
+
           membership: {
             moderators:[],
             members:[],
@@ -80,7 +81,7 @@
 
     },
     mounted(){
-      console.log(this.getGroupOfUser);
+
         let vm=this;
         getGroupMembers(this.$route.params.id).then(function(res){
           vm.membership=res.data;
@@ -101,13 +102,26 @@
 
       getThumbnail,
         ...mapActions('groups', ['getGroup']),
-        ...mapActions('user', [ { getUser:'getUser', getGroupOfUser:'getGroup'} ]),
+        ...mapActions('user', ['getUser']),
     },
     computed:{
+      isModerator(){
+
+        for (var i = 0; i < this.myGroups.length; i++) {
+          if(this.myGroups[i].id==this.$route.params.id && this.myGroups[i].pivot.is_moderator==1)
+          {
+              return true;
+          }
+
+        }
+        return false;
+      },
       group(){
         return this.$store.getters["groups/getGroupById"](this.$route.params.id);
       },
-
+      myGroups(){
+        return this.$store.getters["user/getGroup"];
+      },
       isAuth(){
         return this.$store.getters["user/isAuth"];
       }
