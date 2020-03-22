@@ -56,7 +56,7 @@ export default {
         isMember(id)
         {
 
-      
+
           for (var i = 0; i < this.member.length; i++) {
 
             if(id==this.member[i].id)
@@ -66,13 +66,9 @@ export default {
           }
           return false;
 
-
-
         },
         async joinGroup(id){
           join(id).then(this.getUser());
-
-
 
         },
         async leaveGroup(id){

@@ -2,13 +2,12 @@
   <div>
     <form>
       <div class="form-field">
-        <label for="login-mail">{{$t('form.email')}}</label>
-        <input id="login-mail" autocomplete="email" type="email" name="test" placeholder="email " v-model="email"/>
+      
+        <input id="login-mail" autocomplete="email" type="email" name="test"  v-bind:placeholder="$t('form.email')"   v-model="email"/>
         <p class="error"  v-for="error in this.error.email"> {{error}}</p>
       </div>
       <div class="form-field">
-        <label for="login-password">{{$t('form.password')}}</label>
-        <input id="login-password" autocomplete="new-password" type="password" placeholder="" v-model="password"  />
+        <input id="login-password" autocomplete="new-password" type="password"  v-bind:placeholder="$t('form.password')" v-model="password"  />
         <p class="error"  v-for="error in this.error.password"> {{error}}</p>
       </div>
 

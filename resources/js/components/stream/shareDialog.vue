@@ -246,9 +246,7 @@ export default {
             id:0
           },
           editor: new Editor({
-           content: {
-
-           },
+           content: "<p></p>",
 
            extensions: [
 

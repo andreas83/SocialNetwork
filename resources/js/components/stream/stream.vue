@@ -7,42 +7,47 @@
     </div>
 
     <div class="row" v-if="!group_id">
-      <div class="col-lg-3 group slider" v-for="item in group">
-        <div @click="showGroup(item.id, item.name)" class="preview" v-if="item.avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(item.avatar, 75, 75) + ')' }" />
+      <div class="col-lg-2 group slider" v-for="item in group">
+        <div @click="showGroup(item.id, item.name)" class="preview" v-if="item.avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(item.avatar, 115, 175) + ')' }" />
 
-          <router-link :to="{ name: 'Group', params: {name:item.name, id:item.id} }">{{item.name}}</router-link>
-
+          <router-link :to="{ name: 'Group', params: {name:item.name, id:item.id} }"></router-link>
 
       </div>
     </div>
+
     <div v-bind:class=css_stream_size  >
-      <div class="row-0 streamitem " v-for="data in content" v-if="
+      <div class="streamitem " v-for="data in content" v-if="
       ((user_id==false || user_id==data.user_id)  &&
       (group_id==false || group_id==data.group_id)  &&
       (content_id==false || data.id==content_id)) &&
       data.is_comment=='false'"
       >
 
-        <div class="row card" >
-
-          <div class="col-lg-12  col-md-12">
-            <router-link :to="{ name: 'user', params: {name:data.name, user_id:data.user_id} }">
-              <picture>
-                <img v-if="data.avatar" :src="getThumbnail(data.avatar, 40, 40)" />
-              </picture>
-              <author >
-                {{data.name}}
-
-              </author>
-            </router-link>
 
 
-            <date>{{  data.created_at |  moment("from", "now", true) }}</date>
+          <div class="col-lg-12 item col-md-12">
+            <header class="row-0">
+              <div class="col-lg-10">
+              <router-link :to="{ name: 'user', params: {name:data.name, user_id:data.user_id} }">
 
+                <picture>
+                  <div class="avatar"  v-if="data.avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(data.avatar, 100, 100) + ')' }" />
+                </picture>
+                <author >
+                  {{data.name}}
 
-            <button class="btn default small"  @click="permalink(data.id)">#{{data.id}}</button>
-            <button class="btn default small" v-if="data.user_id==user.id" @click="deleteContent(data.id)">{{$t("form.delete")}}</button>
-            <button class="btn default small" v-if="data.user_id==user.id" @click="editContent(data.id)">{{$t("form.edit")}}</button>
+                </author>
+              </router-link>
+              <span @click="permalink(data.id)">#{{data.id}}</span>
+
+              <date>{{  data.created_at |  moment("from", "now", true) }}</date>
+              </div>
+              <div class="actions col-lg-2">
+                <button class="btn default small" v-if="data.user_id==user.id" @click="deleteContent(data.id)">{{$t("form.delete")}}</button>
+                <button class="btn default small" v-if="data.user_id==user.id" @click="editContent(data.id)">{{$t("form.edit")}}</button>
+              </div>
+            </header>
+
 
 
 
@@ -55,11 +60,11 @@
 
             <comments :parent_content=data v-if="data.show_comment">
             </comments>
-          </div>
+
         </div>
       </div>
     </div>
-    <div class="col-lg-3 col-md-12 ">
+    <div class="col-lg-3  col-md-12 ">
       <UserBox v-if="user_id" :user_id="user_id"></UserBox>
       <GroupBox v-if="group_id" :group_id="group_id"></GroupBox>
     </div>
@@ -106,7 +111,7 @@ export default {
           this.css_stream_size="col-lg-8 col-md-12";
         }
 
-        this.getGroup({limit:4, random:true});
+        this.getGroup({limit:6, random:true});
 
         this.scroll();
       },
@@ -138,12 +143,15 @@ export default {
         ...mapActions('content', ['getContent', 'getMoreContent', 'deleteContent']),
         ...mapActions('groups', ['getGroup', 'setGroup']),
         deleteContent(id){
+          var ret = confirm("Are you sure?");
+          if (ret == true) {
+            axios.delete('/api/content/'+id).then(({data}) => {
+              this.$store.commit('content/deleteContent', id);
+            })
+          }
 
 
 
-          axios.delete('/api/content/'+id).then(({data}) => {
-            this.$store.commit('content/deleteContent', id);
-          })
 
         },
         permalink(id){

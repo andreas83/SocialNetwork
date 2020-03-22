@@ -2,34 +2,82 @@
 @import 'fonts';
 @import 'grid';
 @import 'animation';
-.streamitem
-{
-  padding-top: 1em;
-}
 
-.card{
 
-  background-color: $color3;
+.streamitem{
+
+
   overflow: hidden;
   word-break: word-break;
+  padding-top: 0em;
+  padding-right: 0.3em;
+  padding-bottom: 3em;
 
-  padding-top: 1em;
-  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
   header{
-    font-size: 2em;
-    color:$color2;
-  }
-  author{
-    color:$color2;
-  }
-  picture{
 
-    img{
-      width:40px;
-      height:40px;
-      border-radius: 50px;
+    color:$color2;
+    background-color: $color5;
+    a{
+      display: block;
+      position:relative;
+    }
+    picture{
+
+      .avatar{
+        width:45px;
+        height:45px;
+        background-position: center;
+        backgrousnd-size: contain;
+        border-radius: 50px;
+        display:inline-flex;
+        margin-left:0.3em;
+        margin-top:0.7em;
+      }
+    }
+    author{
+      width: 100%;
+      color:$color3;
+      font-size:1.2em;
+      position:absolute;
+      top:0.7em;
+      left:2.8em;
+
+    }
+    date{
+      font-size:0.6em;
+      left:5.3em;
+      position:relative;
+      top:-1.3em;
+    }
+    span {
+      left:5.3em;
+      position:relative;
+      top:-1.3em;
+      font-size:0.6em;
+      &:hover{
+        cursor: pointer;
+      }
+    }
+
+    .actions{
+      margin-top: 1em;
     }
   }
+
+  .item{
+      box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+      padding: 0px;
+      background-color: $color3;
+  }
+  content{
+
+    p,h2,h1,h3,span,code{
+      margin: 1em;
+
+    }
+
+  }
+
 }
 .profile{
     .center{
@@ -130,8 +178,8 @@
 
 }
 .group.slider{
-  display: inline-block;
-  line-height: 3em;
+
+
   &:hover{
     cursor: pointer;
 
@@ -139,13 +187,15 @@
   .preview{
 
 
-    margin-left: 2em;
-    height:75px;
-    width:75px;
+    margin-left: 1em;
+    height:175px;
+    width:115px;
     background-position: center;
     background-size: contain;
     border-radius: 36px;
   }
+  margin-bottom: 2em;
+
 }
 .group.preview.large{
   height:75px;
