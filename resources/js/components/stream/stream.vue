@@ -31,7 +31,7 @@
               <router-link :to="{ name: 'user', params: {name:data.name, user_id:data.user_id} }">
 
                 <picture>
-                  <div class="avatar"  v-if="data.avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(data.avatar, 100, 100) + ')' }" />
+                  <div class="avatar"  v-if="data.avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(data.avatar, 45, 45) + ')' }" />
                 </picture>
                 <author >
                   {{data.name}}

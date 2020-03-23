@@ -35,7 +35,7 @@
       }
     }
     author{
-    
+
       color:$color3;
       font-size:1.2em;
       position:absolute;
@@ -223,6 +223,10 @@
   }
 }
 #groupBox{
+  button{
+    width:100%;
+    margin-bottom: 1em;
+  }
   b{
     margin:1em;
     width:100%;
