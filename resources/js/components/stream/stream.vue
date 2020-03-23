@@ -7,7 +7,7 @@
     </div>
 
     <div class="row" v-if="!group_id">
-      <div class="col-lg-2 group slider" v-for="item in group">
+      <div class="col-lg-2 col-md-4 group slider" v-for="item in group">
         <div @click="showGroup(item.id, item.name)" class="preview" v-if="item.avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(item.avatar, 115, 175) + ')' }" />
 
           <router-link :to="{ name: 'Group', params: {name:item.name, id:item.id} }"></router-link>
@@ -40,7 +40,7 @@
               </router-link>
               <span @click="permalink(data.id)">#{{data.id}}</span>
 
-              <date>{{  data.created_at |  moment("from", "now", true) }}</date>
+              <date>{{  formatDate(data.created_at) |  moment("from", new Date(), true) }}</date>
               </div>
               <div class="actions col-lg-2">
                 <button class="btn default small" v-if="data.user_id==user.id" @click="deleteContent(data.id)">{{$t("form.delete")}}</button>
@@ -105,18 +105,25 @@ export default {
         //await this.getContent();
         await this.getMoreContent({next_id:false, user_id: this.user_id, content_id: this.content_id, group_id:this.group_id});
       },
+
       mounted(){
         if(this.group_id!=false)
         {
           this.css_stream_size="col-lg-8 col-md-12";
         }
-
+        this.setGroup([]);
         this.getGroup({limit:6, random:true});
 
         this.scroll();
       },
       methods:{
         getThumbnail,
+
+        formatDate(date){
+
+          var t = date.split(/[- :]/);
+          return new Date(Date.UTC(t[0], t[1]-1, t[2], t[3], t[4], t[5]));
+        },
         showGroup(id, name){
           this.$router.push({ name: 'Group', params: { name: name, id: id } })
 

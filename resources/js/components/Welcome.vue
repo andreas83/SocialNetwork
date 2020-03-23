@@ -28,7 +28,7 @@ export default {
         }
       },
       mounted(){
-
+        window.scroll(0,0);
       },
       methods:{
 
