@@ -26,7 +26,7 @@
         "pusher-js": "^5.1.1",
         "tiptap": "^1.26.7",
         "tiptap-extensions": "^1.28.6",
-        "vue": "^2.6.11",
+        "vue": "^2.6.12",
         "vue-i18n": "^8.21.0",
         "vue-moment": "^4.1.0",
         "vue-router": "^3.4.3",
