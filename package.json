@@ -22,7 +22,7 @@
         "vue-template-compiler": "^2.6.11"
     },
     "dependencies": {
-        "highlight.js": "^9.18.1",
+        "highlight.js": "^9.18.3",
         "pusher-js": "^5.1.1",
         "tiptap": "^1.26.7",
         "tiptap-extensions": "^1.28.6",
