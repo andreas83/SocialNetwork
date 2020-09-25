@@ -20,7 +20,7 @@ class ContentController extends Controller
 
         $content = new Content();
         $content->json_content = json_encode($validated['json_content']);
-        $content->html_content = $validated['html_content'];
+        $content->html_content = Purify::clean($validated['html_content']);
         $content->anonymous = ($validated['anonymous'] ? 'true' : 'false');
         if($validated['anonymous']==true)
         {
