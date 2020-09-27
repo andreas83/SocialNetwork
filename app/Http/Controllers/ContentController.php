@@ -11,6 +11,7 @@ use Auth;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Stevebauman\Purify\Facades\Purify;
 
 class ContentController extends Controller
 {
