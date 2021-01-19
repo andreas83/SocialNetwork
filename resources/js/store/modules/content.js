@@ -74,7 +74,7 @@ export default {
     async getMoreContent({commit}, params)
     {
 
-      const response = await getMoreContent(params.next_id, params.user_id, params.content_id);
+      const response = await getMoreContent(params.next_id, params.user_id, params.content_id, params.group_id);
 
       for(let i=0; i < response.data.content.length; i++)
       {
