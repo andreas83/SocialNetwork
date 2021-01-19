@@ -50,6 +50,7 @@ class GroupController extends Controller
         $group->name = $request->name;
         $group->description = $request->description;
         $group->avatar = $request->avatar;
+        $group->visibility = $request->visibility;
         $group->background = '';
         $group->posts = 0;
         $group->members = 1;
@@ -69,21 +70,93 @@ class GroupController extends Controller
 
     public function join(Request $request, $id)
     {
+
+
+
         $membership = new GroupMembers();
         $membership->user_id = Auth::user()->id;
         $membership->group_id = $id;
-        $membership->status = 'awaiting';
+        $group = Group::find($id); 
+        if($group->visibility=="public")
+        {
+            $membership->status = 'confirmed';
+
+            $group->members = $group->members + 1;
+            $group->save();
+        }else {
+            $membership->status = 'awaiting';
+        }
+
         $membership->is_moderator = 0;
         $membership->save();
 
-        $group = Group::find($id);
-        $group->members = $group->members + 1;
-        $group->save();
+
 
         return response()->json([
            'membership' => $membership,
        ]);
     }
+
+    public function approveMember(Request $request, $group_id)
+    {
+
+        if($this->isModerator($group_id))
+        {
+
+
+            $membership = GroupMembers::where([
+                ['group_id', '=', $group_id],
+                ['user_id', '=',  $request->user_id]
+            ])->first();
+
+            $membership->status = 'confirmed';
+            $membership->save();
+        }
+
+        return response()->json([
+           'membership' => $membership,
+       ]);
+    }
+
+    public function declineMember(Request $request, $group_id)
+    {
+
+        if($this->isModerator($group_id))
+        {
+
+
+            $membership = GroupMembers::where([
+                ['group_id', '=', $group_id],
+                ['user_id', '=',  $request->user_id]
+            ])->delete();
+
+        }
+
+        return response()->json([
+           'membership' => $membership,
+       ]);
+    }
+
+    public function isModerator($group_id, $user_id=0){
+        if($user_id==0)
+        {
+          $user_id=Auth::user()->id;
+        }
+        $isModerator = DB::table('group_members')->where([
+            ['group_id', '=', $group_id],
+            ['is_moderator', '=', 1],
+            ['user_id', '=', $user_id],
+        ])->get()->count();
+
+        if($isModerator==0)
+        {
+          return false;
+        }
+        else {
+          return true;
+        }
+    }
+
 
     public function leave(Request $request, $id)
     {
@@ -106,19 +179,19 @@ class GroupController extends Controller
         $moderators = DB::table('group_members')->where([
           ['group_id', '=', $id],
           ['is_moderator', '=', 1],
-      ])->select('name', 'avatar')->
+      ])->select('users.id', 'name', 'avatar')->
       join('users', 'users.id', '=', 'group_members.user_id')->get();
 
         $awaiting = DB::table('group_members')->where([
           ['group_id', '=', $id],
           ['status', '=', 'awaiting'],
-      ])->select('name', 'avatar')->
+      ])->select('users.id', 'name', 'avatar')->
       join('users', 'users.id', '=', 'group_members.user_id')->get();
 
         $members = DB::table('group_members')->where([
           ['group_id', '=', $id],
           ['status', '=', 'confirmed'],
-      ])->select('name', 'avatar')->
+      ])->select('users.id', 'name', 'avatar')->
       join('users', 'users.id', '=', 'group_members.user_id')->get();
 
         return response()->json([
@@ -149,15 +222,9 @@ class GroupController extends Controller
           $group->description = $request->description;
       }
 
-      $membership = DB::table('group_members')->where([
-          ['group_id', '=', $id],
-          ['is_moderator', '=', 1],
-          ['user_id', '=', Auth::user()->id],
-      ])->get()->count();
-
-      if($membership>0)
+      if($this->isModerator($id))
       {
-          $group->save();  
+          $group->save();
       }
 
       return response()->json([

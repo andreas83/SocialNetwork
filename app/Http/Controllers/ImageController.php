@@ -12,6 +12,8 @@ class ImageController extends Controller
     {
         $path = 'public/'.$path;
 
+        $driver = "";
+
         if (extension_loaded('gd')) {
             $driver = 'gd';
         }

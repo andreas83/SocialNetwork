@@ -63,6 +63,10 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::delete('group/membership/{id}', 'GroupController@leave');
     Route::post('group/membership/{id}', 'GroupController@join');
 
+    Route::delete('group/membership/{id}/decline', 'GroupController@declineMember');
+    Route::post('group/membership/{id}/approve', 'GroupController@approveMember');
+
+
     Route::resource('user', 'UserController')->only([
       'update',
     ]);

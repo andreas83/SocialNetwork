@@ -11,12 +11,11 @@
 
 
       <button v-if="isModerator">{{$t("form.group.changePicture")}}</button>
-      <button v-if="isModerator">{{$t("form.group.changeDescription")}}</button> 
+      <button v-if="isModerator">{{$t("form.group.changeDescription")}}</button>
+      <button v-if="isModerator">{{$t("form.group.deleteGroup")}}</button>
 
       <button v-if="!isMember" @click="joinGroup(group.id)" class="btn default">Join</button>
       <button v-if="isMember" @click="leaveGroup(group.id)" class="btn default">Leave</button>
-
-
 
 
 
@@ -35,6 +34,8 @@
             <div class="avatar" v-if="user.avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(user.avatar, 150, 150) + ')' }" />
             <p>{{user.name}}</p>
           </router-link>
+          <p v-if="isModerator"  @click="declineMembership(user.id)">remove</p>
+
         </div>
         <b  v-if="membership.pending.length > 0" >Pending Users</b>
 
@@ -42,7 +43,9 @@
           <router-link :to="{ name: 'user', params: {name:user.name} }">
             <div class="avatar" v-if="user.avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(user.avatar, 150, 150) + ')' }" />
             <p>{{user.name}}</p>
+
           </router-link>
+          <p v-if="isModerator" ><b @click="approveMembership(user.id)">+ approve</b> / <b @click="declineMembership(user.id)">- decline</b></p>
         </div>
       </div>
 
@@ -55,7 +58,7 @@
     import {mapGetters, mapActions} from 'vuex';
     import {getThumbnail} from '../../helper/resize'
     import {getGroupMembers} from '../../store/api/group'
-    import {leave,join} from '../../store/api/group'
+    import {leave,join, approveMember, declineMember} from '../../store/api/group'
     export default {
     name:"GroupBox",
     props:{
@@ -67,8 +70,8 @@
     data() {
 
         return {
-          isMember:false,
 
+          group_id:0,
           membership: {
             moderators:[],
             members:[],
@@ -81,7 +84,7 @@
 
     },
     mounted(){
-
+        this.group_id=this.$route.params.id;
         let vm=this;
         getGroupMembers(this.$route.params.id).then(function(res){
           vm.membership=res.data;
@@ -90,13 +93,24 @@
     },
     methods: {
 
+      approveMembership(user_id)
+      {
+          approveMember(this.group_id, user_id);
+      },
+      declineMembership(user_id)
+      {
+          declineMember(this.group_id, user_id);
+      },
+
 
       joinGroup(id){
-        join(id).then(this.isMember=true);
+
+        join(id).then(vm.$forceUpdate());
 
       },
       leaveGroup(id){
-        leave(id).then(this.isMember=false);
+
+        leave(id).then(vm.$forceUpdate());
 
       },
 
@@ -108,7 +122,20 @@
       isModerator(){
 
         for (var i = 0; i < this.myGroups.length; i++) {
+
           if(this.myGroups[i].id==this.$route.params.id && this.myGroups[i].pivot.is_moderator==1)
+          {
+              return true;
+          }
+
+        }
+        return false;
+      },
+      isMember(){
+
+        for (var i = 0; i < this.myGroups.length; i++) {
+
+          if(this.myGroups[i].id==this.$route.params.id)
           {
               return true;
           }
@@ -127,14 +154,14 @@
       }
     },
     watch:{
-      isMember(){
-        let vm=this;
-        vm.membership=false;
-        getGroupMembers(this.$route.params.id).then(function(res){
-          vm.membership=res.data;
-
-        });
-      }
+      // isMember(){
+      //   let vm=this;
+      //   vm.membership=false;
+      //   getGroupMembers(this.$route.params.id).then(function(res){
+      //     vm.membership=res.data;
+      //
+      //   });
+      // }
     },
   }
 </script>

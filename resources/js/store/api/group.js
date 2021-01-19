@@ -35,10 +35,20 @@ const join = ( id
 )=>httpClient.post("/api/group/membership/"+id,
                       {});
 
+function approveMember(id, user_id){
+  return httpClient.post('/api/group/membership/'+id+'/approve', {user_id: user_id});
+}
+
+function declineMember(id, user_id){
+  return httpClient.delete('/api/group/membership/'+id+'/delcline', {user_id: user_id});
+}
+
 export {
     getGroup,
     createGroup,
     leave,
     join,
+    approveMember,
+    declineMember,
     getGroupMembers
 }
