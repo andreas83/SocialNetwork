@@ -103,6 +103,9 @@ class ContentController extends Controller
         if ($request->has('user_id') && $request->user_id > 0) {
             $content->where('users.id', '=', $request->user_id);
         }
+        if ($request->has('group_id') && $request->group_id > 0) {
+            $content->where('contents.group_id', '=', $request->group_id);
+        }
         if ($request->has('limit') && $request->limit <= 100) {
             $content->limit($request->limit);
         } else {
