@@ -22,8 +22,8 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
-        "highlight.js": "^9.18.3",
-        "pusher-js": "^5.1.0",
+        "highlight.js": "^10.4.1",
+        "pusher-js": "^5.1.1",
         "tiptap": "^1.30.0",
         "tiptap-extensions": "^1.33.0",
         "vue": "^2.6.12",
