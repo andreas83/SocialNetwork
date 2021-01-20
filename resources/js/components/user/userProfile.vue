@@ -26,18 +26,29 @@
         <textarea id="bio" v-model="user.bio"></textarea>
       </div>
     </div>
+
+
+    <div class="col-lg-6  col-md-12 ">
+        <h3>Groups</h3>
+    </div>
+    <div class="row" v-for="item in group">
+
+      <div class="col-lg-6">{{item.name}}</div>
+      <div class="col-lg-6">{{item.pivot.status }}</div>
+
+    </div>
+
     <div class="col-lg-6  col-md-12 ">
       <div class="form-field right">
           <button class="btn default" v-on:click="save" value="default">{{$t('form.save')}}</button>
       </div>
     </div>
-
   </div>
 </div>
 
 </template>
 <script>
-
+    import {upload} from '../../helper/upload'
     import {getThumbnail} from '../../helper/resize'
     export default {
     name:"UserProfile",
@@ -58,59 +69,30 @@
     methods: {
       getThumbnail,
       openFileDialog(){
+        let vm=this
 
-        var element = document.createElement('div');
-        element.innerHTML = '<input  type="file">';
-        let fileInput = element.firstChild;
-        let vm=this;
-        let token=this.user.api_token;
-        fileInput.addEventListener('change', function() {
-          let formData = new FormData();
-
-          for (let i = 0; i < fileInput.files.length; i++) {
-              let file = fileInput.files[i];
-              formData.append('upload[]', file, file.name);
-          }
-          var xhr = new XMLHttpRequest();
+        upload(function(res){
 
 
+          this.user.avatar=res;
 
-          xhr.open('POST', '/api/content/upload', true);
-          xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-          xhr.onload = function () {
-              if (xhr.status === 200) {
+          let data = {
+              avatar: res
 
-                const result = JSON.parse(xhr.responseText);
-                //vm.avatar=result.path[0];
-                vm.user.avatar=result.path[0];
-                vm.$store.commit('user/setUser', vm.user);
-                let data = {
-
-                    avatar: vm.user.avatar,
-
-
-
-                };
-                axios.put('/api/user/'+vm.user.id, data)
-                    .then(({data}) => {
-
-                      vm.$store.commit('user/setUser', data.user);
-                    })
-                    .catch(({response}) => {
-                      vm.show=true;
-                      vm.error=response.data.errors;
-                    });
-
-              } else {
-                  vm.error = xhr.responseText;
-              }
           };
-          xhr.send(formData);
+          axios.put('/api/user/'+this.user.id, data)
+              .then(({data}) => {
+
+                vm.$store.commit('user/setUser', data);
+              })
+              .catch(({response}) => {
+                vm.show=true;
+                vm.error=response.data.errors;
+              });
+
+        }.bind(this));
 
 
-        });
-
-        fileInput.click();
       },
       save(){
 
@@ -124,7 +106,7 @@
           axios.put('/api/user/'+this.user.id, data)
               .then(({data}) => {
 
-                this.$store.commit('user/setUser', data.user);
+                this.$store.commit('user/setUser', data);
               })
               .catch(({response}) => {
                 this.show=true;
@@ -134,8 +116,16 @@
       }
     },
     computed:{
-            user(){
-              return this.$store.getters["user/getUser"];
+            user:{
+              get: function(){
+                return this.$store.getters["user/getUser"];
+              }
+
+            },
+            group:{
+              get: function(){
+                return this.$store.getters["user/getGroup"];
+              },
             },
             isAuth(){
               return this.$store.getters["user/isAuth"];

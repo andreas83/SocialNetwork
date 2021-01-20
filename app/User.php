@@ -35,4 +35,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function content()
+    {
+        return $this->hasMany('Content');
+    }
+
+    public function groups()
+    {
+        return $this->belongsToMany("App\Group", 'group_members')->withPivot('is_moderator', 'status');
+    }
 }

@@ -18,6 +18,7 @@ export default {
                               data.has_comment,
                               data.is_comment,
                               data.parent_id,
+                              data.group_id,
                               data.anonymous,
                               data.visibility);
 
@@ -73,7 +74,7 @@ export default {
     async getMoreContent({commit}, params)
     {
 
-      const response = await getMoreContent(params.next_id, params.user_id, params.content_id);
+      const response = await getMoreContent(params.next_id, params.user_id, params.content_id, params.group_id);
 
       for(let i=0; i < response.data.content.length; i++)
       {
@@ -94,6 +95,7 @@ export default {
                               data.has_comment,
                               data.is_comment,
                               data.parent_id,
+                              data.group_id,
                               data.anonymous,
                               data.visibility);
       response.data.content.show_comment=false;

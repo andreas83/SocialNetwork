@@ -458,7 +458,7 @@ h1 {
 nav {
   z-index: 999999;
   position: fixed;
-  background-color: #ff7909;
+  background-color: #7c93ad;
   width: 100%;
   height: 55px;
   display: -webkit-box;
@@ -470,11 +470,14 @@ nav h1 {
   margin-top: 0.9em;
   margin-left: 10px;
   font-size: 0.9em;
-  color: #f4f4f4;
   text-decoration: underline;
   -webkit-box-flex: 3;
           flex-grow: 3;
   flex-basis: auto;
+}
+
+nav h1 a {
+  color: #fcfcfc;
 }
 
 #menu-select {
@@ -516,7 +519,7 @@ nav h1 {
 #menu ul li {
   margin: 1em;
   color: #f4f4f4;
-  font-size: 3em;
+  font-size: 1.5em;
   text-align: center;
 }
 
@@ -549,7 +552,7 @@ small {
 
 .form-field input {
   width: 100%;
-  padding: 0.8em;
+  padding: 0.5em;
   font-size: 1em;
 }
 
@@ -558,6 +561,19 @@ small {
   height: 5em;
   padding: 0.8em;
   font-size: 1em;
+}
+
+.form-field select {
+  width: 100%;
+  height: 2em;
+  background-color: #fcfcfc;
+  font-size: 1em;
+  padding-left: 0.8em;
+}
+
+.form-field select option {
+  background-color: #fcfcfc;
+  font-size: 1.2em;
 }
 
 .form-field .error {

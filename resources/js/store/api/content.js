@@ -13,6 +13,7 @@ const createContent = ( html_content,
                         has_comment,
                         is_comment,
                         parent_id,
+                        group_id,
                         anonymous,
                         visibility
                       )=>httpClient.post(END_POINT,
@@ -22,12 +23,13 @@ const createContent = ( html_content,
                         has_comment,
                         is_comment,
                         parent_id,
+                        group_id,
                         anonymous,
                         visibility
                        });
 
-function updateContent ( id, html_content, json_content, has_comment,is_comment,
-                         parent_id, anonymous,visibility ) {
+function updateContent ( id, html_content, json_content, has_comment, is_comment,
+                         parent_id, group_id, anonymous, visibility ) {
 
     return httpClient.put('/api/content/'+id, {
         html_content,
@@ -35,6 +37,7 @@ function updateContent ( id, html_content, json_content, has_comment,is_comment,
         has_comment,
         is_comment,
         parent_id,
+        group_id,
         anonymous,
         visibility
     });
@@ -45,12 +48,13 @@ function deleteContent(id){
 }
 
 
-function getMoreContent ( next_id, user_id, content_id, limit  ) {
+function getMoreContent ( next_id, user_id, content_id, group_id, limit  ) {
 
     return httpClient.get(END_POINT, { params:{
       next_id:next_id,
       user_id:user_id,
       content_id: content_id,
+      group_id: group_id,
       limit:limit
     } });
 }

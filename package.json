@@ -10,27 +10,27 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
-        "axios": "^0.19.2",
-        "browser-sync": "^2.26.7",
-        "browser-sync-webpack-plugin": "^2.0.1",
+        "axios": "^0.21.1",
+        "browser-sync": "^2.26.13",
+        "browser-sync-webpack-plugin": "^2.2.2",
         "cross-env": "^5.1",
-        "laravel-mix": "^5.0.1",
-        "lodash": "^4.17.13",
+        "laravel-mix": "^5.0.5",
+        "lodash": "^4.17.20",
         "resolve-url-loader": "^2.3.1",
-        "sass": "^1.15.2",
+        "sass": "^1.26.11",
         "sass-loader": "^8.0.0",
-        "vue-template-compiler": "^2.6.11"
+        "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
-        "highlight.js": "^9.18.1",
+        "highlight.js": "^9.18.3",
         "pusher-js": "^5.1.0",
-        "tiptap": "^1.26.6",
-        "tiptap-extensions": "^1.28.6",
-        "vue": "^2.6.11",
-        "vue-i18n": "^8.15.3",
+        "tiptap": "^1.30.0",
+        "tiptap-extensions": "^1.33.0",
+        "vue": "^2.6.12",
+        "vue-i18n": "^8.21.1",
         "vue-moment": "^4.1.0",
-        "vue-router": "^3.1.5",
+        "vue-router": "^3.4.3",
         "vue-social-auth": "^1.4.3",
-        "vuex": "^3.1.2"
+        "vuex": "^3.5.1"
     }
 }

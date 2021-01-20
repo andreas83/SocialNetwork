@@ -2,20 +2,19 @@
   <div>
     <form>
       <div class="form-field">
-        <label for="name">{{$t('form.name')}}</label>
-        <input id="name" autocomplete="nickname" type="text" placeholder=" " v-model="name" />
+        <input id="name" autocomplete="nickname" type="text"
+        v-bind:placeholder="$t('form.name')" v-model="name" />
 
         <p class="error"  v-for="error in this.error.name"> {{error}}</p>
 
       </div>
       <div class="form-field">
-        <label for="test">{{$t('form.password')}}</label>
-        <input id="test" autocomplete="new-password" type="password" placeholder="" v-model="password"  />
+
+        <input v-bind:placeholder="$t('form.password')"  autocomplete="new-password" type="password" v-model="password"  />
         <p class="error"  v-for="error in this.error.password"> {{error}}</p>
       </div>
       <div class="form-field">
-        <label for="mail">{{$t('form.email')}}</label>
-        <input id="mail" autocomplete="email" type="email" name="test" placeholder="email " v-model="email"/>
+        <input id="mail" autocomplete="email" type="email"   v-bind:placeholder="$t('form.email')"  v-model="email"/>
         <p class="error"  v-for="error in this.error.email"> {{error}}</p>
       </div>
       <div class="form-field">
@@ -63,7 +62,7 @@
             axios.post('/api/register', data)
                 .then(({data}) => {
                   console.log(data);
-                  this.$store.commit('user/setUser', data.user);
+                  this.$store.commit('user/setUser', data);
                   this.$store.commit('user/setAuth', true);
                   localStorage.setItem('token', data.user.api_token);
                   axios.interceptors.request.use(

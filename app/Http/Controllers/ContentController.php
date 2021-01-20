@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Content;
+use App\Group;
 use App\Http\Controllers\Helper\RemoteContent;
 use App\Http\Requests\ContentDestroyRequest;
 use App\Http\Requests\ContentStoreRequest;
@@ -10,6 +11,7 @@ use Auth;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Stevebauman\Purify\Facades\Purify;
 
 class ContentController extends Controller
 {
@@ -19,20 +21,36 @@ class ContentController extends Controller
 
         $content = new Content();
         $content->json_content = json_encode($validated['json_content']);
-        $content->html_content = $validated['html_content'];
-        $content->anonymous = $validated['anonymous'];
+        $content->html_content = Purify::clean($validated['html_content']);
+        $content->anonymous = ($validated['anonymous'] ? 'true' : 'false');
+        if($validated['anonymous']==true)
+        {
+            $content->user_id=(getenv("anonymous") !== false ? getenv("anonymous") : 1 );
+        } else {
+          $content->user_id = Auth::user()->id;
+        }
         $content->visibility = $validated['visibility'];
 
         $content->has_comment = ($validated['has_comment'] ? 'true' : 'false');
         $content->is_comment = ($validated['is_comment'] ? 'true' : 'false');
+        $content->comments = 0;
         $content->parent_id = $validated['parent_id'];
 
-        $content->user_id = Auth::user()->id;
+        $content->group_id = ($request->group_id > 0 ? $request->group_id : 0);
+
+        if ($content->group_id > 0) {
+            $group = Group::find($content->group_id);
+            $group->posts = $group->posts + 1;
+            $group->save();
+        }
+
+
         $content->save();
 
         if ($request->is_comment) {
             $parent = Content::find($request->parent_id);
             $parent->has_comment = 'true';
+            $parent->comments = $parent->comments + 1;
             $parent->save();
         }
 
@@ -85,6 +103,9 @@ class ContentController extends Controller
         if ($request->has('user_id') && $request->user_id > 0) {
             $content->where('users.id', '=', $request->user_id);
         }
+        if ($request->has('group_id') && $request->group_id > 0) {
+            $content->where('contents.group_id', '=', $request->group_id);
+        }
         if ($request->has('limit') && $request->limit <= 100) {
             $content->limit($request->limit);
         } else {
@@ -104,6 +125,15 @@ class ContentController extends Controller
         $content = Content::find($id);
 
         if ($content->user_id == Auth::user()->id) {
+            if ('true' == $content->is_comment) {
+                $parent = Content::find($content->parent_id);
+
+                $parent->comments = $parent->comments - 1;
+                if (0 == $parent->comments) {
+                    $parent->has_comment = 'false';
+                }
+                $parent->save();
+            }
             $content->destroy($id);
         }
     }

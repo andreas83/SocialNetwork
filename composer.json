@@ -19,7 +19,9 @@
         "league/glide-laravel": "^1.0",
         "socialiteproviders/facebook": "^1.0",
         "socialiteproviders/github": "dev-master",
-        "socialiteproviders/twitter": "^3.0"
+        "socialiteproviders/twitter": "^3.0",
+        "stevebauman/purify": "^3.0",
+        "symfony/http-kernel": "4.4.13"
     },
     "require-dev": {
         "facade/ignition": "^1.4",

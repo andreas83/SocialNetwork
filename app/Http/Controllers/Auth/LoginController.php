@@ -77,6 +77,7 @@ class LoginController extends Controller
 
         return response()->json([
              'user' => $user,
+             'groups' => $user->groups()->get()
          ]);
     }
 
@@ -84,6 +85,7 @@ class LoginController extends Controller
     {
         return response()->json([
            'user' => $user,
+           'groups' => $user->groups()->get()
        ]);
     }
 }

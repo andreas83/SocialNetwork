@@ -8,17 +8,27 @@
     <div class="comment-list row-0">
 
       <div class="comment col-lg-12"  v-for="data in comments" v-if="parent_content.id==data.parent_id ">
-        <router-link :to="{ name: 'user', params: {name:data.name, user_id:data.user_id} }">
-        <picture>
-          <img :src="data.avatar" />
-        </picture>
-        <author>
-          {{data.name}}
-        </author>
-        </router-link>
-        <date>{{data.created_at}}</date>
-        <button class="btn default small" v-if="isAuth && data.user_id==user.id" @click="deleteContent(data.id)">{{$t("form.delete")}}</button>
-        <button class="btn default small" v-if="isAuth && data.user_id==user.id" @click="editContent(data.id)">{{$t("form.edit")}}</button>
+        <header class="row-0">
+          <div class="col-lg-10">
+          <router-link :to="{ name: 'user', params: {name:data.name, user_id:data.user_id} }">
+
+            <picture>
+              <div class="avatar"  v-if="data.avatar" v-bind:style="{ 'background-image': 'url(' + getThumbnail(data.avatar, 100, 100) + ')' }" />
+            </picture>
+            <author >
+              {{data.name}}
+
+            </author>
+          </router-link>
+          <span @click="permalink(data.id)">#{{data.id}}</span>
+
+          <date>{{  data.created_at |  moment("from", "now", true) }}</date>
+          </div>
+          <div class="actions col-lg-2">
+            <button class="btn default small" v-if="data.user_id==user.id" @click="deleteContent(data.id)">{{$t("form.delete")}}</button>
+            <button class="btn default small" v-if="data.user_id==user.id" @click="editContent(data.id)">{{$t("form.edit")}}</button>
+          </div>
+        </header>
         <content v-html="data.html_content"></content>
 
         <likes :content=data></likes>
@@ -30,6 +40,7 @@
 </template>
 <script>
 import {mapGetters , mapActions} from 'vuex';
+import {getThumbnail} from '../../helper/resize'
 export default {
     name: "Comments",
     props:{
@@ -55,6 +66,7 @@ export default {
 
       },
       methods:{
+        getThumbnail,
         ...mapActions('content', ['getComment']),
 
         deleteContent(id){

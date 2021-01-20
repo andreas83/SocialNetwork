@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Content extends Model
+class GroupMembers extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,12 +12,11 @@ class Content extends Model
      * @var array
      */
     protected $fillable = [
-      'user_id', 'html_content', 'json_content', 'anonymous',
-      'has_comment', 'is_comment', 'comments', 'parent_id',
+    'group_id', 'user_id', 'status', 'is_moderator',
   ];
 
     /**
-     * Get the user that owns the content.
+     * Get the user.
      */
     public function user()
     {

@@ -16,7 +16,7 @@
   </div>
 </template>
 <script>
-
+    import {upload} from '../../helper/upload'
     import {getThumbnail} from '../../helper/resize'
     export default {
     name:"User",
@@ -34,82 +34,37 @@
         };
     },
     mounted(){
-
+      window.scroll(0,0);
       this.getUser();
 
     },
     methods: {
       getThumbnail,
+
       changeBackground(){
-
-        var element = document.createElement('div');
-        element.innerHTML = '<input  type="file">';
-        let fileInput = element.firstChild;
         let vm=this;
-        let token= localStorage.getItem('token');
+        upload(function(res){
+          vm.user.background=res;
 
-        fileInput.addEventListener('change', function() {
-          let formData = new FormData();
-
-          for (let i = 0; i < fileInput.files.length; i++) {
-              let file = fileInput.files[i];
-              formData.append('upload[]', file, file.name);
-          }
-          var xhr = new XMLHttpRequest();
-
-
-
-          xhr.open('POST', '/api/content/upload', true);
-          xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-          xhr.onload = function () {
-              if (xhr.status === 200) {
-
-                const result = JSON.parse(xhr.responseText);
-                //vm.avatar=result.path[0];
-                vm.user.background=result.path[0];
-                vm.$store.commit('user/setUser', vm.user);
-                let data = {
-
-                    background: vm.user.background,
-
-
-
-                };
-                axios.put('/api/user/'+vm.user.id, data)
-                    .then(({data}) => {
-
-                      vm.$store.commit('user/setUser', data.user);
-                    })
-                    .catch(({response}) => {
-                      vm.show=true;
-                      vm.error=response.data.errors;
-                    });
-
-              } else {
-                  vm.error = xhr.responseText;
-              }
+          let data = {
+              background: vm.user.background,
           };
-          xhr.send(formData);
-
-
+          axios.put('/api/user/'+vm.user.id, data)
+              .then(({data}) => {
+                vm.$store.commit('user/setUser', data);
+              })
+              .catch(({response}) => {
+                vm.show=true;
+                vm.error=response.data.errors;
+              });
         });
-
-        fileInput.click();
       },
       getUser(){
-        //  this.$route.params.username
+
 
           axios.get('/api/user/public/?name='+this.$route.params.name)
               .then(({data}) => {
                 this.user=data;
-                console.log(data);
-                // for(var i=0, length= data.content.data.length; i < length; i++)
-                // {
-                //
-                //   data.content.data[i].show_comment=false;
-                // }
-                //
-                // this.$store.commit('content/setContent', data.content.data);
 
               })
               .catch(({response}) => {

@@ -45,10 +45,7 @@ export default {
   },
   mutations:{
 
-    deleteContent(state, content_id){
-      const index = state.content.findIndex(item => item.id == content_id);
-      state.content.splice(index, 1);
-    },
+
     updateLikes (state, data) {
       const index = state.likes.findIndex(item => item.content_id == data.content_id);
       if (index !== -1)

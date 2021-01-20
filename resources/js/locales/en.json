@@ -21,10 +21,18 @@
     },
     "background":{
       "upload" : "Change background"
+    },
+    "group" : {
+      "changePicture" : "change avatar",
+      "changeDescription" : "change description",
+      "join" : "join group",
+      "leave" : "leave group"
     }
-
   },
   "permalink": "permalink",
   "Share" : "Share",
-  "Comment" : "Comment"
+  "Comment" : "Comment",
+  "post.anonymously" : "Post anonymously",
+  "post.in" : "Post in group",
+  "Create Group" : "Create group"
 }
