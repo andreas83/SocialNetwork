@@ -97,7 +97,8 @@ For commercial support please contact: support@moving-bytes.at
 
 ## 3. History
 ### Version 1.0 (est 2008)
-Sadly no screenshoot are available anymore.
+
+![Screenshoot of verion 1.0](https://social.codejungle.org/upload/6008a1154e1ef3.12760041_new_vote_style.jpg)
 
 
 ### Version 2.0  (est 2014)
