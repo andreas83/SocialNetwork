@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 |
 */
 Route::group(['middleware' => ['api']], function () {
-    Auth::routes();
+#    Auth::routes();
 
     Route::resource('content', 'ContentController')->only([
       'index',

@@ -11,25 +11,24 @@
         "php": "^7.2",
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.0",
-        "horror/php-phantomjs": "^4.6",
-        "laravel/framework": "^6.2",
-        "laravel/socialite": "^4.3",
+        "laravel/framework": "^8.0",
+        "laravel/sanctum": "^2.8",
+        "laravel/socialite": "^5.1",
         "laravel/tinker": "^2.0",
         "league/glide": "^1.5",
         "league/glide-laravel": "^1.0",
-        "socialiteproviders/facebook": "^1.0",
-        "socialiteproviders/github": "dev-master",
-        "socialiteproviders/twitter": "^3.0",
+        "merlinthemagic/mts": "^1.1",
+        "socialiteproviders/facebook": "^4.1",
+        "socialiteproviders/twitter": "^4.1",
         "stevebauman/purify": "^3.0",
-        "symfony/http-kernel": "4.4.13"
+        "symfony/http-kernel": "^5.0"
     },
     "require-dev": {
-        "facade/ignition": "^1.4",
+        "facade/ignition": "^2.3.6",
         "fzaninotto/faker": "^1.4",
-        "laravel/telescope": "^2.1",
         "mockery/mockery": "^1.0",
-        "nunomaduro/collision": "^3.0",
-        "phpunit/phpunit": "^8.0"
+        "nunomaduro/collision": "^5.0",
+        "phpunit/phpunit": "^9.0"
     },
     "config": {
 	"bin-dir": "bin",
@@ -59,12 +58,6 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
-	"post-install-cmd": [
-	   "PhantomInstaller\\Installer::installPhantomJS"
-	],
-	 "post-update-cmd": [
-	   "PhantomInstaller\\Installer::installPhantomJS"
-	],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"

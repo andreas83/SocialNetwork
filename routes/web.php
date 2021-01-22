@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,12 +13,12 @@
 |
 */
 
-Route::post('/auth/twitter', "Auth\LoginController@twitter");
-
-Route::get('/permalink/{id}', 'ContentController@permalink');
-
-Route::get('/resize/{path}', 'ImageController@show')->where('path', '.*');
-
-Route::get('/{any}', function () {
+Route::get('/', function () {
     return view('welcome');
-})->where('any', '.*');
+});
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+require __DIR__.'/auth.php';

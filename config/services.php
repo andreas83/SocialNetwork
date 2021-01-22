@@ -29,11 +29,12 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
-    'github' => [
+/*    'github' => [
       'client_id' => env('MIX_GITHUB_KEY'),
       'client_secret' => env('MIX_GITHUB_SECRET'),
       'redirect' => env('MIX_GITHUB_REDIRECT_URI'),
     ],
+*/
     'twitter' => [
       'client_id' => env('MIX_TWITTER_KEY'),
       'client_secret' => env('MIX_TWITTER_SECRET'),
