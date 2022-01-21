@@ -12,7 +12,7 @@
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.0",
         "horror/php-phantomjs": "^4.6",
-        "laravel/framework": "^6.20.14",
+        "laravel/framework": "^6.18.43",
         "laravel/socialite": "^4.3",
         "laravel/tinker": "^2.0",
         "league/glide": "^1.5",
